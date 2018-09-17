@@ -1,6 +1,7 @@
 import { google } from 'googleapis';
 import assert from 'assert';
 import express from 'express';
+import cors from 'cors';
 
 // Assert required enviroment variables for app
 assert(process.env.GCLOUD_PROJECT !== undefined, 'Required enviroment variable GCLOUD_PROJECT');
@@ -51,24 +52,21 @@ const main = async (req, res, next) => {
       throw err;
     }
 
-    console.log('The API returned with success!\n')
+    console.log('The API returned with success!')
+    
     const rows = sheetRes.data.values;
-    if (rows.length === 0) {
-      console.log('No data found.');
-      return res.json([])
-    } else {
-      console.log('Parse spreadsheet start...\n');
-      const jsonResponse = parseSpreadsheet(rows);
-      console.log('Parse spreadsheet is done!\n')
-      return res.json(jsonResponse);
-    }
+    console.log('Parse spreadsheet start...');
+    const jsonResponse = parseSpreadsheet(rows);
+    console.log('Parse spreadsheet is done!')
+    return res.json(jsonResponse);
   });
 }
 
 const app = express();
 const port = process.env.PORT;
+const corsOpts = { origin: 'http://localhost:3000' }
 
-app.get('/', asyncMiddleware(main));
+app.get('/', cors(corsOpts), asyncMiddleware(main));
 
 app.listen(port, () => console.log(`Match Voluntarios App listening on port ${port}!`));
 
