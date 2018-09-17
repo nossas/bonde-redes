@@ -7,24 +7,17 @@ assert(process.env.GOOGLE_APPLICATION_CREDENTIALS !== undefined, 'Required envir
 assert(process.env.GOOGLE_SPREADSHEET_ID !== undefined, 'Required enviroment GOOGLE_SPREADSHEET_ID');
 assert(process.env.PORT !== undefined, 'Required enviroment PORT');
 
-
-const asyncMiddleware = fn =>
-      (req, res, next) => {
-          Promise.resolve(fn(req, res, next))
-              .catch(next);
-      };
+const asyncMiddleware = fn => (req, res, next) => {
+    Promise.resolve(fn(req, res, next))
+        .catch(next);
+};
 
 async function main (req, res, next) {
-
-    // This method looks for the GCLOUD_PROJECT and GOOGLE_APPLICATION_CREDENTIALS
-    // environment variables.
     const auth = await google.auth.getClient({
-        // Scopes can be specified either as an array or as a single, space-delimited string.
         scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly']
     });
 
-    // obtain the current project Id
-    const project = await google.auth.getDefaultProjectId();
+    // const project = await google.auth.getDefaultProjectId();
     const sheets = google.sheets('v4');
     sheets.spreadsheets.values.get({
         auth: auth,
@@ -44,7 +37,6 @@ async function main (req, res, next) {
 
             for (const row of rows) {
                 // Print columns A and E, which correspond to indices 0 and 4.
-                // console.log(`${row[0]}, ${row[4]}`);
                 jsonResponse.push({
                     name: row[0],
                     major: row[4]
@@ -53,11 +45,6 @@ async function main (req, res, next) {
             res.json(jsonResponse);
         }
     });
-    // console.log(sheets);
-
-    // Fetch the list of GCE zones within a project.
-    // const res = await compute.zones.list({ project, auth });
-    // console.log(res.data);
 }
 
 const app = express();
