@@ -13,9 +13,10 @@ assert(process.env.GOOGLE_SPREADSHEET_ID !== undefined, 'Required enviroment GOO
 assert(process.env.PORT !== undefined, 'Required enviroment PORT');
 
 const asyncMiddleware = fn => (req, res, next) => {
-    Promise.resolve(fn(req, res, next))
-        .catch(next);
+  Promise.resolve(fn(req, res, next))
+    .catch(next);
 };
+
 const app = express();
 const port = process.env.PORT;
 
