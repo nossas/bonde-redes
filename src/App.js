@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Grid from '@material-ui/core/Grid'
 import GoogleMapsAPI from './components/GoogleMapsAPI'
+import GoogleSheetAPI from './components/GoogleSheetAPI'
 
 class App extends Component {
 
@@ -32,6 +33,9 @@ class App extends Component {
             </ul>
           </Grid>
         )}
+        <Grid item xs={12}>
+          <GoogleSheetAPI />
+        </Grid>
       </Grid>
     )
   }
