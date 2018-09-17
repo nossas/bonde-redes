@@ -49,11 +49,11 @@ class GoogleSheetAPI extends React.Component {
 
   componentDidMount () {
     this.setState({ fetched: false, loading: true });
-    fetch('http://localhost:4000')
+    fetch('/api')
       .then((res) => {
         res.json().then((values) => {
           this.setState({ loading: false, fetched: true, entities: values });
-        });
+        }).catch(() => { console.log('error when loading api'); });
       })
       .catch(err => {
         console.log(err);

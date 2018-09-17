@@ -10,17 +10,18 @@
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "googleapis": "^33.0.0",
+    "morgan": "^1.9.1",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
     "react-scripts": "1.1.5",
     "serve": "^10.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
+    "dev:server": "nodemon node_modules/.bin/babel-node ./server/index.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "server": "nodemon node_modules/.bin/babel-node ./server/index.js"
+    "eject": "react-scripts eject"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
