@@ -46,6 +46,7 @@ class GoogleMapsAPI extends React.Component {
           placeholder='Busque por um endereço'
           value={this.state.address}
         />
+        <button type='submit'>Buscar!</button>
       </form>
     )
   }

@@ -8,19 +8,20 @@ const parseSpreadsheet = (rows) => {
     'city': 1,
     'expertness': 8,
     'lng': 13,
-    'lat': 14
+    'lat': 14,
+    'geoAddress': 15
   };
 
   return rows.map(row => {
     const json = {};
     Object.keys(rowKeys).forEach(keyName => {
-        json[keyName] = row[rowKeys[keyName]];
+      json[keyName] = row[rowKeys[keyName]];
     });
-      return json;
+    return json;
   });
 };
 
-export default async (req, res, next) => {
+const main = async (req, res, next) => {
   // Use GCLOUD_PROJECT and GOOGLE_APPLICATION_CREDENTIALS to authenticate
   // service-to-service on googleapis 
   const auth = await google.auth.getClient({
@@ -40,12 +41,14 @@ export default async (req, res, next) => {
       throw err;
     }
 
-    console.log('The API returned with success!');
-
+    console.log('The API returned with success!')
+    
     const rows = sheetRes.data.values;
     console.log('Parse spreadsheet start...');
     const jsonResponse = parseSpreadsheet(rows);
-    console.log('Parse spreadsheet is done!');
+    console.log('Parse spreadsheet is done!')
     return res.json(jsonResponse);
   });
 }
+
+export default main;
