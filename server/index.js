@@ -20,7 +20,9 @@ const parseSpreadsheet = (rows) => {
     'last_name': 4,
     'state': 0,
     'city': 1,
-    'expertness': 8
+    'expertness': 8,
+    'lng': 13,
+    'lat': 14
   };
 
   return rows.map(row => {
