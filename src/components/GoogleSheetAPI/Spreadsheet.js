@@ -24,12 +24,16 @@ const styles = theme => ({
   }
 });
 
-const CustomTableCell = withStyles(theme => ({
+const createTableCell = ({ maxWidth }) => withStyles(theme => ({
   body: {
     wordBreak: 'break-word',
-    maxWidth: '200px'
+    maxWidth: maxWidth
   },
 }))(TableCell);
+
+const ExpertnessTableCell = createTableCell({ maxWidth: '300px' });
+const AvailabilityTableCell = createTableCell({ maxWidth: '200px' });
+const GeoAddressTableCell = createTableCell({ maxWidth: '400px' });
 
 const SimpleTable = ({ rows, classes }) => (
   <Paper className={classes.root}>
@@ -40,6 +44,8 @@ const SimpleTable = ({ rows, classes }) => (
           <TableCell>Especialidade</TableCell>
           <TableCell>Localização</TableCell>
           <TableCell>Distância</TableCell>
+          <TableCell>Quantas pessoas pode atender</TableCell>
+          <TableCell>Está atendendo</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -48,9 +54,11 @@ const SimpleTable = ({ rows, classes }) => (
             <TableCell component='th' scope='row'>
               {`${row.first_name} ${row.last_name}`}
             </TableCell>
-            <CustomTableCell>{row.expertness}</CustomTableCell>
-            <TableCell>{row.geoAddress}</TableCell>
+            <ExpertnessTableCell>{row.expertness}</ExpertnessTableCell>
+            <GeoAddressTableCell>{row.geoAddress}</GeoAddressTableCell>
             <TableCell>{row.distance}</TableCell>
+            <AvailabilityTableCell>{row.availability}</AvailabilityTableCell>
+            <TableCell>{row.busy}</TableCell>
           </TableRow>
         ))}
       </TableBody>
