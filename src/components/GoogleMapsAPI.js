@@ -2,6 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import GoogleMaps from '@google/maps'
 import Input from '@material-ui/core/Input'
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
 
 class GoogleMapsAPI extends React.Component {
 
@@ -39,6 +42,9 @@ class GoogleMapsAPI extends React.Component {
 
   render () {
     return (
+    <Grid item>
+    <Card>
+    <CardContent>
       <form onSubmit={this.handleSearchAddress.bind(this)}>
         <Input
           type='text'
@@ -48,6 +54,9 @@ class GoogleMapsAPI extends React.Component {
         />
         <button type='submit'>Buscar!</button>
       </form>
+    </CardContent>
+    </Card>
+    </Grid>
     )
   }
 }

@@ -1,9 +1,11 @@
 import React from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import Spreadsheet from './Spreadsheet';
 import distance from './calcDistance'
 
 class GoogleSheetAPI extends React.Component {
-  
+
   state = {
     loading: false,
     fecthed: false,
@@ -41,9 +43,7 @@ class GoogleSheetAPI extends React.Component {
 
     return (
       <div>
-        <h2>
-        {`Here should render a SpreadsheetTable: [${loading ? 'loading' : 'done'}]`}
-        </h2>
+        {loading ? <CircularProgress size={50} /> : <span></span>}
         {fetched && <Spreadsheet point={point} rows={rows} />}
       </div>
     );

@@ -42,7 +42,7 @@ const main = async (req, res, next) => {
     }
 
     console.log('The API returned with success!')
-    
+
     const rows = sheetRes.data.values;
     console.log('Parse spreadsheet start...');
     const jsonResponse = parseSpreadsheet(rows);

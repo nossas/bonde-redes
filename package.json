@@ -3,33 +3,36 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "@google/maps": "^0.5.5",
     "@material-ui/core": "^3.0.3",
     "@material-ui/icons": "^3.0.1",
     "@turf/distance": "^6.0.1",
     "cors": "^2.8.4",
-    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "googleapis": "^33.0.0",
     "morgan": "^1.9.1",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
     "react-scripts": "1.1.5",
-    "serve": "^10.0.1",
     "turf": "^3.0.14"
   },
   "scripts": {
-    "dev": "react-scripts start",
-    "dev:server": "nodemon --exec 'rm -rf build && yarn build && node_modules/.bin/babel-node ./server/index.js' --watch ./src --watch ./server",
-    "build": "react-scripts build",
+    "start": "node -r @babel/polyfill build-server",
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:client": "PORT=4000 react-scripts start",
+    "dev:server": "PORT=5000 nodemon node_modules/.bin/babel-node ./server/index.js",
+    "build": "react-scripts build && babel server --out-dir build-server",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0",
+    "@babel/cli": "^7.1.0",
     "@babel/core": "^7.1.0",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
+    "concurrently": "^4.0.1",
     "nodemon": "^1.18.4"
-  }
+  },
+  "proxy": "http://localhost:5000/"
 }
