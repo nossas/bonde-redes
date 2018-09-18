@@ -53,7 +53,7 @@ class App extends Component {
           <AppBar position="static">
             <Toolbar>
               <Typography className={classes.title} variant="title" color="inherit" noWrap>
-                 GeoBonde
+                Match Voluntários 
               </Typography>
             </Toolbar>
           </AppBar>
