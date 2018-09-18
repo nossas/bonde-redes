@@ -1,5 +1,6 @@
 import React from 'react';
 import Spreadsheet from './Spreadsheet';
+import distance from './calcDistance'
 
 class GoogleSheetAPI extends React.Component {
   
@@ -14,8 +15,11 @@ class GoogleSheetAPI extends React.Component {
     fetch('/api')
       .then((res) => {
         res.json().then((values) => {
-          console.log('values', values)
-          this.setState({ loading: false, fetched: true, entities: values });
+          this.setState({
+            loading: false,
+            fetched: true,
+            entities: values
+          });
         });
       })
       .catch(err => {
@@ -26,12 +30,21 @@ class GoogleSheetAPI extends React.Component {
 
   render () {
     const { loading, entities, fetched } = this.state;
+    const { point } = this.props
+
+    const rows = entities.map(value => {
+      const distanceBetween = point
+        ? distance(point, [value.lng, value.lat])
+        : 0;
+        return { ...value, distance: distanceBetween };
+    })
+
     return (
       <div>
         <h2>
         {`Here should render a SpreadsheetTable: [${loading ? 'loading' : 'done'}]`}
         </h2>
-        {fetched && <Spreadsheet point={this.props.point} rows={entities} />}
+        {fetched && <Spreadsheet point={point} rows={rows} />}
       </div>
     );
   }

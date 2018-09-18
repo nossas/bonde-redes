@@ -7,7 +7,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import distance from './calcDistance';
 
-const SimpleTable = ({ rows, point }) => (
+const SimpleTable = ({ rows }) => (
   <Paper>
     <Table>
       <TableHead>
@@ -15,22 +15,18 @@ const SimpleTable = ({ rows, point }) => (
           <TableCell>Nome</TableCell>
           <TableCell>Especialidade</TableCell>
           <TableCell>Localização</TableCell>
-          {point && <TableCell>Distância</TableCell>}
+          <TableCell>Distância</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {rows.map((row, index) => (
+        {rows.sort((r1, r2) => r1.distance - r2.distance).map((row, index) => (
           <TableRow key={`row-${index}`}>
             <TableCell component='th' scope='row'>
               {`${row.first_name} ${row.last_name}`}
             </TableCell>
             <TableCell>{row.expertness}</TableCell>
             <TableCell>{row.geoAddress}</TableCell>
-            {point && (
-              <TableCell>
-                {distance(point, [Number(row.lng), Number(row.lat)])}
-              </TableCell>
-            )}
+            <TableCell>{row.distance}</TableCell>
           </TableRow>
         ))}
       </TableBody>

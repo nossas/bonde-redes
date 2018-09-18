@@ -20,7 +20,7 @@
   },
   "scripts": {
     "dev": "react-scripts start",
-    "dev:server": "nodemon node_modules/.bin/babel-node ./server/index.js",
+    "dev:server": "nodemon --exec 'rm -rf build && yarn build && node_modules/.bin/babel-node ./server/index.js' --watch ./src --watch ./server",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
