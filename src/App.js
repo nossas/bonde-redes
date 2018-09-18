@@ -58,7 +58,7 @@ class App extends Component {
             </Toolbar>
           </AppBar>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12}>
           <GoogleMapsAPI
             onSuccess={(values) => {
             this.setState(values)
@@ -66,7 +66,7 @@ class App extends Component {
           />
         </Grid>
         {address && location && (
-        <Grid item xs={8}>
+        <Grid item xs={12}>
             <Card>
                 <CardContent>
                 <Typography gutterBottom variant="headline">{address}</Typography>

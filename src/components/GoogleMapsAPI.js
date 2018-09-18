@@ -1,10 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import GoogleMaps from '@google/maps'
+import { withStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
 import Input from '@material-ui/core/Input'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
+
+const styles = theme => ({
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    minWidth: '500px'
+  }
+});
 
 class GoogleMapsAPI extends React.Component {
 
@@ -41,6 +52,7 @@ class GoogleMapsAPI extends React.Component {
   }
 
   render () {
+    const { classes } = this.props
     return (
     <Grid item>
     <Card>
@@ -51,8 +63,11 @@ class GoogleMapsAPI extends React.Component {
           onChange={e => this.setState({ address: e.target.value })}
           placeholder='Busque por um endereço'
           value={this.state.address}
+          className={classes.input}
         />
-        <button type='submit'>Buscar!</button>
+        <Button variant="contained" color="secondary" className={classes.button}>
+          Buscar
+        </Button>
       </form>
     </CardContent>
     </Card>
@@ -65,4 +80,4 @@ GoogleMapsAPI.propTypes = {
   onSuccess: PropTypes.func
 }
 
-export default GoogleMapsAPI
+export default withStyles(styles)(GoogleMapsAPI)

@@ -9,7 +9,9 @@ const parseSpreadsheet = (rows) => {
     'expertness': 8,
     'lng': 13,
     'lat': 14,
-    'geoAddress': 15
+    'geoAddress': 15,
+    'availability': 5,
+    'busy': 6
   };
 
   return rows.map(row => {
