@@ -9,7 +9,6 @@ import api from './api.js';
 // Assert required enviroment variables for app
 assert(process.env.GCLOUD_PROJECT !== undefined, 'Required enviroment variable GCLOUD_PROJECT');
 assert(process.env.GOOGLE_APPLICATION_CREDENTIALS !== undefined, 'Required enviroment GOOGLE_APPLICATION_CREDENTIALS');
-assert(process.env.GOOGLE_SPREADSHEET_ID !== undefined, 'Required enviroment GOOGLE_SPREADSHEET_ID');
 assert(process.env.PORT !== undefined, 'Required enviroment PORT');
 
 const asyncMiddleware = fn => (req, res, next) => {

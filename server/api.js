@@ -1,29 +1,15 @@
-import { google } from 'googleapis';
-
-const parseSpreadsheet = (rows) => {
-  const rowKeys = {
-    'first_name': 3,
-    'last_name': 4,
-    'state': 0,
-    'city': 1,
-    'expertness': 8,
-    'lng': 13,
-    'lat': 14,
-    'geoAddress': 15,
-    'availability': 5,
-    'busy': 6
-  };
-
-  return rows.map(row => {
-    const json = {};
-    Object.keys(rowKeys).forEach(keyName => {
-      json[keyName] = row[rowKeys[keyName]];
-    });
-    return json;
-  });
-};
+import { google } from 'googleapis'
+import parse, { spreadsheets } from './parse'
 
 const main = async (req, res, next) => {
+  const { serviceType } = req.query
+  
+  if (serviceType !== 'therapist' && serviceType !== 'lawyers') {
+    return res.status(400).json({ error: 'Query serviceType is invalid' })
+  }
+
+  const spreadsheet = spreadsheets[serviceType]
+  
   // Use GCLOUD_PROJECT and GOOGLE_APPLICATION_CREDENTIALS to authenticate
   // service-to-service on googleapis 
   const auth = await google.auth.getClient({
@@ -35,7 +21,7 @@ const main = async (req, res, next) => {
   const sheets = google.sheets('v4');
   sheets.spreadsheets.values.get({
     auth: auth,
-    spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
+    spreadsheetId: spreadsheet.id,
     range: 'A2:P'
   }, (err, sheetRes) => {
     if (err) {
@@ -47,7 +33,7 @@ const main = async (req, res, next) => {
 
     const rows = sheetRes.data.values;
     console.log('Parse spreadsheet start...');
-    const jsonResponse = parseSpreadsheet(rows);
+    const jsonResponse = parse(rows, spreadsheet.structure);
     console.log('Parse spreadsheet is done!')
     return res.json(jsonResponse);
   });
