@@ -4,7 +4,7 @@ import parse, { spreadsheets } from './parse'
 const main = async (req, res, next) => {
   const { serviceType } = req.query
   
-  if (serviceType !== 'therapist' && serviceType !== 'lawyers') {
+  if (serviceType !== 'therapist' && serviceType !== 'lawyer') {
     return res.status(400).json({ error: 'Query serviceType is invalid' })
   }
 

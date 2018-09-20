@@ -1,7 +1,7 @@
 import therapist from './therapist'
-import lawyers from './lawyers'
+import lawyer from './lawyer'
 
-export const spreadsheets = { therapist, lawyers }
+export const spreadsheets = { therapist, lawyer }
 
 export default (values, cols) => values.map(row => {
   const item = {}
