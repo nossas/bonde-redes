@@ -19,12 +19,13 @@ const Panel = ({ children }) => (
 
 class Search extends React.Component {
  
-  handleSubmit ({ geolocation, serviceType }) {
+  handleSubmit ({ geolocation, serviceType, distance }) {
     // Prepare params to query on api
     this.props.onSuccess({
       lat: geolocation.lat,
       lng: geolocation.lng,
-      serviceType
+      serviceType,
+      distance
     })
   }
 

@@ -2,7 +2,7 @@ import { google } from 'googleapis'
 import parse, { spreadsheets } from './parse'
 
 const main = async (req, res, next) => {
-  const { serviceType } = req.query
+  const { serviceType, lat, lng, distance } = req.query
   
   if (serviceType !== 'therapist' && serviceType !== 'lawyer') {
     return res.status(400).json({ error: 'Query serviceType is invalid' })
@@ -29,7 +29,10 @@ const main = async (req, res, next) => {
       throw err;
     }
     const rows = sheetRes.data.values;
-    const jsonResponse = parse(rows, spreadsheet.structure);
+    // Parse rows and filter by distance
+    const jsonResponse = parse(rows, spreadsheet.structure, [lng, lat])
+      .filter(row => row.distance ? row.distance < Number(distance) : true)
+      .sort((r1, r2) => r1.distance - r2.distance)
     return res.json(jsonResponse);
   });
 }

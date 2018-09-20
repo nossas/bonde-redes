@@ -10,4 +10,5 @@ export default [
   { accessor: 'whatsapp', Header: 'Whatsapp' },
   { accessor: 'registry', Header: 'CRP ou CRM' },
   { accessor: 'note', Header: 'Observações' },
+  { accessor: 'distance', Header: 'Distância (km)' }
 ]

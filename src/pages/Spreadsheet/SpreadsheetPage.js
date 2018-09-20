@@ -58,7 +58,9 @@ class Dataset extends React.Component {
       <FullWidth>  
         <Flexbox vertical>
           <Title.H2 margin={{ bottom: 20 }}>Match realizado!</Title.H2>
-          <Title.H4 margin={{ bottom: 30 }}>{`${json.length} voluntárias encontradas.`}</Title.H4>
+          <Title.H4 margin={{ bottom: 30 }}>
+            {`${json.length} voluntárias encontradas em um raio de ${params.distance}km.`}
+          </Title.H4>
           <ReactTable
             data={json}
             columns={columns[params.serviceType]}

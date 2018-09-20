@@ -13,7 +13,7 @@ class SearchForm extends React.Component {
  
   state = {
     geolocation: undefined,
-    email: '',
+    distance: 80,
     serviceType: ''
   }
 
@@ -32,14 +32,15 @@ class SearchForm extends React.Component {
           onChangeLocation={(geolocation) => this.setState({ geolocation })}
           value={this.state.geolocation}
         /> 
-        {/*<FormField
-          name='email'
-          label='E-mail do ativista'
-          placeholder='Digite o e-mail do ativista'
+        <FormField
+          name='distance'
+          label='Distância (km)'
+          placeholder='Informe o raio de busca'
+          type='number'
           inputComponent={Input}
-          onChange={(e) => this.setState({ email: e.target.value })}
-          value={this.state.email}
-        />*/}
+          onChange={(e) => this.setState({ distance: e.target.value })}
+          value={this.state.distance}
+        />
         <FormField
           name='serviceType'
           label='Tipo de atendimento'

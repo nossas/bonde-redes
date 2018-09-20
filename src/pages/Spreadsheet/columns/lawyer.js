@@ -50,5 +50,9 @@ export default [
   {
     accessor: 'note',
     Header: 'Observações'
+  },
+  {
+    accessor: 'distance',
+    Header: 'Distância (km)'
   }
 ]
