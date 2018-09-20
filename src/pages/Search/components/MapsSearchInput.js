@@ -46,8 +46,7 @@ class MapsSearchInput extends React.Component {
         
         this.setState({
           loading: false,
-          error: 'Algo deu errado!',
-          valid: false
+          error: 'Algo deu errado!'
         })
         onChangeLocation && onChangeLocation(undefined)
       })
