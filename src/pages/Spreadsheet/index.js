@@ -1,1 +1,1 @@
-export { default } from './Dataset'
+export { default } from './SpreadsheetPage'

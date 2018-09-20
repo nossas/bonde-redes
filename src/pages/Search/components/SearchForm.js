@@ -32,14 +32,14 @@ class SearchForm extends React.Component {
           onChangeLocation={(geolocation) => this.setState({ geolocation })}
           value={this.state.geolocation}
         /> 
-        <FormField
+        {/*<FormField
           name='email'
           label='E-mail do ativista'
           placeholder='Digite o e-mail do ativista'
           inputComponent={Input}
           onChange={(e) => this.setState({ email: e.target.value })}
           value={this.state.email}
-        />
+        />*/}
         <FormField
           name='serviceType'
           label='Tipo de atendimento'
@@ -54,7 +54,15 @@ class SearchForm extends React.Component {
           <option value='lawyer'>Advogada</option>
         </FormField>
         <Flexbox horizontal end>
-          <Button type='submit'>Buscar</Button>
+          <Button
+            type='submit'
+            disabled={(
+              this.state.geolocation === undefined
+                || this.state.serviceType === ''
+            )}
+          >
+            Buscar
+          </Button>
         </Flexbox>
       </form>
     )

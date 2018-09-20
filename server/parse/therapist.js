@@ -2,9 +2,9 @@ export default {
   id: '1AnRtXhzjXAcci2vfO0TFvUDKwXwkQJ62wlcgy3ffULc',
   structure: {
     // Nome
-    'first_name': 3,
+    'firstName': 3,
     // Sobrenome
-    'last_name': 4,
+    'lastName': 4,
     // Especialidade
     'expertness': 5,
     // Endereço completo
@@ -13,7 +13,7 @@ export default {
     'availability': 7,
     // Quantas pessoas está atendendo?
     'busy': 8,
-    // Quantas pessoas foram encaminhas?
+    // Quantas pessoas foram encaminhadas?
     'fowarded': 9,
     // Telefone
     'phone': 10,

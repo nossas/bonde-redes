@@ -2,9 +2,9 @@ export default {
   id: '18izV1fwOwU9OAjqSvsqQha5FVbHinzUUe25EH4zbBD0',
   structure: {
     // Nome
-    'first_name': 3,
+    'firstName': 3,
     // Sobrenome
-    'last_name': 4,
+    'lastName': 4,
     // Endereço de atendimento
     'geoAddress': 5,
     // Que tipo de serviço pode oferecer?

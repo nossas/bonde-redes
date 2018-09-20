@@ -28,13 +28,8 @@ const main = async (req, res, next) => {
       console.error('The API returned an error.');
       throw err;
     }
-
-    console.log('The API returned with success!')
-
     const rows = sheetRes.data.values;
-    console.log('Parse spreadsheet start...');
     const jsonResponse = parse(rows, spreadsheet.structure);
-    console.log('Parse spreadsheet is done!')
     return res.json(jsonResponse);
   });
 }
