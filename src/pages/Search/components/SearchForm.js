@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Button,
   Flexbox2 as Flexbox,
@@ -17,9 +18,8 @@ class SearchForm extends React.Component {
   }
 
   handleSubmit (evt) {
-    evt.preventDefault();
-    // TODO: Submit form properties
-    console.log('values', this.state)
+    evt.preventDefault()
+    this.props.onSubmit(this.state)
   }
 
   render () {
@@ -59,6 +59,10 @@ class SearchForm extends React.Component {
       </form>
     )
   }
+}
+
+SearchForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired
 }
 
 export default SearchForm

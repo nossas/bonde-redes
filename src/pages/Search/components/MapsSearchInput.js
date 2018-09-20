@@ -61,7 +61,7 @@ class MapsSearchInput extends React.Component {
           {...extraProps}
           onBlur={this.handleBlur.bind(this)}
           inputComponent={Input}
-          hint={loading && 'buscando endereço...'}
+          hint={loading ? 'buscando endereço...' : ''}
         />
         {!loading && value && (
           <Flexbox spacing='between' margin={{ top: -10 }}>
