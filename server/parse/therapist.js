@@ -2,30 +2,30 @@ export default {
   id: '1AnRtXhzjXAcci2vfO0TFvUDKwXwkQJ62wlcgy3ffULc',
   structure: {
     // Nome
-    'firstName': 3,
+    firstName: 3,
     // Sobrenome
-    'lastName': 4,
+    lastName: 4,
     // Especialidade
-    'expertness': 5,
+    expertness: 5,
     // Endereço completo
-    'geoAddress': 6,
+    geoAddress: 6,
     // Quantas pessoas pode atender?
-    'availability': 7,
+    availability: 7,
     // Quantas pessoas está atendendo?
-    'busy': 8,
+    busy: 8,
     // Quantas pessoas foram encaminhadas?
-    'fowarded': 9,
+    fowarded: 9,
     // Telefone
-    'phone': 10,
+    phone: 10,
     // Whatsapp
-    'whatsapp': 11,
+    whatsapp: 11,
     // CRP ou CRM
-    'registry': 12,
+    registry: 12,
     // Observações
-    'note': 13,
+    note: 13,
     // Longitude
-    'lng': 14,
+    lng: 14,
     // Latitudade
-    'lat': 15
+    lat: 15
   }
 }

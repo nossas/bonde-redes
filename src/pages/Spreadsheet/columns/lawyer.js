@@ -12,6 +12,10 @@ export default [
     Header: 'Endereço de atendimento'
   },
   {
+    accessor: 'distance',
+    Header: 'Distância (km)'
+  },
+  {
     accessor: 'serviceType',
     Header: 'Qual tipo de serviço pode oferecer?'
   },
@@ -50,9 +54,5 @@ export default [
   {
     accessor: 'note',
     Header: 'Observações'
-  },
-  {
-    accessor: 'distance',
-    Header: 'Distância (km)'
   }
 ]

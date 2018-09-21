@@ -26,12 +26,12 @@ class Dataset extends React.Component {
 
   getEndpoint () {
     const { params } = this.props
-    
+
     const url = new URL(`${window.location.href}/api`)
     Object.keys(params).forEach(
       key => url.searchParams.append(key, params[key])
     )
-    
+
     return url
   }
 
@@ -55,7 +55,7 @@ class Dataset extends React.Component {
         <Loading />
       </Flexbox>
     ) : (
-      <FullWidth>  
+      <FullWidth>
         <Flexbox vertical>
           <Title.H2 margin={{ bottom: 20 }}>Match realizado!</Title.H2>
           <Title.H4 margin={{ bottom: 30 }}>
@@ -77,7 +77,7 @@ Dataset.propTypes = {
   params: PropTypes.shape({
     lat: PropTypes.number,
     lng: PropTypes.number,
-    serviceType: PropTypes.oneOf(['lawyers', 'therapist'])
+    serviceType: PropTypes.oneOf(['lawyer', 'therapist'])
   }).isRequired
 }
 

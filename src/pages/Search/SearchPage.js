@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Text, Title, Flexbox2 as Flexbox, Spacing } from 'bonde-styleguide'
+import {
+  Text, Title, Flexbox2 as Flexbox, Spacing
+} from 'bonde-styleguide'
 import SearchForm from './components/SearchForm'
 
 const styles = {
@@ -18,8 +20,7 @@ const Panel = ({ children }) => (
 )
 
 class Search extends React.Component {
- 
-  handleSubmit ({ geolocation, serviceType, distance }) {
+  handleSubmit({ geolocation, serviceType, distance }) {
     // Prepare params to query on api
     this.props.onSuccess({
       lat: geolocation.lat,
@@ -29,17 +30,17 @@ class Search extends React.Component {
     })
   }
 
-  render () {
+  render() {
     return (
       <Flexbox horizontal middle>
         <Panel>
           <Spacing margin={{ bottom: 15 }}>
-            <Title.H2 align='center'>Novo Match</Title.H2>
+            <Title.H2 align="center">Novo Match</Title.H2>
           </Spacing>
           <Spacing margin={{ bottom: 35 }}>
-          <Text align='center'>Insira os dados da pessoa e o tipo de atendimento que você deseja buscar:</Text>
+            <Text align="center">Insira os dados da pessoa e o tipo de atendimento que você deseja buscar:</Text>
           </Spacing>
-          <SearchForm onSubmit={this.handleSubmit.bind(this)} />  
+          <SearchForm onSubmit={this.handleSubmit.bind(this)} />
         </Panel>
       </Flexbox>
     )

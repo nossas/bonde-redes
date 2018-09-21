@@ -5,9 +5,9 @@ import lawyer from './lawyer'
 export const spreadsheets = { therapist, lawyer }
 
 export default (values, cols, from) => values
-  .map(row => {
+  .map((row) => {
     const item = {}
-    Object.keys(cols).forEach(colName => {
+    Object.keys(cols).forEach((colName) => {
       item[colName] = row[cols[colName]]
     })
 

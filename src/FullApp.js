@@ -1,3 +1,4 @@
+/* global document */
 import React from 'react'
 import {
   Header,
@@ -13,7 +14,7 @@ import SpreadsheetPage from './pages/Spreadsheet'
 const SEARCH = 'search'
 const SPREADSHEET = 'spreadsheet'
 
-class FullAPP extends React.Component { 
+class FullAPP extends React.Component {
 
   state = {
     params: {},
