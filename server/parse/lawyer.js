@@ -6,7 +6,7 @@ export default {
     // Sobrenome
     'lastName': 4,
     // Endereço de atendimento
-    'geoAddress': 5,
+    'geoAddress': 16,
     // Que tipo de serviço pode oferecer?
     'serviceType': 6,
     // Quantas orientações juridicas pode fazer ao mesmo tempo?
@@ -26,6 +26,10 @@ export default {
     // OAB
     'registry': 14,
     // Observações
-    'note': 15
+    'note': 15,
+    // Longitude
+    'lng': 17,
+    // Latitude
+    'lat': 18
   }
 }

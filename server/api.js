@@ -22,7 +22,7 @@ const main = async (req, res, next) => {
   sheets.spreadsheets.values.get({
     auth: auth,
     spreadsheetId: spreadsheet.id,
-    range: 'A2:P'
+    range: 'A2:T'
   }, (err, sheetRes) => {
     if (err) {
       console.error('The API returned an error.');
@@ -31,7 +31,7 @@ const main = async (req, res, next) => {
     const rows = sheetRes.data.values;
     // Parse rows and filter by distance
     const jsonResponse = parse(rows, spreadsheet.structure, [lng, lat])
-      .filter(row => row.distance ? row.distance < Number(distance) : true)
+      .filter(row => row.distance && row.distance < Number(distance))
       .sort((r1, r2) => r1.distance - r2.distance)
     return res.json(jsonResponse);
   });

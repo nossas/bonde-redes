@@ -12,10 +12,10 @@ export default (values, cols, from) => values
     })
 
     // add distance column
-    if (item.lng && item.lat && from) {
-      item.distance = calcDistance(from, [item.lng, item.lat])
-    } else {
-      item.distance = 0
+    const lng = Number(item.lng)
+    const lat = Number(item.lat)
+    if (!isNaN(lng) && !isNaN(lng) && lat && from) {
+      item.distance = calcDistance(from, [lng, lat])
     }
 
     return item
