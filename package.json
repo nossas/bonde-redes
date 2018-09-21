@@ -13,6 +13,7 @@
     "express": "^4.16.3",
     "googleapis": "^33.0.0",
     "morgan": "^1.9.1",
+    "prop-types": "^15.6.2",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
     "react-scripts": "1.1.5",
@@ -25,7 +26,7 @@
     "dev:client": "PORT=4000 react-scripts start",
     "dev:server": "PORT=5000 nodemon node_modules/.bin/babel-node ./server/index.js",
     "build": "react-scripts build && babel server --out-dir build-server",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom && eslint src server",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
@@ -34,6 +35,11 @@
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "concurrently": "^4.0.1",
+    "eslint": "^5.6.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.1",
     "nodemon": "^1.18.4"
   },
   "proxy": "http://localhost:5000/"
