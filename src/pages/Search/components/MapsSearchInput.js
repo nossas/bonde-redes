@@ -1,66 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import GoogleMaps from '@google/maps'
 import {
-  FormField,
-  Input,
   Flexbox2 as Flexbox,
   Text,
   Spacing
 } from 'bonde-styleguide'
+import SuggestInput from './SuggestInput'
 
 class MapsSearchInput extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
-    this.client = GoogleMaps.createClient({
-      // TODO: Change to enviroment variable
-      key: 'AIzaSyBNOVZLAmI3WM4X2bB-PAVBsIE9C81XCek',
-      Promise
-    })
-
-    this.state = { loading: false, geolocation: undefined }
+    this.state = { loading: false }
   }
-
-  handleBlur(e) {
-    const { onChangeLocation } = this.props
-
-    const value = e.target.value
-    this.setState({ loading: true })
-
-    this.client
-      .geocode({ address: value })
-      .asPromise()
-      .then((res) => {
-        if (res.json && res.json.results) {
-          const addr = res.json.results[0]
-
-          this.setState({ loading: false })
-          onChangeLocation && onChangeLocation(addr.geometry.location)
-
-          return Promise.resolve()
-        }
-      })
-      .catch((err) => {
-        console.log('ErrorBlur', err)
-
-        this.setState({
-          loading: false,
-          error: 'Algo deu errado!'
-        })
-        onChangeLocation && onChangeLocation(undefined)
-      })
-  }
-
-  render() {
+  
+  render () {
     const { loading } = this.state
     const { value, ...extraProps } = this.props
+
     return (
       <Spacing margin={{ bottom: 15 }}>
-        <FormField
+        <SuggestInput
           {...extraProps}
-          onBlur={this.handleBlur.bind(this)}
-          inputComponent={Input}
-          hint={loading ? 'buscando endereço...' : ''}
+          onSelect={(suggestion) => {
+            this.props.onChangeLocation(suggestion.location)
+          }}
         />
         {!loading && value && (
           <Flexbox spacing="between" margin={{ top: -10 }}>

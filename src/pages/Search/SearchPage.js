@@ -9,7 +9,7 @@ const styles = {
   panel: {
     backgroundColor: 'white',
     padding: '50px 30px',
-    maxWidth: '400px'
+    maxWidth: '500px'
   }
 }
 
