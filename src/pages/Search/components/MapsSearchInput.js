@@ -26,7 +26,7 @@ class MapsSearchInput extends React.Component {
           }}
         />
         {!loading && value && (
-          <Flexbox spacing="between" margin={{ top: -10 }}>
+          <Flexbox spacing="between">
             <Text fontSize={13}>
               <b>Lat:</b>
               {' '}

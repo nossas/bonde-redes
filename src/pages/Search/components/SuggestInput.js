@@ -6,15 +6,23 @@ import GoogleMaps from '@google/maps'
 
 const SuggestionsContainer = styled.div`
   position: relative;
+  margin-top: -17px;
 
   & > div {
     position: absolute;
     background-color: white;
+    width: 100%;
+    -webkit-box-shadow: 0px 2px 5px -1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 2px 5px -1px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 5px -1px rgba(0,0,0,0.75);
+    z-index: 2;
   }
 
   & li {
     list-style: none;
     padding: 5px 5px 10px;
+    background-color: white;
+    border-bottom: 1px solid #c7c7c7;
   }
 
   & .react-autosuggest__suggestion--highlighted {
@@ -103,6 +111,7 @@ export default class SuggestInput extends React.Component {
         renderSuggestionsContainer={this.renderSuggestionsContainer.bind(this)}
         alwaysRenderSuggestion={true}
         inputProps={inputProps}
+        shouldRenderSuggestions={value => value.trim().length > 4}
         renderInputComponent={(props) => (
           <FormField
             {...props}
