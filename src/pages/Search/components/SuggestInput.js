@@ -36,7 +36,7 @@ export default class SuggestInput extends React.Component {
 
     this.client = GoogleMaps.createClient({
       // TODO: Change to enviroment variable
-      key: 'AIzaSyBNOVZLAmI3WM4X2bB-PAVBsIE9C81XCek',
+      key: '8a67614ad3e1b84a907f8d267de37131f1f2f2e0',
       Promise
     })
 
