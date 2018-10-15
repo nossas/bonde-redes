@@ -33,7 +33,6 @@ const SuggestionsContainer = styled.div`
 export default class SuggestInput extends React.Component {
   constructor (props) {
     super(props)
-
     this.client = GoogleMaps.createClient({
       // TODO: Change to enviroment variable
       key: process.env.REACT_APP_GOOGLE_CLIENT_KEY,
@@ -57,7 +56,6 @@ export default class SuggestInput extends React.Component {
             address: addr.formatted_address,
             location: addr.geometry.location
           }))
-
           this.setState({ suggestions })
           return Promise.resolve()
         }
@@ -111,7 +109,7 @@ export default class SuggestInput extends React.Component {
         renderSuggestionsContainer={this.renderSuggestionsContainer.bind(this)}
         alwaysRenderSuggestion={true}
         inputProps={inputProps}
-        shouldRenderSuggestions={value => value.trim().length > 4}
+        shouldRenderSuggestions={value => value.trim().length > 6}
         renderInputComponent={(props) => (
           <FormField
             {...props}
