@@ -19,7 +19,9 @@ const main = async (req, res, next) => {
   }
 
   const id = { therapist: 360282119532, lawyer: 360269610652 }[serviceType]
-  clientZD.users.listByOrganization(id, (err, req, data) => {
+  
+  const searchTerm = `type:user organization_id:${id} condition:inscrita condition:disponível`
+  clientZD.search.queryAll(searchTerm, (err, req, data) => {
     if (err) {
       console.error('The API returned an error.')
       throw err
