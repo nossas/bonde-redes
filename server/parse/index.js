@@ -1,22 +1,19 @@
 import calcDistance from './calcDistance'
-import therapist from './therapist'
-import lawyer from './lawyer'
 
-export const spreadsheets = { therapist, lawyer }
 
-export default (values, cols, from) => values
-  .map((row) => {
-    const item = {}
-    Object.keys(cols).forEach((colName) => {
-      item[colName] = row[cols[colName]]
-    })
+const onlyWithLocation = ({ user_fields: { latitude, longitude } }) => {
+  return latitude != null && longitude != null
+}
 
-    // add distance column
-    const lng = Number(item.lng)
-    const lat = Number(item.lat)
-    if (!isNaN(lng) && !isNaN(lng) && lat && from) {
-      item.distance = calcDistance(from, [lng, lat])
-    }
+const addDistance = (user, pointA) => {
+  const lat = Number(user.user_fields.latitude)
+  const lng = Number(user.user_fields.longitude)
+  return {
+    ...user,
+    distance: calcDistance(pointA, [lng, lat])
+  }
+}
 
-    return item
-  })
+export default (result, pointA) => result
+  .filter(onlyWithLocation)
+  .map(user => addDistance(user, pointA))

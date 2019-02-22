@@ -1,41 +1,35 @@
-import { google } from 'googleapis'
-import parse, { spreadsheets } from './parse'
+import zendesk from 'node-zendesk'
+import parse from './parse'
 
+
+const clientZD = zendesk.createClient({
+  username: process.env.ZENDESK_API_USER,
+  token: process.env.ZENDESK_API_TOKEN,
+  remoteUri: 'https://mapadoacolhimento.zendesk.com/api/v2',
+})
+
+// export default main
 const main = async (req, res, next) => {
   const {
     serviceType, lat, lng, distance
   } = req.query
-
+  // TODO: change filter
   if (serviceType !== 'therapist' && serviceType !== 'lawyer') {
     return res.status(400).json({ error: 'Query serviceType is invalid' })
   }
 
-  const spreadsheet = spreadsheets[serviceType]
-
-  // Use GCLOUD_PROJECT and GOOGLE_APPLICATION_CREDENTIALS to authenticate
-  // service-to-service on googleapis
-  const auth = await google.auth.getClient({
-    scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly']
-  })
-
-  // Get values of GOOGLE_SPREADSHEET_ID
-  // you need to give permission for your service account
-  const sheets = google.sheets('v4')
-  sheets.spreadsheets.values.get({
-    auth,
-    spreadsheetId: spreadsheet.id,
-    range: 'A2:T'
-  }, (err, sheetRes) => {
+  const id = { therapist: 360282119532, lawyer: 360269610652 }[serviceType]
+  clientZD.users.listByOrganization(id, (err, req, data) => {
     if (err) {
       console.error('The API returned an error.')
       throw err
     }
-    const rows = sheetRes.data.values
-    // Parse rows and filter by distance
-    const jsonResponse = parse(rows, spreadsheet.structure, [lng, lat])
-      .filter(row => row.distance && row.distance < Number(distance))
-      .sort((r1, r2) => r1.distance - r2.distance)
-    return res.json(jsonResponse)
+    // Filter by distance
+    const result = parse(data, [lng, lat])
+      .filter(user => user.distance < Number(distance))
+      .sort((u1, u2) => u1.distance - u2.distance)
+
+    return res.json(result)
   })
 }
 
