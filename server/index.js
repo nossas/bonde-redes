@@ -7,8 +7,8 @@ import path from 'path'
 import api from './api.js'
 
 // Assert required enviroment variables for app
-assert(process.env.GCLOUD_PROJECT !== undefined, 'Required enviroment variable GCLOUD_PROJECT')
-assert(process.env.GOOGLE_APPLICATION_CREDENTIALS !== undefined, 'Required enviroment GOOGLE_APPLICATION_CREDENTIALS')
+assert(process.env.ZENDESK_API_USER !== undefined, 'Required enviroment variable ZENDESK_API_USER')
+assert(process.env.ZENDESK_API_TOKEN !== undefined, 'Required enviroment variable ZENDESK_API_TOKEN')
 assert(process.env.PORT !== undefined, 'Required enviroment PORT')
 
 const asyncMiddleware = fn => (req, res, next) => {

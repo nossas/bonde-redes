@@ -1,8 +1,8 @@
 import turf from 'turf'
 
-export default (x, y) => {
-  const from = turf.point(x)
-  const to = turf.point(y)
+export default (pointA, pointB) => {
+  const a = turf.point(pointA)
+  const b = turf.point(pointB)
 
-  return Number(turf.distance(from, to)).toFixed(2)
+  return Number(turf.distance(a, b)).toFixed(2)
 }

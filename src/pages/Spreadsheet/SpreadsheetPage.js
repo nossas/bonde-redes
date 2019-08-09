@@ -3,13 +3,56 @@ import PropTypes from 'prop-types'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import { Flexbox2 as Flexbox, Title, Loading } from 'bonde-styleguide'
-import columns from './columns'
 
 const styles = {
   panel: {
     width: '100%'
   }
 }
+
+const columns = [
+  {
+    accessor: 'name',
+    Header: 'Nome'
+  },
+  {
+    accessor: 'user_fields.address',
+    Header: 'Endereço de atendimento'
+  },
+  {
+    accessor: 'distance',
+    Header: 'Distância (km)'
+  },
+  {
+    accessor: 'user_fields.disponibilidade_de_atendimentos',
+    Header: 'Disponibilidade de atendimento'
+  },
+  {
+    accessor: 'user_fields.encaminhamentos',
+    Header: 'Encaminhamentos realizados'
+  },
+  {
+    accessor: 'user_fields.atendimentos_em_andamento',
+    Header: 'Atendimentos em andamento'
+  },
+  {
+    accessor: 'user_fields.occupation_area',
+    Header: 'Área de atuação'
+  },
+  {
+    accessor: 'phone',
+    Header: 'Telefone'
+  },
+  {
+    accessor: 'user_fields.whatsapp',
+    Header: 'Whatsapp'
+  },
+  {
+    accessor: 'user_fields.registration_number',
+    Header: 'Número de registro (OAB, CRM ou CRP)'
+  }
+]
+
 
 const FullWidth = ({ children }) => (
   <div style={styles.panel}>
@@ -63,7 +106,7 @@ class Dataset extends React.Component {
           </Title.H4>
           <ReactTable
             data={json}
-            columns={columns[params.serviceType]}
+            columns={columns}
             defaultPageSize={10}
             className="-striped -highlight"
           />
