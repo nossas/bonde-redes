@@ -1,6 +1,0 @@
-{
-  "name": "bonde-microservices-typeform",
-  "dependencies": {
-    "bonde-webhook-core": "link:../../core"
-  }
-}
