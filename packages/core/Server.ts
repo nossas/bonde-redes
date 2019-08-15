@@ -1,14 +1,55 @@
 import Express from 'express'
+import debug, { Debugger } from 'debug'
+import axios from 'axios'
 
-const App = Express()
+interface DataType {
+  data: {
+    logTable: {
+      returning: Array<{
+        id: number
+      }>
+    }
+  }
+}
 
-App
-  .use(Express.json())
-  .post('/', (req, res) => {
-    console.log(req.body)
-  })
-  .listen(8081, () => {
-    console.log('Servidor escutando na porta 8081...')
-  })
+class Server {
+  private server = Express().use(Express.json())
 
-export default App
+  private dbg: Debugger
+
+  constructor (name: string) {
+    this.dbg = debug(`microservice:webserver:${name}`)
+  }
+
+  private request = async (data: any) => {
+    const { HASURA_API_URL, HASURA_TABLE_NAME } = process.env
+    try {
+      const json = JSON.stringify(data)
+      const { data: { data: { logTable: { returning: [{ id }] } } } } = await axios.post<DataType>(HASURA_API_URL, {
+        query: `mutation($json: json!) { logTable: insert_${HASURA_TABLE_NAME}(objects: { data: $json }) { returning { id } }}`,
+        variables: { json }
+      })
+      this.dbg(`Success logged, id: ${id}`)
+    } catch (e) {
+      this.dbg(e)
+    }
+  }
+
+  logTo = () => {
+    this.server.post('/', (req: Request) => {
+      this.request(req.body)
+    })
+  }
+
+  listen = () => {
+    const { PORT } = process.env
+    return new Promise((resolve, reject) => {
+      this.server.listen(Number(PORT), '0.0.0.0', () => {
+        this.dbg(`Server listen on port ${PORT}`)
+        resolve()
+      })
+    })
+  }
+}
+
+export default Server
