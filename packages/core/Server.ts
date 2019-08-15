@@ -2,6 +2,20 @@ import Express from 'express'
 import debug, { Debugger } from 'debug'
 import axios from 'axios'
 
+const mutation = (HASURA_TABLE_NAME: string) => `mutation(
+  $json: jsonb!,
+  $service_name: String!
+) {
+  logTable: insert_${HASURA_TABLE_NAME} (
+    objects: {
+      data: $json,
+      service_name: $service_name
+    }
+  ) {
+    returning { id }
+  }
+}`
+
 interface DataType {
   data: {
     logTable: {
@@ -15,9 +29,12 @@ interface DataType {
 class Server {
   private server = Express().use(Express.json())
 
+  private name: string
+
   private dbg: Debugger
 
   constructor (name: string) {
+    this.name = name
     this.dbg = debug(`microservice:webserver:${name}`)
   }
 
@@ -26,8 +43,8 @@ class Server {
     try {
       const json = JSON.stringify(data)
       const { data: { data: { logTable: { returning: [{ id }] } } } } = await axios.post<DataType>(HASURA_API_URL, {
-        query: `mutation($json: json!) { logTable: insert_${HASURA_TABLE_NAME}(objects: { data: $json }) { returning { id } }}`,
-        variables: { json }
+        query: mutation(HASURA_TABLE_NAME),
+        variables: { json, service_name: this.name }
       })
       this.dbg(`Success logged, id: ${id}`)
     } catch (e) {
