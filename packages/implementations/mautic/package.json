@@ -1,0 +1,13 @@
+{
+  "name": "bonde-microservices-mautic",
+  "dependencies": {
+    "bonde-webhook-core": "link:../../core"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "dotenv": "^8.0.0"
+  },
+  "scripts": {
+    "dev": "DEBUG=microservice:* ts-node-dev ."
+  }
+}
