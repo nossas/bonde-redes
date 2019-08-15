@@ -8,6 +8,7 @@
     "dotenv": "^8.0.0"
   },
   "scripts": {
-    "dev": "DEBUG=microservice:* ts-node-dev ."
+    "dev": "DEBUG=microservice:* ts-node-dev .",
+    "clean": "rm -rf node_modules"
   }
 }
