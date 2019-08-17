@@ -2,6 +2,7 @@ import Express from 'express'
 import debug, { Debugger } from 'debug'
 import axios from 'axios'
 import * as yup from 'yup'
+import urljoin from 'url-join'
 
 interface DataType {
   data: {
@@ -28,59 +29,44 @@ class Server {
     this.dbg = debug(`webhook-logs`)
   }
 
-  // private request = async (serviceName: string, data: any) => {
-  //   const { HASURA_API_URL, HASURA_TABLE_NAME } = process.env
-  //   try {
-  //     const json = JSON.stringify(data)
-  //     const { data: { data: { logTable: { returning: [{ id }] } } } } = await axios.post<DataType>(HASURA_API_URL, {
-  //       query: mutation(HASURA_TABLE_NAME),
-  //       variables: { json, service_name: serviceName }
-  //     })
-  //     this.dbg(`Success logged "${serviceName}" req with id "${id}"`)
-  //   } catch (e) {
-  //     this.dbg(e)
-  //   }
-  // }
+  private send = async () => {
+    const { ZENDESK_API_URL, ZENDESK_API_TOKEN } = process.env
+
+    const data = {
+      user: {
+        name: 'Gabriel Rocha de Oliveira',
+        ...this.formData
+      }
+    }
+
+    const endpoint = urljoin(ZENDESK_API_URL!, 'users')
+    try {
+      const result = await axios.post(endpoint, data, {
+        auth: {
+          username: 'rolivegab@gmail.com/token',
+          password: ZENDESK_API_TOKEN
+        }
+      })
+      this.dbg(`Success created user ${result.data.user.id}`)
+      return true
+    } catch (e) {
+      this.dbg(JSON.stringify(e.response.data, null, 2))
+      return false
+    }
+  }
+
+  private filter = (payload: any) => {
+    try {
+      const { event: { data: { new: { service_name: serviceName, data } } } } = payload
+      if (serviceName === 'mautic-test-form') {
+        return JSON.parse(data)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   private validate = async (json: any) => {
-    const a = {
-      'mautic.form_on_submit': [{
-        submission: {
-          id: 20,
-          ipAddress: {
-            ip: '187.105.22.79',
-            id: 22,
-            ipDetails: {
-              city: 'Natal',
-              region: 'Rio Grande do Norte',
-              zipcode: null,
-              country: 'Brazil',
-              latitude: -5.8109,
-              longitude: -35.2238,
-              isp: '',
-              organization: '',
-              timezone: 'America/Fortaleza',
-              extra: ''
-            }
-          },
-          form: {
-            id: 5,
-            name: 'Formulário Teste Integração',
-            alias: 'formulario',
-            category: null
-          },
-          lead: null,
-          trackingId: null,
-          dateSubmitted: '2019-08-16T17:59:56-03:00',
-          referer: 'https://mautic.nossas.org/s/forms/preview/5',
-          page: null,
-          results: {
-            cep: '59090-455'
-          }
-        },
-        timestamp: '2019-08-16T17:59:56-03:00'
-      }]
-    }
     const validation = yup.object().shape({
       'mautic.form_on_submit': yup.array().of(yup.object().shape({
         submission: yup.object().shape({
@@ -99,7 +85,7 @@ class Server {
     })
 
     try {
-      const validatedForm = await validation.validate(a)
+      const validatedForm = await validation.validate(json)
       this.formData = validatedForm['mautic.form_on_submit'][0].submission.results
     } catch (e) {
       this.dbg('validation failed', e)
@@ -109,10 +95,15 @@ class Server {
   start = () => {
     const { PORT } = process.env
     this.server
-      .get('/', async (req, res) => {
-        await this.validate(req.body)
+      .post('/', async (req, res) => {
+        const data = await this.filter(req.body)
+        await this.validate(data)
         if (this.formData) {
-          res.status(200).json('OK!')
+          if (await this.send()) {
+            res.status(200).json('OK!')
+          } else {
+            res.status(500).json('Erro ao salvar usuário')
+          }
         } else {
           res.status(400).json('malformed json')
         }
