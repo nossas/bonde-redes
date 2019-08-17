@@ -67,11 +67,12 @@ class Server {
   }
 
   private validate = async (json: any) => {
+    const { FORM_NAME } = process.env
     const validation = yup.object().shape({
       'mautic.form_on_submit': yup.array().of(yup.object().shape({
         submission: yup.object().shape({
           form: yup.object().shape({
-            name: yup.string().matches(/Formulário Teste Integração/).required()
+            name: yup.string().test('form name', 'not desired form', value => value === FORM_NAME).required()
           }),
           results: yup.object().shape({
             cep: yup
@@ -88,7 +89,11 @@ class Server {
       const validatedForm = await validation.validate(json)
       this.formData = validatedForm['mautic.form_on_submit'][0].submission.results
     } catch (e) {
-      this.dbg('validation failed', e)
+      if (e.type === 'form name') {
+        this.dbg('not desired form:', e.params.value)
+      } else {
+        this.dbg('validation failed', e)
+      }
     }
   }
 
