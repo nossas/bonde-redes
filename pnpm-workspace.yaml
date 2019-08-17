@@ -1,2 +1,4 @@
 packages:
-  - '**'
+  - '.'
+  - 'packages/webhook-logs'
+  - 'packages/webhook-zendesk'

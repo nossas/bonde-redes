@@ -1,10 +1,12 @@
 # bonde-microservices
 
+Instalar tipos do typescript somente na raiz do projeto, com o comando `pnpm i --shamefully-flatten -D @types/<pkg-name>`
+
 ## Commands
 
 #### Install
 ```
-pnpm m i
+pnpm m i --shamefully-flatten
 ```
 ---
 #### Delete `node_modules` recursively
