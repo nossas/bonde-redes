@@ -21,5 +21,5 @@ pnpm m run dev
 ---
 #### Install dependency on specific package
 ```
-pnpm m i <pkg-name> [-D] -- <pkg-name>
+pnpm m i <dependency-name> [-D] -- <pkg-name>
 ```
