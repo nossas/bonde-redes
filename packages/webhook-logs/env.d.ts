@@ -4,5 +4,6 @@ declare namespace NodeJS {
     DEBUG: string
     HASURA_API_URL: string
     HASURA_TABLE_NAME: string
+    X_HASURA_ADMIN_SECRET: string
   }
 }
