@@ -36,12 +36,16 @@ class Server {
   }
 
   private request = async (serviceName: string, data: any) => {
-    const { HASURA_API_URL } = process.env
+    const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
     try {
       const json = JSON.stringify(data)
       const { data: { data: { logTable: { returning: [{ id }] } } } } = await axios.post<DataType>(HASURA_API_URL, {
         query: mutation,
         variables: { json, service_name: serviceName }
+      }, {
+        headers: {
+          'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
+        }
       })
       this.dbg(`Success logged "${serviceName}" req with id "${id}"`)
     } catch (e) {
