@@ -1,0 +1,6 @@
+node_modules
+packages/webhook-logs/node_modules
+packages/webhook-zendesk/node_modules
+.env
+packages/webhook-logs/.env
+packages/webhook-zendesk/.env
