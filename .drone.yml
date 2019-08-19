@@ -1,0 +1,36 @@
+pipeline:
+  record-staging-publish:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-record
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhook-logs/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+
+  zendesk-staging-publish:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-zendesk
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhook-zendesk/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+
+  # record-staging-deploy:
+  #   image: peloton/drone-rancher
+  #   url: http://cluster.bonde.org
+  #   service: webhooks/record
+  #   docker_image: nossas/bonde-webhooks-record:${DRONE_BRANCH/\//-}
+  #   timeout: 360
+  #   confirm: true
+  #   secrets: [ rancher_access_key, rancher_secret_key ]
+  #   when:
+  #     status: success
+  #     branch: [hotfix/*, release/*, feature/*, support/*, develop]
