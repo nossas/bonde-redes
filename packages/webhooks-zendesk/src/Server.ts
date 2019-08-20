@@ -3,6 +3,9 @@ import debug, { Debugger } from 'debug'
 import axios from 'axios'
 import * as yup from 'yup'
 import urljoin from 'url-join'
+import AdvogadaCreateUser from './integrations/AdvogadaCreateUser';
+import Base from './integrations/Base';
+import PsicólogaCreateUser from './integrations/PsicólogaCreateUser';
 
 interface DataType {
   data: {
@@ -29,71 +32,49 @@ class Server {
     this.dbg = debug(`webhooks-zendesk`)
   }
 
-  private send = async () => {
-    const { ZENDESK_API_URL, ZENDESK_API_TOKEN } = process.env
-
-    const data = {
-      user: {
-        name: 'Gabriel Rocha de Oliveira',
-        ...this.formData
-      }
-    }
-
-    const endpoint = urljoin(ZENDESK_API_URL!, 'users')
+  private filterService = (payload: any, res: Express.Response) => {
     try {
-      const result = await axios.post(endpoint, data, {
-        auth: {
-          username: 'rolivegab@gmail.com/token',
-          password: ZENDESK_API_TOKEN
-        }
-      })
-      this.dbg(`Success created user ${result.data.user.id}`)
-      return true
+      const { event: { data: { new: { service_name: serviceName, data, created_at } } } } = payload
+      this.dbg(`received service "${serviceName}"`)
+      if (serviceName !== 'mautic-form') {
+        res.status(200).json(`Service "${serviceName}" isn't desired, but everything is OK.`)
+        throw `${serviceName} not desired service`
+      }
+      this.filterFormName(data, created_at, res)
     } catch (e) {
-      this.dbg(JSON.stringify(e.response.data, null, 2))
-      return false
+      this.dbg(e)
     }
   }
 
-  private filter = (payload: any) => {
+  private filterFormName = async (json: any, created_at: string, res: Express.Response) => {
     try {
-      const { event: { data: { new: { service_name: serviceName, data } } } } = payload
-      if (serviceName === 'mautic-test-form') {
-        return JSON.parse(data)
-      }
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  private validate = async (json: any) => {
-    const { FORM_NAME } = process.env
-    const validation = yup.object().shape({
-      'mautic.form_on_submit': yup.array().of(yup.object().shape({
-        submission: yup.object().shape({
-          form: yup.object().shape({
-            name: yup.string().test('form name', 'not desired form', value => value === FORM_NAME).required()
-          }),
-          results: yup.object().shape({
-            cep: yup
-              .string()
-              .required()
-              .transform((i: string) => i.split('').filter(j => j.match(/\d/)).join(''))
-              .length(8)
+      const data = JSON.parse(json)
+      const validation = yup.object().shape({
+        'mautic.form_on_submit': yup.array().of(yup.object().shape({
+          submission: yup.object().shape({
+            form: yup.object().shape({
+              name: yup.string().required()
+            }),
+            results: yup.object().required()
           })
-        })
-      }))
-    })
-
-    try {
-      const validatedForm = await validation.validate(json)
-      this.formData = validatedForm['mautic.form_on_submit'][0].submission.results
-    } catch (e) {
-      if (e.type === 'form name') {
-        this.dbg('not desired form:', e.params.value)
-      } else {
-        this.dbg('validation failed', e)
+        }))
+      })
+      const {'mautic.form_on_submit': [{submission: { form: { name }, results }}]} = await validation.validate(data)
+      let InstanceClass: Base
+      switch(name) {
+        case 'Recadastro: Advogadas Ativas':
+          InstanceClass = new AdvogadaCreateUser(results, created_at)
+          break
+        case 'Recadastro: Psicólogas Ativas':
+          InstanceClass = new PsicólogaCreateUser(results, created_at)
+        default:
+          this.dbg(`InstanceClass "${name}" doesn't exist`)
+          res.status(200).send(`Integração para o formulário "${name}" não disponível! Mas tudo OK!`)
+          return
       }
+      return await InstanceClass.start()
+    } catch (e) {
+      this.dbg(e)
     }
   }
 
@@ -101,17 +82,20 @@ class Server {
     const { PORT } = process.env
     this.server
       .post('/', async (req, res) => {
-        const data = await this.filter(req.body)
-        await this.validate(data)
-        if (this.formData) {
-          if (await this.send()) {
-            res.status(200).json('OK!')
-          } else {
-            res.status(500).json('Erro ao salvar usuário')
-          }
-        } else {
-          res.status(400).json('malformed json')
-        }
+        await this.filterService(req.body, res)
+        // if (!data) {
+        //   return this.dbg('not desired service')
+        // }
+        // await this.validate(data)
+        // if (this.formData) {
+        //   if (await this.send()) {
+        //     res.status(200).json('OK!')
+        //   } else {
+        //     res.status(500).json('Erro ao salvar usuário')
+        //   }
+        // } else {
+        //   res.status(400).json('malformed json')
+        // }
       })
       .listen(Number(PORT), '0.0.0.0', () => {
         this.dbg(`Server listen on port ${PORT}`)
