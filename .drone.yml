@@ -4,7 +4,7 @@ pipeline:
     repo: nossas/bonde-webhooks-record
     group: publishing
     secrets: [ docker_username, docker_password ]
-    dockerfile: packages/webhook-logs/Dockerfile
+    dockerfile: packages/webhooks-record/Dockerfile
     tags:
       - ${DRONE_BRANCH/\//-}
     when:
@@ -16,7 +16,7 @@ pipeline:
     repo: nossas/bonde-webhooks-zendesk
     group: publishing
     secrets: [ docker_username, docker_password ]
-    dockerfile: packages/webhook-zendesk/Dockerfile
+    dockerfile: packages/webhooks-zendesk/Dockerfile
     tags:
       - ${DRONE_BRANCH/\//-}
     when:
