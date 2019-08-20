@@ -26,7 +26,7 @@ class Server {
   private formData?: FormData
 
   constructor () {
-    this.dbg = debug(`webhook-zendesk`)
+    this.dbg = debug(`webhooks-zendesk`)
   }
 
   private send = async () => {

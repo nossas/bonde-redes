@@ -32,7 +32,7 @@ class Server {
   private dbg: Debugger
 
   constructor () {
-    this.dbg = debug(`webhook-logs`)
+    this.dbg = debug(`webhooks-record`)
   }
 
   private request = async (serviceName: string, data: any) => {
