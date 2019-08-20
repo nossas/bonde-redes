@@ -7,7 +7,7 @@
     "express": "^4.17.1"
   },
   "scripts": {
-    "dev": "DEBUG=webhook-logs ts-node-dev src",
+    "dev": "DEBUG=webhooks-record ts-node-dev src",
     "clean": "rm -rf node_modules dist",
     "build": "tsc"
   }
