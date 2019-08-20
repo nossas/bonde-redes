@@ -1,4 +1,4 @@
 packages:
   - '.'
-  - 'packages/webhook-logs'
-  - 'packages/webhook-zendesk'
+  - 'packages/webhooks-record'
+  - 'packages/webhooks-zendesk'
