@@ -58,6 +58,7 @@ class Server {
     this.server
       .post('/:serviceName', async (req, res) => {
         const { serviceName } = req.params as {[s: string]: string}
+        this.dbg(`Incomming request from "${serviceName}"`)
         if (!serviceName) {
           return res.status(400).json('O caminho "/" do bonde-webhook-logs não deve ser acessado. Favor acessar o caminho "/<nome do serviço que está acessando>" para que ele funcione.')
         }
