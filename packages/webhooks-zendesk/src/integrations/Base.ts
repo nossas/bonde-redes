@@ -1,7 +1,7 @@
-import debug, {Debugger} from 'debug'
+import debug, { Debugger } from 'debug'
 import urljoin from 'url-join'
 import axios from 'axios'
-import {Response} from 'express'
+import { Response } from 'express'
 
 export enum GMAPS_ERRORS {
   REQUEST_FAILED,
@@ -10,13 +10,18 @@ export enum GMAPS_ERRORS {
 
 abstract class Base {
   protected name: string
+
   protected dbg: Debugger
+
   protected url: string
+
   protected data: any
+
   protected organizations: { [s: string]: number }
+
   protected res: Response
 
-  constructor(name: string, url: string, data: any, res: Response) {
+  constructor (name: string, url: string, data: any, res: Response) {
     this.name = `webhooks-zendesk:${name}`
     this.dbg = debug(this.name)
     this.url = url
@@ -33,7 +38,7 @@ abstract class Base {
       const response = await axios.post('https://maps.googleapis.com/maps/api/geocode/json', undefined, {
         params: {
           address: cep,
-          key: GOOGLE_MAPS_API_KEY,
+          key: GOOGLE_MAPS_API_KEY
         }
       })
       data = response.data
@@ -44,24 +49,24 @@ abstract class Base {
       }
     }
 
-    if (data.status === "OK") {
+    if (data.status === 'OK') {
       const { results: [{
         geometry: {
           location: { lat, lng }
         },
-        address_components,
+        address_components: addressComponents,
         formatted_address: address
-      }]} = data
+      }] } = data
 
       let state: string | undefined
       let city: string | undefined
 
-      address_components.forEach(({ types, short_name }: {types: string[], short_name: string}) => {
+      addressComponents.forEach(({ types, short_name: shortName }: {types: string[], short_name: string}) => {
         if (types.includes('administrative_area_level_1')) {
-          state = short_name
+          state = shortName
         }
         if (types.includes('administrative_area_level_2')) {
-          city = short_name
+          city = shortName
         }
       })
 
