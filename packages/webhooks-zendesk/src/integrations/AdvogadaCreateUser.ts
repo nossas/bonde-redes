@@ -184,7 +184,7 @@ class AdvogadaCreateUser extends Base {
           longitude: yup.number(),
           address: yup.string(),
           city: yup.string(),
-          state: yup.string(),
+          state: yup.string().lowercase(),
           condition: yup.string().required()
         })
         .required()
