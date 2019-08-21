@@ -111,7 +111,7 @@ class AdvogadaCreateUser extends Base {
       cep: yup.string().required()
     }).required()
     try {
-      data = verificaCep.validate(data)
+      data = await verificaCep.validate(data)
     } catch (e) {
       this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
     }
@@ -156,19 +156,19 @@ class AdvogadaCreateUser extends Base {
             phone: obj.whatsapp,
             organization_id: this.organizations[this.organization],
             data_de_inscricao_no_bonde: this.createdAt,
-            ultima_atualizacao_de_dados: new Date().toString()
+            ultima_atualizacao_de_dados: new Date().toString(),
+            name: `${obj.firstname} ${obj.lastname}`,
+            condition: condition[0]
           }
         })
         .shape({
-          firstname: yup.string().required(),
-          lastname: yup.string().required(),
+          name: yup.string().required(),
           email: yup.string().email().required(),
           whatsapp: yup.string().required(),
           phone: yup.string().required(),
           cep: yup
             .string()
-            .required()
-            .test('cep length', 'not a valid cep', (i: string) => i.length === 8),
+            .required(),
           color: yup
             .string()
             .required(),
@@ -184,15 +184,15 @@ class AdvogadaCreateUser extends Base {
           longitude: yup.number(),
           address: yup.string(),
           city: yup.string(),
-          state: yup.string()
+          state: yup.string(),
+          condition: yup.string().required()
         })
         .required()
 
-      const zendeskData = await zendeskValidation.validate(this.data, {
+      const zendeskData = await zendeskValidation.validate(data, {
         stripUnknown: true
       })
 
-      // Striping
       this.dbg(zendeskData)
       const dataToBeSent = {
         user: {
