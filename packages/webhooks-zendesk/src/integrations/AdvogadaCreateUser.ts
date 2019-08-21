@@ -1,6 +1,11 @@
 import Base from './Base'
 import * as yup from 'yup'
 
+enum FALHAS {
+  DIRETRIZ_ATENDIMENTO = 'DIRETRIZ_ATENDIMENTO',
+  ESTUDO_DE_CASO = 'ESTUDO_DE_CASO'
+}
+
 class AdvogadaCreateUser extends Base {
   organization = 'ADVOGADA'
   created_at: string
@@ -58,18 +63,25 @@ class AdvogadaCreateUser extends Base {
           'organization_id': yup.number().required(),
           'registration_number': yup.string().required(),
           'occupation_area': yup.string().required(),
-          'data_de_inscricao_no_bonde': yup.date().required(),
           'ultima_atualizacao_de_dados': yup.date().required(),
           'latitude': yup.number().required(),
           'longitude': yup.number().required(),
           'address': yup.string().required(),
           'city': yup.string().required(),
           'state': yup.string().required(),
+
+          'todos_os_atendimentos_rea': yup.string().required().matches(/aceito/, FALHAS.DIRETRIZ_ATENDIMENTO),
+          'as_voluntarias_do_mapa_do': yup.string().required().matches(/compreendo/, FALHAS.DIRETRIZ_ATENDIMENTO),
+          'o_comprometimento_a_dedic': yup.string().required().matches(/sim/, FALHAS.DIRETRIZ_ATENDIMENTO),
+          'o_mapa_do_acolhimento_ent': yup.string().required().matches(/sim/, FALHAS.DIRETRIZ_ATENDIMENTO),
+          'para_que_as_mulheres_que': yup.string().required().matches(/sim/, FALHAS.DIRETRIZ_ATENDIMENTO),
         })
         .required()
-      const validatedData = await validation.validate(this.data, {
+      const zendeskData = await validation.validate(this.data, {
         stripUnknown: true,
       })
+
+      // Striping 
       this.dbg(validatedData)
       const dataToBeSent = {
         user: {
