@@ -34,13 +34,13 @@ class Server {
 
   private filterService = (payload: any, res: Express.Response) => {
     try {
-      const { event: { data: { new: { service_name: serviceName, data, created_at } } } } = payload
+      const { event: { data: { new: { service_name: serviceName, data, created_at: createdAt } } } } = payload
       this.dbg(`received service "${serviceName}"`)
       if (serviceName !== 'mautic-form') {
         res.status(200).json(`Service "${serviceName}" isn't desired, but everything is OK.`)
         throw new Error(`${serviceName} not desired service`)
       }
-      this.filterFormName(data, created_at, res)
+      this.filterFormName(data, createdAt, res)
     } catch (e) {
       this.dbg(e)
     }
