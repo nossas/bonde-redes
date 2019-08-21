@@ -1,6 +1,12 @@
 import debug, {Debugger} from 'debug'
 import urljoin from 'url-join'
 import axios from 'axios'
+import {Response} from 'express'
+
+export enum GMAPS_ERRORS {
+  REQUEST_FAILED,
+  INVALID_INPUT
+}
 
 abstract class Base {
   protected name: string
@@ -8,24 +14,35 @@ abstract class Base {
   protected url: string
   protected data: any
   protected organizations: { [s: string]: number }
+  protected res: Response
 
-  constructor(name: string, url: string, data: any) {
+  constructor(name: string, url: string, data: any, res: Response) {
     this.name = `webhooks-zendesk:${name}`
     this.dbg = debug(this.name)
     this.url = url
     this.data = data
+    this.res = res
     const { ZENDESK_ORGANIZATIONS } = process.env
     this.organizations = JSON.parse(ZENDESK_ORGANIZATIONS)
   }
 
   protected getAddress = async (cep: string) => {
     const { GOOGLE_MAPS_API_KEY } = process.env
-    const { data } = await axios.post('https://maps.googleapis.com/maps/api/geocode/json', undefined, {
-      params: {
-        address: cep,
-        key: GOOGLE_MAPS_API_KEY,
+    let data
+    try {
+      const response = await axios.post('https://maps.googleapis.com/maps/api/geocode/json', undefined, {
+        params: {
+          address: cep,
+          key: GOOGLE_MAPS_API_KEY,
+        }
+      })
+      data = response.data
+    } catch (e) {
+      this.dbg(`falha na requisição para o google maps`)
+      return {
+        error: GMAPS_ERRORS.REQUEST_FAILED
       }
-    })
+    }
 
     if (data.status === "OK") {
       const { results: [{
@@ -56,7 +73,9 @@ abstract class Base {
         city
       }
     } else {
-      throw new Error(`failed to get lat-lng to cep ${cep}`)
+      return {
+        error: GMAPS_ERRORS.INVALID_INPUT
+      }
     }
   }
 
