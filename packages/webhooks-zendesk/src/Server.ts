@@ -3,9 +3,9 @@ import debug, { Debugger } from 'debug'
 import axios from 'axios'
 import * as yup from 'yup'
 import urljoin from 'url-join'
-import AdvogadaCreateUser from './integrations/AdvogadaCreateUser';
-import Base from './integrations/Base';
-import PsicólogaCreateUser from './integrations/PsicólogaCreateUser';
+import AdvogadaCreateUser from './integrations/AdvogadaCreateUser'
+import Base from './integrations/Base'
+import PsicólogaCreateUser from './integrations/PsicólogaCreateUser'
 
 interface DataType {
   data: {
@@ -38,7 +38,7 @@ class Server {
       this.dbg(`received service "${serviceName}"`)
       if (serviceName !== 'mautic-form') {
         res.status(200).json(`Service "${serviceName}" isn't desired, but everything is OK.`)
-        throw `${serviceName} not desired service`
+        throw new Error(`${serviceName} not desired service`)
       }
       this.filterFormName(data, created_at, res)
     } catch (e) {
@@ -46,7 +46,7 @@ class Server {
     }
   }
 
-  private filterFormName = async (json: any, created_at: string, res: Express.Response) => {
+  private filterFormName = async (json: any, createdAt: string, res: Express.Response) => {
     try {
       const data = JSON.parse(json)
       const validation = yup.object().shape({
@@ -59,14 +59,15 @@ class Server {
           })
         }))
       })
-      const {'mautic.form_on_submit': [{submission: { form: { name }, results }}]} = await validation.validate(data)
+      const { 'mautic.form_on_submit': [{ submission: { form: { name }, results } }] } = await validation.validate(data)
       let InstanceClass: Base
-      switch(name) {
+      switch (name) {
         case 'Recadastro: Advogadas Ativas':
-          InstanceClass = new AdvogadaCreateUser(results, created_at)
+          InstanceClass = new AdvogadaCreateUser(results, createdAt, res)
           break
         case 'Recadastro: Psicólogas Ativas':
-          InstanceClass = new PsicólogaCreateUser(results, created_at)
+          InstanceClass = new PsicólogaCreateUser(results, createdAt, res)
+          break
         default:
           this.dbg(`InstanceClass "${name}" doesn't exist`)
           res.status(200).send(`Integração para o formulário "${name}" não disponível! Mas tudo OK!`)
