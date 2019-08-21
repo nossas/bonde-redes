@@ -1,5 +1,5 @@
 {
-  "name": "bonde-webhooks-record",
+  "name": "bonde-webhooks-registry",
   "dependencies": {
     "axios": "^0.19.0",
     "debug": "^4.1.1",
@@ -7,7 +7,7 @@
     "express": "^4.17.1"
   },
   "scripts": {
-    "dev": "DEBUG=webhooks-record ts-node-dev src",
+    "dev": "DEBUG=webhooks-registry ts-node-dev src",
     "clean": "rm -rf node_modules dist",
     "build": "tsc"
   }

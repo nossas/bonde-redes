@@ -1,10 +1,10 @@
 pipeline:
-  record-staging-publish:
+  registry-staging-publish:
     image: plugins/docker
-    repo: nossas/bonde-webhooks-record
+    repo: nossas/bonde-webhooks-registry
     group: publishing
     secrets: [ docker_username, docker_password ]
-    dockerfile: packages/webhooks-record/Dockerfile
+    dockerfile: packages/webhooks-registry/Dockerfile
     tags:
       - ${DRONE_BRANCH/\//-}
     when:
@@ -23,11 +23,11 @@ pipeline:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
 
-  # record-staging-deploy:
+  # registry-staging-deploy:
   #   image: peloton/drone-rancher
   #   url: http://cluster.bonde.org
-  #   service: webhooks/record
-  #   docker_image: nossas/bonde-webhooks-record:${DRONE_BRANCH/\//-}
+  #   service: webhooks/registry
+  #   docker_image: nossas/bonde-webhooks-registry:${DRONE_BRANCH/\//-}
   #   timeout: 360
   #   confirm: true
   #   secrets: [ rancher_access_key, rancher_secret_key ]

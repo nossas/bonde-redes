@@ -1,4 +1,4 @@
-Esse pacote faz o log de qualquer requisição POST do tipo JSON, no banco de dados `webhook_logs`, na coluna `data`.
+Esse pacote faz o log de qualquer requisição POST do tipo JSON, no banco de dados `webhooks_registry`, na coluna `data`.
 
 A url da API do Hasura deve ser definida através da variável de ambiente `HASURA_API_URL`.
 
