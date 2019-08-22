@@ -12,11 +12,8 @@ export enum CONDITION {
 class AdvogadaCreateUser extends Base {
   organization = 'ADVOGADA'
 
-  createdAt: string
-
-  constructor (data: any, createdAt: string, res: Response) {
-    super('AdvogadaCreateUser', 'users/create_or_update', data, res)
-    this.createdAt = createdAt
+  constructor (res: Response) {
+    super('AdvogadaCreateUser', 'users/create_or_update', res)
   }
 
   private setCondition = (condition: [CONDITION], value: CONDITION) => {
@@ -130,8 +127,7 @@ class AdvogadaCreateUser extends Base {
     }
   }
 
-  start = async () => {
-    let data = this.data
+  start = async (data: any, createdAt: string) => {
     const condition: [CONDITION] = [CONDITION.UNSET]
     data = await this.verificaDiretrizesAtendimento(condition, data)
     data = await this.verificaEstudoDeCaso(condition, data)
@@ -158,7 +154,7 @@ class AdvogadaCreateUser extends Base {
             organization_id: this.organizations[this.organization],
             user_fields: {
               ...userFields,
-              data_de_inscricao_no_bonde: this.createdAt,
+              data_de_inscricao_no_bonde: createdAt,
               ultima_atualizacao_de_dados: new Date().toString(),
               condition: condition[0]
             }
@@ -198,7 +194,7 @@ class AdvogadaCreateUser extends Base {
         stripUnknown: true
       })
 
-      this.dbg(zendeskData)
+      // this.dbg(zendeskData)
       const dataToBeSent = {
         user: {
           ...zendeskData

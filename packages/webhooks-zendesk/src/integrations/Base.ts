@@ -15,32 +15,35 @@ abstract class Base {
 
   protected url: string
 
-  protected data: any
-
   protected organizations: { [s: string]: number }
 
   protected res: Response
 
-  constructor (name: string, url: string, data: any, res: Response) {
+  private method: 'GET' | 'POST' | 'PUT'
+
+  constructor (name: string, url: string, res: Response, method: 'GET' | 'POST' | 'PUT' = 'POST') {
+    this.method = method
     this.name = `webhooks-zendesk:${name}`
     this.dbg = debug(this.name)
     this.url = url
-    this.data = data
     this.res = res
     const { ZENDESK_ORGANIZATIONS } = process.env
     this.organizations = JSON.parse(ZENDESK_ORGANIZATIONS)
   }
 
   protected getAddress = async (cep: string) => {
+    const log = debug('gmaps')
     const { GOOGLE_MAPS_API_KEY } = process.env
     let data
     try {
+      log(`requesting google with cep ${cep}...`)
       const response = await axios.post('https://maps.googleapis.com/maps/api/geocode/json', undefined, {
         params: {
           address: cep,
           key: GOOGLE_MAPS_API_KEY
         }
       })
+      log('response!', response.data)
       data = response.data
     } catch (e) {
       this.dbg(`falha na requisição para o google maps`)
@@ -84,25 +87,44 @@ abstract class Base {
     }
   }
 
-  protected send = async (data: any) => {
+  protected send = async (data?: any) => {
     const { ZENDESK_API_URL, ZENDESK_API_TOKEN, ZENDESK_API_USER } = process.env
     const endpoint = urljoin(ZENDESK_API_URL!, this.url)
     try {
-      const result = await axios.post(endpoint, data, {
-        auth: {
-          username: ZENDESK_API_USER,
-          password: ZENDESK_API_TOKEN
-        }
-      })
-      this.dbg(`Success created user ${result.data.user.id}`)
-      return true
+      if (this.method === 'POST') {
+        const result = await axios.post(endpoint, data, {
+          auth: {
+            username: ZENDESK_API_USER,
+            password: ZENDESK_API_TOKEN
+          }
+        })
+        console.log(result)
+        return result
+      } else if (this.method === 'GET') {
+        const result = await axios.get(endpoint, {
+          auth: {
+            username: ZENDESK_API_USER,
+            password: ZENDESK_API_TOKEN
+          }
+        })
+        return result
+      } else if (this.method === 'PUT') {
+        const result = await axios.put(endpoint, data, {
+          auth: {
+            username: ZENDESK_API_USER,
+            password: ZENDESK_API_TOKEN
+          }
+        })
+        console.log(result)
+        return result
+      }
     } catch (e) {
+      console.log(e)
       this.dbg(JSON.stringify(e.response.data, null, 2))
-      return false
     }
   }
 
-  abstract start: () => any
+  abstract start: Function
 }
 
 export default Base

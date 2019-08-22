@@ -1,11 +1,12 @@
-import Express from 'express'
+/* eslint-disable camelcase */
+import Express, { Response } from 'express'
 import debug, { Debugger } from 'debug'
-import axios from 'axios'
 import * as yup from 'yup'
-import urljoin from 'url-join'
 import AdvogadaCreateUser from './integrations/AdvogadaCreateUser'
-import Base from './integrations/Base'
 import PsicólogaCreateUser from './integrations/PsicólogaCreateUser'
+import ListTicketsFromUser from './integrations/ListTicket'
+import AdvogadaCreateTicket from './integrations/AdvogadaCreateTicket'
+import AdvogadaUpdateTicket from './integrations/AdvogadaUpdateTicket'
 
 interface DataType {
   data: {
@@ -122,6 +123,63 @@ class Server {
     }
   }
 
+  dictionary: {[s: string]: string} = {
+    reprovada_estudo_de_caso: 'Reprovada - Estudo de Caso'
+  }
+
+  createTicket = async (instance: any, {
+    id,
+    organization_id,
+    name,
+    user_fields: {
+      registration_number,
+      condition
+    }
+  }: any, res: Response) => {
+    const listTickets = new ListTicketsFromUser(id, res)
+    const tickets = await listTickets.start()
+    if (!tickets) {
+      return
+    }
+    if (tickets.data.tickets.length === 0) {
+      if (instance instanceof AdvogadaCreateUser) {
+        const advogadaCreateTicket = new AdvogadaCreateTicket(res)
+        advogadaCreateTicket.start({
+          requester_id: id,
+          organization_id,
+          description: '-',
+          subject: `[Advogada] ${name} - ${registration_number}`,
+          custom_fields: [{
+            id: 360021665652,
+            value: this.dictionary[condition]
+          }, {
+            id: 360016631592,
+            value: name
+          }]
+        })
+      } else if (instance instanceof PsicólogaCreateUser) {
+        // etc
+      }
+    } else {
+      if (instance instanceof AdvogadaCreateUser) {
+        const advogadaUpdateTicket = new AdvogadaUpdateTicket(tickets.data.tickets[0].id, res)
+        advogadaUpdateTicket.start({
+          requester_id: id,
+          organization_id,
+          description: '-',
+          subject: `[Psicóloga] ${name} - ${registration_number}`,
+          custom_fields: [{
+            id: 360021665652,
+            value: this.dictionary[condition]
+          }, {
+            id: 360016631592,
+            value: name
+          }]
+        })
+      }
+    }
+  }
+
   start = () => {
     const { PORT } = process.env
     this.server
@@ -149,21 +207,27 @@ class Server {
           return res.status(400).json(`Invalid request, see logs.`)
         }
 
-        const instance = await new InstanceClass!(results, createdAt, res)
-        instance.start()
-        // if (!data) {
-        //   return this.dbg('not desired service')
-        // }
-        // await this.validate(data)
-        // if (this.formData) {
-        //   if (await this.send()) {
-        //     res.status(200).json('OK!')
-        //   } else {
-        //     res.status(500).json('Erro ao salvar usuário')
-        //   }
-        // } else {
-        //   res.status(400).json('malformed json')
-        // }
+        const instance = await new InstanceClass!(res)
+        let user
+        if (instance instanceof AdvogadaCreateUser) {
+          user = await instance.start(results, createdAt)
+        } else if (instance instanceof PsicólogaCreateUser) {
+          instance.start()
+        }
+
+        if (!user) {
+          return
+        }
+
+        const { data: { user: createdUser, user: { created_at: responseCreatedAt, updated_at: responseUpdatedAt, id: userId } } } = user
+        this.dbg(createdUser)
+        if (responseCreatedAt === responseUpdatedAt) {
+          this.dbg(`Success, created user ${userId}!`)
+        } else {
+          this.dbg(`Success, updated user ${userId}!`)
+        }
+
+        this.createTicket(instance, createdUser, res)
       })
       .listen(Number(PORT), '0.0.0.0', () => {
         this.dbg(`Server listen on port ${PORT}`)
