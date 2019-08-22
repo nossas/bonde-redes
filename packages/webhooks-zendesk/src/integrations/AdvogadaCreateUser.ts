@@ -15,7 +15,7 @@ class AdvogadaCreateUser extends Base {
   createdAt: string
 
   constructor (data: any, createdAt: string, res: Response) {
-    super('AdvogadaCreateUser', 'users', data, res)
+    super('AdvogadaCreateUser', 'users/create_or_update', data, res)
     this.createdAt = createdAt
   }
 
