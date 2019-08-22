@@ -143,7 +143,6 @@ class AdvogadaCreateUser extends Base {
         .from('primeiro_nome', 'firstname')
         .from('sobrenome_completo', 'lastname')
         .from('whatsapp_com_ddd', 'whatsapp')
-        .from('cor', 'color')
         .from('sendo_voluntaria_do_mapa', 'disponibilidade_de_atendimentos')
         .from('quantas_vezes_voce_ja_rec', 'encaminhamentos')
         .from('atualmente_quantas_mulher', 'atendimentos_em_andamento')
@@ -151,41 +150,47 @@ class AdvogadaCreateUser extends Base {
         .from('insira_seu_numero_de_regi', 'registration_number')
         .from('qual_sua_area_de_atuacao', 'occupation_area')
         .transform((obj) => {
+          const { email, ...userFields } = obj
           return {
-            ...obj,
+            name: `${obj.firstname} ${obj.lastname}`,
+            email,
             phone: obj.whatsapp,
             organization_id: this.organizations[this.organization],
-            data_de_inscricao_no_bonde: this.createdAt,
-            ultima_atualizacao_de_dados: new Date().toString(),
-            name: `${obj.firstname} ${obj.lastname}`,
-            condition: condition[0]
+            user_fields: {
+              ...userFields,
+              data_de_inscricao_no_bonde: this.createdAt,
+              ultima_atualizacao_de_dados: new Date().toString(),
+              condition: condition[0]
+            }
           }
         })
         .shape({
           name: yup.string().required(),
           email: yup.string().email().required(),
-          whatsapp: yup.string().required(),
           phone: yup.string().required(),
-          cep: yup
-            .string()
-            .required(),
-          color: yup
-            .string()
-            .required(),
-          disponibilidade_de_atendimentos: yup.string().required(),
-          encaminhamentos: yup.string().required(),
-          atendimentos_em_andamento: yup.string().required(),
-          atendimentos_concluidos: yup.string().required(),
           organization_id: yup.number().required(),
-          registration_number: yup.string().required(),
-          occupation_area: yup.string().required(),
-          ultima_atualizacao_de_dados: yup.date().required(),
-          latitude: yup.number(),
-          longitude: yup.number(),
-          address: yup.string(),
-          city: yup.string(),
-          state: yup.string().lowercase(),
-          condition: yup.string().required()
+          user_fields: yup.object().shape({
+            whatsapp: yup.string().required(),
+            cep: yup
+              .string()
+              .required(),
+            cor: yup
+              .string()
+              .required(),
+            disponibilidade_de_atendimentos: yup.string().required(),
+            encaminhamentos: yup.string().required(),
+            atendimentos_em_andamento: yup.string().required(),
+            atendimentos_concluidos: yup.string().required(),
+            registration_number: yup.string().required(),
+            occupation_area: yup.string().required(),
+            ultima_atualizacao_de_dados: yup.date().required(),
+            latitude: yup.number(),
+            longitude: yup.number(),
+            address: yup.string(),
+            city: yup.string(),
+            state: yup.string().lowercase(),
+            condition: yup.string().required()
+          })
         })
         .required()
 
