@@ -7,6 +7,8 @@ import PsicólogaCreateUser from './integrations/PsicólogaCreateUser'
 import ListTicketsFromUser from './integrations/ListTicket'
 import AdvogadaCreateTicket from './integrations/AdvogadaCreateTicket'
 import AdvogadaUpdateTicket from './integrations/AdvogadaUpdateTicket'
+import PsicólogaCreateTicket from './integrations/PsicólogaCreateTicket'
+import PsicólogaUpdateTicket from './integrations/PsicólogaUpdateTicket'
 
 interface DataType {
   data: {
@@ -158,7 +160,20 @@ class Server {
           }]
         })
       } else if (instance instanceof PsicólogaCreateUser) {
-        // etc
+        const psicólogaCreateTicket = new PsicólogaCreateTicket(res)
+        psicólogaCreateTicket.start({
+          requester_id: id,
+          organization_id,
+          description: '-',
+          subject: `[Psicóloga] ${name} - ${registration_number}`,
+          custom_fields: [{
+            id: 360021665652,
+            value: this.dictionary[condition]
+          }, {
+            id: 360016631592,
+            value: name
+          }]
+        })
       }
     } else {
       if (instance instanceof AdvogadaCreateUser) {
@@ -168,6 +183,21 @@ class Server {
           organization_id,
           description: '-',
           subject: `[Advogada] ${name} - ${registration_number}`,
+          custom_fields: [{
+            id: 360021665652,
+            value: this.dictionary[condition]
+          }, {
+            id: 360016631592,
+            value: name
+          }]
+        })
+      } else if (instance instanceof PsicólogaCreateUser) {
+        const psicólogaUpdateTicket = new PsicólogaUpdateTicket(tickets.data.tickets[0].id, res)
+        psicólogaUpdateTicket.start({
+          requester_id: id,
+          organization_id,
+          description: '-',
+          subject: `[Psicóloga] ${name} - ${registration_number}`,
           custom_fields: [{
             id: 360021665652,
             value: this.dictionary[condition]
@@ -212,7 +242,7 @@ class Server {
         if (instance instanceof AdvogadaCreateUser) {
           user = await instance.start(results, createdAt)
         } else if (instance instanceof PsicólogaCreateUser) {
-          instance.start()
+          user = await instance.start(results, createdAt)
         }
 
         if (!user) {
