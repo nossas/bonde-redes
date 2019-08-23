@@ -7,7 +7,7 @@ class PsicólogaUpdateTicket extends Base {
     super('PsicólogaUpdateTicket', `tickets/${ticketId.toString()}`, res, 'PUT')
   }
 
-  start = async (data: any) => {
+  start = async <T = any>(data: any) => {
     const validateTicket = yup.object().shape({
       requester_id: yup.number().required(),
       organization_id: yup.number().required(),
@@ -23,10 +23,11 @@ class PsicólogaUpdateTicket extends Base {
       data = await validateTicket.validate(data, {
         stripUnknown: true
       })
+      // this.dbg(data)
     } catch (e) {
       this.dbg('Falhou ao validar ticket')
     }
-    await this.send({
+    return this.send<T>({
       ticket: {
         ...data
       }

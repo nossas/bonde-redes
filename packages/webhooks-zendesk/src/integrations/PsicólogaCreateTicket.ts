@@ -7,7 +7,7 @@ class PsicólogaCreateTicket extends Base {
     super('PsicólogaCreateTicket', 'tickets', res)
   }
 
-  start = async (data: any) => {
+  start = async <T = any>(data: any) => {
     const validateTicket = yup.object().shape({
       requester_id: yup.number().required(),
       organization_id: yup.number().required(),
@@ -26,7 +26,7 @@ class PsicólogaCreateTicket extends Base {
     } catch (e) {
       this.dbg('Falhou ao validar ticket')
     }
-    await this.send({
+    await this.send<T>({
       ticket: {
         ...data
       }

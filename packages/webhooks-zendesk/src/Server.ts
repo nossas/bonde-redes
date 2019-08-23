@@ -126,7 +126,10 @@ class Server {
   }
 
   dictionary: {[s: string]: string} = {
-    reprovada_estudo_de_caso: 'Reprovada - Estudo de Caso'
+    aprovada: 'aprovada',
+    reprovada_estudo_de_caso: 'reprovada_-_estudo_de_caso',
+    reprovada_registro_inválido: 'reprovada_-_registro_inválido',
+    reprovada_diretrizes_do_mapa: 'reprovada_-_diretrizes_do_mapa'
   }
 
   createTicket = async (instance: any, {
@@ -146,7 +149,7 @@ class Server {
     if (tickets.data.tickets.length === 0) {
       if (instance instanceof AdvogadaCreateUser) {
         const advogadaCreateTicket = new AdvogadaCreateTicket(res)
-        advogadaCreateTicket.start({
+        return advogadaCreateTicket.start<any>({
           requester_id: id,
           organization_id,
           description: '-',
@@ -161,7 +164,7 @@ class Server {
         })
       } else if (instance instanceof PsicólogaCreateUser) {
         const psicólogaCreateTicket = new PsicólogaCreateTicket(res)
-        psicólogaCreateTicket.start({
+        return psicólogaCreateTicket.start<any>({
           requester_id: id,
           organization_id,
           description: '-',
@@ -178,7 +181,7 @@ class Server {
     } else {
       if (instance instanceof AdvogadaCreateUser) {
         const advogadaUpdateTicket = new AdvogadaUpdateTicket(tickets.data.tickets[0].id, res)
-        advogadaUpdateTicket.start({
+        return advogadaUpdateTicket.start<any>({
           requester_id: id,
           organization_id,
           description: '-',
@@ -193,7 +196,7 @@ class Server {
         })
       } else if (instance instanceof PsicólogaCreateUser) {
         const psicólogaUpdateTicket = new PsicólogaUpdateTicket(tickets.data.tickets[0].id, res)
-        psicólogaUpdateTicket.start({
+        return psicólogaUpdateTicket.start<any>({
           requester_id: id,
           organization_id,
           description: '-',
@@ -250,14 +253,19 @@ class Server {
         }
 
         const { data: { user: createdUser, user: { created_at: responseCreatedAt, updated_at: responseUpdatedAt, id: userId } } } = user
-        this.dbg(createdUser)
+        // this.dbg(createdUser)
         if (responseCreatedAt === responseUpdatedAt) {
-          this.dbg(`Success, created user ${userId}!`)
+          this.dbg(`Success, created user "${userId}"!`)
         } else {
-          this.dbg(`Success, updated user ${userId}!`)
+          this.dbg(`Success, updated user "${userId}"!`)
         }
 
-        this.createTicket(instance, createdUser, res)
+        const resultTicket = await this.createTicket(instance, createdUser, res)
+        if (resultTicket) {
+          this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}"`)
+        } else {
+          this.dbg(`Failed to create ticket`)
+        }
       })
       .listen(Number(PORT), '0.0.0.0', () => {
         this.dbg(`Server listen on port ${PORT}`)

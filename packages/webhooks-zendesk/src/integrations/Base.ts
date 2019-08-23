@@ -87,12 +87,12 @@ abstract class Base {
     }
   }
 
-  protected send = async (data?: any) => {
+  protected send = async <T = any>(data?: any) => {
     const { ZENDESK_API_URL, ZENDESK_API_TOKEN, ZENDESK_API_USER } = process.env
     const endpoint = urljoin(ZENDESK_API_URL!, this.url)
     try {
       if (this.method === 'POST') {
-        const result = await axios.post(endpoint, data, {
+        const result = await axios.post<T>(endpoint, data, {
           auth: {
             username: ZENDESK_API_USER,
             password: ZENDESK_API_TOKEN
@@ -100,7 +100,7 @@ abstract class Base {
         })
         return result
       } else if (this.method === 'GET') {
-        const result = await axios.get(endpoint, {
+        const result = await axios.get<T>(endpoint, {
           auth: {
             username: ZENDESK_API_USER,
             password: ZENDESK_API_TOKEN
@@ -108,7 +108,7 @@ abstract class Base {
         })
         return result
       } else if (this.method === 'PUT') {
-        const result = await axios.put(endpoint, data, {
+        const result = await axios.put<T>(endpoint, data, {
           auth: {
             username: ZENDESK_API_USER,
             password: ZENDESK_API_TOKEN
