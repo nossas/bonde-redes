@@ -5,7 +5,6 @@ import * as yup from 'yup'
 class AdvogadaUpdateTicket extends Base {
   constructor (ticketId: number, res: Response) {
     super('AdvogadaUpdateTicket', `tickets/${ticketId.toString()}`, res, 'PUT')
-    console.log(`tickets/${ticketId.toString()}`)
   }
 
   start = async (data: any) => {

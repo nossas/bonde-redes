@@ -98,7 +98,6 @@ abstract class Base {
             password: ZENDESK_API_TOKEN
           }
         })
-        console.log(result)
         return result
       } else if (this.method === 'GET') {
         const result = await axios.get(endpoint, {
@@ -115,11 +114,9 @@ abstract class Base {
             password: ZENDESK_API_TOKEN
           }
         })
-        console.log(result)
         return result
       }
     } catch (e) {
-      console.log(e)
       this.dbg(JSON.stringify(e.response.data, null, 2))
     }
   }
