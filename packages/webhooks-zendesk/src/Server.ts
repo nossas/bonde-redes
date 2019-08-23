@@ -136,9 +136,12 @@ class Server {
     id,
     organization_id,
     name,
+    phone,
     user_fields: {
       registration_number,
-      condition
+      condition,
+      state,
+      city
     }
   }: any, res: Response) => {
     const listTickets = new ListTicketsFromUser(id, res)
@@ -160,6 +163,15 @@ class Server {
           }, {
             id: 360016631592,
             value: name
+          }, {
+            id: 360021812712,
+            value: phone
+          }, {
+            id: 360021879791,
+            value: state
+          }, {
+            id: 360021879811,
+            value: city
           }]
         })
       } else if (instance instanceof PsicólogaCreateUser) {
@@ -175,6 +187,15 @@ class Server {
           }, {
             id: 360016631592,
             value: name
+          }, {
+            id: 360021812712,
+            value: phone
+          }, {
+            id: 360021879791,
+            value: state
+          }, {
+            id: 360021879811,
+            value: city
           }]
         })
       }
@@ -192,6 +213,15 @@ class Server {
           }, {
             id: 360016631592,
             value: name
+          }, {
+            id: 360021812712,
+            value: phone
+          }, {
+            id: 360021879791,
+            value: state
+          }, {
+            id: 360021879811,
+            value: city
           }]
         })
       } else if (instance instanceof PsicólogaCreateUser) {
@@ -207,6 +237,15 @@ class Server {
           }, {
             id: 360016631592,
             value: name
+          }, {
+            id: 360021812712,
+            value: phone
+          }, {
+            id: 360021879791,
+            value: state
+          }, {
+            id: 360021879811,
+            value: city
           }]
         })
       }

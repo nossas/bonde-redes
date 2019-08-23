@@ -26,7 +26,7 @@ class AdvogadaCreateTicket extends Base {
     } catch (e) {
       this.dbg('Falhou ao validar ticket')
     }
-    return this.send({
+    return this.send<T>({
       ticket: {
         ...data
       }
