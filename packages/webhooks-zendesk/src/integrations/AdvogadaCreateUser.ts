@@ -139,6 +139,7 @@ class AdvogadaCreateUser extends Base {
         .from('primeiro_nome', 'firstname')
         .from('sobrenome_completo', 'lastname')
         .from('whatsapp_com_ddd', 'whatsapp')
+        .from('telefone_de_atendimento_c', 'phone')
         .from('sendo_voluntaria_do_mapa', 'disponibilidade_de_atendimentos')
         .from('quantas_vezes_voce_ja_rec', 'encaminhamentos')
         .from('atualmente_quantas_mulher', 'atendimentos_em_andamento')
@@ -146,11 +147,11 @@ class AdvogadaCreateUser extends Base {
         .from('insira_seu_numero_de_regi', 'registration_number')
         .from('qual_sua_area_de_atuacao', 'occupation_area')
         .transform((obj) => {
-          const { email, ...userFields } = obj
+          const { email, phone, ...userFields } = obj
           return {
             name: `${obj.firstname} ${obj.lastname}`,
             email,
-            phone: obj.whatsapp,
+            phone,
             organization_id: this.organizations[this.organization],
             user_fields: {
               ...userFields,
