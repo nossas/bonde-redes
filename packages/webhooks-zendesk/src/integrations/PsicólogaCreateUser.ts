@@ -157,7 +157,7 @@ class PsicólogaCreateUser extends Base {
               ...userFields,
               data_de_inscricao_no_bonde: createdAt,
               ultima_atualizacao_de_dados: new Date().toString(),
-              condition: condition[0]
+              condition: condition[0] === 'unset' ? 'aprovada' : condition[0]
             }
           }
         })
