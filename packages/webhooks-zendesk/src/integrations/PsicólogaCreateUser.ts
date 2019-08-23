@@ -110,11 +110,11 @@ class PsicólogaCreateUser extends Base {
     try {
       data = await verificaCep.validate(data)
     } catch (e) {
-      this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
+      // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
     }
     const { error, lat: latitude, lng: longitude, address, city, state } = await this.getAddress(data.cep)
     if (error === GMAPS_ERRORS.INVALID_INPUT) {
-      this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
+      // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
     }
 
     return {
