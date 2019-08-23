@@ -167,7 +167,7 @@ class Server {
           requester_id: id,
           organization_id,
           description: '-',
-          subject: `[Psicóloga] ${name} - ${registration_number}`,
+          subject: `[Advogada] ${name} - ${registration_number}`,
           custom_fields: [{
             id: 360021665652,
             value: this.dictionary[condition]
