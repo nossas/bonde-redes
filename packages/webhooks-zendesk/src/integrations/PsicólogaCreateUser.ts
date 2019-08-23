@@ -195,7 +195,7 @@ class PsicólogaCreateUser extends Base {
         stripUnknown: true
       })
 
-      // this.dbg(zendeskData)
+      this.dbg(zendeskData)
       const dataToBeSent = {
         user: {
           ...zendeskData

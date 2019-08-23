@@ -20,10 +20,10 @@ class PsicólogaUpdateTicket extends Base {
     }).required()
 
     try {
+      this.dbg(data)
       data = await validateTicket.validate(data, {
         stripUnknown: true
       })
-      // this.dbg(data)
     } catch (e) {
       this.dbg('Falhou ao validar ticket')
     }

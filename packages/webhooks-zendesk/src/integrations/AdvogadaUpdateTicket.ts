@@ -20,6 +20,7 @@ class AdvogadaUpdateTicket extends Base {
     }).required()
 
     try {
+      this.dbg(data)
       data = await validateTicket.validate(data, {
         stripUnknown: true
       })
