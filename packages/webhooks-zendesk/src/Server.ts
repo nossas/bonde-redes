@@ -142,7 +142,8 @@ class Server {
       condition,
       state,
       city
-    }
+    },
+    created_at
   }: any, res: Response) => {
     const listTickets = new ListTicketsFromUser(id, res)
     const tickets = await listTickets.start()
@@ -179,7 +180,8 @@ class Server {
           }, {
             id: 360021879811,
             value: city
-          }]
+          }],
+          created_at,
         })
       } else if (instance instanceof PsicólogaCreateUser) {
         const psicólogaCreateTicket = new PsicólogaCreateTicket(res)
@@ -203,7 +205,8 @@ class Server {
           }, {
             id: 360021879811,
             value: city
-          }]
+          }],
+          created_at,
         })
       }
     } else {
