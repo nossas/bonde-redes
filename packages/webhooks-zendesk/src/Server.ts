@@ -149,7 +149,14 @@ class Server {
     if (!tickets) {
       return
     }
-    if (tickets.data.tickets.length === 0) {
+    const filteredTickets = tickets.data.tickets.filter((i: any) => {
+      if (instance instanceof AdvogadaCreateUser) {
+        return ['open', 'new', 'pending', 'hold'].includes(i.status) && i.subject === `[Advogada] ${name} - ${registration_number}`
+      } else if (instance instanceof PsicólogaCreateUser) {
+        return ['open', 'new', 'pending', 'hold'].includes(i.status) && i.subject === `[Psicóloga] ${name} - ${registration_number}`
+      }
+    })
+    if (filteredTickets.length === 0) {
       if (instance instanceof AdvogadaCreateUser) {
         const advogadaCreateTicket = new AdvogadaCreateTicket(res)
         return advogadaCreateTicket.start<any>({
@@ -201,7 +208,7 @@ class Server {
       }
     } else {
       if (instance instanceof AdvogadaCreateUser) {
-        const advogadaUpdateTicket = new AdvogadaUpdateTicket(tickets.data.tickets[0].id, res)
+        const advogadaUpdateTicket = new AdvogadaUpdateTicket(filteredTickets[0].id, res)
         return advogadaUpdateTicket.start<any>({
           requester_id: id,
           organization_id,
@@ -225,7 +232,7 @@ class Server {
           }]
         })
       } else if (instance instanceof PsicólogaCreateUser) {
-        const psicólogaUpdateTicket = new PsicólogaUpdateTicket(tickets.data.tickets[0].id, res)
+        const psicólogaUpdateTicket = new PsicólogaUpdateTicket(filteredTickets[0].id, res)
         return psicólogaUpdateTicket.start<any>({
           requester_id: id,
           organization_id,
