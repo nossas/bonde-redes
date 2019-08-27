@@ -148,6 +148,10 @@ class AdvogadaCreateUser extends Base {
         .from('qual_sua_area_de_atuacao', 'occupation_area')
         .transform((obj) => {
           const { email, phone, ...userFields } = obj
+          let { disponibilidade_de_atendimentos } = obj
+          if (disponibilidade_de_atendimentos === '6') {
+            disponibilidade_de_atendimentos = '5_ou_mais'
+          }
           return {
             name: `${obj.firstname} ${obj.lastname}`,
             email,

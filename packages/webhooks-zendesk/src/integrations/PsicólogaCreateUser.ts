@@ -148,6 +148,10 @@ class PsicólogaCreateUser extends Base {
         .from('quanto_atendimentos_pelo', 'atendimentos_concluidos')
         .transform((obj) => {
           const { email, phone, ...userFields } = obj
+          let { disponibilidade_de_atendimentos } = obj
+          if (disponibilidade_de_atendimentos === '6') {
+            disponibilidade_de_atendimentos = '5_ou_mais'
+          }
           return {
             name: `${obj.firstname} ${obj.lastname}`,
             email,
