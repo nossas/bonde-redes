@@ -63,6 +63,7 @@ abstract class Base {
 
       let state: string | undefined
       let city: string | undefined
+      let country: string | undefined
 
       addressComponents.forEach(({ types, short_name: shortName }: {types: string[], short_name: string}) => {
         if (types.includes('administrative_area_level_1')) {
@@ -71,7 +72,15 @@ abstract class Base {
         if (types.includes('administrative_area_level_2')) {
           city = shortName
         }
+        if (types.includes('country')) {
+          country = shortName
+        }
       })
+
+      if (country !== 'BR') {
+        state = undefined
+        city = undefined
+      }
 
       return {
         lat,
