@@ -34,7 +34,7 @@ importers:
       eslint-plugin-standard: ^4.0.0
       ts-node-dev: ^1.0.0-pre.40
       typescript: ^3.5.3
-  packages/webhooks-convert:
+  packages/cli-jsonb-convert:
     dependencies:
       axios: 0.19.0
       debug: 4.1.1
