@@ -23,6 +23,18 @@ pipeline:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
 
+  convert-staging-publish:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-convert
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhooks-convert/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+
   # registry-staging-deploy:
   #   image: peloton/drone-rancher
   #   url: http://cluster.bonde.org
