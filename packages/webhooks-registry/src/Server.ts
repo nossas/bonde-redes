@@ -6,7 +6,7 @@ const mutation = `mutation(
   $json: jsonb!,
   $service_name: String!
 ) {
-  logTable: insert_webhook_logs (
+  logTable: insert_webhooks_registry (
     objects: {
       data: $json,
       service_name: $service_name
@@ -32,7 +32,7 @@ class Server {
   private dbg: Debugger
 
   constructor () {
-    this.dbg = debug(`webhook-logs`)
+    this.dbg = debug(`webhooks-registry`)
   }
 
   private request = async (serviceName: string, data: any) => {
@@ -58,8 +58,9 @@ class Server {
     this.server
       .post('/:serviceName', async (req, res) => {
         const { serviceName } = req.params as {[s: string]: string}
+        this.dbg(`Incomming request from "${serviceName}"`)
         if (!serviceName) {
-          return res.status(400).json('O caminho "/" do bonde-webhook-logs não deve ser acessado. Favor acessar o caminho "/<nome do serviço que está acessando>" para que ele funcione.')
+          return res.status(400).json('O caminho "/" do bonde-webhooks-registry não deve ser acessado. Favor acessar o caminho "/<nome do serviço que está acessando>" para que ele funcione.')
         }
         await this.request(serviceName, req.body)
         res.status(200).json('OK!')
