@@ -19,15 +19,15 @@ const mutation = `mutation(
 interface DataType {
   data: {
     logTable: {
-      returning: Array<{
+      returning: {
         id: number
-      }>
+      }[]
     }
   }
 }
 
 class Server {
-  private server = Express().use(Express.json())
+  server = Express().use(Express.json())
 
   private dbg: Debugger
 
@@ -35,7 +35,7 @@ class Server {
     this.dbg = debug(`webhooks-registry`)
   }
 
-  private request = async (serviceName: string, json: any) => {
+  private request = async (serviceName: string, json: object) => {
     const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
     try {
       const { data: { data: { logTable: { returning: [{ id }] } } } } = await axios.post<DataType>(HASURA_API_URL, {
@@ -53,7 +53,6 @@ class Server {
   }
 
   start = () => {
-    const { PORT } = process.env
     this.server
       .post('/:serviceName', async (req, res) => {
         const { serviceName } = req.params as {[s: string]: string}
@@ -64,6 +63,11 @@ class Server {
         await this.request(serviceName, req.body)
         res.status(200).json('OK!')
       })
+  }
+
+  listen = () => {
+    const { PORT } = process.env
+    this.server
       .listen(Number(PORT), '0.0.0.0', () => {
         this.dbg(`Server listen on port ${PORT}`)
       })
