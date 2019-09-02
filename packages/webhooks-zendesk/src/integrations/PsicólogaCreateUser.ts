@@ -9,7 +9,7 @@ export enum CONDITION {
   REPROVADA_ESTUDO_DE_CASO = 'reprovada_estudo_de_caso',
 }
 
-class PsicólogaCreateUser extends Base {
+class PsicologaCreateUser extends Base {
   organization = 'PSICÓLOGA'
 
   constructor (res: Response) {
@@ -22,7 +22,7 @@ class PsicólogaCreateUser extends Base {
     }
   }
 
-  private verificaDiretrizesAtendimento = async (condition: [CONDITION], data: any) => {
+  private verificaDiretrizesAtendimento = async (condition: [CONDITION], data: object) => {
     const verificaCamposDiretrizesAtendimento = yup.object().shape({
       todos_os_atendimentos_rea: yup.string().required(),
       as_voluntarias_do_mapa_do: yup.string().required(),
@@ -64,7 +64,7 @@ class PsicólogaCreateUser extends Base {
     return data
   }
 
-  private verificaEstudoDeCaso = async (condition: [CONDITION], data: any) => {
+  private verificaEstudoDeCaso = async (condition: [CONDITION], data: object) => {
     const verificaCamposEstudoDeCaso = yup.object().shape({
       no_seu_primeiro_atendimen: yup.string().required(),
       para_voce_o_que_e_mais_im: yup.string().required(),
@@ -103,22 +103,24 @@ class PsicólogaCreateUser extends Base {
     return data
   }
 
-  private verificaLocalização = async (condition: [CONDITION], data: any) => {
+  private verificaLocalização = async (condition: [CONDITION], data: object) => {
     const verificaCep = yup.object().shape({
       cep: yup.string().required()
     }).required()
+    let verifiedData
     try {
-      data = await verificaCep.validate(data)
+      verifiedData = await verificaCep.validate(data)
     } catch (e) {
+      return
       // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
     }
-    const { error, lat: latitude, lng: longitude, address, city, state } = await this.getAddress(data.cep)
+    const { error, lat: latitude, lng: longitude, address, city, state } = await this.getAddress(verifiedData.cep)
     if (error === GMAPS_ERRORS.INVALID_INPUT) {
       // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
     }
 
     return {
-      ...data,
+      ...verifiedData,
       latitude,
       longitude,
       address,
@@ -127,11 +129,11 @@ class PsicólogaCreateUser extends Base {
     }
   }
 
-  start = async (data: any, createdAt: string) => {
+  start = async (data: object, createdAt: string) => {
     const condition: [CONDITION] = [CONDITION.UNSET]
     data = await this.verificaDiretrizesAtendimento(condition, data)
     data = await this.verificaEstudoDeCaso(condition, data)
-    data = await this.verificaLocalização(condition, data)
+    const validatedData = await this.verificaLocalização(condition, data)
 
     try {
       const zendeskValidation = yup
@@ -196,7 +198,7 @@ class PsicólogaCreateUser extends Base {
         })
         .required()
 
-      const zendeskData = await zendeskValidation.validate(data, {
+      const zendeskData = await zendeskValidation.validate(validatedData, {
         stripUnknown: true
       })
 
@@ -213,4 +215,4 @@ class PsicólogaCreateUser extends Base {
   }
 }
 
-export default PsicólogaCreateUser
+export default PsicologaCreateUser
