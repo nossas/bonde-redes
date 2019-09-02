@@ -35,10 +35,9 @@ class Server {
     this.dbg = debug(`webhook-logs`)
   }
 
-  private request = async (serviceName: string, data: any) => {
+  private request = async (serviceName: string, json: any) => {
     const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
     try {
-      const json = JSON.stringify(data)
       const { data: { data: { logTable: { returning: [{ id }] } } } } = await axios.post<DataType>(HASURA_API_URL, {
         query: mutation,
         variables: { json, service_name: serviceName }
