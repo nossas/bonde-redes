@@ -2,12 +2,12 @@ import Base from './Base'
 import { Response } from 'express'
 import * as yup from 'yup'
 
-class PsicólogaUpdateTicket extends Base {
+class PsicologaUpdateTicket extends Base {
   constructor (ticketId: number, res: Response) {
     super('PsicólogaUpdateTicket', `tickets/${ticketId.toString()}`, res, 'PUT')
   }
 
-  start = async <T = any>(data: any) => {
+  start = async <T>(data: object) => {
     const validateTicket = yup.object().shape({
       requester_id: yup.number().required(),
       organization_id: yup.number().required(),
@@ -35,4 +35,4 @@ class PsicólogaUpdateTicket extends Base {
   }
 }
 
-export default PsicólogaUpdateTicket
+export default PsicologaUpdateTicket
