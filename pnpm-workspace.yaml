@@ -1,4 +1,5 @@
 packages:
   - '.'
-  - 'packages/webhook-logs'
-  - 'packages/webhook-zendesk'
+  - 'packages/webhooks-registry'
+  - 'packages/webhooks-zendesk'
+  - 'packages/cli-jsonb-convert'
