@@ -21,5 +21,8 @@
   "scripts": {
     "lint": "eslint **/*.ts",
     "clean": "rm -rf node_modules"
+  },
+  "dependencies": {
+    "pnpm": "^3.8.1"
   }
 }
