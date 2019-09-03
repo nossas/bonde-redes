@@ -6,5 +6,6 @@ declare namespace NodeJS {
     ZENDESK_ORGANIZATIONS: string
     GOOGLE_MAPS_API_KEY: string
     PORT: string
+    WIDGET_IDS: string
   }
 }
