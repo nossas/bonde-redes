@@ -13,8 +13,5 @@
     "dev": "DEBUG=webhooks-auth ts-node-dev src",
     "clean": "rm -rf node_modules dist",
     "build": "tsc"
-  },
-  "devDependencies": {
-    "ts-node-dev": "^1.0.0-pre.42"
   }
 }
