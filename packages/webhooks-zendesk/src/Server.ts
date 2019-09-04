@@ -1,21 +1,20 @@
-/* eslint-disable camelcase */
 import Express, { Response } from 'express'
 import debug, { Debugger } from 'debug'
 import * as yup from 'yup'
 import AdvogadaCreateUser from './integrations/AdvogadaCreateUser'
-import PsicólogaCreateUser from './integrations/PsicólogaCreateUser'
+import PsicologaCreateUser from './integrations/PsicólogaCreateUser'
 import ListTicketsFromUser from './integrations/ListTicket'
 import AdvogadaCreateTicket from './integrations/AdvogadaCreateTicket'
 import AdvogadaUpdateTicket from './integrations/AdvogadaUpdateTicket'
-import PsicólogaCreateTicket from './integrations/PsicólogaCreateTicket'
-import PsicólogaUpdateTicket from './integrations/PsicólogaUpdateTicket'
+import PsicologaCreateTicket from './integrations/PsicologaCreateTicket'
+import PsicologaUpdateTicket from './integrations/PsicologaUpdateTicket'
 
 interface DataType {
   data: {
     logTable: {
-      returning: Array<{
+      returning: {
         id: number
-      }>
+      }[]
     }
   }
 }
@@ -48,7 +47,19 @@ class Server {
     this.dbg = debug(`webhooks-zendesk`)
   }
 
-  private filterService = (payload: any) => {
+  private filterService = (
+    payload: {
+      event: {
+        data: {
+          new: {
+            service_name: string
+            data: object
+            created_at: string
+          }
+        }
+      }
+    }
+  ) => {
     try {
       const { event: { data: { new: { service_name: serviceName, data, created_at: createdAt } } } } = payload
       this.dbg(`received service "${serviceName}"`)
@@ -72,8 +83,8 @@ class Server {
     }
   }
 
-  private filterFormName = async (json: any) => {
-    let data: any
+  private filterFormName = async (json: string) => {
+    let data
     try {
       data = JSON.parse(json)
     } catch (e) {
@@ -109,7 +120,7 @@ class Server {
         InstanceClass = AdvogadaCreateUser
         break
       case 'Recadastro: Psicólogas Ativas':
-        InstanceClass = PsicólogaCreateUser
+        InstanceClass = PsicologaCreateUser
         break
       default:
         this.dbg(`InstanceClass "${name}" doesn't exist`)
@@ -153,7 +164,7 @@ class Server {
     const filteredTickets = tickets.data.tickets.filter((i: any) => {
       if (instance instanceof AdvogadaCreateUser) {
         return ['open', 'new', 'pending', 'hold'].includes(i.status) && i.subject === `[Advogada] ${name} - ${registration_number}`
-      } else if (instance instanceof PsicólogaCreateUser) {
+      } else if (instance instanceof PsicologaCreateUser) {
         return ['open', 'new', 'pending', 'hold'].includes(i.status) && i.subject === `[Psicóloga] ${name} - ${registration_number}`
       }
     })
@@ -181,10 +192,10 @@ class Server {
             id: 360021879811,
             value: city
           }],
-          created_at,
+          created_at
         })
-      } else if (instance instanceof PsicólogaCreateUser) {
-        const psicólogaCreateTicket = new PsicólogaCreateTicket(res)
+      } else if (instance instanceof PsicologaCreateUser) {
+        const psicólogaCreateTicket = new PsicologaCreateTicket(res)
         return psicólogaCreateTicket.start<any>({
           requester_id: id,
           organization_id,
@@ -206,7 +217,7 @@ class Server {
             id: 360021879811,
             value: city
           }],
-          created_at,
+          created_at
         })
       }
     } else {
@@ -234,8 +245,8 @@ class Server {
             value: city
           }]
         })
-      } else if (instance instanceof PsicólogaCreateUser) {
-        const psicólogaUpdateTicket = new PsicólogaUpdateTicket(filteredTickets[0].id, res)
+      } else if (instance instanceof PsicologaCreateUser) {
+        const psicólogaUpdateTicket = new PsicologaUpdateTicket(filteredTickets[0].id, res)
         return psicólogaUpdateTicket.start<any>({
           requester_id: id,
           organization_id,
@@ -293,7 +304,7 @@ class Server {
         let user
         if (instance instanceof AdvogadaCreateUser) {
           user = await instance.start(results, createdAt)
-        } else if (instance instanceof PsicólogaCreateUser) {
+        } else if (instance instanceof PsicologaCreateUser) {
           user = await instance.start(results, createdAt)
         }
 
