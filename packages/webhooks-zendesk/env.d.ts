@@ -7,5 +7,7 @@ declare namespace NodeJS {
     GOOGLE_MAPS_API_KEY: string
     PORT: string
     WIDGET_IDS: string
+    HASURA_API_URL: string
+    X_HASURA_ADMIN_SECRET: string
   }
 }

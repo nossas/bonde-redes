@@ -9,7 +9,7 @@ const query = `{
 }`
 
 interface FormEntry {
-  fields: [{}, {}, {value: string}]
+  fields: string
   created_at: string
   widget_id: number
 }
@@ -28,7 +28,7 @@ class BondeCreatedDate {
 
   getFormEntries = async () => {
     const {HASURA_API_URL, X_HASURA_ADMIN_SECRET} = process.env
-    const {data: {data: { form_entries }}} = await axios.post<DataType>(HASURA_API_URL!, {
+    const {data: {data: {form_entries}}} = await axios.post<DataType>(HASURA_API_URL!, {
       query
     }, {
       headers: {
@@ -45,7 +45,7 @@ class BondeCreatedDate {
       const widgets = JSON.parse(WIDGET_IDS)
       const advogadaId = widgets['ADVOGADA']
       const psicologaId = widgets['PSICÓLOGA']
-      return formEntries.filter(i => [advogadaId, psicologaId].includes(i.widget_id))
+      return formEntries.filter(i => [Number(advogadaId), Number(psicologaId)].includes(i.widget_id))
     } catch (e) {
       return null
     }
@@ -53,11 +53,16 @@ class BondeCreatedDate {
 
   filterByEmail = (formEntries: FormEntry[]) => {
     try {
-      const filteredEntries = formEntries.filter(i => i.fields[2].value === this.email)
+      const filteredEntries = formEntries.filter(i => {
+        const parsedFields = JSON.parse(i.fields)
+        return parsedFields[2].value === this.email
+      })
       if (filteredEntries.length > 0) {
         return filteredEntries
       }
-    } finally {
+
+      return null
+    } catch(e) {
       return null
     }
   }

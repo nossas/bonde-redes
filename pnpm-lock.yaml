@@ -49,35 +49,35 @@ importers:
       ts-jest: ^24.0.2
       ts-node-dev: ^1.0.0-pre.40
       typescript: ^3.5.3
-  packages/webhooks-auth:
+  packages/webhooks-registry:
     dependencies:
       '@types/jsonwebtoken': 8.3.3
       axios: 0.19.0
       debug: 4.1.1
       dotenv: 8.1.0
       express: 4.17.1
-      jsonwebtoken: 8.5.1
-      typescript: 3.6.2
     specifiers:
       '@types/jsonwebtoken': ^8.3.3
       axios: ^0.19.0
       debug: ^4.1.1
       dotenv: ^8.0.0
       express: ^4.17.1
-      jsonwebtoken: ^8.5.1
-      typescript: ^3.6.2
-  packages/webhooks-registry:
+  packages/webhooks-zendesk:
     dependencies:
       axios: 0.19.0
       debug: 4.1.1
       dotenv: 8.1.0
       express: 4.17.1
+      url-join: 4.0.1
+      yup: 0.27.0
     specifiers:
       axios: ^0.19.0
       debug: ^4.1.1
       dotenv: ^8.0.0
       express: ^4.17.1
-  packages/webhooks-zendesk:
+      url-join: ^4.0.1
+      yup: ^0.27.0
+  packages/webhooks-zendesk-ticket:
     dependencies:
       axios: 0.19.0
       debug: 4.1.1
@@ -508,6 +508,7 @@ packages:
     resolution:
       integrity: sha512-FwI9gX75FgVBJ7ywgnq/P7tw+/o1GUbtP0KzbtusLigAOgIgNISRK0ZPl4qertvXSIE8YbsVJueQ90cDt9YYyw==
   /@types/node/12.7.4:
+    dev: true
     resolution:
       integrity: sha512-W0+n1Y+gK/8G2P/piTkBBN38Qc5Q1ZSO6B5H3QmPCUewaiXOo2GCAWZ4ElZCcNhjJuBSUSLGFUJnmlCn5+nxOQ==
   /@types/range-parser/1.2.3:
