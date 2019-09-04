@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "DEBUG=webhooks-registry ts-node-dev src",
     "clean": "rm -rf node_modules dist",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "ts-jest"
   }
 }
