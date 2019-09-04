@@ -49,35 +49,35 @@ importers:
       ts-jest: ^24.0.2
       tsc-watch: ^3.0.0
       typescript: ^3.5.3
-  packages/webhooks-auth:
+  packages/webhooks-registry:
     dependencies:
       '@types/jsonwebtoken': 8.3.3
       axios: 0.19.0
       debug: 4.1.1
       dotenv: 8.1.0
       express: 4.17.1
-      jsonwebtoken: 8.5.1
-      typescript: 3.6.3
     specifiers:
       '@types/jsonwebtoken': ^8.3.3
       axios: ^0.19.0
       debug: ^4.1.1
       dotenv: ^8.0.0
       express: ^4.17.1
-      jsonwebtoken: ^8.5.1
-      typescript: ^3.6.2
-  packages/webhooks-registry:
+  packages/webhooks-zendesk:
     dependencies:
       axios: 0.19.0
       debug: 4.1.1
       dotenv: 8.1.0
       express: 4.17.1
+      url-join: 4.0.1
+      yup: 0.27.0
     specifiers:
       axios: ^0.19.0
       debug: ^4.1.1
       dotenv: ^8.0.0
       express: ^4.17.1
-  packages/webhooks-zendesk:
+      url-join: ^4.0.1
+      yup: ^0.27.0
+  packages/webhooks-zendesk-ticket:
     dependencies:
       axios: 0.19.0
       debug: 4.1.1
@@ -533,10 +533,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-W0+n1Y+gK/8G2P/piTkBBN38Qc5Q1ZSO6B5H3QmPCUewaiXOo2GCAWZ4ElZCcNhjJuBSUSLGFUJnmlCn5+nxOQ==
-  /@types/node/12.7.5:
-    dev: false
-    resolution:
-      integrity: sha512-9fq4jZVhPNW8r+UYKnxF1e2HkDWOWKM5bC2/7c9wPV835I0aOrVbS/Hw/pWPk2uKrNXQqg9Z959Kz+IYDd5p3w==
   /@types/range-parser/1.2.3:
     dev: true
     resolution:
@@ -3854,19 +3850,6 @@ packages:
       node: '>= 0.10'
     resolution:
       integrity: sha512-t/7RxHXPH6cJtP0pRG6smSr9QJidhB+3kXu0KgXnbGYMgzEnUxRQ4/LDdfOwZEMyIh3/xHb8PX3t+lfL9z+YVQ==
-  /ps-tree/1.2.0:
-    dependencies:
-      event-stream: 3.3.4
-    dev: true
-    engines:
-      node: '>= 0.10'
-    hasBin: true
-    resolution:
-      integrity: sha512-0VnamPPYHl4uaU/nSFeZZpR21QAWRz+sRv4iW9+v/GS/J5U5iZB5BNN6J0RMoOvdx2gWM2+ZFMIm58q24e4UYA==
-  /pseudomap/1.0.2:
-    dev: true
-    resolution:
-      integrity: sha1-8FKijacOYYkX7wqKw0wa5aaChrM=
   /psl/1.3.1:
     dev: true
     resolution:
