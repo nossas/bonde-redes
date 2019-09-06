@@ -186,7 +186,7 @@ class Server {
           return res.status(400).json(`Erro desconhecido ao filtrar por serviço.`)
         }
 
-        const { InstanceClass, results, status: formNameStatus, name, data: errorData } = await filterFormName(data!)
+        const { InstanceClass, results, status: formNameStatus, name, data: errorData, timestamp } = await filterFormName(data!)
         if (formNameStatus === FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED) {
           this.dbg(`Form "${name}" not implemented. But it's ok`)
           return res.status(200).json(`Form "${name}" not implemented. But it's ok`)
@@ -196,7 +196,7 @@ class Server {
           return res.status(400).json(`Invalid request, see logs.`)
         }
         
-        if (!results) {
+        if (!results || !timestamp) {
           return res.status(400).json('Invalid request, failed to parse results')
         }
         const bondeCreatedDate = new BondeCreatedDate(results.email)
@@ -221,7 +221,7 @@ class Server {
           this.dbg(`Success, updated user "${userId}"!`)
         }
 
-        const resultTicket = await this.createTicket(instance, createdUser, createdAt, res)
+        const resultTicket = await this.createTicket(instance, createdUser, timestamp, res)
         if (resultTicket) {
           this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}"`)
         } else {
