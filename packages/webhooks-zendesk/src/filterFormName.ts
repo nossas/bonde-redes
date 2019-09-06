@@ -18,7 +18,9 @@ export const filterFormName = async (data: object) => {
         form: yup.object().shape({
           name: yup.string().required()
         }),
-        results: yup.object().required()
+        results: yup.object().shape({
+          email: yup.string().required(),
+        }).required()
       })
     }))
   })

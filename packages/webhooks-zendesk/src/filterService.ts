@@ -22,7 +22,7 @@ export enum FILTER_SERVICE_STATUS {
 
 export const filterService = (payload: Payload) => {
   try {
-    const { event: { data: { new: { service_name: serviceName, data, created_at: createdAt } } } } = payload
+    const { event: { data: { new: { service_name: serviceName, data } } } } = payload
     dbg(`received service "${serviceName}"`)
     if (serviceName !== 'mautic-form') {
       dbg(`${serviceName} not desired service`)
@@ -33,8 +33,7 @@ export const filterService = (payload: Payload) => {
     }
     return {
       status: FILTER_SERVICE_STATUS.SUCCESS,
-      data,
-      createdAt
+      data
     }
   } catch (e) {
     dbg(e)

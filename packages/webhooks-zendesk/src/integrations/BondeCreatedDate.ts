@@ -1,7 +1,8 @@
 import axios from 'axios'
+import * as yup from 'yup'
 
-const query = `{
-  form_entries {
+const query = `query($advogadaId: Int!, $psicologaId: Int!) {
+  form_entries(where: {widget_id: {_in: [$advogadaId, $psicologaId]}}) {
     fields
     created_at
     widget_id
@@ -27,9 +28,25 @@ class BondeCreatedDate {
   }
 
   getFormEntries = async () => {
-    const {HASURA_API_URL, X_HASURA_ADMIN_SECRET} = process.env
+    const {HASURA_API_URL, X_HASURA_ADMIN_SECRET, WIDGET_IDS} = process.env
+    let widget_ids
+    try {
+      widget_ids = JSON.parse(WIDGET_IDS)
+      if (!yup.object().shape({
+        'ADVOGADA': yup.number().required(),
+        'PSICÓLOGA': yup.number().required(),
+      }).isValid(widget_ids)) {
+        throw new Error('Invalid WIDGET_IDS env var')
+      }
+    } catch(e) {
+      return
+    }
     const {data: {data: {form_entries}}} = await axios.post<DataType>(HASURA_API_URL!, {
-      query
+      query,
+      variables: {
+        advogadaId: widget_ids['ADVOGADA'],
+        psicologaId: widget_ids['PSICÓLOGA']
+      }
     }, {
       headers: {
         'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
@@ -37,18 +54,6 @@ class BondeCreatedDate {
     })
     
     return form_entries
-  }
-
-  filterByWidgetId = (formEntries: FormEntry[]) => {
-    const {WIDGET_IDS} = process.env
-    try {
-      const widgets = JSON.parse(WIDGET_IDS)
-      const advogadaId = widgets['ADVOGADA']
-      const psicologaId = widgets['PSICÓLOGA']
-      return formEntries.filter(i => [Number(advogadaId), Number(psicologaId)].includes(i.widget_id))
-    } catch (e) {
-      return null
-    }
   }
 
   filterByEmail = (formEntries: FormEntry[]) => {
@@ -72,11 +77,7 @@ class BondeCreatedDate {
     if (!formEntries) {
       throw new Error('getFormEntries error')
     }
-    const scopedFormEntries = await this.filterByWidgetId(formEntries)
-    if (!scopedFormEntries) {
-      throw new Error('filterByWidgetId error')
-    }
-    const filteredFormEntries = await this.filterByEmail(scopedFormEntries)
+    const filteredFormEntries = await this.filterByEmail(formEntries)
     if (!filteredFormEntries) {
       throw new Error('filteredFormEntries error')
     }

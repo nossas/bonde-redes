@@ -177,7 +177,7 @@ class Server {
     const { PORT } = process.env
     this.server
       .post('/', async (req, res) => {
-        const { status: serviceStatus, serviceName, createdAt, data } = await filterService(req.body)
+        const { status: serviceStatus, serviceName, data } = await filterService(req.body)
 
         if (serviceStatus === FILTER_SERVICE_STATUS.NOT_DESIRED_SERVICE) {
           return res.status(200).json(`Service "${serviceName}" isn't desired, but everything is OK.`)
@@ -195,6 +195,12 @@ class Server {
           this.dbg(errorData)
           return res.status(400).json(`Invalid request, see logs.`)
         }
+        
+        if (!results) {
+          return res.status(400).json('Invalid request, failed to parse results')
+        }
+        const bondeCreatedDate = new BondeCreatedDate(results.email)
+        const createdAt = await bondeCreatedDate.start()
 
         const instance = await new InstanceClass!(res)
         let user
@@ -209,18 +215,13 @@ class Server {
         }
 
         const { data: { user: createdUser, user: { created_at: responseCreatedAt, updated_at: responseUpdatedAt, id: userId } } } = user
-        // this.dbg(createdUser)
         if (responseCreatedAt === responseUpdatedAt) {
           this.dbg(`Success, created user "${userId}"!`)
         } else {
           this.dbg(`Success, updated user "${userId}"!`)
         }
 
-        const bondeCreatedDate = new BondeCreatedDate(createdUser.email)
-
-        const created_at = await bondeCreatedDate.start()
-
-        const resultTicket = await this.createTicket(instance, createdUser, created_at, res)
+        const resultTicket = await this.createTicket(instance, createdUser, createdAt, res)
         if (resultTicket) {
           this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}"`)
         } else {
