@@ -21,13 +21,16 @@ class Server {
           "X-Hasura-User-Id": String(decoded.user_id),
           "X-Hasura-Role": decoded.role
         }
+        this.dbg(`Logged ${decoded.role} user.`)
         res.status(200).json(hasuraVariables)
       } else if (err.message === 'jwt must be provided') {
+        this.dbg(`Logged anonymous user.`)
         res.status(200).json({ "X-Hasura-Role": 'anonymous' })
       } else {
+        this.dbg(`Unauthorized jwt token.`)
         res.status(401).json('Unauthorized')
       }
-    }) 
+    })
   }
 
   start = () => {
