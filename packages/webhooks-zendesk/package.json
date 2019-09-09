@@ -9,7 +9,7 @@
     "yup": "^0.27.0"
   },
   "scripts": {
-    "dev": "DEBUG=webhooks-zendesk* ts-node-dev src",
+    "dev": "tsc-watch --onSuccess \"node dist/index.js\"",
     "clean": "rm -rf node_modules dist",
     "build": "tsc"
   }

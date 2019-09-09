@@ -2,5 +2,4 @@ packages:
   - '.'
   - 'packages/webhooks-registry'
   - 'packages/webhooks-zendesk'
-  - 'packages/webhooks-auth'
-  - 'packages/cli-jsonb-convert'
+  - 'packages/webhooks-zendesk-ticket'
