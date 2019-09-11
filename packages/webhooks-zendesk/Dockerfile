@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 
 COPY ./ .
 
-RUN pnpm m i --shamefully-flatten -- bonde-microservices bonde-webhooks-zendesk
+RUN pnpm m i -- bonde-microservices bonde-webhooks-zendesk
 
 RUN pnpm m run build --filter bonde-webhooks-zendesk
 
