@@ -10,7 +10,7 @@
     "typescript": "^3.6.2"
   },
   "scripts": {
-    "dev": "DEBUG=webhooks-auth ts-node-dev src",
+    "dev": "DEBUG=webhooks-auth tsc-watch --onSuccess \"node dist/index.js\"",
     "clean": "rm -rf node_modules dist",
     "build": "tsc"
   }
