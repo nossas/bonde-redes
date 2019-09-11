@@ -95,7 +95,7 @@ class Server {
     let actualPageNumber = '1'
     while (true) {
       const listTickets = new ListTickets()
-      const actualPageTickets = await listTickets.start<TicketResponse>(actualPageNumber)
+      const actualPageTickets = await listTickets.start(actualPageNumber)
       if (actualPageTickets) {
         tickets = [...tickets, ...actualPageTickets.data.tickets]
         if (actualPageTickets.data.next_page) {
