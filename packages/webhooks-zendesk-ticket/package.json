@@ -11,7 +11,8 @@
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node dist/index.js\"",
     "clean": "rm -rf node_modules dist",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest"
   },
   "main": "src/index.ts"
 }
