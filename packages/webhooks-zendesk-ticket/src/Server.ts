@@ -68,12 +68,6 @@ const handleCustomFields = (ticket: Ticket) => {
   return ticket
 }
 
-interface TicketResponse {
-  tickets: Ticket[]
-  next_page: string
-  count: number
-}
-
 class Server {
   private server = Express().use(Express.json())
 
