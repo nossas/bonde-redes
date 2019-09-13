@@ -4,3 +4,4 @@ packages:
   - 'packages/webhooks-zendesk'
   - 'packages/webhooks-zendesk-ticket'
   - 'packages/webhooks-auth'
+  - 'packages/cli-mautic-forms'
