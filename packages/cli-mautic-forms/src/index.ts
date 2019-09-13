@@ -57,8 +57,29 @@ const signale = new Signale();
   });
 
   signale.success(response2)
-  const submissions = await rMautic(`/forms/${response2.selectedForm}/submissions?limit=300`, mautic_username, mautic_password)
-  console.dir(submissions.data.submissions.length)
+  const submissions = await rMautic(`/forms/${response2.selectedForm}/submissions?limit=3`, mautic_username, mautic_password)
 
+  submissions.data.submissions.forEach(async (element: any) => {
+    const submitData = {
+      "mautic.form_on_submit": [
+        {
+          "submission": element,
+          "timestamp": new Date().toISOString()
+        }
+      ]
+    };
 
+    const { REGISTRY_WEBHOOK_URL } = process.env
+
+    try {
+      const response = await axios({
+        method: 'post',
+        url: REGISTRY_WEBHOOK_URL,
+        data: submitData
+      })
+      console.log(response.status, response.statusText);
+    } catch (error) {
+      console.error(error);
+    }
+  });
 })();
