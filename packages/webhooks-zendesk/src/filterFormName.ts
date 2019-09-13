@@ -20,9 +20,10 @@ export const filterFormName = async (data: object) => {
         }),
         results: yup.object().shape({
           email: yup.string().required(),
-        }).required()
+        }).required(),
+        dateSubmitted: yup.string().required(),
       }),
-      timestamp: yup.string().required()
+      timestamp: yup.string().required(),
     }))
   })
   let validationResult
@@ -35,7 +36,7 @@ export const filterFormName = async (data: object) => {
       data
     }
   }
-  const { 'mautic.form_on_submit': [{ submission: { form: { name }, results }, timestamp }] } = validationResult
+  const { 'mautic.form_on_submit': [{ submission: { form: { name }, results, dateSubmitted }, timestamp }] } = validationResult
   let InstanceClass
   switch (name) {
     case 'Recadastro: Advogadas Ativas':
@@ -55,6 +56,7 @@ export const filterFormName = async (data: object) => {
     status: FILTER_FORM_NAME_STATUS.SUCCESS,
     InstanceClass,
     results,
-    timestamp
+    timestamp,
+    dateSubmitted
   }
 }
