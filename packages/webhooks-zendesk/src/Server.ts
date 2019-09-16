@@ -186,7 +186,7 @@ class Server {
           return res.status(400).json(`Erro desconhecido ao filtrar por serviço.`)
         }
 
-        const { InstanceClass, results, status: formNameStatus, name, data: errorData, timestamp } = await filterFormName(data!)
+        const { InstanceClass, results, status: formNameStatus, name, data: errorData, dateSubmitted } = await filterFormName(data!)
         if (formNameStatus === FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED) {
           this.dbg(`Form "${name}" not implemented. But it's ok`)
           return res.status(200).json(`Form "${name}" not implemented. But it's ok`)
@@ -196,18 +196,18 @@ class Server {
           return res.status(400).json(`Invalid request, see logs.`)
         }
         
-        if (!results || !timestamp) {
+        if (!results || !dateSubmitted) {
           return res.status(400).json('Invalid request, failed to parse results')
         }
         const bondeCreatedDate = new BondeCreatedDate(results.email)
-        const createdAt = await bondeCreatedDate.start()
+        const bondeCreatedAt = await bondeCreatedDate.start()
 
         const instance = await new InstanceClass!(res)
         let user
         if (instance instanceof AdvogadaCreateUser) {
-          user = await instance.start(results, createdAt!)
+          user = await instance.start(results, bondeCreatedAt!)
         } else if (instance instanceof PsicologaCreateUser) {
-          user = await instance.start(results!, createdAt!)
+          user = await instance.start(results!, bondeCreatedAt!)
         }
 
         if (!user) {
@@ -221,7 +221,7 @@ class Server {
           this.dbg(`Success, updated user "${userId}"!`)
         }
 
-        const resultTicket = await this.createTicket(instance, createdUser, timestamp, res)
+        const resultTicket = await this.createTicket(instance, createdUser, dateSubmitted, res)
         if (resultTicket) {
           this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}"`)
         } else {

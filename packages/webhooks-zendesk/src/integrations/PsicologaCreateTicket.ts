@@ -16,7 +16,8 @@ class PsicologaCreateTicket extends Base {
       custom_fields: yup.array().of(yup.object().shape({
         id: yup.number().required(),
         value: yup.mixed().required()
-      }))
+      })),
+      created_at: yup.string().required()
     }).required()
 
     try {
