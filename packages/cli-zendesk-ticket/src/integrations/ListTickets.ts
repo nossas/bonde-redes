@@ -1,5 +1,5 @@
 import Base from './Base'
-import { Ticket } from '../Server'
+import { Ticket } from '../cli'
 
 export interface TicketResponse {
   tickets: Ticket[]
