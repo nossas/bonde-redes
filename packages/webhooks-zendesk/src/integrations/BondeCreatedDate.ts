@@ -57,19 +57,14 @@ class BondeCreatedDate {
   }
 
   filterByEmail = (formEntries: FormEntry[]) => {
-    try {
-      const filteredEntries = formEntries.filter(i => {
+    return formEntries.filter(i => {
+      try {
         const parsedFields = JSON.parse(i.fields)
         return parsedFields[2].value === this.email
-      })
-      if (filteredEntries.length > 0) {
-        return filteredEntries
+      } catch (e) {
+        return false
       }
-
-      return null
-    } catch(e) {
-      return null
-    }
+    })
   }
 
   start = async () => {
