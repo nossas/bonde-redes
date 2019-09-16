@@ -13,8 +13,8 @@ importers:
       '@types/supertest': 2.0.8
       '@types/url-join': 4.0.0
       '@types/yup': 0.26.23
-      '@typescript-eslint/eslint-plugin': 2.2.0_ea2f14a4003c8d827ca3f58619cfbae2
-      '@typescript-eslint/parser': 2.2.0_eslint@6.4.0
+      '@typescript-eslint/eslint-plugin': 2.3.0_deff88047e1dd01e180c1e3d2cca825b
+      '@typescript-eslint/parser': 2.3.0_eslint@6.4.0
       babel-eslint: 10.0.3_eslint@6.4.0
       eslint: 6.4.0
       eslint-config-standard: 14.1.0_908888e278e6cf5ed19a4a7e77831e63
@@ -66,6 +66,21 @@ importers:
       dotenv: ^8.0.0
       prompts: ^2.2.1
       signale: ^1.4.0
+  packages/cli-zendesk-ticket:
+    dependencies:
+      axios: 0.19.0
+      debug: 4.1.1
+      dotenv: 8.1.0
+      express: 4.17.1
+      url-join: 4.0.1
+      yup: 0.27.0
+    specifiers:
+      axios: ^0.19.0
+      debug: ^4.1.1
+      dotenv: ^8.1.0
+      express: ^4.17.1
+      url-join: ^4.0.1
+      yup: ^0.27.0
   packages/webhooks-auth:
     dependencies:
       '@types/jsonwebtoken': 8.3.3
@@ -95,21 +110,6 @@ importers:
       dotenv: ^8.1.0
       express: ^4.17.1
   packages/webhooks-zendesk:
-    dependencies:
-      axios: 0.19.0
-      debug: 4.1.1
-      dotenv: 8.1.0
-      express: 4.17.1
-      url-join: 4.0.1
-      yup: 0.27.0
-    specifiers:
-      axios: ^0.19.0
-      debug: ^4.1.1
-      dotenv: ^8.1.0
-      express: ^4.17.1
-      url-join: ^4.0.1
-      yup: ^0.27.0
-  packages/webhooks-zendesk-ticket:
     dependencies:
       axios: 0.19.0
       debug: 4.1.1
@@ -598,10 +598,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-+tipAL6prdInS/avA6QityIFBDvHnqk1Tv9L5JMEws5IZC6agymBGAoDsrPyYp42wGcktyQtYKv9kvGPEKd4Qg==
-  /@typescript-eslint/eslint-plugin/2.2.0_ea2f14a4003c8d827ca3f58619cfbae2:
+  /@typescript-eslint/eslint-plugin/2.3.0_deff88047e1dd01e180c1e3d2cca825b:
     dependencies:
-      '@typescript-eslint/experimental-utils': 2.2.0_eslint@6.4.0
-      '@typescript-eslint/parser': 2.2.0_eslint@6.4.0
+      '@typescript-eslint/experimental-utils': 2.3.0_eslint@6.4.0
+      '@typescript-eslint/parser': 2.3.0_eslint@6.4.0
       eslint: 6.4.0
       eslint-utils: 1.4.2
       functional-red-black-tree: 1.0.1
@@ -615,11 +615,11 @@ packages:
       eslint: ^5.0.0 || ^6.0.0
       typescript: '*'
     resolution:
-      integrity: sha512-rOodtI+IvaO8USa6ValYOrdWm9eQBgqwsY+B0PPiB+aSiK6p6Z4l9jLn/jI3z3WM4mkABAhKIqvGIBl0AFRaLQ==
-  /@typescript-eslint/experimental-utils/2.2.0_eslint@6.4.0:
+      integrity: sha512-QgO/qmNye+rKsU7dan6pkBTSfpbyrHJidsw9bR3gZCrQNTB9eWQ5+UDkrrev/fu9xg6Qh7ebbx03IVuGnGRmEw==
+  /@typescript-eslint/experimental-utils/2.3.0_eslint@6.4.0:
     dependencies:
       '@types/json-schema': 7.0.3
-      '@typescript-eslint/typescript-estree': 2.2.0
+      '@typescript-eslint/typescript-estree': 2.3.0
       eslint: 6.4.0
       eslint-scope: 5.0.0
     dev: true
@@ -628,12 +628,12 @@ packages:
     peerDependencies:
       eslint: '*'
     resolution:
-      integrity: sha512-IMhbewFs27Frd/ICHBRfIcsUCK213B8MsEUqvKFK14SDPjPR5JF6jgOGPlroybFTrGWpMvN5tMZdXAf+xcmxsA==
-  /@typescript-eslint/parser/2.2.0_eslint@6.4.0:
+      integrity: sha512-ry+fgd0Hh33LyzS30bIhX/a1HJpvtnecjQjWxxsZTavrRa1ymdmX7tz+7lPrPAxB018jnNzwNtog6s3OhxPTAg==
+  /@typescript-eslint/parser/2.3.0_eslint@6.4.0:
     dependencies:
       '@types/eslint-visitor-keys': 1.0.0
-      '@typescript-eslint/experimental-utils': 2.2.0_eslint@6.4.0
-      '@typescript-eslint/typescript-estree': 2.2.0
+      '@typescript-eslint/experimental-utils': 2.3.0_eslint@6.4.0
+      '@typescript-eslint/typescript-estree': 2.3.0
       eslint: 6.4.0
       eslint-visitor-keys: 1.1.0
     dev: true
@@ -642,8 +642,8 @@ packages:
     peerDependencies:
       eslint: ^5.0.0 || ^6.0.0
     resolution:
-      integrity: sha512-0mf893kj9L65O5sA7wP6EoYvTybefuRFavUNhT7w9kjhkdZodoViwVS+k3D+ZxKhvtL7xGtP/y/cNMJX9S8W4A==
-  /@typescript-eslint/typescript-estree/2.2.0:
+      integrity: sha512-Dc+LAtHts0yDuusxG0NVjGvrpPy2kZauxqPbfFs0fmcMB4JhNs+WwIDMFGWeKjbGoPt/SIUC9XJ7E0ZD/f8InQ==
+  /@typescript-eslint/typescript-estree/2.3.0:
     dependencies:
       glob: 7.1.4
       is-glob: 4.0.1
@@ -653,7 +653,7 @@ packages:
     engines:
       node: ^8.10.0 || ^10.13.0 || >=11.10.1
     resolution:
-      integrity: sha512-9/6x23A3HwWWRjEQbuR24on5XIfVmV96cDpGR9671eJv1ebFKHj2sGVVAwkAVXR2UNuhY1NeKS2QMv5P8kQb2Q==
+      integrity: sha512-WBxfwsTeCOsmQ7cLjow7lgysviBKUW34npShu7dxJYUQCbSG5nfZWZTgmQPKEc+3flpbSM7tjXjQOgETYp+njQ==
   /abab/2.0.1:
     dev: true
     resolution:

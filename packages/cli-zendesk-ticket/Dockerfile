@@ -6,8 +6,8 @@ WORKDIR /usr/src/app
 
 COPY ./ .
 
-RUN pnpm m i -- bonde-microservices bonde-webhooks-zendesk-ticket
+RUN pnpm m i -- bonde-microservices bonde-cli-zendesk-ticket
 
-RUN pnpm m run build --filter bonde-webhooks-zendesk-ticket
+RUN pnpm m run build --filter bonde-cli-zendesk-ticket
 
-CMD node ./packages/webhooks-zendesk-ticket/dist
+CMD node ./packages/cli-zendesk-ticket/dist
