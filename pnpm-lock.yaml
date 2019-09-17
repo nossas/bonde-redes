@@ -84,7 +84,6 @@ importers:
   packages/webhooks-auth:
     dependencies:
       '@types/jsonwebtoken': 8.3.3
-      axios: 0.19.0
       debug: 4.1.1
       dotenv: 8.1.0
       express: 4.17.1
@@ -92,7 +91,6 @@ importers:
       typescript: 3.6.3
     specifiers:
       '@types/jsonwebtoken': ^8.3.3
-      axios: ^0.19.0
       debug: ^4.1.1
       dotenv: ^8.1.0
       express: ^4.17.1

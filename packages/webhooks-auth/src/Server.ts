@@ -1,6 +1,5 @@
 import Express from 'express'
 import debug, { Debugger } from 'debug'
-import axios from 'axios'
 import jwt from 'jsonwebtoken'
 
 class Server {
