@@ -68,7 +68,7 @@ const handleCustomFields = (ticket: Ticket) => {
   return ticket
 }
 
-class Server {
+class CLI {
   private server = Express().use(Express.json())
 
   private dbg: Debugger
@@ -123,4 +123,4 @@ class Server {
   }
 }
 
-export default Server
+export default CLI

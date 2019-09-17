@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Ticket } from '../Server'
+import { Ticket } from '../cli'
 
 const mutation = `mutation (
   $assignee_id: bigint

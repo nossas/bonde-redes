@@ -2,6 +2,6 @@ packages:
   - '.'
   - 'packages/webhooks-registry'
   - 'packages/webhooks-zendesk'
-  - 'packages/webhooks-zendesk-ticket'
+  - 'packages/cli-zendesk-ticket'
   - 'packages/webhooks-auth'
   - 'packages/cli-mautic-forms'
