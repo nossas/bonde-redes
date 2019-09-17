@@ -14,8 +14,6 @@ abstract class Base {
 
   protected url: string
 
-  protected organizations: { [s: string]: number }
-
   private method: 'GET' | 'POST' | 'PUT'
 
   constructor (name: string, url: string, method: 'GET' | 'POST' | 'PUT' = 'POST') {
@@ -23,8 +21,6 @@ abstract class Base {
     this.name = `webhooks-zendesk:${name}`
     this.dbg = debug(this.name)
     this.url = url
-    const { ZENDESK_ORGANIZATIONS } = process.env
-    this.organizations = JSON.parse(ZENDESK_ORGANIZATIONS)
   }
 
   protected send = async <T>(page?: string) => {
