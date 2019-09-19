@@ -88,14 +88,18 @@ class CLI {
     this.dbg = debug(`webhooks-zendesk-ticket`)
   }
 
-  saveTicket = async (ticket: Ticket) => {
+  saveTicket = async (ticket: Ticket, tries: number, counter: number) => {
+    if (counter >= tries) {
+      console.log(`Limite máximo de tentativas alcançado para o ${ticket.id}`)
+      return
+    }
     try {
       await saveTicket(ticket)
     } catch (e) {
       console.log('Falhou para o ticket ' + ticket.id)
       console.log('Tentando novamente em 1 segundo...')
       await new Promise(r => setTimeout(r, 1000))
-      this.saveTicket(ticket)
+      await this.saveTicket(ticket, tries, counter + 1)
     }
   }
 
@@ -158,12 +162,12 @@ class CLI {
 
     if (!response) {
       console.log('Resposta indefinida!')
-      return this.sendSlicedRequesters(slicedRequesters, 3, counter++)
+      return this.sendSlicedRequesters(slicedRequesters, tries, counter++)
     }
 
     if (response.status !== 200) {
       console.log('Resposta diferente de 200 para o usuário', slicedRequesters)
-      return this.sendSlicedRequesters(slicedRequesters, 3, counter++)
+      return this.sendSlicedRequesters(slicedRequesters, tries, counter++)
     }
 
     return true
@@ -175,7 +179,7 @@ class CLI {
     while (true) {
       const slicedRequesters = requesters.slice(offset, offset + limit)
       const responseOk = await this.sendSlicedRequesters(slicedRequesters, 3, 0)
-      console.log(`[${offset + limit > requesters.length ? offset + limit : requesters.length}/${requesters.length}]`)
+      console.log(`[${offset + limit < requesters.length ? offset + limit : requesters.length}/${requesters.length}]`)
 
       if (responseOk) {
         if (offset + limit > requesters.length) {
@@ -198,7 +202,7 @@ class CLI {
 
     // Salva os tickets com custom_fields no banco
     await Promise.all(ticketsWithCustomFields.map(i => {
-      return this.saveTicket(i)
+      return this.saveTicket(i, 5, 0)
     }))
 
     console.log('Script finalizado!')
