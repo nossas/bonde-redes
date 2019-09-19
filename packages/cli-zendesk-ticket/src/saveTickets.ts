@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Ticket } from '../cli'
+import { Ticket } from './cli'
 
 const mutation = `mutation (
   $assignee_id: bigint
@@ -88,7 +88,7 @@ const mutation = `mutation (
   }
 }`
 
-const saveTickets = async ({
+const saveTicket = async ({
   assignee_id,
   created_at,
   custom_fields,
@@ -154,4 +154,4 @@ const saveTickets = async ({
   return response
 }
 
-export default saveTickets
+export default saveTicket
