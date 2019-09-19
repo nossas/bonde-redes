@@ -8,7 +8,7 @@ describe('Test ListTickets', () => {
     listTickets = new ListTickets()
   })
   test('Connect to zendesk, and get some tickets', async () => {
-    const tickets = await listTickets.start('1')
+    const tickets = await listTickets.start(1)
     expect(tickets).toBeTruthy()
   })
 })

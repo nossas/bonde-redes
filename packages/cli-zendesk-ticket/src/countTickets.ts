@@ -6,41 +6,22 @@ export interface TicketIds {
   [s: number]: Ticket
 }
 
-interface Requester {
+export interface Requester {
+  id: number
   atendimentos_em_andamento: number
   atendimento__concluído: number
   encaminhamentos: number
 }
 
-interface Requesters {
+export interface Requesters {
   [s: number]: Requester
 }
 
-const countTickets = async (tickets: Ticket[], ticketIds: TicketIds) => {
+const countTickets = async (tickets: Ticket[], ticketsByTicketId: TicketIds) => {
   const requesters: Requesters = {}
   const promises = tickets.map(async i => {
     let type: 'voluntaria' | 'msr' | null = null
     if (!i.link_match) {
-      console.log('Não tem link match', i)
-      return
-    }
-
-    let matchId: number
-    try {
-      matchId = Number(i.link_match.split('/').slice(-1)[0])
-    } catch (e) {
-      console.log('Falhou ao gerar o link do match!', i.id)
-      return
-    }
-
-    if (isNaN(matchId)) {
-      console.log('É NaN', i.id)
-      return
-    }
-
-    const ticketId = ticketIds[matchId]
-    if (!ticketId) {
-      console.log('Ticket match parece que não existe! :(', matchId)
       return
     }
 
@@ -56,14 +37,15 @@ const countTickets = async (tickets: Ticket[], ticketIds: TicketIds) => {
 
     if (type === 'msr') {
       // Cria um pivô e inicializa o valor
-      let requester_pivot = requesters[ticketId.requester_id]
-      if (!requesters[ticketId.requester_id]) {
-        requesters[ticketId.requester_id] = {
+      let requester_pivot = requesters[i.requester_id]
+      if (!requesters[i.requester_id]) {
+        requesters[i.requester_id] = {
+          id: i.requester_id,
           atendimentos_em_andamento: 0,
           atendimento__concluído: 0,
           encaminhamentos: 0
         }
-        requester_pivot = requesters[ticketId.requester_id]
+        requester_pivot = requesters[i.requester_id]
       }
 
       // Atualiza os atendimentos em andamento:
@@ -83,6 +65,7 @@ const countTickets = async (tickets: Ticket[], ticketIds: TicketIds) => {
   })
 
   await Promise.all(promises)
+  return requesters
 }
 
 export default countTickets

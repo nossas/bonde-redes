@@ -2,7 +2,8 @@ import Express from 'express'
 import debug, { Debugger } from 'debug'
 import ListTickets from './integrations/ListTickets';
 import saveTicket from './saveTickets';
-import countTickets, { TicketIds } from './countTickets';
+import countTickets, { TicketIds, Requesters, Requester } from './countTickets';
+import UpdateRequesterFields from './integrations/UpdateRequesterFields';
 
 export const dicio: {
   360014379412: 'status_acolhimento'
@@ -37,7 +38,7 @@ export interface Ticket {
   custom_fields: Array<{
     id: keyof typeof dicio
     value: string | null
-  } | {id: 360014379412; value: status_acolhimento_values}>
+  } | { id: 360014379412; value: status_acolhimento_values }>
   description: string
   group_id: number
   organization_id: number
@@ -83,7 +84,7 @@ class CLI {
 
   private formData?: FormData
 
-  constructor () {
+  constructor() {
     this.dbg = debug(`webhooks-zendesk-ticket`)
   }
 
@@ -98,17 +99,17 @@ class CLI {
     }
   }
 
-  start = async () => {
+  getTickets = async () => {
     let tickets: Ticket[] = [];
-    let actualPageNumber = '1'
+    let actualPageNumber = 1
     while (true) {
       const listTickets = new ListTickets()
       const actualPageTickets = await listTickets.start(actualPageNumber)
       if (actualPageTickets) {
         tickets = [...tickets, ...actualPageTickets.data.tickets]
         if (actualPageTickets.data.next_page) {
-          console.log(`[${Number(actualPageNumber)*100}/${actualPageTickets.data.count}]`)
-          actualPageNumber = (~~actualPageNumber + 1).toString()
+          console.log(`[${Number(actualPageNumber) * 100}/${actualPageTickets.data.count}]`)
+          actualPageNumber = actualPageNumber + 1
         } else {
           console.log(`[${Number(actualPageTickets && actualPageTickets.data.count)}/${actualPageTickets && actualPageTickets.data.count}]`)
           break
@@ -118,6 +119,10 @@ class CLI {
       }
     }
 
+    return tickets
+  }
+
+  getTicketsWithCustomFields = (tickets: Ticket[]) => {
     // Convert tickets to have custom_fields on root:
     const { COMMUNITY_ID } = process.env
     const ticketsWithCustomFields = tickets.map(i => ({
@@ -125,14 +130,71 @@ class CLI {
       community_id: Number(COMMUNITY_ID)
     }))
 
-    // Faz a contagem dos custom_fields, adiciona às relações ao banco e faz a contagem de tickets para cada ticket
-    const ticketIds: TicketIds = {}
-    ticketsWithCustomFields.forEach(i => {
-      ticketIds[i.id] = i
-    })
-    await countTickets(ticketsWithCustomFields, ticketIds)
+    return ticketsWithCustomFields
+  }
 
-    // console.log('Script finalizado!')
+  getTicketsByTicketId = (ticketsWithCustomFields: Ticket[]) => {
+    const ticketsByTicketId: TicketIds = {}
+    ticketsWithCustomFields.forEach(i => {
+      ticketsByTicketId[i.id] = i
+    })
+    return ticketsByTicketId
+  }
+
+  convertRequestersToArray = (requesters: Requesters) => {
+    return Object.values(requesters) as Requester[]
+  }
+
+  sendSlicedRequesters = async (slicedRequesters: Requester[], tries: number, counter: number): Promise<boolean> => {
+    if (counter >= tries) {
+      console.log('Tentou mais de três vezes', slicedRequesters)
+      return false
+    }
+    const updateRequesterFields = new UpdateRequesterFields()
+    const response = await updateRequesterFields.start(slicedRequesters)
+
+    // Espera 1 segundo
+    await new Promise(r => setTimeout(r, 1000))
+
+    if (!response) {
+      console.log('Resposta indefinida!')
+      return this.sendSlicedRequesters(slicedRequesters, 3, counter++)
+    }
+
+    if (response.status !== 200) {
+      console.log('Resposta diferente de 200 para o usuário', slicedRequesters)
+      return this.sendSlicedRequesters(slicedRequesters, 3, counter++)
+    }
+
+    return true
+  }
+
+  sendRequesters = async (requesters: Requester[]) => {
+    const limit = 100
+    let offset = 0
+    while (true) {
+      const slicedRequesters = requesters.slice(offset, offset + limit)
+      const responseOk = await this.sendSlicedRequesters(slicedRequesters, 3, 0)
+      console.log(`[${offset + limit > requesters.length ? offset + limit : requesters.length}/${requesters.length}]`)
+
+      if (responseOk) {
+        if (offset + limit > requesters.length) {
+          break
+        }
+        offset += limit
+      } else {
+        console.log('Falha na integração!')
+        break
+      }
+    }
+  }
+
+  start = async () => {
+    const ticketsWithCustomFields = this.getTicketsWithCustomFields(await this.getTickets())
+    const ticketsByTicketId = this.getTicketsByTicketId(ticketsWithCustomFields)
+    const requesters = await countTickets(ticketsWithCustomFields, ticketsByTicketId)
+    const requestersArray = this.convertRequestersToArray(requesters)
+    await this.sendRequesters(requestersArray)
 
     // Salva os tickets com custom_fields no banco
     await Promise.all(ticketsWithCustomFields.map(i => {
