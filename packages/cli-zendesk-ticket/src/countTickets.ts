@@ -8,9 +8,9 @@ export interface TicketIds {
 
 export interface Requester {
   id: number
-  atendimentos_em_andamento: number
-  atendimento__concluído: number
-  encaminhamentos: number
+  atendimentos_em_andamento_calculado_: number
+  atendimentos_concludos_calculado_: number
+  encaminhamentos_realizados_calculado_: number
 }
 
 export interface Requesters {
@@ -41,20 +41,20 @@ const countTickets = async (tickets: Ticket[], ticketsByTicketId: TicketIds) => 
       if (!requesters[i.requester_id]) {
         requesters[i.requester_id] = {
           id: i.requester_id,
-          atendimentos_em_andamento: 0,
-          atendimento__concluído: 0,
-          encaminhamentos: 0
+          atendimentos_em_andamento_calculado_: 0,
+          atendimentos_concludos_calculado_: 0,
+          encaminhamentos_realizados_calculado_: 0
         }
         requester_pivot = requesters[i.requester_id]
       }
 
       // Atualiza os atendimentos em andamento:
       if (i.status_acolhimento === 'atendimento__iniciado') {
-        requester_pivot.atendimentos_em_andamento = requester_pivot.atendimentos_em_andamento + 1
+        requester_pivot.atendimentos_em_andamento_calculado_ = requester_pivot.atendimentos_em_andamento_calculado_ + 1
       } else if (i.status_acolhimento === 'atendimento__concluído') {
-        requester_pivot.atendimento__concluído = requester_pivot.atendimento__concluído + 1
+        requester_pivot.atendimentos_concludos_calculado_ = requester_pivot.atendimentos_concludos_calculado_ + 1
       } else if (i.status_acolhimento === 'encaminhamento__realizado' || i.status_acolhimento === 'encaminhamento__realizado_para_serviço_público') {
-        requester_pivot.encaminhamentos = requester_pivot.encaminhamentos + 1
+        requester_pivot.encaminhamentos_realizados_calculado_ = requester_pivot.encaminhamentos_realizados_calculado_ + 1
       }
     }
 
