@@ -25,10 +25,10 @@ class PsicologaCreateTicket extends Base {
         stripUnknown: true
       })
     } catch (e) {
-      this.dbg('Falhou ao validar ticket')
+      return this.dbg('Falhou ao validar ticket')
     }
     try {
-      await this.send<T>({
+      return this.send<T>({
         ticket: {
           ...data
         }
