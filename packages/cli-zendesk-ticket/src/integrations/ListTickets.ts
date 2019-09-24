@@ -9,11 +9,11 @@ export interface TicketResponse {
 
 class ListTickets extends Base {
   constructor () {
-    super('ListTickets', `tickets`, 'GET')
+    super('ListTickets')
   }
 
-  start = async (page?: string) => {
-    return this.send<TicketResponse>(page)
+  start = async (page: number) => {
+    return this.get<TicketResponse>('tickets', {page})
   }
 }
 export default ListTickets

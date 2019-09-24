@@ -49,12 +49,12 @@ pipeline:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
 
-  zendesk-ticket-staging-publish:
+  cli-ticket-staging-publish:
     image: plugins/docker
-    repo: nossas/bonde-webhooks-zendesk-ticket
+    repo: nossas/bonde-cli-zendesk-ticket
     group: publishing
     secrets: [ docker_username, docker_password ]
-    dockerfile: packages/webhooks-zendesk-ticket/Dockerfile
+    dockerfile: packages/cli-zendesk-ticket/Dockerfile
     tags:
       - ${DRONE_BRANCH/\//-}
     when:
