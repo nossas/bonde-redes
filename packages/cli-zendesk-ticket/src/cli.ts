@@ -2,7 +2,7 @@ import Express from 'express'
 import debug, { Debugger } from 'debug'
 import ListTickets from './integrations/ListTickets';
 import saveTicket from './saveTickets';
-import countTickets, { TicketIds, Requesters, Requester } from './countTickets';
+import countTickets, { Requesters, Requester } from './countTickets';
 import UpdateRequesterFields from './integrations/UpdateRequesterFields';
 
 export const dicio: {
@@ -137,14 +137,6 @@ class CLI {
     return ticketsWithCustomFields
   }
 
-  getTicketsByTicketId = (ticketsWithCustomFields: Ticket[]) => {
-    const ticketsByTicketId: TicketIds = {}
-    ticketsWithCustomFields.forEach(i => {
-      ticketsByTicketId[i.id] = i
-    })
-    return ticketsByTicketId
-  }
-
   convertRequestersToArray = (requesters: Requesters) => {
     return Object.values(requesters) as Requester[]
   }
@@ -195,8 +187,7 @@ class CLI {
 
   start = async () => {
     const ticketsWithCustomFields = this.getTicketsWithCustomFields(await this.getTickets())
-    const ticketsByTicketId = this.getTicketsByTicketId(ticketsWithCustomFields)
-    const requesters = await countTickets(ticketsWithCustomFields, ticketsByTicketId)
+    const requesters = await countTickets(ticketsWithCustomFields)
     const requestersArray = this.convertRequestersToArray(requesters)
     await this.sendRequesters(requestersArray)
 
