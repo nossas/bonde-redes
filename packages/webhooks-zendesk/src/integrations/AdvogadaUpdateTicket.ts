@@ -24,13 +24,17 @@ class AdvogadaUpdateTicket extends Base {
         stripUnknown: true
       })
     } catch (e) {
-      this.dbg('Falhou ao validar ticket')
+      return this.dbg('Falhou ao validar ticket')
     }
-    await this.send<T>({
-      ticket: {
-        ...data
-      }
-    })
+    try {
+      return this.send<T>({
+        ticket: {
+          ...data
+        }
+      })
+    } catch(e) {
+      this.dbg(e)
+    }
   }
 }
 
