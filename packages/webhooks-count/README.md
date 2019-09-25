@@ -1,4 +1,4 @@
-### WEBHOOKS_MATCH
+### WEBHOOKS_COUNT
 
 Esse pacote faz a sincronização completa do do ticket em tempo real, fazendo a contagem dos tickets e atualizando os usuários no zendesk, realizando o match entre voluntárias e MSRs sempre que ouver uma mudança de status em um ticket e deixando o banco de dados sempre em sincronização com os tickets modificados.
 
