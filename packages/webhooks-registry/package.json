@@ -7,7 +7,7 @@
     "express": "^4.17.1"
   },
   "scripts": {
-    "dev": "tsc-watch --onSuccess \"node dist/index.js\"",
+    "dev": "DEBUG=webhooks-registry* tsc-watch --onSuccess \"node dist/index.js\"",
     "clean": "rm -rf node_modules dist",
     "build": "tsc",
     "test": "ts-jest"

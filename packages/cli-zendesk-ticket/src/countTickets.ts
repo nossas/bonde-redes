@@ -1,5 +1,4 @@
 import { Ticket } from "./cli";
-import updateTicketRelation from "./updateTicketRelation";
 // import updateTicketRelation from "./updateTicketRelation";
 
 export interface TicketIds {
@@ -17,7 +16,7 @@ export interface Requesters {
   [s: number]: Requester
 }
 
-const countTickets = async (tickets: Ticket[], ticketsByTicketId: TicketIds) => {
+const countTickets = async (tickets: Ticket[]) => {
   const requesters: Requesters = {}
   const promises = tickets.map(async i => {
     let type: 'voluntaria' | 'msr' | null = null
@@ -58,10 +57,6 @@ const countTickets = async (tickets: Ticket[], ticketsByTicketId: TicketIds) => 
       }
     }
 
-    // const { id } = ticketId
-    // const { id: webhooks_registry_id } = i
-
-    // await updateTicketRelation(id, webhooks_registry_id)
   })
 
   await Promise.all(promises)

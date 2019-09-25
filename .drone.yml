@@ -60,3 +60,15 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
+
+  cli-ticket-staging-publish:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-count
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhooks-count/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
