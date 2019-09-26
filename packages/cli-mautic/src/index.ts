@@ -1,7 +1,6 @@
 import dotenv from 'dotenv'
 import prompts, { PromptObject } from 'prompts'
 import { Signale } from 'signale';
-// import debug, { Debugger } from 'debug'
 import axios from 'axios'
 
 dotenv.config()
