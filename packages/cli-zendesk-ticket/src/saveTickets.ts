@@ -28,7 +28,7 @@ const mutation = `mutation (
   $cidade: String
   $community_id: bigint
 ) {
-  insert_solidarity_zd_tickets(objects: {
+  insert_solidarity_tickets(objects: {
     assignee_id: $assignee_id
     created_at: $created_at
     custom_fields: $custom_fields
@@ -55,7 +55,7 @@ const mutation = `mutation (
     cidade: $cidade
     community_id: $community_id
   }, on_conflict: {
-    constraint: solidarity_zd_tickets_ticket_id_key
+    constraint: solidarity_tickets_ticket_id_key
     update_columns: [
       assignee_id
       created_at

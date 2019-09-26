@@ -4,7 +4,7 @@ const mutation = `mutation(
   $id: Int
   $webhooks_registry_id: Int
 ) {
-  update_solidarity_zd_tickets(
+  update_solidarity_tickets(
     where: {
       id: {
         _eq: $id
