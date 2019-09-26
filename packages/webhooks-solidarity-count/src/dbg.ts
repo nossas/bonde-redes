@@ -1,3 +1,3 @@
 import debug from 'debug'
 
-export default debug('webhooks-match')
+export default debug('webhooks-solidarity-count')
