@@ -1,6 +1,5 @@
 pipeline:
-  
-  auth-staging-publish:
+  webhooks-auth-staging-publish:
     image: plugins/docker
     repo: nossas/bonde-webhooks-auth
     group: publishing
@@ -11,21 +10,8 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
-
-  auth-staging-deploy:
-    image: peloton/drone-rancher
-    url: http://cluster.bonde.org
-    service: webhooks/graphql-auth
-    group: deploying
-    docker_image: nossas/bonde-webhooks-auth:${DRONE_BRANCH/\//-}
-    timeout: 360
-    confirm: true
-    secrets: [ rancher_access_key, rancher_secret_key ]
-    when:
-      status: success
-      branch: [hotfix/*, release/*, feature/*, develop]
   
-  registry-staging-publish:
+  webhooks-registry-staging-publish:
     image: plugins/docker
     repo: nossas/bonde-webhooks-registry
     group: publishing
@@ -37,7 +23,7 @@ pipeline:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
 
-  zendesk-staging-publish:
+  webhooks-zendesk-staging-publish:
     image: plugins/docker
     repo: nossas/bonde-webhooks-zendesk
     group: publishing
@@ -49,26 +35,39 @@ pipeline:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
 
-  cli-ticket-staging-publish:
+  cli-zendesk-staging-publish:
     image: plugins/docker
-    repo: nossas/bonde-cli-zendesk-ticket
+    repo: nossas/bonde-cli-zendesk
     group: publishing
     secrets: [ docker_username, docker_password ]
-    dockerfile: packages/cli-zendesk-ticket/Dockerfile
+    dockerfile: packages/cli-zendesk/Dockerfile
     tags:
       - ${DRONE_BRANCH/\//-}
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
 
-  cli-ticket-staging-publish:
+  webhooks-solidarity-count-staging-publish:
     image: plugins/docker
-    repo: nossas/bonde-webhooks-count
+    repo: nossas/bonde-webhooks-solidarity-count
     group: publishing
     secrets: [ docker_username, docker_password ]
-    dockerfile: packages/webhooks-count/Dockerfile
+    dockerfile: packages/webhooks-solidarity-count/Dockerfile
     tags:
       - ${DRONE_BRANCH/\//-}
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
+
+  webhooks-auth-staging-deploy:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/graphql-auth
+    group: deploying
+    docker_image: nossas/bonde-webhooks-auth:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [ rancher_access_key, rancher_secret_key ]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
