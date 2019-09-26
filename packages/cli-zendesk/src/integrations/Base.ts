@@ -13,7 +13,7 @@ abstract class Base {
   protected dbg: Debugger
 
   constructor (name: string) {
-    this.name = `webhooks-zendesk:${name}`
+    this.name = `cli-zendesk:${name}`
     this.dbg = debug(this.name)
   }
 
