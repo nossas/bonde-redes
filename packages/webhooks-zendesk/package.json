@@ -5,6 +5,7 @@
     "debug": "^4.1.1",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
+    "source-map-support": "^0.5.13",
     "url-join": "^4.0.1",
     "yup": "^0.27.0"
   },
@@ -12,5 +13,8 @@
     "dev": "tsc-watch --onSuccess \"node dist/index.js\"",
     "clean": "rm -rf node_modules dist",
     "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/source-map-support": "^0.5.0"
   }
 }
