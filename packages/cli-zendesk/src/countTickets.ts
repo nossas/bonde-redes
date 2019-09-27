@@ -1,20 +1,6 @@
-import { Ticket } from "./cli";
+import { Requesters } from "./interfaces/Requester";
+import { Ticket } from "./interfaces/Ticket";
 // import updateTicketRelation from "./updateTicketRelation";
-
-export interface TicketIds {
-  [s: number]: Ticket
-}
-
-export interface Requester {
-  id: number
-  atendimentos_em_andamento_calculado_: number
-  atendimentos_concludos_calculado_: number
-  encaminhamentos_realizados_calculado_: number
-}
-
-export interface Requesters {
-  [s: number]: Requester
-}
 
 const countTickets = async (tickets: Ticket[]) => {
   const requesters: Requesters = {}
