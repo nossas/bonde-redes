@@ -16,17 +16,6 @@
       "extends": [
         "plugin:@typescript-eslint/recommended"
       ],
-      "parserOptions": {
-        "project": [
-          "tsconfig.json",
-          "packages/cli-mautic/tsconfig.json",
-          "packages/cli-zendesk/tsconfig.json",
-          "packages/webhooks-auth/tsconfig.json",
-          "packages/webhooks-registry/tsconfig.json",
-          "packages/webhooks-solidarity-count/tsconfig.json",
-          "packages/webhooks-zendesk/tsconfig.json"
-        ]
-      },
       "rules": {
         "@typescript-eslint/indent": [
           "error",
