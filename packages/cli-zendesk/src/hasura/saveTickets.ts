@@ -1,20 +1,8 @@
 import axios from 'axios'
 import { Ticket } from '../interfaces/Ticket'
 import dbg from './dbg'
-import stringigyObject from 'stringify-object'
 import * as yup from 'yup'
-
-const stringify = (obj: any) => {
-  return stringigyObject(obj, {
-    singleQuotes: false, transform: (obj, prop, originalResult) => {
-      if (prop === 'description') {
-        return JSON.stringify(originalResult)
-      } else {
-        return originalResult
-      }
-    }
-  })
-}
+import stringify from '../stringify'
 
 const query = (tickets: any) => `mutation {
   insert_solidarity_tickets(objects: ${stringify(tickets)}, on_conflict: {
@@ -87,7 +75,6 @@ const validate = yup.array().of(yup.object().shape({
 const saveTickets = async (tickets: Ticket[]) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const validatedTickets = (await validate.validate(tickets, { stripUnknown: true }))
-  // console.log(query(validatedTickets))
   const response = await axios.post(HASURA_API_URL, {
     query: query(validatedTickets)
   }, {
