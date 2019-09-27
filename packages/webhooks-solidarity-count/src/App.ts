@@ -3,76 +3,14 @@ import { Response } from 'express'
 import { Ticket, handleCustomFields } from './interfaces/Ticket'
 import saveTicket from './hasura/saveTicket'
 import dbg from './dbg'
-import * as yup from 'yup'
 import getUserRequestedTickets from './zendesk/getUserRequestedTickets'
 import updateRequesterFields from './zendesk/updateRequesterFields'
-// import getUserRequestedTickets from './zendesk/getUserRequestedTickets'
+import countTickets from './countTickets'
+import verifyOrganization from './verifyOrganizations'
+import { ORGANIZATIONS } from './interfaces/Organizations'
+import updateHasura from './updateHasura'
 
 const log = dbg.extend('app')
-
-enum ORGANIZATIONS {
-  ADVOGADA,
-  MSR,
-  PSICOLOGA
-}
-
-const updateHasura = async (ticket: Ticket): Promise<boolean> => {
-  try {
-    const response = await saveTicket(ticket)
-    return response.status === 200
-  } catch (e) {
-    log.extend('updateHasura')(e)
-  }
-
-  return false
-}
-
-const verifyOrganization = async (ticket: Ticket) => {
-  const {ZENDESK_ORGANIZATIONS} = process.env
-  try {
-    const organizations = await yup.object().shape({
-      'ADVOGADA': yup.number().required(),
-      'MSR': yup.number().required(),
-      'PSICÓLOGA': yup.number().required()
-    }).validate(JSON.parse(ZENDESK_ORGANIZATIONS))
-
-    const {organization_id} = ticket
-
-    switch (organization_id) {
-      case organizations.ADVOGADA:
-        return ORGANIZATIONS.ADVOGADA
-      case organizations.MSR:
-        return ORGANIZATIONS.MSR
-      case organizations.PSICÓLOGA:
-        return ORGANIZATIONS.PSICOLOGA
-      default:
-        return null
-    }
-  } catch (e) {
-    log.extend('verifyOrganization')(e)
-    return null
-  }
-}
-
-const countTickets = (tickets: Ticket[]) => {
-  const userCount = {
-    atendimentos_em_andamento_calculado_: 0,
-    atendimentos_concludos_calculado_: 0,
-    encaminhamentos_realizados_calculado_: 0
-  }
-
-  tickets.forEach(i => {
-    if (i.status_acolhimento === 'atendimento__iniciado') {
-      userCount.atendimentos_em_andamento_calculado_ = userCount.atendimentos_em_andamento_calculado_ + 1
-    } else if (i.status_acolhimento === 'atendimento__concluído') {
-      userCount.atendimentos_concludos_calculado_ = userCount.atendimentos_concludos_calculado_ + 1
-    } else if (i.status_acolhimento === 'encaminhamento__realizado' || i.status_acolhimento === 'encaminhamento__realizado_para_serviço_público') {
-      userCount.encaminhamentos_realizados_calculado_ = userCount.encaminhamentos_realizados_calculado_ + 1
-    }
-  })
-
-  return userCount
-}
 
 /**
  * @param id ID do ticket
