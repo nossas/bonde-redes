@@ -2,6 +2,7 @@ importers:
   .:
     dependencies:
       pnpm: 3.8.1
+      source-map-support: 0.5.13
     devDependencies:
       '@types/debug': 4.1.5
       '@types/dotenv': 6.1.1
@@ -10,6 +11,7 @@ importers:
       '@types/node': 12.7.8
       '@types/prompts': 2.0.1
       '@types/signale': 1.2.1
+      '@types/source-map-support': 0.5.0
       '@types/supertest': 2.0.8
       '@types/url-join': 4.0.0
       '@types/yup': 0.26.24
@@ -32,9 +34,10 @@ importers:
       '@types/dotenv': ^6.1.1
       '@types/express': ^4.17.1
       '@types/jest': ^24.0.18
-      '@types/node': ^12.7.5
+      '@types/node': ^12.7.8
       '@types/prompts': ^2.0.1
       '@types/signale': ^1.2.1
+      '@types/source-map-support': ^0.5.0
       '@types/supertest': ^2.0.8
       '@types/url-join': ^4.0.0
       '@types/yup': ^0.26.24
@@ -49,6 +52,7 @@ importers:
       eslint-plugin-standard: ^4.0.1
       jest: ^24.9.0
       pnpm: ^3.8.1
+      source-map-support: ^0.5.13
       supertest: ^4.0.2
       ts-jest: ^24.1.0
       tsc-watch: ^4.0.0
@@ -59,24 +63,44 @@ importers:
       dotenv: 8.1.0
       prompts: 2.2.1
       signale: 1.4.0
+      source-map-support: 0.5.13
+    devDependencies:
+      '@types/source-map-support': 0.5.0
     specifiers:
+      '@types/source-map-support': ^0.5.0
       axios: ^0.19.0
       dotenv: ^8.1.0
       prompts: ^2.2.1
       signale: ^1.4.0
+      source-map-support: ^0.5.13
   packages/cli-zendesk:
     dependencies:
       axios: 0.19.0
       debug: 4.1.1
       dotenv: 8.1.0
       express: 4.17.1
+      prompts: 2.2.1
+      signale: 1.4.0
+      source-map-support: 0.5.13
       url-join: 4.0.1
       yup: 0.27.0
+    devDependencies:
+      '@types/prompts': 2.0.1
+      '@types/signale': 1.2.1
+      '@types/source-map-support': 0.5.0
+      install: 0.13.0
     specifiers:
+      '@types/prompts': ^2.0.1
+      '@types/signale': ^1.2.1
+      '@types/source-map-support': ^0.5.0
       axios: ^0.19.0
       debug: ^4.1.1
       dotenv: ^8.1.0
       express: ^4.17.1
+      install: ^0.13.0
+      prompts: ^2.2.1
+      signale: ^1.4.0
+      source-map-support: ^0.5.13
       url-join: ^4.0.1
       yup: ^0.27.0
   packages/webhooks-auth:
@@ -86,13 +110,18 @@ importers:
       dotenv: 8.1.0
       express: 4.17.1
       jsonwebtoken: 8.5.1
+      source-map-support: 0.5.13
       typescript: 3.6.3
+    devDependencies:
+      '@types/source-map-support': 0.5.0
     specifiers:
       '@types/jsonwebtoken': ^8.3.4
+      '@types/source-map-support': ^0.5.0
       debug: ^4.1.1
       dotenv: ^8.1.0
       express: ^4.17.1
       jsonwebtoken: ^8.5.1
+      source-map-support: ^0.5.13
       typescript: ^3.6.3
   packages/webhooks-registry:
     dependencies:
@@ -100,24 +129,34 @@ importers:
       debug: 4.1.1
       dotenv: 8.1.0
       express: 4.17.1
+      source-map-support: 0.5.13
+    devDependencies:
+      '@types/source-map-support': 0.5.0
     specifiers:
+      '@types/source-map-support': ^0.5.0
       axios: ^0.19.0
       debug: ^4.1.1
       dotenv: ^8.1.0
       express: ^4.17.1
+      source-map-support: ^0.5.13
   packages/webhooks-solidarity-count:
     dependencies:
       axios: 0.19.0
       debug: 4.1.1
       dotenv: 8.1.0
       express: 4.17.1
+      source-map-support: 0.5.13
       url-join: 4.0.1
       yup: 0.27.0
+    devDependencies:
+      '@types/source-map-support': 0.5.0
     specifiers:
+      '@types/source-map-support': ^0.5.0
       axios: ^0.19.0
       debug: ^4.1.1
       dotenv: ^8.1.0
       express: ^4.17.1
+      source-map-support: ^0.5.13
       url-join: ^4.0.1
       yup: ^0.27.0
   packages/webhooks-zendesk:
@@ -126,13 +165,18 @@ importers:
       debug: 4.1.1
       dotenv: 8.1.0
       express: 4.17.1
+      source-map-support: 0.5.13
       url-join: 4.0.1
       yup: 0.27.0
+    devDependencies:
+      '@types/source-map-support': 0.5.0
     specifiers:
+      '@types/source-map-support': ^0.5.0
       axios: ^0.19.0
       debug: ^4.1.1
       dotenv: ^8.1.0
       express: ^4.17.1
+      source-map-support: ^0.5.13
       url-join: ^4.0.1
       yup: ^0.27.0
 lockfileVersion: 5.1
@@ -573,6 +617,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-mV6s2VgcBC16Jb+1EwulgRrrZBT93V4JCILkNPg31rvvSK6LRQQGU8R/SUivgHjDZ5LJZu/yL2kMF8j85YQTnA==
+  /@types/source-map-support/0.5.0:
+    dependencies:
+      '@types/node': 12.7.8
+    dev: true
+    resolution:
+      integrity: sha512-OrnAz5K5dXDgMdeRRoXIjDAvkodQ9ESvVJCyzrhzUJKmCkXgmYx/KLUBcVFe5eS4FiohfcY7YPxsdkmSwJz9wA==
   /@types/stack-utils/1.0.1:
     dev: true
     resolution:
@@ -1019,7 +1069,6 @@ packages:
     resolution:
       integrity: sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=
   /buffer-from/1.1.1:
-    dev: true
     resolution:
       integrity: sha512-MQcXEUbCKtEo7bhqEs6560Hyd4XaovZlO/k9V3hjVUF/zwW7KBVdSK4gIt/bzwS9MbR5qob+F5jusZsb0YQK2A==
   /bytes/3.1.0:
@@ -2103,7 +2152,7 @@ packages:
     dev: true
     resolution:
       integrity: sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=
-  /handlebars/4.3.1:
+  /handlebars/4.3.3:
     dependencies:
       neo-async: 2.6.1
       optimist: 0.6.1
@@ -2115,7 +2164,7 @@ packages:
     optionalDependencies:
       uglify-js: 3.6.0
     resolution:
-      integrity: sha512-c0HoNHzDiHpBt4Kqe99N8tdLPKAnGCQ73gYMPWtAYM4PwGnf7xl8PBUHJqh9ijlzt2uQKaSRxbXRt+rZ7M2/kA==
+      integrity: sha512-VupOxR91xcGojfINrzMqrvlyYbBs39sXIrWa7YdaQWeBudOlvKEGvCczMfJPgnuwHE/zyH1M6J+IUP6cgDVyxg==
   /har-schema/2.0.0:
     dev: true
     engines:
@@ -2308,6 +2357,12 @@ packages:
       node: '>=6.0.0'
     resolution:
       integrity: sha512-cntlB5ghuB0iuO65Ovoi8ogLHiWGs/5yNrtUcKjFhSSiVeAIVpD7koaSU9RM8mpXw5YDi9RdYXGQMaOURB7ycQ==
+  /install/0.13.0:
+    dev: true
+    engines:
+      node: '>= 0.10'
+    resolution:
+      integrity: sha512-zDml/jzr2PKU9I8J/xyZBQn8rPCAY//UOYNmR01XwNwyfhEWObo2SWfSl1+0tm1u6PhxLwDnfsT/6jB7OUxqFA==
   /invariant/2.2.4:
     dependencies:
       loose-envify: 1.4.0
@@ -2572,7 +2627,7 @@ packages:
       integrity: sha512-R47KzMtDJH6X4/YW9XTx+jrLnZnscW4VpNN+1PViSYTejLVPWv7oov+Duf8YQSPyVRUvueQqz1TcsC6mooZTXw==
   /istanbul-reports/2.2.6:
     dependencies:
-      handlebars: 4.3.1
+      handlebars: 4.3.3
     dev: true
     engines:
       node: '>=6'
@@ -4371,7 +4426,6 @@ packages:
     dependencies:
       buffer-from: 1.1.1
       source-map: 0.6.1
-    dev: true
     resolution:
       integrity: sha512-SHSKFHadjVA5oR4PPqhtAVdcBWwRYVd6g6cAXnIbRiIwc2EhPrTuKUBdSLvlEKyIP3GCf89fltvcZiP9MMFA1w==
   /source-map-url/0.4.0:
@@ -4385,7 +4439,6 @@ packages:
     resolution:
       integrity: sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
   /source-map/0.6.1:
-    dev: true
     engines:
       node: '>=0.10.0'
     resolution:
