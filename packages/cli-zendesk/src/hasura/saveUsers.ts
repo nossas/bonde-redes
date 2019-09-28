@@ -1,7 +1,7 @@
 import User from "../interfaces/User"
 import axios from 'axios'
 import dbg from "./dbg"
-import stringify from "../stringify"
+import {stringify} from "../stringify"
 
 const query = (users: User[]) => `
   mutation {
