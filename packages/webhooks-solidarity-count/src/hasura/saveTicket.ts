@@ -1,60 +1,9 @@
 import axios from 'axios'
 import { Ticket } from '../interfaces/Ticket'
+import stringify from '../stringify'
 
-const mutation = `mutation (
-  $assignee_id: bigint
-  $created_at: timestamp
-  $custom_fields: jsonb
-  $description: String
-  $group_id: bigint
-  $ticket_id: bigint
-  $organization_id: bigint
-  $raw_subject: String
-  $requester_id: bigint
-  $status: String
-  $subject: String
-  $submitter_id: bigint
-  $tags: jsonb
-  $updated_at: timestamp
-  $status_acolhimento: String
-  $nome_voluntaria: String
-  $link_match: String
-  $nome_msr: String
-  $data_inscricao_bonde: timestamp
-  $data_encaminhamento: timestamp
-  $status_inscricao: String
-  $telefone: String
-  $estado:String
-  $cidade: String
-  $community_id: bigint
-) {
-  insert_solidarity_tickets(objects: {
-    assignee_id: $assignee_id
-    created_at: $created_at
-    custom_fields: $custom_fields
-    description: $description
-    group_id: $group_id
-    ticket_id: $ticket_id
-    organization_id: $organization_id
-    raw_subject: $raw_subject
-    requester_id: $requester_id
-    status: $status
-    subject: $subject
-    submitter_id: $submitter_id
-    tags: $tags
-    updated_at: $updated_at
-    status_acolhimento: $status_acolhimento
-    nome_voluntaria: $nome_voluntaria
-    link_match: $link_match
-    nome_msr: $nome_msr
-    data_inscricao_bonde: $data_inscricao_bonde
-    data_encaminhamento: $data_encaminhamento
-    status_inscricao: $status_inscricao
-    telefone: $telefone
-    estado: $estado
-    cidade: $cidade
-    community_id: $community_id
-  }, on_conflict: {
+const query = (users: any) => `mutation {
+  insert_solidarity_tickets(objects: ${stringify(users)}, on_conflict: {
     constraint: solidarity_tickets_ticket_id_key
     update_columns: [
       assignee_id
@@ -94,7 +43,7 @@ const saveTicket = async ({
   custom_fields,
   description,
   group_id,
-  id,
+  ticket_id,
   organization_id,
   raw_subject,
   requester_id,
@@ -117,14 +66,13 @@ const saveTicket = async ({
 }: Ticket) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const response = await axios.post(HASURA_API_URL, {
-    query: mutation,
-    variables: {
+    query: query({
       assignee_id,
       created_at,
       custom_fields,
       description,
       group_id,
-      ticket_id: id,
+      ticket_id,
       organization_id,
       raw_subject,
       requester_id,
@@ -144,12 +92,14 @@ const saveTicket = async ({
       estado,
       cidade,
       community_id
-    }
+    }),
   }, {
     headers: {
       'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
     }
   })
+
+  response.data.errors && console.log(response.data.errors)
 
   return response
 }
