@@ -80,6 +80,7 @@ importers:
       dotenv: 8.1.0
       express: 4.17.1
       prompts: 2.2.1
+      ramda: 0.26.1
       signale: 1.4.0
       source-map-support: 0.5.13
       url-join: 4.0.1
@@ -99,6 +100,7 @@ importers:
       express: ^4.17.1
       install: ^0.13.0
       prompts: ^2.2.1
+      ramda: ^0.26.1
       signale: ^1.4.0
       source-map-support: ^0.5.13
       url-join: ^4.0.1
@@ -140,6 +142,26 @@ importers:
       express: ^4.17.1
       source-map-support: ^0.5.13
   packages/webhooks-solidarity-count:
+    dependencies:
+      axios: 0.19.0
+      debug: 4.1.1
+      dotenv: 8.1.0
+      express: 4.17.1
+      source-map-support: 0.5.13
+      url-join: 4.0.1
+      yup: 0.27.0
+    devDependencies:
+      '@types/source-map-support': 0.5.0
+    specifiers:
+      '@types/source-map-support': ^0.5.0
+      axios: ^0.19.0
+      debug: ^4.1.1
+      dotenv: ^8.1.0
+      express: ^4.17.1
+      source-map-support: ^0.5.13
+      url-join: ^4.0.1
+      yup: ^0.27.0
+  packages/webhooks-solidarity-match:
     dependencies:
       axios: 0.19.0
       debug: 4.1.1
@@ -3967,6 +3989,10 @@ packages:
       node: '>=0.6'
     resolution:
       integrity: sha512-27RP4UotQORTpmNQDX8BHPukOnBP3p1uUJY5UnDhaJB+rMt9iMsok724XL+UHU23bEFOHRMQ2ZhI99qOWUMGFA==
+  /ramda/0.26.1:
+    dev: false
+    resolution:
+      integrity: sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==
   /range-parser/1.2.1:
     dev: false
     engines:
