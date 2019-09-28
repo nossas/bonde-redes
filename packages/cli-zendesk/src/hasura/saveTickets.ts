@@ -2,10 +2,69 @@ import axios from 'axios'
 import { Ticket } from '../interfaces/Ticket'
 import dbg from './dbg'
 import * as yup from 'yup'
-import stringify from '../stringify'
+import {stringifyVariables} from '../stringify'
 
-const query = (tickets: any) => `mutation {
-  insert_solidarity_tickets(objects: ${stringify(tickets)}, on_conflict: {
+const generateVariablesIndex = (index: number) => `
+$assignee_id_${index}: bigint
+$created_at_${index}: timestamp
+$custom_fields_${index}: jsonb
+$description_${index}: String
+$group_id_${index}: bigint
+$ticket_id_${index}: bigint
+$organization_id_${index}: bigint
+$raw_subject_${index}: String
+$requester_id_${index}: bigint
+$status_${index}: String
+$subject_${index}: String
+$submitter_id_${index}: bigint
+$tags_${index}: jsonb
+$updated_at_${index}: timestamp
+$status_acolhimento_${index}: String
+$nome_voluntaria_${index}: String
+$link_match_${index}: String
+$nome_msr_${index}: String
+$data_inscricao_bonde_${index}: String
+$data_encaminhamento_${index}: String
+$status_inscricao_${index}: String
+$telefone_${index}: String
+$estado_${index}:String
+$cidade_${index}: String
+$community_id_${index}: Int
+`
+const generateObjectsIndex = (index: number) => `
+assignee_id: $assignee_id_${index}
+created_at: $created_at_${index}
+custom_fields: $custom_fields_${index}
+description: $description_${index}
+group_id: $group_id_${index}
+ticket_id: $ticket_id_${index}
+organization_id: $organization_id_${index}
+raw_subject: $raw_subject_${index}
+requester_id: $requester_id_${index}
+status: $status_${index}
+subject: $subject_${index}
+submitter_id: $submitter_id_${index}
+tags: $tags_${index}
+updated_at: $updated_at_${index}
+status_acolhimento: $status_acolhimento_${index}
+nome_voluntaria: $nome_voluntaria_${index}
+link_match: $link_match_${index}
+nome_msr: $nome_msr_${index}
+data_inscricao_bonde: $data_inscricao_bonde_${index}
+data_encaminhamento: $data_encaminhamento_${index}
+status_inscricao: $status_inscricao_${index}
+telefone: $telefone_${index}
+estado: $estado_${index}
+cidade: $cidade_${index}
+community_id: $community_id_${index}
+`
+
+const generateVariables = (tickets: Ticket[]) => tickets.map((_, index) => generateVariablesIndex(index)).flat()
+
+const generateObjects = (tickets: Ticket[]) => `[${tickets.map((_, index) => `{${generateObjectsIndex(index)}}`).join(',')}]`
+
+const query = (tickets: any) => `mutation (${generateVariables(tickets)}){
+  insert_solidarity_tickets(objects: ${generateObjects(tickets)}, on_conflict: {
     constraint: solidarity_tickets_ticket_id_key
     update_columns: [
       assignee_id
@@ -40,7 +99,7 @@ const query = (tickets: any) => `mutation {
 }`
 
 const validate = yup.array().of(yup.object().shape({
-  id: yup.number(),
+  id: yup.number().strip(true),
   ticket_id: yup.number().required(),
   assignee_id: yup.number().nullable(),
   created_at: yup.string(),
@@ -76,7 +135,8 @@ const saveTickets = async (tickets: Ticket[]) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const validatedTickets = (await validate.validate(tickets, { stripUnknown: true }))
   const response = await axios.post(HASURA_API_URL, {
-    query: query(validatedTickets)
+    query: query(validatedTickets),
+    variables: stringifyVariables(validatedTickets)
   }, {
     headers: {
       'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
