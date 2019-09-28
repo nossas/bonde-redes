@@ -1,0 +1,21 @@
+{
+  "name": "bonde-webhooks-solidarity-match",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "debug": "^4.1.1",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "source-map-support": "^0.5.13",
+    "url-join": "^4.0.1",
+    "yup": "^0.27.0"
+  },
+  "scripts": {
+    "dev": "DEBUG=webhooks-solidarity-match* tsc-watch --onSuccess \"node dist/index.js\"",
+    "clean": "rm -rf node_modules dist",
+    "test": "jest src",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/source-map-support": "^0.5.0"
+  }
+}
