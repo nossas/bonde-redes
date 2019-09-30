@@ -63,7 +63,7 @@ const generateVariables = (tickets: Ticket[]) => tickets.map((_, index) => gener
 
 const generateObjects = (tickets: Ticket[]) => `[${tickets.map((_, index) => `{${generateObjectsIndex(index)}}`).join(',')}]`
 
-const query = (tickets: any) => `mutation (${generateVariables(tickets)}){
+const createQuery = (tickets: any) => `mutation (${generateVariables(tickets)}){
   insert_solidarity_tickets(objects: ${generateObjects(tickets)}, on_conflict: {
     constraint: solidarity_tickets_ticket_id_key
     update_columns: [
@@ -135,7 +135,7 @@ const saveTickets = async (tickets: Ticket[]) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const validatedTickets = (await validate.validate(tickets, { stripUnknown: true }))
   const response = await axios.post(HASURA_API_URL, {
-    query: query(validatedTickets),
+    query: createQuery(validatedTickets),
     variables: stringifyVariables(validatedTickets)
   }, {
     headers: {
