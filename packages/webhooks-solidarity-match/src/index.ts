@@ -1,3 +1,5 @@
+import sourceMapSupport from 'source-map-support'
+sourceMapSupport.install()
 import dotenv from 'dotenv'
 dotenv.config()
 import Server from './Server'
