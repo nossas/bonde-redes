@@ -1,6 +1,7 @@
 import User from "../interfaces/User"
 import axios from 'axios'
 import dbg from "./dbg"
+import { stringifyVariables } from "../stringify"
 
 const generateVariablesIndex = (index: number) => `
 $active_${index}: Boolean
@@ -134,7 +135,7 @@ const generateObjects = (tickets: User[]) => `[${tickets.map((_, index) => `{${g
 
 const createQuery = (users: User[]) => `mutation (${generateVariables(users)}) {
   insert_solidarity_users (objects: ${generateObjects(users)}, on_conflict: {
-    constraint: solidarity_users_pkey
+    constraint: solidarity_users_user_id_key
     update_columns: [
       active
       address
@@ -146,20 +147,20 @@ const createQuery = (users: User[]) => `mutation (${generateVariables(users)}) {
       cep
       chat_only
       city
+      community_id
       condition
       cor
+      disponibilidade_de_atendimentos
       created_at
       custom_role_id
       data_de_inscricao_no_bonde
       default_group_id
       details
-      disponibilidade_de_atendimentos
       email
       encaminhamentos
       encaminhamentos_realizados_calculado_
       external_id
       iana_time_zone
-      id
       last_login_at
       latitude
       locale
@@ -193,7 +194,6 @@ const createQuery = (users: User[]) => `mutation (${generateVariables(users)}) {
       updated_at
       url
       user_fields
-      user_id
       verified
       whatsapp
     ]
@@ -206,8 +206,10 @@ const createQuery = (users: User[]) => `mutation (${generateVariables(users)}) {
 const saveUsers = async (users: User[]) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const query = createQuery(users)
+  const variables = stringifyVariables(users)
   const response = await axios.post(HASURA_API_URL, {
     query,
+    variables,
   }, {
     headers: {
       'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
