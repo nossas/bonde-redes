@@ -7,19 +7,29 @@ import saveTicketsInChunks from "./saveTicketsInChunks"
 import getAllUsers from "./getAllUsers"
 import getUsersWithUserFields from "./getUsersWithUserFields"
 import saveUsersInChunks from "./saveUsersInChunks"
+import countMatches from "./countMatches"
+import fs from 'fs'
+import { promisify } from "util"
+import { Ticket } from "./interfaces/Ticket"
+import User from "./interfaces/User"
 
 const ticket = async () => {
+  // const tickets = JSON.parse(((await promisify(fs.readFile)('users.json')).toString())) as Ticket[]
   const ticketsWithoutCustomFields = await getAllTickets()
   const tickets = getTicketsWithCustomFields(ticketsWithoutCustomFields)
+  // await promisify(fs.writeFile)('tickets.json', JSON.stringify(tickets))
   const requesters = await countTickets(tickets)
   const requestersArray = convertRequestersToArray(requesters)
   await sendRequesters(requestersArray)
   await saveTicketsInChunks(tickets)
+  await countMatches(tickets)
 }
 
 const user = async () => {
+  // const users = JSON.parse(((await promisify(fs.readFile)('users.json')).toString())) as User[]
   const usersWithoutCustomFields = await getAllUsers()
   const users = await getUsersWithUserFields(usersWithoutCustomFields)
+  // await promisify(fs.writeFile)('users.json', JSON.stringify(users))
   await saveUsersInChunks(users)
 }
 

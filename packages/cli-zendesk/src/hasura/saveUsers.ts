@@ -64,6 +64,7 @@ $user_fields_${index}: jsonb
 $user_id_${index}: bigint
 $verified_${index}: Boolean
 $whatsapp_${index}: String
+$permanently_deleted_${index}: Boolean
 `
 
 const generateObjectsIndex = (index: number) => `
@@ -127,6 +128,7 @@ user_fields: $user_fields_${index}
 user_id: $user_id_${index}
 verified: $verified_${index}
 whatsapp: $whatsapp_${index}
+permanently_deleted: $permanently_deleted_${index}
 `
 
 const generateVariables = (tickets: User[]) => tickets.map((_, index) => generateVariablesIndex(index)).flat()
@@ -196,6 +198,7 @@ const createQuery = (users: User[]) => `mutation (${generateVariables(users)}) {
       user_fields
       verified
       whatsapp
+      permanently_deleted
     ]
   }) {
     affected_rows

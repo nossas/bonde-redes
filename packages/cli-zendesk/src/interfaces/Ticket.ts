@@ -68,5 +68,12 @@ export const handleCustomFields = (ticket: Ticket) => {
     }
   })
 
-  return ticket
+  const {id, ...otherFields} = ticket
+  const finalTicket = {
+    ticket_id: id,
+    ...otherFields,
+    community_id: Number(process.env.COMMUNITY_ID)
+  } as Ticket
+
+  return finalTicket
 }
