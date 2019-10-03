@@ -1,9 +1,8 @@
 import Express from 'express'
 import dbg from './dbg'
 import App from './App'
-import * as yup from 'yup'
 
-const log = dbg.extend('app')
+const log = dbg.extend('router')
 
 const JSONErrorHandler = (err: Error, _: Express.Request, res: Express.Response, __: Express.NextFunction) => {
   if (err instanceof SyntaxError) {
@@ -18,9 +17,7 @@ const Router = () => {
     .use(JSONErrorHandler)
     .post('/', async (req, res) => {
       try {
-        log(`incoming request from hasura`)
-        log(req.body)
-        App(res)
+        App(req.body, res)
       } catch (e) {
         log (e)
         return res.status(400).json('Corpo inválido da requisição')
