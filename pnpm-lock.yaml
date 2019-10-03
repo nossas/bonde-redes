@@ -2,14 +2,16 @@ importers:
   .:
     dependencies:
       pnpm: 3.8.1
+      source-map-support: 0.5.13
     devDependencies:
       '@types/debug': 4.1.5
       '@types/dotenv': 6.1.1
       '@types/express': 4.17.1
       '@types/jest': 24.0.18
-      '@types/node': 12.7.5
+      '@types/node': 12.7.8
       '@types/prompts': 2.0.1
       '@types/signale': 1.2.1
+      '@types/source-map-support': 0.5.0
       '@types/supertest': 2.0.8
       '@types/url-join': 4.0.0
       '@types/yup': 0.26.24
@@ -32,9 +34,10 @@ importers:
       '@types/dotenv': ^6.1.1
       '@types/express': ^4.17.1
       '@types/jest': ^24.0.18
-      '@types/node': ^12.7.5
+      '@types/node': ^12.7.8
       '@types/prompts': ^2.0.1
       '@types/signale': ^1.2.1
+      '@types/source-map-support': ^0.5.0
       '@types/supertest': ^2.0.8
       '@types/url-join': ^4.0.0
       '@types/yup': ^0.26.24
@@ -49,36 +52,57 @@ importers:
       eslint-plugin-standard: ^4.0.1
       jest: ^24.9.0
       pnpm: ^3.8.1
+      source-map-support: ^0.5.13
       supertest: ^4.0.2
       ts-jest: ^24.1.0
       tsc-watch: ^4.0.0
       typescript: ^3.6.3
-  packages/cli-mautic-forms:
+  packages/cli-mautic:
     dependencies:
       axios: 0.19.0
-      debug: 4.1.1
       dotenv: 8.1.0
       prompts: 2.2.1
       signale: 1.4.0
+      source-map-support: 0.5.13
+    devDependencies:
+      '@types/source-map-support': 0.5.0
     specifiers:
+      '@types/source-map-support': ^0.5.0
       axios: ^0.19.0
-      debug: ^4.1.1
       dotenv: ^8.1.0
       prompts: ^2.2.1
       signale: ^1.4.0
-  packages/cli-zendesk-ticket:
+      source-map-support: ^0.5.13
+  packages/cli-zendesk:
     dependencies:
       axios: 0.19.0
       debug: 4.1.1
       dotenv: 8.1.0
       express: 4.17.1
+      prompts: 2.2.1
+      ramda: 0.26.1
+      signale: 1.4.0
+      source-map-support: 0.5.13
       url-join: 4.0.1
       yup: 0.27.0
+    devDependencies:
+      '@types/prompts': 2.0.1
+      '@types/signale': 1.2.1
+      '@types/source-map-support': 0.5.0
+      install: 0.13.0
     specifiers:
+      '@types/prompts': ^2.0.1
+      '@types/signale': ^1.2.1
+      '@types/source-map-support': ^0.5.0
       axios: ^0.19.0
       debug: ^4.1.1
       dotenv: ^8.1.0
       express: ^4.17.1
+      install: ^0.13.0
+      prompts: ^2.2.1
+      ramda: ^0.26.1
+      signale: ^1.4.0
+      source-map-support: ^0.5.13
       url-join: ^4.0.1
       yup: ^0.27.0
   packages/webhooks-auth:
@@ -88,53 +112,93 @@ importers:
       dotenv: 8.1.0
       express: 4.17.1
       jsonwebtoken: 8.5.1
+      source-map-support: 0.5.13
       typescript: 3.6.3
+    devDependencies:
+      '@types/source-map-support': 0.5.0
     specifiers:
       '@types/jsonwebtoken': ^8.3.4
+      '@types/source-map-support': ^0.5.0
       debug: ^4.1.1
       dotenv: ^8.1.0
       express: ^4.17.1
       jsonwebtoken: ^8.5.1
+      source-map-support: ^0.5.13
       typescript: ^3.6.3
-  packages/webhooks-match:
-    dependencies:
-      axios: 0.19.0
-      debug: 4.1.1
-      dotenv: 8.1.0
-      express: 4.17.1
-      url-join: 4.0.1
-      yup: 0.27.0
-    specifiers:
-      axios: ^0.19.0
-      debug: ^4.1.1
-      dotenv: ^8.1.0
-      express: ^4.17.1
-      url-join: ^4.0.1
-      yup: ^0.27.0
   packages/webhooks-registry:
     dependencies:
       axios: 0.19.0
       debug: 4.1.1
       dotenv: 8.1.0
       express: 4.17.1
+      source-map-support: 0.5.13
+    devDependencies:
+      '@types/source-map-support': 0.5.0
     specifiers:
+      '@types/source-map-support': ^0.5.0
       axios: ^0.19.0
       debug: ^4.1.1
       dotenv: ^8.1.0
       express: ^4.17.1
+      source-map-support: ^0.5.13
+  packages/webhooks-solidarity-count:
+    dependencies:
+      axios: 0.19.0
+      debug: 4.1.1
+      dotenv: 8.1.0
+      express: 4.17.1
+      source-map-support: 0.5.13
+      url-join: 4.0.1
+      yup: 0.27.0
+    devDependencies:
+      '@types/source-map-support': 0.5.0
+    specifiers:
+      '@types/source-map-support': ^0.5.0
+      axios: ^0.19.0
+      debug: ^4.1.1
+      dotenv: ^8.1.0
+      express: ^4.17.1
+      source-map-support: ^0.5.13
+      url-join: ^4.0.1
+      yup: ^0.27.0
+  packages/webhooks-solidarity-match:
+    dependencies:
+      axios: 0.19.0
+      debug: 4.1.1
+      dotenv: 8.1.0
+      express: 4.17.1
+      source-map-support: 0.5.13
+      url-join: 4.0.1
+      yup: 0.27.0
+    devDependencies:
+      '@types/source-map-support': 0.5.0
+    specifiers:
+      '@types/source-map-support': ^0.5.0
+      axios: ^0.19.0
+      debug: ^4.1.1
+      dotenv: ^8.1.0
+      express: ^4.17.1
+      source-map-support: ^0.5.13
+      url-join: ^4.0.1
+      yup: ^0.27.0
   packages/webhooks-zendesk:
     dependencies:
       axios: 0.19.0
       debug: 4.1.1
       dotenv: 8.1.0
       express: 4.17.1
+      source-map-support: 0.5.13
       url-join: 4.0.1
       yup: 0.27.0
+    devDependencies:
+      '@types/source-map-support': 0.5.0
     specifiers:
+      '@types/source-map-support': ^0.5.0
       axios: ^0.19.0
       debug: ^4.1.1
       dotenv: ^8.1.0
       express: ^4.17.1
+      source-map-support: ^0.5.13
       url-join: ^4.0.1
       yup: ^0.27.0
 lockfileVersion: 5.1
@@ -429,7 +493,7 @@ packages:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.1
       '@types/istanbul-reports': 1.1.1
-      '@types/yargs': 13.0.2
+      '@types/yargs': 13.0.3
     dev: true
     engines:
       node: '>= 6'
@@ -439,18 +503,18 @@ packages:
     dependencies:
       '@babel/parser': 7.6.2
       '@babel/types': 7.6.1
-      '@types/babel__generator': 7.0.2
+      '@types/babel__generator': 7.6.0
       '@types/babel__template': 7.0.2
       '@types/babel__traverse': 7.0.7
     dev: true
     resolution:
       integrity: sha512-8fBo0UR2CcwWxeX7WIIgJ7lXjasFxoYgRnFHUj+hRvKkpiBJbxhdAPTCY6/ZKM0uxANFVzt4yObSLuTiTnazDA==
-  /@types/babel__generator/7.0.2:
+  /@types/babel__generator/7.6.0:
     dependencies:
       '@babel/types': 7.6.1
     dev: true
     resolution:
-      integrity: sha512-NHcOfab3Zw4q5sEE2COkpfXjoE7o+PmqD9DQW4koUT3roNxwziUdXGnRndMat/LJNUtePwn1TlP4do3uoe3KZQ==
+      integrity: sha512-c1mZUu4up5cp9KROs/QAw0gTeHrw/x7m52LcnvMxxOZ03DmLwPV0MlGmlgzV3cnSdjhJOZsj7E7FHeioai+egw==
   /@types/babel__template/7.0.2:
     dependencies:
       '@babel/parser': 7.6.2
@@ -467,13 +531,13 @@ packages:
   /@types/body-parser/1.17.1:
     dependencies:
       '@types/connect': 3.4.32
-      '@types/node': 12.7.5
+      '@types/node': 12.7.8
     dev: true
     resolution:
       integrity: sha512-RoX2EZjMiFMjZh9lmYrwgoP9RTpAjSHiJxdp4oidAQVO02T7HER3xj9UKue5534ULWeqVEkujhWcyvUce+d68w==
   /@types/connect/3.4.32:
     dependencies:
-      '@types/node': 12.7.5
+      '@types/node': 12.7.8
     dev: true
     resolution:
       integrity: sha512-4r8qa0quOvh7lGD0pre62CAb1oni1OO6ecJLGCezTmhQ8Fz50Arx9RUszryR8KlgK6avuSXvviL6yWyViQABOg==
@@ -487,7 +551,7 @@ packages:
       integrity: sha512-Q1y515GcOdTHgagaVFhHnIFQ38ygs/kmxdNpvpou+raI9UO3YZcHDngBSYKQklcKlvA7iuQlmIKbzvmxcOE9CQ==
   /@types/dotenv/6.1.1:
     dependencies:
-      '@types/node': 12.7.5
+      '@types/node': 12.7.8
     dev: true
     resolution:
       integrity: sha512-ftQl3DtBvqHl9L16tpqqzA4YzCSXZfi7g8cQceTz5rOlYtk/IZbFjAv3mLOQlNIgOaylCQWQoBdDQHPgEBJPHg==
@@ -497,7 +561,7 @@ packages:
       integrity: sha512-OCutwjDZ4aFS6PB1UZ988C4YgwlBHJd6wCeQqaLdmadZ/7e+w79+hbMUFC1QXDNCmdyoRfAFdm0RypzwR+Qpag==
   /@types/express-serve-static-core/4.16.9:
     dependencies:
-      '@types/node': 12.7.5
+      '@types/node': 12.7.8
       '@types/range-parser': 1.2.3
     dev: true
     resolution:
@@ -543,7 +607,7 @@ packages:
       integrity: sha512-Il2DtDVRGDcqjDtE+rF8iqg1CArehSK84HZJCT7AMITlyXRBpuPhqGLDQMowraqqu1coEaimg4ZOqggt6L6L+A==
   /@types/jsonwebtoken/8.3.4:
     dependencies:
-      '@types/node': 12.7.5
+      '@types/node': 12.7.8
     dev: false
     resolution:
       integrity: sha512-R0eiYPpbo6Jl/XtGwpg7vQlapd7D38gp0g9WMKOSFr/e2NUTN9Udd3ty7n+2yUpmHr2Fti+/BSc+KSQ8zPN+vg==
@@ -551,9 +615,9 @@ packages:
     dev: true
     resolution:
       integrity: sha512-FwI9gX75FgVBJ7ywgnq/P7tw+/o1GUbtP0KzbtusLigAOgIgNISRK0ZPl4qertvXSIE8YbsVJueQ90cDt9YYyw==
-  /@types/node/12.7.5:
+  /@types/node/12.7.8:
     resolution:
-      integrity: sha512-9fq4jZVhPNW8r+UYKnxF1e2HkDWOWKM5bC2/7c9wPV835I0aOrVbS/Hw/pWPk2uKrNXQqg9Z959Kz+IYDd5p3w==
+      integrity: sha512-FMdVn84tJJdV+xe+53sYiZS4R5yn1mAIxfj+DVoNiQjTYz1+OYmjwEZr1ev9nU0axXwda0QDbYl06QHanRVH3A==
   /@types/prompts/2.0.1:
     dev: true
     resolution:
@@ -571,10 +635,16 @@ packages:
       integrity: sha512-oprSwp094zOglVrXdlo/4bAHtKTAxX6VT8FOZlBKrmyLbNvE1zxZyJ6yikMVtHIvwP45+ZQGJn+FdXGKTozq0g==
   /@types/signale/1.2.1:
     dependencies:
-      '@types/node': 12.7.5
+      '@types/node': 12.7.8
     dev: true
     resolution:
       integrity: sha512-mV6s2VgcBC16Jb+1EwulgRrrZBT93V4JCILkNPg31rvvSK6LRQQGU8R/SUivgHjDZ5LJZu/yL2kMF8j85YQTnA==
+  /@types/source-map-support/0.5.0:
+    dependencies:
+      '@types/node': 12.7.8
+    dev: true
+    resolution:
+      integrity: sha512-OrnAz5K5dXDgMdeRRoXIjDAvkodQ9ESvVJCyzrhzUJKmCkXgmYx/KLUBcVFe5eS4FiohfcY7YPxsdkmSwJz9wA==
   /@types/stack-utils/1.0.1:
     dev: true
     resolution:
@@ -582,7 +652,7 @@ packages:
   /@types/superagent/4.1.3:
     dependencies:
       '@types/cookiejar': 2.1.1
-      '@types/node': 12.7.5
+      '@types/node': 12.7.8
     dev: true
     resolution:
       integrity: sha512-vy2licJQwOXrTAe+yz9SCyUVXAkMgCeDq9VHzS5CWJyDU1g6CI4xKb4d5sCEmyucjw5sG0y4k2/afS0iv/1D0Q==
@@ -600,12 +670,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-gCubfBUZ6KxzoibJ+SCUc/57Ms1jz5NjHe4+dI2krNmU5zCPAphyLJYyTOg06ueIyfj+SaCUqmzun7ImlxDcKg==
-  /@types/yargs/13.0.2:
+  /@types/yargs/13.0.3:
     dependencies:
       '@types/yargs-parser': 13.1.0
     dev: true
     resolution:
-      integrity: sha512-lwwgizwk/bIIU+3ELORkyuOgDjCh7zuWDFqRtPPhhVgq9N1F7CvLNKg1TX4f2duwtKQ0p044Au9r1PLIXHrIzQ==
+      integrity: sha512-K8/LfZq2duW33XW/tFwEAfnZlqIfVsoyRB3kfXdPXYhl0nfM8mmh7GS0jg7WrX2Dgq/0Ha/pR1PaR+BvmWwjiQ==
   /@types/yup/0.26.24:
     dev: true
     resolution:
@@ -666,10 +736,10 @@ packages:
       node: ^8.10.0 || ^10.13.0 || >=11.10.1
     resolution:
       integrity: sha512-9SFhUgFuePJBB6jlLkOPPhMkZNiDCr+S8Ft7yAkkP2c5x5bxPhG3pe/exMiQaF8IGyVMDW6Ul0q4/cZ+uF3uog==
-  /abab/2.0.1:
+  /abab/2.0.2:
     dev: true
     resolution:
-      integrity: sha512-1zSbbCuoIjafKZ3mblY5ikvAb0ODUbqBnFuUb7f6uLeQhhGJ0vEV4ntmtxKLT2WgXCO94E07BjunsIw1jOMPZw==
+      integrity: sha512-2scffjvioEmNz0OyDSLGWDfKCVwaKc6l9Pm9kOIREU13ClXZvHpg/nRL5xyjSSSLhOnXqft2HpsAzNEEA8cFFg==
   /accepts/1.3.7:
     dependencies:
       mime-types: 2.1.24
@@ -1021,7 +1091,6 @@ packages:
     resolution:
       integrity: sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=
   /buffer-from/1.1.1:
-    dev: true
     resolution:
       integrity: sha512-MQcXEUbCKtEo7bhqEs6560Hyd4XaovZlO/k9V3hjVUF/zwW7KBVdSK4gIt/bzwS9MbR5qob+F5jusZsb0YQK2A==
   /bytes/3.1.0:
@@ -1259,7 +1328,7 @@ packages:
       integrity: sha1-hTz6D3y+L+1d4gMmuN1YEDX24vA=
   /data-urls/1.1.0:
     dependencies:
-      abab: 2.0.1
+      abab: 2.0.2
       whatwg-mimetype: 2.3.0
       whatwg-url: 7.0.0
     dev: true
@@ -1424,12 +1493,12 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha1-rT/0yG7C0CkyL1oCw6mmBslbP1k=
-  /end-of-stream/1.4.2:
+  /end-of-stream/1.4.4:
     dependencies:
       once: 1.4.0
     dev: true
     resolution:
-      integrity: sha512-gUSUszrsxlDnUbUwEI9Oygyrk4ZEWtVaHQc+uZHphVeNxl+qeqMV/jDWoTkjN1RmGlZ5QWAP7o458p/JMlikQg==
+      integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==
   /error-ex/1.3.2:
     dependencies:
       is-arrayish: 0.2.1
@@ -2105,7 +2174,7 @@ packages:
     dev: true
     resolution:
       integrity: sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=
-  /handlebars/4.3.0:
+  /handlebars/4.3.3:
     dependencies:
       neo-async: 2.6.1
       optimist: 0.6.1
@@ -2117,7 +2186,7 @@ packages:
     optionalDependencies:
       uglify-js: 3.6.0
     resolution:
-      integrity: sha512-7XlnO8yBXOdi7AzowjZssQr47Ctidqm7GbgARapOaqSN9HQhlClnOkR9HieGauIT3A8MBC6u9wPCXs97PCYpWg==
+      integrity: sha512-VupOxR91xcGojfINrzMqrvlyYbBs39sXIrWa7YdaQWeBudOlvKEGvCczMfJPgnuwHE/zyH1M6J+IUP6cgDVyxg==
   /har-schema/2.0.0:
     dev: true
     engines:
@@ -2310,6 +2379,12 @@ packages:
       node: '>=6.0.0'
     resolution:
       integrity: sha512-cntlB5ghuB0iuO65Ovoi8ogLHiWGs/5yNrtUcKjFhSSiVeAIVpD7koaSU9RM8mpXw5YDi9RdYXGQMaOURB7ycQ==
+  /install/0.13.0:
+    dev: true
+    engines:
+      node: '>= 0.10'
+    resolution:
+      integrity: sha512-zDml/jzr2PKU9I8J/xyZBQn8rPCAY//UOYNmR01XwNwyfhEWObo2SWfSl1+0tm1u6PhxLwDnfsT/6jB7OUxqFA==
   /invariant/2.2.4:
     dependencies:
       loose-envify: 1.4.0
@@ -2574,7 +2649,7 @@ packages:
       integrity: sha512-R47KzMtDJH6X4/YW9XTx+jrLnZnscW4VpNN+1PViSYTejLVPWv7oov+Duf8YQSPyVRUvueQqz1TcsC6mooZTXw==
   /istanbul-reports/2.2.6:
     dependencies:
-      handlebars: 4.3.0
+      handlebars: 4.3.3
     dev: true
     engines:
       node: '>=6'
@@ -2856,7 +2931,7 @@ packages:
       '@jest/source-map': 24.9.0
       '@jest/transform': 24.9.0
       '@jest/types': 24.9.0
-      '@types/yargs': 13.0.2
+      '@types/yargs': 13.0.3
       chalk: 2.4.2
       exit: 0.1.2
       glob: 7.1.4
@@ -2942,7 +3017,7 @@ packages:
     dependencies:
       '@jest/test-result': 24.9.0
       '@jest/types': 24.9.0
-      '@types/yargs': 13.0.2
+      '@types/yargs': 13.0.3
       ansi-escapes: 3.2.0
       chalk: 2.4.2
       jest-util: 24.9.0
@@ -2989,7 +3064,7 @@ packages:
       integrity: sha1-peZUwuWi3rXyAdls77yoDA7y9RM=
   /jsdom/11.12.0:
     dependencies:
-      abab: 2.0.1
+      abab: 2.0.2
       acorn: 5.7.3
       acorn-globals: 4.3.4
       array-equal: 1.0.0
@@ -3881,7 +3956,7 @@ packages:
       integrity: sha512-HZzqCGPecFLyoRj5HLfuDSKYTJkAfB5thKBIkRHtGjWwY7p1dAyveIbXIq4tO0KYfDF2tHqPUgY9SDnGm00uFw==
   /pump/3.0.0:
     dependencies:
-      end-of-stream: 1.4.2
+      end-of-stream: 1.4.4
       once: 1.4.0
     dev: true
     resolution:
@@ -3914,6 +3989,10 @@ packages:
       node: '>=0.6'
     resolution:
       integrity: sha512-27RP4UotQORTpmNQDX8BHPukOnBP3p1uUJY5UnDhaJB+rMt9iMsok724XL+UHU23bEFOHRMQ2ZhI99qOWUMGFA==
+  /ramda/0.26.1:
+    dev: false
+    resolution:
+      integrity: sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==
   /range-parser/1.2.1:
     dev: false
     engines:
@@ -4373,7 +4452,6 @@ packages:
     dependencies:
       buffer-from: 1.1.1
       source-map: 0.6.1
-    dev: true
     resolution:
       integrity: sha512-SHSKFHadjVA5oR4PPqhtAVdcBWwRYVd6g6cAXnIbRiIwc2EhPrTuKUBdSLvlEKyIP3GCf89fltvcZiP9MMFA1w==
   /source-map-url/0.4.0:
@@ -4387,7 +4465,6 @@ packages:
     resolution:
       integrity: sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
   /source-map/0.6.1:
-    dev: true
     engines:
       node: '>=0.10.0'
     resolution:

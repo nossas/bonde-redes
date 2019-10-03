@@ -16,11 +16,6 @@
       "extends": [
         "plugin:@typescript-eslint/recommended"
       ],
-      "parserOptions": {
-        "project": [
-          "./tsconfig.json"
-        ]
-      },
       "rules": {
         "@typescript-eslint/indent": [
           "error",

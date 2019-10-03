@@ -1,17 +1,16 @@
 {
-  "name": "bonde-webhooks-registry",
+  "name": "cli-mautic",
   "dependencies": {
     "axios": "^0.19.0",
-    "debug": "^4.1.1",
     "dotenv": "^8.1.0",
-    "express": "^4.17.1",
+    "prompts": "^2.2.1",
+    "signale": "^1.4.0",
     "source-map-support": "^0.5.13"
   },
   "scripts": {
-    "dev": "DEBUG=webhooks-registry* tsc-watch --onSuccess \"node dist/index.js\"",
+    "dev": "DEBUG=cli-mautic tsc-watch --onSuccess \"node dist/index.js\"",
     "clean": "rm -rf node_modules dist",
-    "build": "tsc",
-    "test": "ts-jest"
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/source-map-support": "^0.5.0"
