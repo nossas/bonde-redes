@@ -14,7 +14,7 @@ import { Ticket } from "./interfaces/Ticket"
 import User from "./interfaces/User"
 
 const ticket = async () => {
-  // const tickets = JSON.parse(((await promisify(fs.readFile)('users.json')).toString())) as Ticket[]
+  // const tickets = JSON.parse(((await promisify(fs.readFile)('tickets.json')).toString())) as Ticket[]
   const ticketsWithoutCustomFields = await getAllTickets()
   const tickets = getTicketsWithCustomFields(ticketsWithoutCustomFields)
   // await promisify(fs.writeFile)('tickets.json', JSON.stringify(tickets))

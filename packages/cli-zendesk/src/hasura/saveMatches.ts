@@ -4,12 +4,12 @@ import { stringifyVariables } from "../stringify"
 import { Match } from "../interfaces/Match"
 
 const generateVariablesIndex = (index: number) => `
-$community_id_${index}: Int!
+$community_id_${index}: Int
 $created_at_${index}: timestamp
-$individuals_ticket_id_${index}: bigint!
-$individuals_user_id_${index}: bigint!
-$volunteers_ticket_id_${index}: bigint!
-$volunteers_user_id_${index}: bigint!
+$individuals_ticket_id_${index}: bigint
+$individuals_user_id_${index}: bigint
+$volunteers_ticket_id_${index}: bigint
+$volunteers_user_id_${index}: bigint
 $status_${index}: String
 `
 
@@ -29,7 +29,7 @@ const generateObjects = (matches: Match[]) => `[${matches.map((_, index) => `{${
 
 const createQuery = (matches: Match[]) => `mutation (${generateVariables(matches)}) {
   insert_solidarity_matches (objects: ${generateObjects(matches)}, on_conflict: {
-    constraint: solidarity_matches_individuals_user_id_volunteers_user_id_key, update_columns: [
+    constraint: solidarity_matches_individuals_ticket_id_volunteers_ticket__key, update_columns: [
       community_id
       created_at
       individuals_user_id

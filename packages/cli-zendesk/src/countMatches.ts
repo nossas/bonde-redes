@@ -4,6 +4,7 @@ import verifyOrganization from "./verifyOrganizations";
 import { ORGANIZATIONS } from "./interfaces/Organizations";
 import dbg from "./dbg";
 import saveMatches from "./hasura/saveMatches";
+import R from 'ramda'
 
 const log = dbg.extend('saveMatches')
 
@@ -19,6 +20,8 @@ const countMatches = async (tickets: Ticket[]) => {
       const matchId = Number(i.link_match.split('/').slice(-1)[0])
       if (isNaN(matchId)) {
         return log(`failed to convert '${i.link_match}' for ticket '${i.ticket_id}'`)
+      } else if (i.ticket_id === matchId) {
+        return log (`you can't match a ticket with itself. Ticket '${i.ticket_id}'`)
       }
       matchList.set(i.ticket_id, matchId)
     }
@@ -54,11 +57,14 @@ const countMatches = async (tickets: Ticket[]) => {
     })
   }
 
-  // log(matches.map(i => i.individuals_ticket_id).length, new Set(matches.map(i => i.individuals_ticket_id)).size)
-  // console.log(new Set(matches.map(i => i.individuals_ticket_id)).size)
-  // Agora salva os matches! o/
-  const array = Array.from(matches.values()).slice(14, 15)
-  await saveMatches(array)
+  const array = Array.from(matches.values())
+  const splittedArray = R.splitEvery(1000, array) as Match[][]
+  let counter = 0
+  for await (const i of splittedArray) {
+    counter += i.length
+    log(`[${counter}/${array.length}]`)
+    await saveMatches(i)
+  }
 }
 
 export default countMatches
