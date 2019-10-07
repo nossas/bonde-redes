@@ -6,4 +6,5 @@ export interface Match {
   volunteers_user_id: number
   community_id: number
   created_at: string
+  status: string
 }

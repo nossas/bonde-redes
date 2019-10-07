@@ -43,7 +43,7 @@ export interface Ticket {
   submitter_id: number
   tags: string[]
   updated_at: string
-  status_acolhimento: status_acolhimento_values | null
+  status_acolhimento: status_acolhimento_values
   nome_voluntaria: string | null
   link_match: string | null
   nome_msr: string | null
