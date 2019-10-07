@@ -1,20 +1,17 @@
 import dbg from "./dbg"
 import saveUsers from "./hasura/saveUsers"
 import User from "./interfaces/User"
+import R from 'ramda'
 
 const log = dbg.extend('saveUsersInChunks')
 
 const saveUsersInChunks = async (users: User[]) => {
-  let offset = 0
-  const limit = 1000
-  while (true) {
-    log(`[${offset+limit > users.length ? users.length : offset+limit}/${users.length}]`)
-    await saveUsers(users.slice(offset, offset + limit))
-    await new Promise(r => setTimeout(r, 1000))
-    if (offset + limit >= users.length) {
-      break
-    }
-    offset += limit
+  const splitedUsers = R.splitEvery(1000, users) as User[][]
+  let contador = 0
+  for await (const usersChunk of splitedUsers) {
+    await saveUsers(usersChunk)
+    contador += usersChunk.length
+    log(`[${contador}/${users.length}]`)
   }
 }
 

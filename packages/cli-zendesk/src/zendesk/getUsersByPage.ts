@@ -5,12 +5,12 @@ import dbg from './dbg'
 export interface UserResponse {
   users: User[]
   next_page: string
+  end_time: number
   count: number
 }
 
-const getUsersByPage = (page: number) => {
-  const sort_by = 'created_at'
-  return Base.get<UserResponse>('users', dbg.extend('getUsersByPage'), {page, sort_by})
+const getUsersByPage = (start_time: number) => {
+  return Base.get<UserResponse>('incremental/users', dbg.extend('getUsersByPage'), {start_time})
 }
 
 export default getUsersByPage

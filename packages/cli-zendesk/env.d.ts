@@ -7,5 +7,6 @@ declare namespace NodeJS {
     HASURA_API_URL: string
     X_HASURA_ADMIN_SECRET: string
     COMMUNITY_ID: string
+    ZENDESK_ORGANIZATIONS: string
   }
 }

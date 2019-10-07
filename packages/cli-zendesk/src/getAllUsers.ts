@@ -5,17 +5,19 @@ import dbg from "./dbg";
 const log = dbg.extend('getAllUsers')
 
 const getAllUsers = async () => {
-  let users: User[] = [];
-  let actualPageNumber = 1
+  const users: User[] = [];
+  let start_time = 1
+  let counter = 0
   while (true) {
-    const actualPageUsers = await getUsersByPage(actualPageNumber)
+    const actualPageUsers = await getUsersByPage(start_time)
+    await new Promise(r => setTimeout(r, 5000))
     if (actualPageUsers) {
-      users = [...users, ...actualPageUsers.data.users]
-      if (actualPageUsers.data.next_page) {
-        log(`[${Number(actualPageNumber) * 100}/${actualPageUsers.data.count}]`)
-        actualPageNumber = actualPageNumber + 1
-      } else {
-        log(`[${Number(actualPageUsers && actualPageUsers.data.count)}/${actualPageUsers && actualPageUsers.data.count}]`)
+      const {data: {count, end_time, users: requestedUsers}} = actualPageUsers
+      start_time = end_time
+      requestedUsers.forEach(i => users.push(i))
+      counter += count
+      log(`[${counter}], end_time: ${start_time}`)
+      if (count < 1000) {
         break
       }
     } else {

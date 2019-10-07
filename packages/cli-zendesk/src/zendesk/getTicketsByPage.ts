@@ -5,11 +5,12 @@ import dbg from './dbg'
 export interface TicketResponse {
   tickets: Ticket[]
   next_page: string
+  end_time: number
   count: number
 }
 
-const getTicketsByPage = (page: number) => {
-  return Base.get<TicketResponse>('tickets', dbg.extend('getTicketsByPage'), {page, start_time: new Date().getTime()/1000})
+const getTicketsByPage = (start_time: number) => {
+  return Base.get<TicketResponse>('incremental/tickets', dbg.extend('getTicketsByPage'), {start_time})
 }
 
 export default getTicketsByPage

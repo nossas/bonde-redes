@@ -5,17 +5,19 @@ import dbg from "./dbg";
 const log = dbg.extend('getAllTickets')
 
 const getAllTickets = async () => {
-  let tickets: Ticket[] = [];
-  let actualPageNumber = 1
+  const tickets: Ticket[] = [];
+  let start_time = 1
+  let counter = 0
   while (true) {
-    const actualPageTickets = await getTicketsByPage(actualPageNumber)
+    const actualPageTickets = await getTicketsByPage(start_time)
+    await new Promise(r => setTimeout(r, 5000))
     if (actualPageTickets) {
-      tickets = [...tickets, ...actualPageTickets.data.tickets]
-      if (actualPageTickets.data.next_page) {
-        log(`[${Number(actualPageNumber) * 100}/${actualPageTickets.data.count}]`)
-        actualPageNumber = actualPageNumber + 1
-      } else {
-        log(`[${Number(actualPageTickets && actualPageTickets.data.count)}/${actualPageTickets && actualPageTickets.data.count}]`)
+      const {data: {count, end_time, tickets: requestedTickets}} = actualPageTickets
+      start_time = end_time
+      requestedTickets.forEach(i => tickets.push(i))
+      counter += count
+      log(`[${counter}], end_time: ${start_time}`)
+      if (count < 1000) {
         break
       }
     } else {

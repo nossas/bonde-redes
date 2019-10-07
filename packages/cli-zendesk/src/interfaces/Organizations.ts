@@ -1,0 +1,5 @@
+export enum ORGANIZATIONS {
+  ADVOGADA,
+  MSR,
+  PSICOLOGA
+}
