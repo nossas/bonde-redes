@@ -1,7 +1,7 @@
 import axios from 'axios'
 import dbg from './dbg'
 import User from '../interfaces/User'
-import { HasuraError } from '../interfaces/HasuraError'
+import { HasuraResponse, isError } from '../interfaces/HasuraResponse'
 
 const log = dbg.extend('getUserFromTicket')
 
@@ -26,17 +26,9 @@ interface ResponseData {
   }
 }
 
-const isError = (data: ResponseData | HasuraError): data is HasuraError => {
-  if (data['error']) {
-    return true
-  } else {
-    return false
-  }
-}
-
 const getUserFromTicket = async (id: number) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
-  const response = await axios.post<ResponseData | HasuraError>(HASURA_API_URL, {
+  const response = await axios.post<HasuraResponse<ResponseData>>(HASURA_API_URL, {
     query,
     variables: { id }
   }, {
@@ -46,8 +38,7 @@ const getUserFromTicket = async (id: number) => {
   })
 
   if (isError(response.data)) {
-    log(response.data.errors)
-    return null
+    return log(response.data.errors)
   }
 
   return response.data.data.solidarity_users
