@@ -53,6 +53,7 @@ const countMatches = async (tickets: Ticket[]) => {
       volunteers_ticket_id: volunteer_ticket.ticket_id,
       volunteers_user_id: volunteer_ticket.requester_id,
       created_at: individuals_ticket.created_at,
+      status: individuals_ticket.status_acolhimento,
       community_id: Number(COMMUNITY_ID)
     })
   }
