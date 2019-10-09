@@ -3,6 +3,7 @@ import { Ticket } from '../interfaces/Ticket'
 import dbg from './dbg'
 import * as yup from 'yup'
 import { generateRequestVariables } from './base'
+import { isError } from '../interfaces/HasuraResponse'
 
 const generateVariablesIndex = (index: number) => `
 $assignee_id_${index}: bigint
@@ -131,6 +132,8 @@ const validate = yup.array().of(yup.object().shape({
   webhooks_registry_id: yup.number(),
 }))
 
+const log = dbg.extend('saveTickets')
+
 const saveTickets = async (tickets: Ticket[]) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const validatedTickets = (await validate.validate(tickets, { stripUnknown: true }))
@@ -143,7 +146,9 @@ const saveTickets = async (tickets: Ticket[]) => {
     }
   })
 
-  response.data.errors && dbg(response.data.errors)
+  if (isError(response.data)) {
+    log(response.data.errors)
+  }
 
   return response
 }
