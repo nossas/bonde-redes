@@ -23,6 +23,8 @@ type disponibilidade_de_atendimentos = '1' |
 '0' |
 '5'
 
+type tipo_de_acolhimento = 'jurídico' | 'psicológico' | 'psicológico_e_jurídico'
+
 interface User {
   active: boolean
   address: string
@@ -75,7 +77,7 @@ interface User {
   tags: any
   ticket_restriction: string
   time_zone: string
-  tipo_de_acolhimento: string
+  tipo_de_acolhimento: tipo_de_acolhimento | null
   two_factor_auth_enabled: boolean
   ultima_atualizacao_de_dados: string
   updated_at: string
