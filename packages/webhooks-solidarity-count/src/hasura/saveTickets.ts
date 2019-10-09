@@ -3,7 +3,7 @@ import { Ticket } from '../interfaces/Ticket'
 import dbg from './dbg'
 import * as yup from 'yup'
 import { generateRequestVariables } from './base'
-import { isError } from '../interfaces/HasuraResponse'
+import { isError, HasuraResponse } from '../interfaces/HasuraResponse'
 
 const generateVariablesIndex = (index: number) => `
 $assignee_id_${index}: bigint
@@ -134,10 +134,14 @@ const validate = yup.array().of(yup.object().shape({
 
 const log = dbg.extend('saveTickets')
 
+interface Response {
+  affected_rows: number
+}
+
 const saveTickets = async (tickets: Ticket[]) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const validatedTickets = (await validate.validate(tickets, { stripUnknown: true }))
-  const response = await axios.post(HASURA_API_URL, {
+  const response = await axios.post<HasuraResponse<'insert_solidarity_tickets', Response>>(HASURA_API_URL, {
     query: createQuery(validatedTickets),
     variables: generateRequestVariables(validatedTickets)
   }, {
@@ -147,10 +151,10 @@ const saveTickets = async (tickets: Ticket[]) => {
   })
 
   if (isError(response.data)) {
-    log(response.data.errors)
+    return log(response.data.errors)
   }
 
-  return response
+  return response.data.data.insert_solidarity_tickets.affected_rows
 }
 
 export default saveTickets
