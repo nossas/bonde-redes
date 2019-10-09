@@ -16,7 +16,8 @@ class PsicologaUpdateTicket extends Base {
       custom_fields: yup.array().of(yup.object().shape({
         id: yup.number().required(),
         value: yup.mixed().required()
-      }))
+      })),
+      status_inscricao: yup.string().required()
     }).required()
 
     try {

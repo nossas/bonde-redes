@@ -75,6 +75,7 @@ class Server {
           requester_id: id,
           organization_id,
           description: '-',
+          status_inscricao: 'aprovada',
           subject: `[Advogada] ${name} - ${registration_number}`,
           custom_fields: [{
             id: 360021665652,
@@ -100,6 +101,7 @@ class Server {
           requester_id: id,
           organization_id,
           description: '-',
+          status_inscricao: 'aprovada',
           subject: `[Psicóloga] ${name} - ${registration_number}`,
           custom_fields: [{
             id: 360021665652,
@@ -127,6 +129,7 @@ class Server {
           requester_id: id,
           organization_id,
           description: '-',
+          status_inscricao: 'aprovada',
           subject: `[Advogada] ${name} - ${registration_number}`,
           custom_fields: [{
             id: 360021665652,
@@ -151,6 +154,7 @@ class Server {
           requester_id: id,
           organization_id,
           description: '-',
+          status_inscricao: 'aprovada',
           subject: `[Psicóloga] ${name} - ${registration_number}`,
           custom_fields: [{
             id: 360021665652,
