@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { HasuraResponse } from '../interfaces/HasuraResponse'
+import { HasuraResponse, isError } from '../interfaces/HasuraResponse'
 import dbg from './dbg'
 import { Match } from '../interfaces/Match'
 
@@ -28,17 +28,11 @@ query($id: bigint, $created_at: timestamp) {
 }
 `
 
-interface ResponseData {
-  data: {
-    solidarity_matches: Match[]
-  }
-}
-
-const log = dbg.extend('getRencetMatches')
+const log = dbg.extend('getRecentMatches')
 
 const getRecentMatches = async (id: number) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
-  const response = await axios.post<HasuraResponse<ResponseData>>(HASURA_API_URL, {
+  const response = await axios.post<HasuraResponse<'solidarity_matches', Match[]>>(HASURA_API_URL, {
     query,
     variables: { id }
   }, {
@@ -47,7 +41,7 @@ const getRecentMatches = async (id: number) => {
     }
   })
 
-  if ('errors' in response.data) {
+  if (isError(response.data)) {
     return log(response.data.errors)
   }
 
