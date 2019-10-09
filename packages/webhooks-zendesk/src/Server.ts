@@ -1,6 +1,5 @@
 import Express, { Response } from 'express'
 import debug, { Debugger } from 'debug'
-import * as yup from 'yup'
 import AdvogadaCreateUser from './integrations/AdvogadaCreateUser'
 import PsicologaCreateUser from './integrations/PsicologaCreateUser'
 import ListTicketsFromUser from './integrations/ListTicket'

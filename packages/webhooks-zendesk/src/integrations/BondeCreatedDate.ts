@@ -39,9 +39,10 @@ class BondeCreatedDate {
         throw new Error('Invalid WIDGET_IDS env var')
       }
     } catch(e) {
+      console.log(e)
       return
     }
-    const {data: {data: {form_entries}}} = await axios.post<DataType>(HASURA_API_URL!, {
+    const data = await axios.post<DataType>(HASURA_API_URL!, {
       query,
       variables: {
         advogadaId: widget_ids['ADVOGADA'],
@@ -53,7 +54,7 @@ class BondeCreatedDate {
       }
     })
     
-    return form_entries
+    return data.data.data.form_entries
   }
 
   filterByEmail = (formEntries: FormEntry[]) => {
