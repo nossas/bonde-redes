@@ -1,0 +1,29 @@
+{
+  "name": "bonde-action",
+  "dependencies": {
+    "apollo-boost": "^0.4.4",
+    "apollo-cache-inmemory": "^1.6.3",
+    "apollo-client": "^2.6.4",
+    "apollo-link": "^1.2.13",
+    "apollo-link-http": "^1.5.16",
+    "apollo-link-ws": "^1.0.19",
+    "apollo-utilities": "^1.3.2",
+    "debug": "^4.1.1",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "graphql": "^14.5.8",
+    "graphql-tag": "^2.10.1",
+    "source-map-support": "^0.5.13",
+    "subscriptions-transport-ws": "^0.9.16",
+    "tsc-watch": "^4.0.0",
+    "typescript": "^3.6.4"
+  },
+  "scripts": {
+    "dev": "DEBUG=webhooks-action tsc-watch --onSuccess \"node dist/index.js\"",
+    "clean": "rm -rf node_modules dist",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/source-map-support": "^0.5.0"
+  }
+}

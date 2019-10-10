@@ -2,6 +2,7 @@ packages:
   - '.'
   - 'packages/cli-mautic'
   - 'packages/cli-zendesk'
+  - 'packages/webhooks-action'
   - 'packages/webhooks-auth'
   - 'packages/webhooks-registry'
   - 'packages/webhooks-solidarity-count'
