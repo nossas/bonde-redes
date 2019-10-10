@@ -11,6 +11,7 @@ import verifyIndividual, { VERIFY_MSR_STATUS } from "./app/verifyIndividual"
 import { UserFromTicket } from "./hasura/getUserFromTicket"
 import { Ticket } from "./interfaces/Ticket"
 import createTicket from "./zendesk/createTicket"
+import R from 'ramda'
 
 const log = dbg.extend('app')
 
@@ -43,6 +44,7 @@ const App = async (data: IncomingRequestData, res: Response) => {
 
   let volunteer: UserFromTicket | undefined
   let individual: UserFromTicket | undefined
+  let availableOpenings = 0
 
   if (organization !== ORGANIZATIONS.MSR) {
     const status = await verifyVolunteer(ticket)
@@ -61,6 +63,7 @@ const App = async (data: IncomingRequestData, res: Response) => {
         return
       default:
         volunteer = status.user
+        availableOpenings = status.availableOpenings
     }
 
   } else {
@@ -90,9 +93,9 @@ const App = async (data: IncomingRequestData, res: Response) => {
     return
   }
   
-  const asd = userLocalizations.filter(i => i.user_id === 388369061372)
+  // const asd = userLocalizations.filter(i => i.user_id === 388369061372)
 
-  const usersWhichDistanceMatches = await Promise.all(asd.map(async i => {
+  const usersWhichDistanceMatches = await Promise.all(userLocalizations.map(async i => {
     if (
       i.latitude === undefined ||
       i.longitude === undefined ||
@@ -166,6 +169,7 @@ const App = async (data: IncomingRequestData, res: Response) => {
           return []
         default:
           volunteer = status.user
+          availableOpenings = status.availableOpenings
       }
       distance = getDistance({
         latitude: individual.latitude,
@@ -188,14 +192,13 @@ const App = async (data: IncomingRequestData, res: Response) => {
     return []
   }
 
-  usersWhichDistanceMatches.flat().forEach(i => {
+  (availableOpenings > 0) && R.take(availableOpenings, usersWhichDistanceMatches.flat()).forEach(i => {
     log(`Gotcha! Creating tickets between users '${user.user_id}' and '${i.user_id}', distance '${i.distance}'`)
     if (process.env.CREATE_TICKETS === 'true') {
       volunteer && createTicketFlux(volunteer, i)
       individual && createTicketFlux(i, individual)
     }
   })
-
 
   return res.status(200).json('Ok!')
 }
