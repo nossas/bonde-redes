@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 
 COPY ./ .
 
-RUN pnpm m i --filter bonde-microservices bonde-webhooks-auth
+RUN pnpm m i --filter bonde-microservices --filter bonde-webhooks-auth
 
 RUN pnpm m run build --filter bonde-webhooks-auth
 
