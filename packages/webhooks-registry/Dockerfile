@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 
 COPY ./ .
 
-RUN pnpm m i -- bonde-microservices bonde-webhooks-registry
+RUN pnpm m i --filter bonde-microservices --filter bonde-webhooks-registry
 
 RUN pnpm m run build --filter bonde-webhooks-registry
 

@@ -5,7 +5,7 @@ import dbg from "./dbg"
 const updateHasura = async (ticket: Ticket): Promise<boolean> => {
   try {
     const response = await saveTicket([ticket])
-    return response.status === 200
+    return typeof response === 'number'
   } catch (e) {
     dbg.extend('updateHasura')(e)
   }

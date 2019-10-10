@@ -1,11 +1,10 @@
 import * as yup from 'yup'
-import { Ticket } from '../interfaces/Ticket'
 import { ORGANIZATIONS } from "../interfaces/Organizations"
 import dbg from './dbg'
 
 const log = dbg.extend('verifyOrganizations')
 
-const verifyOrganization = async (ticket: Ticket) => {
+const verifyOrganization = async (organization_id: number) => {
   const {ZENDESK_ORGANIZATIONS} = process.env
   try {
     const organizations = await yup.object().shape({
@@ -13,8 +12,6 @@ const verifyOrganization = async (ticket: Ticket) => {
       'MSR': yup.number().required(),
       'PSICÓLOGA': yup.number().required()
     }).validate(JSON.parse(ZENDESK_ORGANIZATIONS))
-
-    const {organization_id} = ticket
 
     switch (organization_id) {
       case organizations.ADVOGADA:

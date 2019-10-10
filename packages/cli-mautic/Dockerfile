@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 
 COPY ./ .
 
-RUN pnpm m i -- bonde-microservices cli-mautic
+RUN pnpm m i --filter bonde-microservices --filter cli-mautic
 
 RUN pnpm m run build --filter cli-mautic
 

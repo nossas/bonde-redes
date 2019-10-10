@@ -11,24 +11,25 @@ const query = `query ($id: bigint) {
       _eq: $id
     }
   }) {
-    id
+    user_id
+    name
     atendimentos_concludos_calculado_
     atendimentos_em_andamento_calculado_
     encaminhamentos_realizados_calculado_
     disponibilidade_de_atendimentos
+    latitude
+    longitude
     condition
+    tipo_de_acolhimento
+    organization_id
   }
 }`
 
-interface ResponseData {
-  data: {
-    solidarity_users: User[]
-  }
-}
+export type UserFromTicket = Pick<User, 'user_id' | 'atendimentos_concludos_calculado_' | 'atendimentos_em_andamento_calculado_' | 'encaminhamentos_realizados_calculado_' | 'disponibilidade_de_atendimentos' | 'latitude' | 'longitude' | 'condition' | 'tipo_de_acolhimento' | 'organization_id' | 'name'>
 
 const getUserFromTicket = async (id: number) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
-  const response = await axios.post<HasuraResponse<ResponseData>>(HASURA_API_URL, {
+  const response = await axios.post<HasuraResponse<'solidarity_users', UserFromTicket[]>>(HASURA_API_URL, {
     query,
     variables: { id }
   }, {

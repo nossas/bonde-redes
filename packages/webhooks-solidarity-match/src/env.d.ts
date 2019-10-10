@@ -9,5 +9,6 @@ declare namespace NodeJS {
     WIDGET_IDS: string
     HASURA_API_URL: string
     X_HASURA_ADMIN_SECRET: string
+    CREATE_TICKETS: string
   }
 }
