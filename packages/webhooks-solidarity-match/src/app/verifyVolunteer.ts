@@ -17,6 +17,7 @@ export enum VERIFY_VOLUNTEER_STATUS {
 interface OK {
   status: VERIFY_VOLUNTEER_STATUS.AVAILABLE
   user: Exclude<Unpromise<ReturnType<typeof getUserFromTicket>>, void>[0]
+  availableOpenings: number
 } 
 type NOT_OK = {
   status: Exclude<VERIFY_VOLUNTEER_STATUS, VERIFY_VOLUNTEER_STATUS.AVAILABLE>
@@ -55,13 +56,15 @@ const verifyVolunteer = async ({requester_id, ticket_id}: Ticket, user?: UserFro
 
   log(`Ticket '${ticket_id}', requester '${requester_id}', availability '${user.disponibilidade_de_atendimentos}', in calculated progress '${user.atendimentos_em_andamento_calculado_}', with recent referrals '${user.atendimentos_em_andamento_calculado_ - recentMatchesFromVolunteer}'.`)
 
+  const availableOpenings = Number(user.disponibilidade_de_atendimentos) - user.atendimentos_em_andamento_calculado_ + recentMatchesFromVolunteer
   if (
     user.disponibilidade_de_atendimentos === '5_ou_mais' ||
-    Number(user.disponibilidade_de_atendimentos) > user.atendimentos_em_andamento_calculado_ + recentMatchesFromVolunteer
+    availableOpenings > 0
   ) {
     return {
       status: VERIFY_VOLUNTEER_STATUS.AVAILABLE,
-      user
+      user,
+      availableOpenings
     }
   }
 
