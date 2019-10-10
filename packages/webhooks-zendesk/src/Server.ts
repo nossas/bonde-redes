@@ -1,6 +1,5 @@
 import Express, { Response } from 'express'
 import debug, { Debugger } from 'debug'
-import * as yup from 'yup'
 import AdvogadaCreateUser from './integrations/AdvogadaCreateUser'
 import PsicologaCreateUser from './integrations/PsicologaCreateUser'
 import ListTicketsFromUser from './integrations/ListTicket'
@@ -75,6 +74,7 @@ class Server {
           requester_id: id,
           organization_id,
           description: '-',
+          status_inscricao: 'aprovada',
           subject: `[Advogada] ${name} - ${registration_number}`,
           custom_fields: [{
             id: 360021665652,
@@ -100,6 +100,7 @@ class Server {
           requester_id: id,
           organization_id,
           description: '-',
+          status_inscricao: 'aprovada',
           subject: `[Psicóloga] ${name} - ${registration_number}`,
           custom_fields: [{
             id: 360021665652,
@@ -127,6 +128,7 @@ class Server {
           requester_id: id,
           organization_id,
           description: '-',
+          status_inscricao: 'aprovada',
           subject: `[Advogada] ${name} - ${registration_number}`,
           custom_fields: [{
             id: 360021665652,
@@ -151,6 +153,7 @@ class Server {
           requester_id: id,
           organization_id,
           description: '-',
+          status_inscricao: 'aprovada',
           subject: `[Psicóloga] ${name} - ${registration_number}`,
           custom_fields: [{
             id: 360021665652,

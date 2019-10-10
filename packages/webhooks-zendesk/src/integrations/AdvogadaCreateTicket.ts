@@ -17,6 +17,7 @@ class AdvogadaCreateTicket extends Base {
         id: yup.number().required(),
         value: yup.mixed().required()
       })),
+      status_inscricao: yup.string().required(),
       created_at: yup.string().required()
     }).required()
 
