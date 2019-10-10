@@ -1,8 +1,8 @@
 import axios from 'axios'
 import dbg from "./dbg"
 import User from '../interfaces/User'
-import { HasuraResponse } from '../interfaces/HasuraResponse'
 import { generateRequestVariables } from './base'
+import { HasuraResponse, isError } from '../interfaces/HasuraResponse'
 
 const log = dbg.extend('saveUsers')
 
@@ -39,18 +39,14 @@ const createQuery = (users: User[]) => `mutation (${generateVariables(users)}) {
 `
 
 interface Response {
-  data: {
-    insert_solidarity_users: {
-      affected_rows: number
-    }
-  }
+  affected_rows: number
 }
 
 const updateUserTicketCount = async (users: User[]) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const query = createQuery(users)
   const variables = generateRequestVariables(users)
-  const response = await axios.post<HasuraResponse<Response>>(HASURA_API_URL, {
+  const response = await axios.post<HasuraResponse<'insert_solidarity_users', Response>>(HASURA_API_URL, {
     query,
     variables,
   }, {
@@ -59,12 +55,11 @@ const updateUserTicketCount = async (users: User[]) => {
     }
   })
 
-  if ('errors' in response.data) {
-    log(response.data.errors)
-    return null
+  if (isError(response.data)) {
+    return log(response.data.errors)
   }
 
-  return response.data.data.insert_solidarity_users
+  return response.data.data.insert_solidarity_users.affected_rows === 1
 }
 
 export default updateUserTicketCount

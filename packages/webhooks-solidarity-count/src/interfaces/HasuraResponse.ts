@@ -2,4 +2,16 @@ interface HasuraError {
   errors: any
 }
 
-export type HasuraResponse<T> = HasuraError | T
+export const isError = (data: HasuraResponse<any, any>): data is HasuraError => {
+  if (data['error']) {
+    return true
+  } else {
+    return false
+  }
+}
+
+export type HasuraResponse<queryName extends string, dataType> = HasuraError | {
+  data: {
+    [K in queryName]: dataType
+  }
+}

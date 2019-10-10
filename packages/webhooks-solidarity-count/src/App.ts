@@ -9,6 +9,9 @@ import verifyOrganization from './verifyOrganizations'
 import { ORGANIZATIONS } from './interfaces/Organizations'
 import updateHasura from './updateHasura'
 import updateUserTicketCount from './hasura/updateUserTicketCount'
+import getUser from './zendesk/getUser'
+import saveUsers from './hasura/saveUsers'
+import { handleUserFields } from './interfaces/User'
 
 const log = dbg.extend('app')
 
@@ -33,6 +36,22 @@ const App = async (id: string, res: Response) => {
   }
 
   log(`Ticket '${id}' updated on Hasura.`)
+
+  // Busca o usuário no zendesk
+  const getUserResponse = await getUser(ticket.requester_id)
+  if (!getUserResponse) {
+    log(`Failed to get user '${ticket.requester_id}'.`)
+    return res.status(500).json(`Failed to get user.`)
+  }
+
+  const userWithUserFields = handleUserFields(getUserResponse.data.user)
+
+  // Salva o usuário no Hasura
+  const saveUserResponse = await saveUsers([userWithUserFields])
+  if (saveUserResponse !== true) {
+    log(`Failed to save user '${ticket.requester_id}'. Ticket ${ticket.ticket_id}.`)
+    return res.status(500).json(`Failed to save user.`)
+  }
 
   // Verifica se o ticket possui link match, e se o requester_id é uma voluntária
   const organization = await verifyOrganization(ticket)
@@ -68,7 +87,7 @@ const App = async (id: string, res: Response) => {
     ...countTicket
   }])
 
-  if (!saveUsersHasuraResponse || saveUsersHasuraResponse.affected_rows !== 1) {
+  if (saveUsersHasuraResponse !== true) {
     log(`Failed to update user '${ticket.requester_id}'.`)
     return res.status(500).json('Failed to update user.')
   }
