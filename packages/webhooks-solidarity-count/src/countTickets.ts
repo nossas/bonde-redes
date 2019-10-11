@@ -1,19 +1,19 @@
-import { Ticket } from "./interfaces/Ticket"
+import { Ticket } from './interfaces/Ticket'
 
 const countTickets = (tickets: Ticket[]) => {
   const userCount = {
     atendimentos_em_andamento_calculado_: 0,
     atendimentos_concludos_calculado_: 0,
-    encaminhamentos_realizados_calculado_: 0
+    encaminhamentos_realizados_calculado_: 0,
   }
 
-  tickets.forEach(i => {
+  tickets.forEach((i) => {
     if (i.status_acolhimento === 'atendimento__iniciado') {
-      userCount.atendimentos_em_andamento_calculado_ = userCount.atendimentos_em_andamento_calculado_ + 1
+      userCount.atendimentos_em_andamento_calculado_ += 1
     } else if (i.status_acolhimento === 'atendimento__concluído') {
-      userCount.atendimentos_concludos_calculado_ = userCount.atendimentos_concludos_calculado_ + 1
+      userCount.atendimentos_concludos_calculado_ += 1
     } else if (i.status_acolhimento === 'encaminhamento__realizado' || i.status_acolhimento === 'encaminhamento__realizado_para_serviço_público') {
-      userCount.encaminhamentos_realizados_calculado_ = userCount.encaminhamentos_realizados_calculado_ + 1
+      userCount.encaminhamentos_realizados_calculado_ += 1
     }
   })
 

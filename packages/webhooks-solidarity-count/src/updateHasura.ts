@@ -1,6 +1,6 @@
-import { Ticket } from "./interfaces/Ticket"
-import saveTicket from "./hasura/saveTickets"
-import dbg from "./dbg"
+import { Ticket } from './interfaces/Ticket'
+import saveTicket from './hasura/saveTickets'
+import dbg from './dbg'
 
 const updateHasura = async (ticket: Ticket): Promise<boolean> => {
   try {
