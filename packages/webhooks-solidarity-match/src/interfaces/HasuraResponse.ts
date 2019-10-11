@@ -3,15 +3,17 @@ interface HasuraError {
 }
 
 export const isError = (data: HasuraResponse<any, any>): data is HasuraError => {
-  if (data['error']) {
+  if ('error' in data) {
     return true
-  } else {
-    return false
   }
+  return false
 }
+
 
 export type HasuraResponse<queryName extends string, dataType> = HasuraError | {
   data: {
     [K in queryName]: dataType
   }
 }
+
+export default isError

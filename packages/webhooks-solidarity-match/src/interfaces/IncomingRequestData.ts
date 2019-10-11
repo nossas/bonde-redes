@@ -1,4 +1,4 @@
-import { Ticket } from "./Ticket";
+import { Ticket } from './Ticket'
 
 export interface IncomingRequestData {
   event: {

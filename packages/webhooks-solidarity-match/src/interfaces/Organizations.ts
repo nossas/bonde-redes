@@ -3,3 +3,5 @@ export enum ORGANIZATIONS {
   MSR,
   PSICOLOGA
 }
+
+export default ORGANIZATIONS
