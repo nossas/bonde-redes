@@ -1,12 +1,10 @@
-import Base from "./Base"
-import User from "../interfaces/User"
+import Base from './Base'
+import User from '../interfaces/User'
 
 interface Response {
   user: User
 }
 
-const getUser = (id: number) => {
-  return Base.get<Response>(`users/${id}`)
-}
+const getUser = (id: number) => Base.get<Response>(`users/${id}`)
 
 export default getUser
