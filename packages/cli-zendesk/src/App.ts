@@ -1,17 +1,17 @@
-import sendRequesters from "./sendRequesters"
-import getAllTickets from "./getAllTickets"
-import getTicketsWithCustomFields from "./getTicketsWithCustomFields"
-import countTickets from "./countTickets"
-import convertRequestersToArray from "./convertRequestersToArray"
-import saveTicketsInChunks from "./saveTicketsInChunks"
-import getAllUsers from "./getAllUsers"
-import getUsersWithUserFields from "./getUsersWithUserFields"
-import saveUsersInChunks from "./saveUsersInChunks"
-import countMatches from "./countMatches"
-import fs from 'fs'
-import { promisify } from "util"
-import { Ticket } from "./interfaces/Ticket"
-import User from "./interfaces/User"
+// import fs from 'fs'
+// import { promisify } from 'util'
+import sendRequesters from './sendRequesters'
+import getAllTickets from './getAllTickets'
+import getTicketsWithCustomFields from './getTicketsWithCustomFields'
+import countTickets from './countTickets'
+import convertRequestersToArray from './convertRequestersToArray'
+import saveTicketsInChunks from './saveTicketsInChunks'
+import getAllUsers from './getAllUsers'
+import getUsersWithUserFields from './getUsersWithUserFields'
+import saveUsersInChunks from './saveUsersInChunks'
+import countMatches from './countMatches'
+// import { Ticket } from './interfaces/Ticket'
+// import User from './interfaces/User'
 
 const ticket = async () => {
   // const tickets = JSON.parse(((await promisify(fs.readFile)('tickets.json')).toString())) as Ticket[]
@@ -33,4 +33,4 @@ const user = async () => {
   await saveUsersInChunks(users)
 }
 
-export default {ticket, user}
+export default { ticket, user }

@@ -4,12 +4,14 @@ export const stringify = (obj: any): any => {
   let result = ''
   if (obj instanceof Array) {
     result += '['
-    obj.forEach(i => result += stringify(i))
+    obj.forEach((i) => {
+      result += stringify(i)
+    })
     result += ']'
   } else if (obj && typeof obj === 'object') {
     const entries = Object.entries(obj)
     result += '{'
-    for (let i = 0; i < entries.length; ++i) {
+    for (let i = 0; i < entries.length; i += 1) {
       result += `${entries[i][0]}: ${stringify(entries[i][1])}`
       if (i < entries.length - 1) {
         result += ','
@@ -24,15 +26,15 @@ export const stringify = (obj: any): any => {
 
 export const stringifyVariables = R.pipe(
   R.addIndex(R.map)((i, index) => R.pipe(
-    i => R.zip(
+    (j) => R.zip(
       R.pipe(
         R.keys,
         // j => j.map((i, indexI) => `${i}_${indexI}`)
-        R.map(i => `${i}_${index}`)
-      )(i),
-      R.values(i)
-    )
+        R.map((k) => `${k}_${index}`),
+      )(j),
+      R.values(j),
+    ),
   )(i)),
   R.unnest,
-  R.fromPairs
+  R.fromPairs,
 )

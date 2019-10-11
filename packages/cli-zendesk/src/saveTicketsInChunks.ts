@@ -1,7 +1,7 @@
-import { Ticket } from "./interfaces/Ticket"
-import dbg from "./dbg"
-import saveTickets from "./hasura/saveTickets"
 import R from 'ramda'
+import { Ticket } from './interfaces/Ticket'
+import dbg from './dbg'
+import saveTickets from './hasura/saveTickets'
 
 const log = dbg.extend('saveTicketsInChunks')
 
