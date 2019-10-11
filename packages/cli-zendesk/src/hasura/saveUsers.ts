@@ -1,7 +1,7 @@
-import User from "../interfaces/User"
 import axios from 'axios'
-import dbg from "./dbg"
-import { stringifyVariables } from "../stringify"
+import User from '../interfaces/User'
+import dbg from './dbg'
+import { stringifyVariables } from '../stringify'
 
 const generateVariablesIndex = (index: number) => `
 $active_${index}: Boolean
@@ -131,7 +131,9 @@ whatsapp: $whatsapp_${index}
 permanently_deleted: $permanently_deleted_${index}
 `
 
-const generateVariables = (tickets: User[]) => tickets.map((_, index) => generateVariablesIndex(index)).flat()
+const generateVariables = (tickets: User[]) => tickets.map(
+  (_, index) => generateVariablesIndex(index),
+).flat()
 
 const generateObjects = (tickets: User[]) => `[${tickets.map((_, index) => `{${generateObjectsIndex(index)}}`).join(',')}]`
 
@@ -215,8 +217,8 @@ const saveUsers = async (users: User[]) => {
     variables,
   }, {
     headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
-    }
+      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
+    },
   })
 
   response.data.errors && dbg(response.data.errors)
