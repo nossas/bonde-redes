@@ -28,17 +28,17 @@ export const filterService = (payload: Payload) => {
       dbg(`${serviceName} not desired service`)
       return {
         status: FILTER_SERVICE_STATUS.NOT_DESIRED_SERVICE,
-        serviceName
+        serviceName,
       }
     }
     return {
       status: FILTER_SERVICE_STATUS.SUCCESS,
-      data
+      data,
     }
   } catch (e) {
     dbg(e)
     return {
-      status: FILTER_SERVICE_STATUS.INVALID_REQUEST
+      status: FILTER_SERVICE_STATUS.INVALID_REQUEST,
     }
   }
 }
