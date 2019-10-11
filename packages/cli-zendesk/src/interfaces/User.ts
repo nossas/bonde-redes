@@ -62,7 +62,7 @@ interface User {
 }
 
 export const handleUserFields = (user: User) => {
-  const {user_fields, ...otherFields} = user
+  const { user_fields, ...otherFields } = user
   return {
     user_fields,
     ...otherFields,
