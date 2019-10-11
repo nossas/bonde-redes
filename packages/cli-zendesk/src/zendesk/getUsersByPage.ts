@@ -9,8 +9,10 @@ export interface UserResponse {
   count: number
 }
 
-const getUsersByPage = (start_time: number) => {
-  return Base.get<UserResponse>('incremental/users', dbg.extend('getUsersByPage'), {start_time})
-}
+const getUsersByPage = (start_time: number) => Base.get<UserResponse>(
+  'incremental/users',
+  dbg.extend('getUsersByPage'),
+  { start_time },
+)
 
 export default getUsersByPage

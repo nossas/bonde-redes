@@ -9,8 +9,10 @@ export interface TicketResponse {
   count: number
 }
 
-const getTicketsByPage = (start_time: number) => {
-  return Base.get<TicketResponse>('incremental/tickets', dbg.extend('getTicketsByPage'), {start_time})
-}
+const getTicketsByPage = (start_time: number) => Base.get<TicketResponse>(
+  'incremental/tickets',
+  dbg.extend('getTicketsByPage'),
+  { start_time },
+)
 
 export default getTicketsByPage
