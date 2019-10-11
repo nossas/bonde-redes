@@ -7,8 +7,8 @@ class Server {
 
   private dbg: Debugger
 
-  constructor () {
-    this.dbg = debug(`webhooks-auth`)
+  constructor() {
+    this.dbg = debug('webhooks-auth')
   }
 
   private webhook = async (req: any, res: any) => {
@@ -17,16 +17,16 @@ class Server {
     jwt.verify(token, process.env.JWT_SECRET, (err: any, decoded: any) => {
       if (decoded) {
         const hasuraVariables = {
-          "X-Hasura-User-Id": String(decoded.user_id),
-          "X-Hasura-Role": decoded.role
+          'X-Hasura-User-Id': String(decoded.user_id),
+          'X-Hasura-Role': decoded.role,
         }
         this.dbg(`Logged ${decoded.role} user.`)
         res.status(200).json(hasuraVariables)
       } else if (err.message === 'jwt must be provided') {
-        this.dbg(`Logged anonymous user.`)
-        res.status(200).json({ "X-Hasura-Role": 'anonymous' })
+        this.dbg('Logged anonymous user.')
+        res.status(200).json({ 'X-Hasura-Role': 'anonymous' })
       } else {
-        this.dbg(`Unauthorized jwt token.`)
+        this.dbg('Unauthorized jwt token.')
         res.status(401).json('Unauthorized')
       }
     })
