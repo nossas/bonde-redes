@@ -1,5 +1,6 @@
 import axios from 'axios'
 import * as yup from 'yup'
+import debug from 'debug'
 
 const query = `query($advogadaId: Int!, $psicologaId: Int!) {
   form_entries(where: {widget_id: {_in: [$advogadaId, $psicologaId]}}) {
@@ -23,50 +24,50 @@ interface DataType {
 
 class BondeCreatedDate {
   email: string
+
+  dbg = debug('BondeCreatedDate')
+
   constructor(email: string) {
     this.email = email
   }
 
   getFormEntries = async () => {
-    const {HASURA_API_URL, X_HASURA_ADMIN_SECRET, WIDGET_IDS} = process.env
+    const { HASURA_API_URL, X_HASURA_ADMIN_SECRET, WIDGET_IDS } = process.env
     let widget_ids
     try {
       widget_ids = JSON.parse(WIDGET_IDS)
       if (!yup.object().shape({
-        'ADVOGADA': yup.number().required(),
-        'PSICÓLOGA': yup.number().required(),
+        ADVOGADA: yup.number().required(),
+        PSICÓLOGA: yup.number().required(),
       }).isValid(widget_ids)) {
         throw new Error('Invalid WIDGET_IDS env var')
       }
-    } catch(e) {
-      console.log(e)
-      return
+    } catch (e) {
+      return this.dbg(e)
     }
     const data = await axios.post<DataType>(HASURA_API_URL!, {
       query,
       variables: {
-        advogadaId: widget_ids['ADVOGADA'],
-        psicologaId: widget_ids['PSICÓLOGA']
-      }
+        advogadaId: widget_ids.ADVOGADA,
+        psicologaId: widget_ids['PSICÓLOGA'],
+      },
     }, {
       headers: {
-        'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
-      }
+        'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
+      },
     })
-    
+
     return data.data.data.form_entries
   }
 
-  filterByEmail = (formEntries: FormEntry[]) => {
-    return formEntries.filter(i => {
-      try {
-        const parsedFields = JSON.parse(i.fields)
-        return parsedFields[2].value === this.email
-      } catch (e) {
-        return false
-      }
-    })
-  }
+  filterByEmail = (formEntries: FormEntry[]) => formEntries.filter((i) => {
+    try {
+      const parsedFields = JSON.parse(i.fields)
+      return parsedFields[2].value === this.email
+    } catch (e) {
+      return false
+    }
+  })
 
   start = async () => {
     const formEntries = await this.getFormEntries()
@@ -81,7 +82,7 @@ class BondeCreatedDate {
     try {
       return filteredFormEntries[0].created_at
     } catch (e) {
-      console.log(e)
+      this.dbg(e)
       return new Date().toString()
     }
   }
