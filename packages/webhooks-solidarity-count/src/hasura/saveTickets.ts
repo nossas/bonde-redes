@@ -1,7 +1,7 @@
 import axios from 'axios'
+import * as yup from 'yup'
 import { Ticket } from '../interfaces/Ticket'
 import dbg from './dbg'
-import * as yup from 'yup'
 import { generateRequestVariables } from './base'
 import { isError, HasuraResponse } from '../interfaces/HasuraResponse'
 
@@ -60,7 +60,9 @@ cidade: $cidade_${index}
 community_id: $community_id_${index}
 `
 
-const generateVariables = (tickets: Ticket[]) => tickets.map((_, index) => generateVariablesIndex(index)).flat()
+const generateVariables = (tickets: Ticket[]) => tickets.map(
+  (_, index) => generateVariablesIndex(index),
+).flat()
 
 const generateObjects = (tickets: Ticket[]) => `[${tickets.map((_, index) => `{${generateObjectsIndex(index)}}`).join(',')}]`
 
@@ -106,7 +108,7 @@ const validate = yup.array().of(yup.object().shape({
   created_at: yup.string(),
   custom_fields: yup.array().of(yup.object().shape({
     id: yup.number(),
-    value: yup.string().nullable()
+    value: yup.string().nullable(),
   })),
   description: yup.string(),
   group_id: yup.number().nullable(),
@@ -143,11 +145,11 @@ const saveTickets = async (tickets: Ticket[]) => {
   const validatedTickets = (await validate.validate(tickets, { stripUnknown: true }))
   const response = await axios.post<HasuraResponse<'insert_solidarity_tickets', Response>>(HASURA_API_URL, {
     query: createQuery(validatedTickets),
-    variables: generateRequestVariables(validatedTickets)
+    variables: generateRequestVariables(validatedTickets),
   }, {
     headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
-    }
+      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
+    },
   })
 
   if (isError(response.data)) {
