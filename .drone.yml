@@ -59,6 +59,18 @@ pipeline:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
 
+  webhooks-solidarity-match-staging-publish:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-solidarity-match
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhooks-solidarity-match/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+
   webhooks-auth-staging-deploy:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
