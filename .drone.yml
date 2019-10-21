@@ -1,16 +1,4 @@
 pipeline:
-  webhooks-auth-staging-publish:
-    image: plugins/docker
-    repo: nossas/bonde-webhooks-auth
-    group: publishing
-    secrets: [ docker_username, docker_password ]
-    dockerfile: packages/webhooks-auth/Dockerfile
-    tags:
-      - ${DRONE_BRANCH/\//-}
-    when:
-      status: success
-      branch: [hotfix/*, release/*, feature/*, support/*, develop]
-  
   webhooks-registry-staging-publish:
     image: plugins/docker
     repo: nossas/bonde-webhooks-registry
@@ -71,12 +59,24 @@ pipeline:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
 
-  webhooks-auth-staging-deploy:
+  webhook-mail-publish:
+    image: plugins/docker
+    repo: nossas/bonde-webhook-mail
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhook-mail/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+
+  webhook-mail-deploy:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
-    service: webhooks/graphql-auth
+    service: webhooks/mail
     group: deploying
-    docker_image: nossas/bonde-webhooks-auth:${DRONE_BRANCH/\//-}
+    docker_image: nossas/bonde-webhook-mail:${DRONE_BRANCH/\//-}
     timeout: 360
     confirm: true
     secrets: [ rancher_access_key, rancher_secret_key ]
