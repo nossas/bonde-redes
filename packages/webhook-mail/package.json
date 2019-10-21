@@ -14,6 +14,8 @@
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
     "node-fetch": "^2.6.0",
+    "nodemailer": "^6.3.1",
+    "nunjucks": "^3.2.0",
     "source-map-support": "^0.5.13",
     "subscriptions-transport-ws": "^0.9.16",
     "tsc-watch": "^4.0.0",
@@ -29,9 +31,10 @@
   "devDependencies": {
     "@types/jest": "^24.0.19",
     "@types/mocha": "^5.2.7",
+    "@types/supertest": "^2.0.8",
     "@types/source-map-support": "^0.5.0",
     "jest": "^24.9.0",
     "ts-jest": "^24.1.0",
-    "webhook-mail": "link:"
+    "supertest": "^4.0.2"
   }
 }
