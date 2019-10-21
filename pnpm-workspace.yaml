@@ -8,3 +8,4 @@ packages:
   - 'packages/webhooks-solidarity-match'
   - 'packages/webhooks-zendesk'
   - 'packages/webhook-mail'
+  - 'packages/webhook-activists'
