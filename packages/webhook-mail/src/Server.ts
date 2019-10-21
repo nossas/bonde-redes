@@ -16,7 +16,7 @@ class Server {
     this.dbg = debug(`webhook-mail`)
     // Routing
     this.server.get('/health', this.health.bind(this))
-    this.server.get('/webhook', this.webhook.bind(this))
+    this.server.post('/webhook', this.webhook.bind(this))
   }
 
   private health = async (_, res: any) => {
