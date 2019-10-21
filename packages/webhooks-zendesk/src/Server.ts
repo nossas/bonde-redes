@@ -7,9 +7,9 @@ import AdvogadaCreateTicket from './integrations/AdvogadaCreateTicket'
 import AdvogadaUpdateTicket from './integrations/AdvogadaUpdateTicket'
 import PsicologaCreateTicket from './integrations/PsicologaCreateTicket'
 import PsicologaUpdateTicket from './integrations/PsicologaUpdateTicket'
-import { FILTER_SERVICE_STATUS, filterService } from './filterService';
-import { FILTER_FORM_NAME_STATUS, filterFormName } from './filterFormName';
-import BondeCreatedDate from './integrations/BondeCreatedDate';
+import { FILTER_SERVICE_STATUS, filterService } from './filterService'
+import { FILTER_FORM_NAME_STATUS, filterFormName } from './filterFormName'
+import BondeCreatedDate from './integrations/BondeCreatedDate'
 
 interface DataType {
   data: {
@@ -32,18 +32,18 @@ class Server {
 
   private formData?: FormData
 
-  constructor () {
-    this.dbg = debug(`webhooks-zendesk`)
+  constructor() {
+    this.dbg = debug('webhooks-zendesk')
   }
 
   dictionary: {[s: string]: string} = {
     aprovada: 'aprovada',
     reprovada_estudo_de_caso: 'reprovada_-_estudo_de_caso',
     reprovada_registro_inválido: 'reprovada_-_registro_inválido',
-    reprovada_diretrizes_do_mapa: 'reprovada_-_diretrizes_do_mapa'
+    reprovada_diretrizes_do_mapa: 'reprovada_-_diretrizes_do_mapa',
   }
 
-  createTicket = async (instance: any, {
+  createTicket = async (instance: AdvogadaCreateUser | PsicologaCreateUser, {
     id,
     organization_id,
     name,
@@ -52,21 +52,21 @@ class Server {
       registration_number,
       condition,
       state,
-      city
-    }
-  }: any, created_at: string, res: Response) => {
+      city,
+    },
+  }, created_at: string, res: Response) => {
     const listTickets = new ListTicketsFromUser(id, res)
     const tickets = await listTickets.start()
     if (!tickets) {
-      return
+      return undefined
     }
     const filteredTickets = tickets.data.tickets.filter((i: any) => {
       if (instance instanceof AdvogadaCreateUser) {
         return ['open', 'new', 'pending', 'hold'].includes(i.status) && i.subject === `[Advogada] ${name} - ${registration_number}`
-      } else if (instance instanceof PsicologaCreateUser) {
-        return ['open', 'new', 'pending', 'hold'].includes(i.status) && i.subject === `[Psicóloga] ${name} - ${registration_number}`
       }
+      return ['open', 'new', 'pending', 'hold'].includes(i.status) && i.subject === `[Psicóloga] ${name} - ${registration_number}`
     })
+
     if (filteredTickets.length === 0) {
       if (instance instanceof AdvogadaCreateUser) {
         const advogadaCreateTicket = new AdvogadaCreateTicket(res)
@@ -78,102 +78,99 @@ class Server {
           subject: `[Advogada] ${name} - ${registration_number}`,
           custom_fields: [{
             id: 360021665652,
-            value: this.dictionary[condition]
+            value: this.dictionary[condition],
           }, {
             id: 360016631592,
-            value: name
+            value: name,
           }, {
             id: 360021812712,
-            value: phone
+            value: phone,
           }, {
             id: 360021879791,
-            value: state
+            value: state,
           }, {
             id: 360021879811,
-            value: city
+            value: city,
           }],
-          created_at
-        })
-      } else if (instance instanceof PsicologaCreateUser) {
-        const psicólogaCreateTicket = new PsicologaCreateTicket(res)
-        return psicólogaCreateTicket.start<any>({
-          requester_id: id,
-          organization_id,
-          description: '-',
-          status_inscricao: 'aprovada',
-          subject: `[Psicóloga] ${name} - ${registration_number}`,
-          custom_fields: [{
-            id: 360021665652,
-            value: this.dictionary[condition]
-          }, {
-            id: 360016631592,
-            value: name
-          }, {
-            id: 360021812712,
-            value: phone
-          }, {
-            id: 360021879791,
-            value: state
-          }, {
-            id: 360021879811,
-            value: city
-          }],
-          created_at
+          created_at,
         })
       }
-    } else {
-      if (instance instanceof AdvogadaCreateUser) {
-        const advogadaUpdateTicket = new AdvogadaUpdateTicket(filteredTickets[0].id, res)
-        return advogadaUpdateTicket.start<any>({
-          requester_id: id,
-          organization_id,
-          description: '-',
-          status_inscricao: 'aprovada',
-          subject: `[Advogada] ${name} - ${registration_number}`,
-          custom_fields: [{
-            id: 360021665652,
-            value: this.dictionary[condition]
-          }, {
-            id: 360016631592,
-            value: name
-          }, {
-            id: 360021812712,
-            value: phone
-          }, {
-            id: 360021879791,
-            value: state
-          }, {
-            id: 360021879811,
-            value: city
-          }]
-        })
-      } else if (instance instanceof PsicologaCreateUser) {
-        const psicólogaUpdateTicket = new PsicologaUpdateTicket(filteredTickets[0].id, res)
-        return psicólogaUpdateTicket.start<any>({
-          requester_id: id,
-          organization_id,
-          description: '-',
-          status_inscricao: 'aprovada',
-          subject: `[Psicóloga] ${name} - ${registration_number}`,
-          custom_fields: [{
-            id: 360021665652,
-            value: this.dictionary[condition]
-          }, {
-            id: 360016631592,
-            value: name
-          }, {
-            id: 360021812712,
-            value: phone
-          }, {
-            id: 360021879791,
-            value: state
-          }, {
-            id: 360021879811,
-            value: city
-          }]
-        })
-      }
+      const psicólogaCreateTicket = new PsicologaCreateTicket(res)
+      return psicólogaCreateTicket.start<any>({
+        requester_id: id,
+        organization_id,
+        description: '-',
+        status_inscricao: 'aprovada',
+        subject: `[Psicóloga] ${name} - ${registration_number}`,
+        custom_fields: [{
+          id: 360021665652,
+          value: this.dictionary[condition],
+        }, {
+          id: 360016631592,
+          value: name,
+        }, {
+          id: 360021812712,
+          value: phone,
+        }, {
+          id: 360021879791,
+          value: state,
+        }, {
+          id: 360021879811,
+          value: city,
+        }],
+        created_at,
+      })
     }
+    if (instance instanceof AdvogadaCreateUser) {
+      const advogadaUpdateTicket = new AdvogadaUpdateTicket(filteredTickets[0].id, res)
+      return advogadaUpdateTicket.start<any>({
+        requester_id: id,
+        organization_id,
+        description: '-',
+        status_inscricao: 'aprovada',
+        subject: `[Advogada] ${name} - ${registration_number}`,
+        custom_fields: [{
+          id: 360021665652,
+          value: this.dictionary[condition],
+        }, {
+          id: 360016631592,
+          value: name,
+        }, {
+          id: 360021812712,
+          value: phone,
+        }, {
+          id: 360021879791,
+          value: state,
+        }, {
+          id: 360021879811,
+          value: city,
+        }],
+      })
+    }
+    const psicólogaUpdateTicket = new PsicologaUpdateTicket(filteredTickets[0].id, res)
+    return psicólogaUpdateTicket.start<any>({
+      requester_id: id,
+      organization_id,
+      description: '-',
+      status_inscricao: 'aprovada',
+      subject: `[Psicóloga] ${name} - ${registration_number}`,
+      custom_fields: [{
+        id: 360021665652,
+        value: this.dictionary[condition],
+      }, {
+        id: 360016631592,
+        value: name,
+      }, {
+        id: 360021812712,
+        value: phone,
+      }, {
+        id: 360021879791,
+        value: state,
+      }, {
+        id: 360021879811,
+        value: city,
+      }],
+    })
   }
 
   start = () => {
@@ -184,21 +181,23 @@ class Server {
 
         if (serviceStatus === FILTER_SERVICE_STATUS.NOT_DESIRED_SERVICE) {
           return res.status(200).json(`Service "${serviceName}" isn't desired, but everything is OK.`)
-        } else if (serviceStatus === FILTER_SERVICE_STATUS.INVALID_REQUEST) {
-          this.dbg(`Erro desconhecido ao filtrar por serviço.`)
-          return res.status(400).json(`Erro desconhecido ao filtrar por serviço.`)
+        } if (serviceStatus === FILTER_SERVICE_STATUS.INVALID_REQUEST) {
+          this.dbg('Erro desconhecido ao filtrar por serviço.')
+          return res.status(400).json('Erro desconhecido ao filtrar por serviço.')
         }
 
-        const { InstanceClass, results, status: formNameStatus, name, data: errorData, dateSubmitted } = await filterFormName(data!)
+        const {
+          InstanceClass, results, status: formNameStatus, name, data: errorData, dateSubmitted,
+        } = await filterFormName(data!)
         if (formNameStatus === FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED) {
           this.dbg(`Form "${name}" not implemented. But it's ok`)
           return res.status(200).json(`Form "${name}" not implemented. But it's ok`)
-        } else if (formNameStatus === FILTER_FORM_NAME_STATUS.INVALID_REQUEST) {
-          this.dbg(`Invalid request.`)
+        } if (formNameStatus === FILTER_FORM_NAME_STATUS.INVALID_REQUEST) {
+          this.dbg('Invalid request.')
           this.dbg(errorData)
-          return res.status(400).json(`Invalid request, see logs.`)
+          return res.status(400).json('Invalid request, see logs.')
         }
-        
+
         if (!results || !dateSubmitted) {
           return res.status(400).json('Invalid request, failed to parse results')
         }
@@ -214,10 +213,18 @@ class Server {
         }
 
         if (!user) {
-          return
+          return undefined
         }
 
-        const { data: { user: createdUser, user: { created_at: responseCreatedAt, updated_at: responseUpdatedAt, id: userId } } } = user
+        const {
+          data: {
+            user: createdUser, user: {
+              created_at: responseCreatedAt,
+              updated_at: responseUpdatedAt,
+              id: userId,
+            },
+          },
+        } = user
         if (responseCreatedAt === responseUpdatedAt) {
           this.dbg(`Success, created user "${userId}"!`)
         } else {
@@ -226,10 +233,9 @@ class Server {
 
         const resultTicket = await this.createTicket(instance, createdUser, dateSubmitted, res)
         if (resultTicket) {
-          this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}"`)
-        } else {
-          this.dbg(`Failed to create ticket`)
+          return this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}"`)
         }
+        return this.dbg('Failed to create ticket')
       })
       .listen(Number(PORT), '0.0.0.0', () => {
         this.dbg(`Server listen on port ${PORT}`)

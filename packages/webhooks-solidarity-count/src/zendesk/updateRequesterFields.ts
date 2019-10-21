@@ -6,14 +6,12 @@ interface RequesterFields {
   encaminhamentos_realizados_calculado_: number
 }
 
-const updateRequesterFields = (user_id: number, fields: RequesterFields) => {
-  return Base.put(`users/${user_id}`, {
-    user: {
-      user_fields: {
-        ...fields
-      }
-    }
-  })
-}
+const updateRequesterFields = (user_id: number, fields: RequesterFields) => Base.put(`users/${user_id}`, {
+  user: {
+    user_fields: {
+      ...fields,
+    },
+  },
+})
 
 export default updateRequesterFields

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import dbg from "./dbg"
+import dbg from './dbg'
 import User from '../interfaces/User'
 import { generateRequestVariables } from './base'
 import { HasuraResponse, isError } from '../interfaces/HasuraResponse'
@@ -20,7 +20,9 @@ encaminhamentos_realizados_calculado_: $encaminhamentos_realizados_calculado__${
 user_id: $user_id_${index}
 `
 
-const generateVariables = (tickets: User[]) => tickets.map((_, index) => generateVariablesIndex(index)).flat()
+const generateVariables = (tickets: User[]) => tickets.map(
+  (_, index) => generateVariablesIndex(index),
+).flat()
 
 const generateObjects = (tickets: User[]) => `[${tickets.map((_, index) => `{${generateObjectsIndex(index)}}`).join(',')}]`
 
@@ -51,8 +53,8 @@ const updateUserTicketCount = async (users: User[]) => {
     variables,
   }, {
     headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
-    }
+      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
+    },
   })
 
   if (isError(response.data)) {

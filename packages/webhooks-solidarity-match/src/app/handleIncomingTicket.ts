@@ -1,7 +1,5 @@
-import { IncomingRequestData } from "../interfaces/IncomingRequestData";
+import { IncomingRequestData } from '../interfaces/IncomingRequestData'
 
-const handleIncomingTicket = (data: IncomingRequestData) => {
-  return data.event.data.new
-}
+const handleIncomingTicket = (data: IncomingRequestData) => data.event.data.new
 
 export default handleIncomingTicket

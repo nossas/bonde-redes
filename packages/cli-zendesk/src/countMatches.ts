@@ -1,10 +1,10 @@
-import { Ticket } from "./interfaces/Ticket";
-import { Match } from "./interfaces/Match";
-import verifyOrganization from "./verifyOrganizations";
-import { ORGANIZATIONS } from "./interfaces/Organizations";
-import dbg from "./dbg";
-import saveMatches from "./hasura/saveMatches";
 import R from 'ramda'
+import { Ticket } from './interfaces/Ticket'
+import { Match } from './interfaces/Match'
+import verifyOrganization from './verifyOrganizations'
+import { ORGANIZATIONS } from './interfaces/Organizations'
+import dbg from './dbg'
+import saveMatches from './hasura/saveMatches'
 
 const log = dbg.extend('saveMatches')
 
@@ -14,22 +14,24 @@ const countMatches = async (tickets: Ticket[]) => {
   const ticketsById: {
     [s: number]: Ticket
   } = {}
-  tickets.forEach(i => {
+  tickets.forEach((i) => {
     ticketsById[i.ticket_id] = i
     if (i.link_match) {
       const matchId = Number(i.link_match.split('/').slice(-1)[0])
-      if (isNaN(matchId)) {
+      if (Number.isNaN(matchId)) {
         return log(`failed to convert '${i.link_match}' for ticket '${i.ticket_id}'`)
-      } else if (i.ticket_id === matchId) {
-        return log (`you can't match a ticket with itself. Ticket '${i.ticket_id}'`)
+      } if (i.ticket_id === matchId) {
+        return log(`you can't match a ticket with itself. Ticket '${i.ticket_id}'`)
       }
       matchList.set(i.ticket_id, matchId)
     }
+
+    return undefined
   })
 
   const matches: Map<number, Match> = new Map()
 
-  for (const [id1, id2] of matchList.entries()) {
+  for await (const [id1, id2] of matchList.entries()) {
     let volunteer_ticket: Ticket
     let individuals_ticket: Ticket
     const organization = await verifyOrganization(ticketsById[id1])
@@ -45,7 +47,7 @@ const countMatches = async (tickets: Ticket[]) => {
       volunteer_ticket = ticketsById[id1]
     }
 
-    const {COMMUNITY_ID} = process.env
+    const { COMMUNITY_ID } = process.env
 
     matches.set(individuals_ticket.ticket_id, {
       individuals_ticket_id: individuals_ticket.ticket_id,
@@ -54,7 +56,7 @@ const countMatches = async (tickets: Ticket[]) => {
       volunteers_user_id: volunteer_ticket.requester_id,
       created_at: individuals_ticket.created_at,
       status: individuals_ticket.status_acolhimento,
-      community_id: Number(COMMUNITY_ID)
+      community_id: Number(COMMUNITY_ID),
     })
   }
 
@@ -66,6 +68,8 @@ const countMatches = async (tickets: Ticket[]) => {
     log(`[${counter}/${array.length}]`)
     await saveMatches(i)
   }
+
+  return undefined
 }
 
 export default countMatches

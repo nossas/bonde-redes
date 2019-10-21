@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 import debug from 'debug'
-import AdvogadaCreateUser from './integrations/AdvogadaCreateUser';
-import PsicologaCreateUser from './integrations/PsicologaCreateUser';
+import AdvogadaCreateUser from './integrations/AdvogadaCreateUser'
+import PsicologaCreateUser from './integrations/PsicologaCreateUser'
 
 const dbg = debug('filterFormName')
 
@@ -16,7 +16,7 @@ export const filterFormName = async (data: object) => {
     'mautic.form_on_submit': yup.array().of(yup.object().shape({
       submission: yup.object().shape({
         form: yup.object().shape({
-          name: yup.string().required()
+          name: yup.string().required(),
         }),
         results: yup.object().shape({
           email: yup.string().required(),
@@ -24,7 +24,7 @@ export const filterFormName = async (data: object) => {
         dateSubmitted: yup.string().required(),
       }),
       timestamp: yup.string().required(),
-    }))
+    })),
   })
   let validationResult
   try {
@@ -33,7 +33,7 @@ export const filterFormName = async (data: object) => {
     dbg(e)
     return {
       status: FILTER_FORM_NAME_STATUS.INVALID_REQUEST,
-      data
+      data,
     }
   }
   const { 'mautic.form_on_submit': [{ submission: { form: { name }, results, dateSubmitted }, timestamp }] } = validationResult
@@ -49,7 +49,7 @@ export const filterFormName = async (data: object) => {
       dbg(`InstanceClass "${name}" doesn't exist`)
       return {
         status: FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED,
-        name
+        name,
       }
   }
   return {
@@ -57,6 +57,6 @@ export const filterFormName = async (data: object) => {
     InstanceClass,
     results,
     timestamp,
-    dateSubmitted
+    dateSubmitted,
   }
 }

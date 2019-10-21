@@ -34,11 +34,11 @@ const getRecentMatches = async (id: number) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const response = await axios.post<HasuraResponse<'solidarity_matches', Match[]>>(HASURA_API_URL, {
     query,
-    variables: { id }
+    variables: { id },
   }, {
     headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
-    }
+      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
+    },
   })
 
   if (isError(response.data)) {

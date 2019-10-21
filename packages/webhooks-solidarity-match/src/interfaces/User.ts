@@ -1,10 +1,10 @@
-type condition = 'inscrita' | 
-'disponivel' | 
-'indisponível_férias' | 
-'indisponível_maternidade' | 
-'indisponível_agenda' | 
-'indisponível_-sem_resposta' | 
-'dados_incompletos_endereço' | 
+type condition = 'inscrita' |
+'disponivel' |
+'indisponível_férias' |
+'indisponível_maternidade' |
+'indisponível_agenda' |
+'indisponível_-sem_resposta' |
+'dados_incompletos_endereço' |
 'dados_incompletos_telefone' |
 'dados_incompletos_email' |
 'desabilitada' |
@@ -89,7 +89,7 @@ interface User {
 }
 
 export const handleUserFields = (user: User) => {
-  const {user_fields, ...otherFields} = user
+  const { user_fields, ...otherFields } = user
   return {
     user_fields,
     ...otherFields,

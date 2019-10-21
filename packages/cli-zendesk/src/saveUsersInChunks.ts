@@ -1,7 +1,7 @@
-import dbg from "./dbg"
-import saveUsers from "./hasura/saveUsers"
-import User from "./interfaces/User"
 import R from 'ramda'
+import dbg from './dbg'
+import saveUsers from './hasura/saveUsers'
+import User from './interfaces/User'
 
 const log = dbg.extend('saveUsersInChunks')
 

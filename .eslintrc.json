@@ -14,7 +14,9 @@
         "@typescript-eslint"
       ],
       "extends": [
-        "plugin:@typescript-eslint/recommended"
+        "airbnb-base",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:import/typescript"
       ],
       "rules": {
         "@typescript-eslint/indent": [
@@ -29,6 +31,10 @@
           {
             "multiline": {
               "delimiter": "none"
+            },
+            "singleline": {
+              "delimiter": "semi",
+              "requireLast": false
             }
           }
         ],
@@ -36,11 +42,49 @@
         "@typescript-eslint/camelcase": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-unused-vars": ["error", {
-          "argsIgnorePattern": "^_",
-          "varsIgnorePattern": "^_"
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^_"
+          }
+        ],
+        "quotes": "off",
+        "@typescript-eslint/quotes": [
+          "error",
+          "single"
+        ],
+        "@typescript-eslint/func-call-spacing": [
+          "error",
+          "never"
+        ],
+        "@typescript-eslint/type-annotation-spacing": "error",
+        "semi": "off",
+        "no-undef": "off",
+        "@typescript-eslint/semi": ["error", "never"],
+        "@typescript-eslint/brace-style": ["error"],
+        "object-curly-spacing": ["error", "always"],
+        "keyword-spacing": "error",
+        "array-bracket-spacing": "error",
+        "no-unused-expressions": ["error", {
+          "allowTernary": true,
+          "allowShortCircuit": true
+        }],
+        "no-underscore-dangle": "off",
+        "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
+        "max-len": ["error", {
+          "ignoreComments": true,
+          "code": 100,
+          "ignoreTemplateLiterals": true,
+          "ignoreStrings": true
         }]
       }
     }
-  ]
+  ],
+  "settings": {
+    "import/extensions": [
+      ".ts"
+    ],
+    "packageManager": "pnpm"
+  }
 }

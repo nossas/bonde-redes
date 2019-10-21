@@ -1,12 +1,13 @@
-import {install} from 'source-map-support'
-install()
+import { install } from 'source-map-support'
 import dotenv from 'dotenv'
-dotenv.config()
+import prompts from 'prompts'
+import signale from 'signale'
 import checkConfig from './checkConfig'
 import dbg from './dbg'
-import prompts from 'prompts'
 import App from './App'
-import signale from 'signale'
+
+install()
+dotenv.config()
 
 const init = async () => {
   try {
@@ -17,26 +18,25 @@ const init = async () => {
       message: 'Which module you want to execute?',
       choices: [
         { title: 'Ticket', value: 'ticket' },
-        { title: 'User', value: 'user' }
-      ]
+        { title: 'User', value: 'user' },
+      ],
     })
 
     signale.time('duration')
-    switch(module.module) {
+    switch (module.module) {
       case 'ticket':
         await App.ticket()
         break
       case 'user':
         await App.user()
         break
+      default:
+        signale.timeEnd('duration')
+        signale.success('successfully finished')
     }
-    signale.timeEnd('duration')
-
-    signale.success('successfully finished')
   } catch (e) {
     dbg(e)
   }
 }
 
 init()
-

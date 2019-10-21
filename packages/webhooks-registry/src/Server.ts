@@ -31,20 +31,28 @@ class Server {
 
   private dbg: Debugger
 
-  constructor () {
-    this.dbg = debug(`webhooks-registry`)
+  constructor() {
+    this.dbg = debug('webhooks-registry')
   }
 
   private request = async (serviceName: string, json: object) => {
     const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
     try {
-      const { data: { data: { logTable: { returning: [{ id }] } } } } = await axios.post<DataType>(HASURA_API_URL, {
+      const {
+        data: {
+          data: {
+            logTable: {
+              returning: [{ id }],
+            },
+          },
+        },
+      } = await axios.post<DataType>(HASURA_API_URL, {
         query: mutation,
-        variables: { json, service_name: serviceName }
+        variables: { json, service_name: serviceName },
       }, {
         headers: {
-          'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
-        }
+          'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
+        },
       })
       this.dbg(`Success logged "${serviceName}" req with id "${id}"`)
     } catch (e) {
@@ -61,7 +69,7 @@ class Server {
           return res.status(400).json('O caminho "/" do bonde-webhooks-registry não deve ser acessado. Favor acessar o caminho "/<nome do serviço que está acessando>" para que ele funcione.')
         }
         await this.request(serviceName, req.body)
-        res.status(200).json('OK!')
+        return res.status(200).json('OK!')
       })
   }
 

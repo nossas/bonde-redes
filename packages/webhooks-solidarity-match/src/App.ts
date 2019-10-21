@@ -1,17 +1,17 @@
-import dbg from "./dbg"
 import { Response } from 'express'
-import handleIncomingTicket from "./app/handleIncomingTicket"
-import { IncomingRequestData } from "./interfaces/IncomingRequestData"
-import verifyOrganization from "./app/verifyOrganizations"
-import { ORGANIZATIONS } from "./interfaces/Organizations"
-import getAllUsersLocalizations from "./hasura/getAllUsersLocalizations"
 import { getDistance } from 'geolib'
-import verifyVolunteer, { VERIFY_VOLUNTEER_STATUS } from "./app/verifyVolunteer"
-import verifyIndividual, { VERIFY_MSR_STATUS } from "./app/verifyIndividual"
-import { UserFromTicket } from "./hasura/getUserFromTicket"
-import { Ticket } from "./interfaces/Ticket"
-import createTicket from "./zendesk/createTicket"
 import R from 'ramda'
+import dbg from './dbg'
+import handleIncomingTicket from './app/handleIncomingTicket'
+import { IncomingRequestData } from './interfaces/IncomingRequestData'
+import verifyOrganization from './app/verifyOrganizations'
+import { ORGANIZATIONS } from './interfaces/Organizations'
+import getAllUsersLocalizations from './hasura/getAllUsersLocalizations'
+import verifyVolunteer, { VERIFY_VOLUNTEER_STATUS } from './app/verifyVolunteer'
+import verifyIndividual, { VERIFY_MSR_STATUS } from './app/verifyIndividual'
+import { UserFromTicket } from './hasura/getUserFromTicket'
+import { Ticket } from './interfaces/Ticket'
+import createTicket from './zendesk/createTicket'
 
 const log = dbg.extend('app')
 
@@ -19,13 +19,13 @@ const createTicketFlux = async (volunteer: UserFromTicket, individual: UserFromT
   const volunteer_ticket: Partial<Ticket> = {
     nome_msr: individual.name,
     nome_voluntaria: volunteer.name,
-    status_acolhimento: 'encaminhamento__realizado'
+    status_acolhimento: 'encaminhamento__realizado',
   }
 
   const individual_ticket: Partial<Ticket> = {
     nome_msr: individual.name,
     nome_voluntaria: volunteer.name,
-    status_acolhimento: 'encaminhamento__realizado'
+    status_acolhimento: 'encaminhamento__realizado',
   }
 
   await createTicket(individual_ticket)
@@ -39,7 +39,7 @@ const App = async (data: IncomingRequestData, res: Response) => {
   const organization = await verifyOrganization(ticket.organization_id)
   if (organization === null) {
     log(`failed to handle organization for ticket '${ticket.ticket_id}'`)
-    return res.status(500).json(`failed to handle organization`)
+    return res.status(500).json('failed to handle organization')
   }
 
   let volunteer: UserFromTicket | undefined
@@ -50,56 +50,45 @@ const App = async (data: IncomingRequestData, res: Response) => {
     const status = await verifyVolunteer(ticket)
     switch (status.status) {
       case VERIFY_VOLUNTEER_STATUS.HAVE_NO_MATCHES:
-        log('have no matches')
-        return
+        return log('have no matches')
       case VERIFY_VOLUNTEER_STATUS.NOT_AVAILABLE:
-        log('not available')
-        return
+        return log('not available')
       case VERIFY_VOLUNTEER_STATUS.NOT_FOUND:
-        log('not found')
-        return
+        return log('not found')
       case VERIFY_VOLUNTEER_STATUS.STATUS_NOT_AVAILABLE:
-        log('status not available')
-        return
+        return log('status not available')
       default:
         volunteer = status.user
         availableOpenings = status.availableOpenings
     }
-
   } else {
     const status = await verifyIndividual(ticket)
     switch (status.status) {
       case VERIFY_MSR_STATUS.NOT_FOUND:
-        log('msr not found')
-        return
+        return log('msr not found')
       case VERIFY_MSR_STATUS.FAILED_TIPO_ACOLHIMENTO:
-        log('msr failed tipo acolhimento')
-        return
+        return log('msr failed tipo acolhimento')
       case VERIFY_MSR_STATUS.STATUS_NOT_INSCRIBED:
-        log('msr status not inscribed')
-        return
+        return log('msr status not inscribed')
       case VERIFY_MSR_STATUS.TICKET_INVALID_STATUS:
-        log('msr ticket invalid status')
-        return
+        return log('msr ticket invalid status')
       default:
         individual = status.user
     }
-
   }
 
   const userLocalizations = await getAllUsersLocalizations()
   if (!userLocalizations) {
-    log('user localizations failed')
-    return
+    return log('user localizations failed')
   }
-  
+
   // const asd = userLocalizations.filter(i => i.user_id === 388369061372)
 
-  const usersWhichDistanceMatches = await Promise.all(userLocalizations.map(async i => {
+  const usersWhichDistanceMatches = await Promise.all(userLocalizations.map(async (i) => {
     if (
-      i.latitude === undefined ||
-      i.longitude === undefined ||
-      i.organization === undefined
+      i.latitude === undefined
+      || i.longitude === undefined
+      || i.organization === undefined
     ) {
       log('no latitude, or longitude, or organization', i)
       return []
@@ -113,8 +102,8 @@ const App = async (data: IncomingRequestData, res: Response) => {
         return []
       }
       if (
-        i.tipo_de_acolhimento === 'jurídico' && organization === ORGANIZATIONS.PSICOLOGA
-        || i.tipo_de_acolhimento === 'psicológico' && organization === ORGANIZATIONS.ADVOGADA
+        (i.tipo_de_acolhimento === 'jurídico' && organization === ORGANIZATIONS.PSICOLOGA)
+        || (i.tipo_de_acolhimento === 'psicológico' && organization === ORGANIZATIONS.ADVOGADA)
       ) {
         log(`${i.user_id} wants diferent type of attendance`)
         return []
@@ -133,22 +122,23 @@ const App = async (data: IncomingRequestData, res: Response) => {
         case VERIFY_MSR_STATUS.TICKET_INVALID_STATUS:
           log(`${i.user_id} tiucket invalid status`)
           return []
+        default:
+          distance = getDistance({
+            latitude: volunteer.latitude,
+            longitude: volunteer.longitude,
+          }, {
+            latitude: i.latitude,
+            longitude: i.longitude,
+          })
       }
-      distance = getDistance({
-        latitude: volunteer.latitude,
-        longitude: volunteer.longitude
-      }, {
-        latitude: i.latitude,
-        longitude: i.longitude
-      })
     } else if (individual) {
       if (i.organization !== ORGANIZATIONS.ADVOGADA && i.organization !== ORGANIZATIONS.PSICOLOGA) {
-        log(`not a lawyer or a psychologist`)
+        log('not a lawyer or a psychologist')
         return []
       }
       if (
-        individual.tipo_de_acolhimento === 'jurídico' && i.organization === ORGANIZATIONS.PSICOLOGA
-        || individual.tipo_de_acolhimento === 'psicológico' && i.organization === ORGANIZATIONS.ADVOGADA
+        (individual.tipo_de_acolhimento === 'jurídico' && i.organization === ORGANIZATIONS.PSICOLOGA)
+        || (individual.tipo_de_acolhimento === 'psicológico' && i.organization === ORGANIZATIONS.ADVOGADA)
       ) {
         log(`${i.user_id} wants diferent type of attendance`)
         return []
@@ -173,10 +163,10 @@ const App = async (data: IncomingRequestData, res: Response) => {
       }
       distance = getDistance({
         latitude: individual.latitude,
-        longitude: individual.longitude
+        longitude: individual.longitude,
       }, {
         latitude: i.latitude,
-        longitude: i.longitude
+        longitude: i.longitude,
       })
     } else {
       return []
@@ -192,7 +182,9 @@ const App = async (data: IncomingRequestData, res: Response) => {
     return []
   }
 
-  (availableOpenings > 0) && R.take(availableOpenings, usersWhichDistanceMatches.flat()).forEach(i => {
+  (availableOpenings > 0) && R.take(
+    availableOpenings, usersWhichDistanceMatches.flat(),
+  ).forEach((i) => {
     log(`Gotcha! Creating tickets between users '${user.user_id}' and '${i.user_id}', distance '${i.distance}'`)
     if (process.env.CREATE_TICKETS === 'true') {
       volunteer && createTicketFlux(volunteer, i)

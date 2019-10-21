@@ -1,14 +1,12 @@
-import Base from './Base'
 import { Response } from 'express'
+import Base from './Base'
 
 class ListTicketsFromUser extends Base {
-  constructor (userId: string, res: Response) {
+  constructor(userId: string, res: Response) {
     super('AdvogadaCreateTicket', `users/${userId}/tickets/requested`, res, 'GET')
   }
 
-  start = async () => {
-    return this.send()
-  }
+  start = async () => this.send()
 }
 
 export default ListTicketsFromUser

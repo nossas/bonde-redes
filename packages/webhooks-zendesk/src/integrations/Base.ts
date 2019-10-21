@@ -21,7 +21,7 @@ abstract class Base {
 
   private method: 'GET' | 'POST' | 'PUT'
 
-  constructor (name: string, url: string, res: Response, method: 'GET' | 'POST' | 'PUT' = 'POST') {
+  constructor(name: string, url: string, res: Response, method: 'GET' | 'POST' | 'PUT' = 'POST') {
     this.method = method
     this.name = `webhooks-zendesk:${name}`
     this.dbg = debug(this.name)
@@ -40,32 +40,39 @@ abstract class Base {
       const response = await axios.post('https://maps.googleapis.com/maps/api/geocode/json', undefined, {
         params: {
           address: cep,
-          key: GOOGLE_MAPS_API_KEY
-        }
+          key: GOOGLE_MAPS_API_KEY,
+        },
       })
       log('response!', response.data)
       data = response.data
     } catch (e) {
-      this.dbg(`falha na requisição para o google maps`)
+      this.dbg('falha na requisição para o google maps')
       return {
-        error: GMAPS_ERRORS.REQUEST_FAILED
+        error: GMAPS_ERRORS.REQUEST_FAILED,
       }
     }
 
     if (data.status === 'OK') {
-      const { results: [{
-        geometry: {
-          location: { lat, lng }
-        },
-        address_components: addressComponents,
-        formatted_address: address
-      }] } = data
+      const {
+        results: [{
+          geometry: {
+            location: { lat, lng },
+          },
+          address_components: addressComponents,
+          formatted_address: address,
+        }],
+      } = data
 
       let state: string | undefined
       let city: string | undefined
       let country: string | undefined
 
-      addressComponents.forEach(({ types, short_name: shortName }: {types: string[], short_name: string}) => {
+      addressComponents.forEach((
+        {
+          types,
+          short_name: shortName,
+        }: {types: string[]; short_name: string},
+      ) => {
         if (types.includes('administrative_area_level_1')) {
           state = shortName
         }
@@ -87,12 +94,11 @@ abstract class Base {
         lng,
         address,
         state,
-        city
+        city,
       }
-    } else {
-      return {
-        error: GMAPS_ERRORS.INVALID_INPUT
-      }
+    }
+    return {
+      error: GMAPS_ERRORS.INVALID_INPUT,
     }
   }
 
@@ -104,29 +110,28 @@ abstract class Base {
         const result = await axios.post<T>(endpoint, data, {
           auth: {
             username: ZENDESK_API_USER,
-            password: ZENDESK_API_TOKEN
-          }
+            password: ZENDESK_API_TOKEN,
+          },
         })
         return result
-      } else if (this.method === 'GET') {
+      } if (this.method === 'GET') {
         const result = await axios.get<T>(endpoint, {
           auth: {
             username: ZENDESK_API_USER,
-            password: ZENDESK_API_TOKEN
-          }
-        })
-        return result
-      } else if (this.method === 'PUT') {
-        const result = await axios.put<T>(endpoint, data, {
-          auth: {
-            username: ZENDESK_API_USER,
-            password: ZENDESK_API_TOKEN
-          }
+            password: ZENDESK_API_TOKEN,
+          },
         })
         return result
       }
+      const result = await axios.put<T>(endpoint, data, {
+        auth: {
+          username: ZENDESK_API_USER,
+          password: ZENDESK_API_TOKEN,
+        },
+      })
+      return result
     } catch (e) {
-      this.dbg(JSON.stringify(e.response.data, null, 2))
+      return this.dbg(JSON.stringify(e.response.data, null, 2))
     }
   }
 

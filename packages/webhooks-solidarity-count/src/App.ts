@@ -1,5 +1,5 @@
-import getTicket from './zendesk/getTicket'
 import { Response } from 'express'
+import getTicket from './zendesk/getTicket'
 import { handleCustomFields } from './interfaces/Ticket'
 import dbg from './dbg'
 import getUserRequestedTickets from './zendesk/getUserRequestedTickets'
@@ -26,7 +26,7 @@ const App = async (id: string, res: Response) => {
   }
 
   // Converte o ticket para conter os custom_fields na raiz
-  const {ticket: ticketWithoutCustomValues} = response.data
+  const { ticket: ticketWithoutCustomValues } = response.data
   const ticket = handleCustomFields(ticketWithoutCustomValues)
 
   // Salva o ticket no Hasura
@@ -41,7 +41,7 @@ const App = async (id: string, res: Response) => {
   const getUserResponse = await getUser(ticket.requester_id)
   if (!getUserResponse) {
     log(`Failed to get user '${ticket.requester_id}'.`)
-    return res.status(500).json(`Failed to get user.`)
+    return res.status(500).json('Failed to get user.')
   }
 
   const userWithUserFields = handleUserFields(getUserResponse.data.user)
@@ -50,7 +50,7 @@ const App = async (id: string, res: Response) => {
   const saveUserResponse = await saveUsers([userWithUserFields])
   if (saveUserResponse !== true) {
     log(`Failed to save user '${ticket.requester_id}'. Ticket ${ticket.ticket_id}.`)
-    return res.status(500).json(`Failed to save user.`)
+    return res.status(500).json('Failed to save user.')
   }
 
   // Verifica se o ticket possui link match, e se o requester_id é uma voluntária
@@ -62,29 +62,32 @@ const App = async (id: string, res: Response) => {
 
   if (organization !== ORGANIZATIONS.ADVOGADA && organization !== ORGANIZATIONS.PSICOLOGA) {
     log(`Internal server error relative to organization parse, ticket '${id}'.`)
-    return res.status(200).json(`Ok!`)
+    return res.status(200).json('Ok!')
   }
 
   // Busca todos os tickets do requester_id
   const ticketsFromUser = await getUserRequestedTickets(ticket.requester_id)
   if (!ticketsFromUser) {
     log(`Can't find tickets for user '${ticket.requester_id}', ticket '${id}'.`)
-    return res.status(500).json(`Can't find tickets.`)
+    return res.status(500).json('Can\'t find tickets.')
   }
 
   // Conta os tickets
-  const {data: {tickets}} = ticketsFromUser
+  const { data: { tickets } } = ticketsFromUser
   const countTicket = countTickets(tickets)
 
-  const updateRequesterZendeskResponse = await updateRequesterFields(ticket.requester_id, countTicket)
+  const updateRequesterZendeskResponse = await updateRequesterFields(
+    ticket.requester_id,
+    countTicket,
+  )
   if (!updateRequesterZendeskResponse) {
     log(`Can't update user fields for user '${ticket.requester_id}', ticket '${id}'.`)
-    return res.status(500).json(`Can't update user fields.`)
+    return res.status(500).json('Can\'t update user fields.')
   }
 
   const saveUsersHasuraResponse = await updateUserTicketCount([{
     user_id: ticket.requester_id,
-    ...countTicket
+    ...countTicket,
   }])
 
   if (saveUsersHasuraResponse !== true) {

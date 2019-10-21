@@ -1,7 +1,7 @@
 import axios from 'axios'
-import dbg from "./dbg"
-import { stringifyVariables } from "../stringify"
-import { Match } from "../interfaces/Match"
+import dbg from './dbg'
+import { stringifyVariables } from '../stringify'
+import { Match } from '../interfaces/Match'
 
 const generateVariablesIndex = (index: number) => `
 $community_id_${index}: Int
@@ -23,7 +23,9 @@ volunteers_user_id: $volunteers_user_id_${index}
 status: $status_${index}
 `
 
-const generateVariables = (matches: Match[]) => matches.map((_, index) => generateVariablesIndex(index)).flat()
+const generateVariables = (matches: Match[]) => matches.map(
+  (_, index) => generateVariablesIndex(index),
+).flat()
 
 const generateObjects = (matches: Match[]) => `[${matches.map((_, index) => `{${generateObjectsIndex(index)}}`).join(',')}]`
 
@@ -50,8 +52,8 @@ const saveMatches = async (matches: Match[]) => {
     variables,
   }, {
     headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
-    }
+      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
+    },
   })
 
   response.data.errors && dbg(response.data.errors)

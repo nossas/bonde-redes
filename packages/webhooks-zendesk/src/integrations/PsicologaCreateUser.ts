@@ -1,6 +1,6 @@
-import Base, { GMAPS_ERRORS } from './Base'
 import * as yup from 'yup'
 import { Response } from 'express'
+import Base, { GMAPS_ERRORS } from './Base'
 
 export enum CONDITION {
   UNSET = 'unset',
@@ -12,28 +12,30 @@ export enum CONDITION {
 class PsicologaCreateUser extends Base {
   organization = 'PSICÓLOGA'
 
-  constructor (res: Response) {
+  constructor(res: Response) {
     super('PsicólogaCreateUser', 'users/create_or_update', res)
   }
 
   private setCondition = (condition: [CONDITION], value: CONDITION) => {
+    const newCondition = condition
     if (condition[0] === CONDITION.UNSET) {
-      condition[0] = value
+      newCondition[0] = value
     }
   }
 
   private verificaDiretrizesAtendimento = async (condition: [CONDITION], data: object) => {
+    let newData = data
     const verificaCamposDiretrizesAtendimento = yup.object().shape({
       todos_os_atendimentos_rea: yup.string().required(),
       as_voluntarias_do_mapa_do: yup.string().required(),
       o_comprometimento_a_dedic: yup.string().required(),
       o_mapa_do_acolhimento_ent: yup.string().required(),
-      para_que_as_mulheres_que: yup.string().required()
+      para_que_as_mulheres_que: yup.string().required(),
     }).required()
 
     try {
-      await verificaCamposDiretrizesAtendimento.validate(data, {
-        strict: true
+      await verificaCamposDiretrizesAtendimento.validate(newData, {
+        strict: true,
       })
     } catch (e) {
       this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
@@ -44,10 +46,10 @@ class PsicologaCreateUser extends Base {
       as_voluntarias_do_mapa_do: yup.string().matches(/compreendo/),
       o_comprometimento_a_dedic: yup.string().matches(/sim/),
       o_mapa_do_acolhimento_ent: yup.string().matches(/sim/),
-      para_que_as_mulheres_que: yup.string().matches(/sim/)
+      para_que_as_mulheres_que: yup.string().matches(/sim/),
     }).required()
 
-    if (!await verificaRespostasDiretrizesAtendimento.isValid(data)) {
+    if (!await verificaRespostasDiretrizesAtendimento.isValid(newData)) {
       this.setCondition(condition, CONDITION.REPROVADA_DIRETRIZES_DO_MAPA)
     }
 
@@ -56,25 +58,26 @@ class PsicologaCreateUser extends Base {
       as_voluntarias_do_mapa_do: yup.mixed().strip(true),
       o_comprometimento_a_dedic: yup.mixed().strip(true),
       o_mapa_do_acolhimento_ent: yup.mixed().strip(true),
-      para_que_as_mulheres_que: yup.mixed().strip(true)
+      para_que_as_mulheres_que: yup.mixed().strip(true),
     })
 
-    data = await stripDiretrizesAtendimento.cast(data)
+    newData = await stripDiretrizesAtendimento.cast(newData)
 
-    return data
+    return newData
   }
 
   private verificaEstudoDeCaso = async (condition: [CONDITION], data: object) => {
+    let newData = data
     const verificaCamposEstudoDeCaso = yup.object().shape({
       no_seu_primeiro_atendimen: yup.string().required(),
       para_voce_o_que_e_mais_im: yup.string().required(),
       durante_os_encontros_ana: yup.string().required(),
-      durante_os_atendimentos_a: yup.string().required()
+      durante_os_atendimentos_a: yup.string().required(),
     }).required()
 
     try {
-      await verificaCamposEstudoDeCaso.validate(data, {
-        strict: true
+      await verificaCamposEstudoDeCaso.validate(newData, {
+        strict: true,
       })
     } catch (e) {
       this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
@@ -84,10 +87,10 @@ class PsicologaCreateUser extends Base {
       no_seu_primeiro_atendimen: yup.string().matches(/A|B/),
       para_voce_o_que_e_mais_im: yup.string().matches(/A|B/),
       durante_os_encontros_ana: yup.string().matches(/A|B/),
-      durante_os_atendimentos_a: yup.string().matches(/A|B/)
+      durante_os_atendimentos_a: yup.string().matches(/A|B/),
     }).required()
 
-    if (!await verificaRespostaEstudoDeCaso.isValid(data)) {
+    if (!await verificaRespostaEstudoDeCaso.isValid(newData)) {
       this.setCondition(condition, CONDITION.REPROVADA_ESTUDO_DE_CASO)
     }
 
@@ -95,26 +98,28 @@ class PsicologaCreateUser extends Base {
       no_seu_primeiro_atendimen: yup.mixed().strip(true),
       para_voce_o_que_e_mais_im: yup.mixed().strip(true),
       durante_os_encontros_ana: yup.mixed().strip(true),
-      durante_os_atendimentos_a: yup.mixed().strip(true)
+      durante_os_atendimentos_a: yup.mixed().strip(true),
     }).required()
 
-    data = await stripRespostaEstudoDeCaso.cast(data)
+    newData = await stripRespostaEstudoDeCaso.cast(newData)
 
-    return data
+    return newData
   }
 
   private verificaLocalização = async (condition: [CONDITION], data: object) => {
     const verificaCep = yup.object().shape({
-      cep: yup.string().required()
+      cep: yup.string().required(),
     }).required()
     let verifiedData
     try {
       verifiedData = await verificaCep.validate(data)
     } catch (e) {
-      return
+      return undefined
       // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
     }
-    const { error, lat: latitude, lng: longitude, address, city, state } = await this.getAddress(verifiedData.cep)
+    const {
+      error, lat: latitude, lng: longitude, address, city, state,
+    } = await this.getAddress(verifiedData.cep)
     if (error === GMAPS_ERRORS.INVALID_INPUT) {
       // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
     }
@@ -125,15 +130,16 @@ class PsicologaCreateUser extends Base {
       longitude,
       address,
       city,
-      state
+      state,
     }
   }
 
   start = async (data: object, createdAt: string) => {
+    let newData = data
     const condition: [CONDITION] = [CONDITION.UNSET]
-    data = await this.verificaDiretrizesAtendimento(condition, data)
-    data = await this.verificaEstudoDeCaso(condition, data)
-    const validatedData = await this.verificaLocalização(condition, data)
+    newData = await this.verificaDiretrizesAtendimento(condition, newData)
+    newData = await this.verificaEstudoDeCaso(condition, newData)
+    const validatedData = await this.verificaLocalização(condition, newData)
 
     try {
       const zendeskValidation = yup
@@ -164,8 +170,8 @@ class PsicologaCreateUser extends Base {
               data_de_inscricao_no_bonde: createdAt,
               ultima_atualizacao_de_dados: new Date().toString(),
               condition: condition[0] === 'unset' ? 'aprovada' : condition[0],
-              disponibilidade_de_atendimentos
-            }
+              disponibilidade_de_atendimentos,
+            },
           }
         })
         .shape({
@@ -193,23 +199,23 @@ class PsicologaCreateUser extends Base {
             address: yup.string(),
             city: yup.string(),
             state: yup.string().lowercase(),
-            condition: yup.string().required()
-          })
+            condition: yup.string().required(),
+          }),
         })
         .required()
 
       const zendeskData = await zendeskValidation.validate(validatedData, {
-        stripUnknown: true
+        stripUnknown: true,
       })
 
       const dataToBeSent = {
         user: {
-          ...zendeskData
-        }
+          ...zendeskData,
+        },
       }
       return this.send(dataToBeSent)
     } catch (e) {
-      this.dbg('validation failed', e)
+      return this.dbg('validation failed', e)
     }
   }
 }

@@ -16,12 +16,12 @@ const get = async <T>(url: string, params?: any) => {
     return await axios.get<T>(endpoint, {
       auth: {
         username: ZENDESK_API_USER,
-        password: ZENDESK_API_TOKEN
+        password: ZENDESK_API_TOKEN,
       },
-      params
+      params,
     })
   } catch (e) {
-    log(e.response.data)
+    return log(e.response.data)
   }
 }
 
@@ -32,11 +32,11 @@ const put = async <T>(url: string, data?: any) => {
     return await axios.put<T>(endpoint, data, {
       auth: {
         username: ZENDESK_API_USER,
-        password: ZENDESK_API_TOKEN
-      }
+        password: ZENDESK_API_TOKEN,
+      },
     })
   } catch (e) {
-    log(e)
+    return log(e)
   }
 }
 

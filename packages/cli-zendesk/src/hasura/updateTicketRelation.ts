@@ -25,12 +25,12 @@ const updateTicketRelation = async (id: number, webhooks_registry_id: number) =>
     query: mutation,
     variables: {
       id,
-      webhooks_registry_id
-    }
+      webhooks_registry_id,
+    },
   }, {
     headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
-    }
+      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
+    },
   })
 
   return response
