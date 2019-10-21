@@ -108,7 +108,7 @@ importers:
       ws: 7.2.0
     devDependencies:
       '@types/jest': 24.0.19
-      '@types/mocha': 5.2.7
+      '@types/node': 12.11.1
       '@types/source-map-support': 0.5.0
       '@types/supertest': 2.0.8
       jest: 24.9.0
@@ -116,7 +116,7 @@ importers:
       ts-jest: 24.1.0_jest@24.9.0
     specifiers:
       '@types/jest': ^24.0.19
-      '@types/mocha': ^5.2.7
+      '@types/node': ^12.11.1
       '@types/source-map-support': ^0.5.0
       '@types/supertest': ^2.0.8
       apollo-boost: ^0.4.4
@@ -689,10 +689,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-FwI9gX75FgVBJ7ywgnq/P7tw+/o1GUbtP0KzbtusLigAOgIgNISRK0ZPl4qertvXSIE8YbsVJueQ90cDt9YYyw==
-  /@types/mocha/5.2.7:
-    dev: true
-    resolution:
-      integrity: sha512-NYrtPht0wGzhwe9+/idPaBB+TqkY9AhTvOLMkThm0IoEfLaiVQZwBwyJ5puCkO3AUCWrmcoePjp2mbFocKy4SQ==
   /@types/node/12.11.1:
     resolution:
       integrity: sha512-TJtwsqZ39pqcljJpajeoofYRfeZ7/I/OMUQ5pR4q5wOKf2ocrUvBAZUMhWsOvKx3dVc/aaV5GluBivt0sWqA5A==
