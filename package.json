@@ -10,6 +10,7 @@
     "@turf/distance": "^6.0.1",
     "bonde-styleguide": "^0.1.6",
     "cors": "^2.8.4",
+    "dotenv": "^8.1.0",
     "express": "^4.16.3",
     "morgan": "^1.9.1",
     "node-zendesk": "^1.4.0",
@@ -23,10 +24,10 @@
     "turf": "^3.0.14"
   },
   "scripts": {
-    "start": "node -r @babel/polyfill build-server",
+    "start": "node -r @babel/polyfill -r dotenv/config build-server",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "dev:client": "PORT=4000 react-scripts start",
-    "dev:server": "PORT=5000 nodemon node_modules/.bin/babel-node ./server/index.js",
+    "dev:server": "PORT=5000 nodemon -r dotenv/config node_modules/.bin/babel-node ./server/index.js",
     "build": "react-scripts build && babel server --out-dir build-server",
     "test": "react-scripts test --env=jsdom && eslint src server",
     "eject": "react-scripts eject"
@@ -42,7 +43,7 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
-    "nodemon": "^1.18.4"
+    "nodemon": "^1.19.3"
   },
   "proxy": "http://localhost:5000/"
 }
