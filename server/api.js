@@ -1,12 +1,5 @@
-import zendesk from 'node-zendesk'
 import parse from './parse'
-
-
-const clientZD = zendesk.createClient({
-  username: process.env.ZENDESK_API_USER,
-  token: process.env.ZENDESK_API_TOKEN,
-  remoteUri: 'https://mapadoacolhimento.zendesk.com/api/v2',
-})
+import getAllUsers from './hasura/getAllUsers'
 
 // export default main
 const main = async (req, res, next) => {
@@ -14,25 +7,25 @@ const main = async (req, res, next) => {
     serviceType, lat, lng, distance
   } = req.query
   // TODO: change filter
-  if (serviceType !== 'therapist' && serviceType !== 'lawyer') {
+  const services = ['therapist', 'lawyer', 'individual']
+
+  if (!services.includes(serviceType)) {
     return res.status(400).json({ error: 'Query serviceType is invalid' })
   }
 
-  const id = { therapist: 360282119532, lawyer: 360269610652 }[serviceType]
-  
-  const searchTerm = `type:user organization_id:${id} condition:disponivel`
-  clientZD.search.queryAll(searchTerm, (err, req, data) => {
-    if (err) {
-      console.error('The API returned an error.')
-      throw err
-    }
-    // Filter by distance
-    const result = parse(data, [lng, lat])
-      .filter(user => user.distance < Number(distance))
-      .sort((u1, u2) => u1.distance - u2.distance)
+  const organizationId = { therapist: 360282119532, lawyer: 360269610652, individual: 360273031591 }[serviceType]
 
-    return res.json(result)
-  })
+  const data = await getAllUsers(organizationId)
+
+  if (!data) {
+    console.error('The API returned an error.')
+  }
+
+  const result = parse(data, [lng, lat])
+    .filter(user => user.distance < Number(distance))
+    .sort((u1, u2) => u1.distance - u2.distance)
+
+  res.json(result)
 }
 
 export default main
