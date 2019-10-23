@@ -53,6 +53,7 @@ class SearchForm extends React.Component {
           <option value=''>Selecione</option>
           <option value='therapist'>Terapeuta</option>
           <option value='lawyer'>Advogada</option>
+          <option value='individual'>MSR</option>
         </FormField>
         <Flexbox horizontal end>
           <Button
