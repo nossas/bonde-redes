@@ -38,12 +38,12 @@ const columns = [
     Header: 'Disponibilidade de atendimento'
   },
   {
-    accessor: 'encaminhamentos',
-    Header: 'Encaminhamentos realizados'
+    accessor: 'encaminhamentos_realizados_calculado_',
+    Header: 'Encaminhamentos realizados [calculado]'
   },
   {
-    accessor: 'atendimentos_em_andamento',
-    Header: 'Atendimentos em andamento'
+    accessor: 'atendimentos_em_andamento_calculado_',
+    Header: 'Atendimentos em andamento [calculado]'
   },
   {
     accessor: 'occupation_area',
