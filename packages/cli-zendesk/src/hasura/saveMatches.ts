@@ -31,7 +31,7 @@ const generateObjects = (matches: Match[]) => `[${matches.map((_, index) => `{${
 
 const createQuery = (matches: Match[]) => `mutation (${generateVariables(matches)}) {
   insert_solidarity_matches (objects: ${generateObjects(matches)}, on_conflict: {
-    constraint: solidarity_matches_individuals_ticket_id_volunteers_ticket__key, update_columns: [
+    constraint: solidarity_matches_individuals_user_id_volunteers_user_id_key, update_columns: [
       community_id
       created_at
       individuals_user_id
