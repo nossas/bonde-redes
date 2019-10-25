@@ -4,6 +4,7 @@ const query = `query ($organization_id: bigint, $status_acolhimento: String) {
   solidarity_tickets(where: {status_acolhimento: {_eq: $status_acolhimento}, organization_id: {_eq: $organization_id}}) {
     requester_id
     status_acolhimento
+    ticket_id
   }
 }`
 

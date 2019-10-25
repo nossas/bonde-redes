@@ -17,6 +17,7 @@ const query = `query ($organization_id: bigint, $condition: String) {
     registration_number
     occupation_area
     whatsapp
+    data_de_inscricao_no_bonde
   }
 }
 `
@@ -37,7 +38,7 @@ const getAllIndividualUsers = async (organization_id, condition) => {
   try {
     return response.data.data.solidarity_users
   } catch (e) {
-    console.log(response)
+    console.log(response.data.errors[0])
     return null
   }
 }

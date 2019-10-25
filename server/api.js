@@ -1,7 +1,8 @@
 import parse from './parse'
 import getAllVolunteerUsers from './hasura/getAllVolunteerUsers'
 import getAllIndividualUsers from './hasura/getAllIndividualUsers'
-import getAllTickets from './hasura/getAllTickets'
+import getAllIndividualTickets from './hasura/getAllIndividualTickets'
+import getAllVolunteerTickets from './hasura/getAllVolunteerTickets'
 
 // export default main
 const main = async (req, res, next) => {
@@ -22,27 +23,41 @@ const main = async (req, res, next) => {
   }[serviceType]
 
   if (['therapist', 'lawyer'].includes(serviceType)) {
-    const data = await getAllVolunteerUsers(organizationId, 'disponivel')
-    if (!data) {
-      console.error('The API returned an error.')
+    const tickets = await getAllVolunteerTickets(organizationId, ['aprovada', 'aprovada_e_validada'])
+    const users = await getAllVolunteerUsers(organizationId, 'disponivel')
+    if (!users) {
+      return console.error('The API returned an error.')
     }
 
-    const result = parse(data, [lng, lat])
+    const filteredUsers = users.flatMap((user) => {
+      const filteredTikets = tickets.filter(ticket => ticket.requester_id === user.user_id)
+      return [{
+        ...user,
+        link_ticket: filteredTikets.map(ticket => ticket.ticket_id),
+        status_inscricao: filteredTikets.map(ticket => ticket.status_inscricao)
+      }]
+    })
+
+    const result = parse(filteredUsers, [lng, lat])
       .filter(user => user.distance < Number(distance))
       .sort((u1, u2) => u1.distance - u2.distance)
 
     res.json(result)
   } else {
-    const tickets = await getAllTickets(organizationId, 'solicitação_recebida')
+    const tickets = await getAllIndividualTickets(organizationId, 'solicitação_recebida')
     const users = await getAllIndividualUsers(organizationId, 'inscrita')
 
     if (!tickets || !users) {
       return console.error('The API returned an error.')
     }
 
-    const filteredUsers = users.filter((user) => {
+    const filteredUsers = users.flatMap((user) => {
       const filteredTikets = tickets.filter(ticket => ticket.requester_id === user.user_id)
-      return filteredTikets.length > 0
+      return filteredTikets.length > 0 ? [{
+        ...user,
+        link_ticket: filteredTikets.map(ticket => ticket.ticket_id),
+        status_acolhimento: filteredTikets.map(ticket => ticket.status_acolhimento)
+      }] : []
     })
 
     const result = parse(filteredUsers, [lng, lat])

@@ -16,6 +16,36 @@ const dicioService = {
   individual: 'MSRs'
 }
 
+const addAccessorIndividual = (columns) => [
+  ...columns.slice(0, 4),
+  {
+    accessor: 'status_acolhimento',
+    Header: 'Status Acolhimento',
+    Cell: ({value}) => value && value.map(i => (
+      <React.Fragment>
+        <span>{i}</span>
+        <br />
+      </React.Fragment>
+    ))
+  },
+  ...columns.slice(5)
+]
+
+const addAccessorVolunteer = (columns) => [
+  ...columns.slice(0, 4),
+  {
+    accessor: 'status_inscricao',
+    Header: 'Status Inscrição',
+    Cell: ({value}) => value && value.map(i => (
+      <React.Fragment>
+        <span>{i}</span>
+        <br />
+      </React.Fragment>
+    ))
+  },
+  ...columns.slice(5)
+]
+
 const columns = [
   {
     accessor: 'name',
@@ -54,6 +84,20 @@ const columns = [
     Header: 'Atendimentos em andamento [calculado]'
   },
   {
+    accessor: 'link_ticket',
+    Header: 'Link do ticket',
+    Cell: ({value}) => value && value.map(i => (
+      <React.Fragment>
+        <a href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${i}`}>{i}</a>
+        <br />
+      </React.Fragment>
+    ))
+  },
+  {
+    accessor: 'data_de_inscricao_no_bonde',
+    Header: 'Data de inscrição no BONDE'
+  },
+  {
     accessor: 'occupation_area',
     Header: 'Área de atuação'
   },
@@ -89,7 +133,6 @@ class Dataset extends React.Component {
     const { params } = this.props
 
     const url = new URL(`${window.location.href}api`)
-    console.log(params)
     Object.keys(params).forEach(
       key => url.searchParams.append(key, params[key])
     )
@@ -110,7 +153,9 @@ class Dataset extends React.Component {
 
   render () {
     const { json, loading } = this.state
-    const { params, serviceType } = this.props
+    const { params: {
+      distance, serviceType
+    } } = this.props
 
     return loading ? (
       <Flexbox horizontal spacing='around'>
@@ -121,11 +166,11 @@ class Dataset extends React.Component {
         <Flexbox vertical>
           <Title.H2 margin={{ bottom: 20 }}>Match realizado!</Title.H2>
           <Title.H4 margin={{ bottom: 30 }}>
-            {`${json.length} ${dicioService[serviceType]} encontradas em um raio de ${params.distance}km.`}
+            {`${json.length} ${dicioService[serviceType]} encontradas em um raio de ${distance}km.`}
           </Title.H4>
           <ReactTable
             data={json}
-            columns={columns}
+            columns={['lawyer', 'therapist'].includes(serviceType) ? addAccessorVolunteer(columns) : addAccessorIndividual(columns)}
             defaultPageSize={10}
             className="-striped -highlight"
           />
