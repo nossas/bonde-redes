@@ -29,13 +29,13 @@ const main = async (req, res, next) => {
       return console.error('The API returned an error.')
     }
 
-    const filteredUsers = users.flatMap((user) => {
+    const filteredUsers = users.map((user) => {
       const filteredTikets = tickets.filter(ticket => ticket.requester_id === user.user_id)
-      return [{
+      return {
         ...user,
         link_ticket: filteredTikets.map(ticket => ticket.ticket_id),
         status_inscricao: filteredTikets.map(ticket => ticket.status_inscricao)
-      }]
+      }
     })
 
     const result = parse(filteredUsers, [lng, lat])
@@ -51,13 +51,13 @@ const main = async (req, res, next) => {
       return console.error('The API returned an error.')
     }
 
-    const filteredUsers = users.flatMap((user) => {
+    const filteredUsers = users.filter((user) => {
+      const newUser = user
       const filteredTikets = tickets.filter(ticket => ticket.requester_id === user.user_id)
-      return filteredTikets.length > 0 ? [{
-        ...user,
-        link_ticket: filteredTikets.map(ticket => ticket.ticket_id),
-        status_acolhimento: filteredTikets.map(ticket => ticket.status_acolhimento)
-      }] : []
+      newUser.link_ticket = filteredTikets.map(ticket => ticket.ticket_id)
+      newUser.status_acolhimento = filteredTikets.map(ticket => ticket.status_acolhimento)
+
+      return filteredTikets.length > 0
     })
 
     const result = parse(filteredUsers, [lng, lat])
