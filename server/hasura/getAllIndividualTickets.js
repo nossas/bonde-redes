@@ -5,6 +5,7 @@ const query = `query ($organization_id: bigint, $status_acolhimento: String) {
     requester_id
     status_acolhimento
     ticket_id
+    subject
   }
 }`
 

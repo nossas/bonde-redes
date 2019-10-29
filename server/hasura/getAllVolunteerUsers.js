@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const query = `query ($organization_id: bigint, $condition: String) {
-  solidarity_users(where: {organization_id: {_eq: $organization_id}, condition: {_eq: $condition}, longitude: {_is_null: false}, latitude: {_is_null: false}}) {
+const query = `query ($organization_id: bigint, $condition: [String!]) {
+  solidarity_users(where: {organization_id: {_eq: $organization_id}, condition: {_in: $condition}, longitude: {_is_null: false}, latitude: {_is_null: false}}) {
     address
     atendimentos_concludos_calculado_
     atendimentos_em_andamento_calculado_

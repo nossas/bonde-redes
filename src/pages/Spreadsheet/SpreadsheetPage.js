@@ -27,6 +27,15 @@ const addAccessorIndividual = (columns) => [
         <br />
       </React.Fragment>
     ))
+  }, {
+    accessor: 'tipo_acolhimento',
+    Header: 'Tipo de acolhimento',
+    Cell: ({value}) => value && value.map(i => (
+      <React.Fragment>
+        <span>{i}</span>
+        <br />
+      </React.Fragment>
+    ))
   },
   ...columns.slice(5)
 ]
