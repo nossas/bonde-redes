@@ -1,6 +1,6 @@
 import User, { handleUserFields } from './interfaces/User'
 
-const getUsersWithUserFields = (users: User[]) => {
+const getUsersWithUserFields = (users: User[]): User[] => {
   const { COMMUNITY_ID } = process.env
   return users.map((i) => {
     const withUserFields = handleUserFields(i)
