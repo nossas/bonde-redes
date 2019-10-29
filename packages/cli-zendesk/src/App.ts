@@ -10,6 +10,7 @@ import getAllUsers from './getAllUsers'
 import getUsersWithUserFields from './getUsersWithUserFields'
 import saveUsersInChunks from './saveUsersInChunks'
 import countMatches from './countMatches'
+import getFormEntries, { filterByEmail } from './hasura/getFormEntries'
 // import { Ticket } from './interfaces/Ticket'
 // import User from './interfaces/User'
 
@@ -30,7 +31,12 @@ const user = async () => {
   const usersWithoutCustomFields = await getAllUsers()
   const users = await getUsersWithUserFields(usersWithoutCustomFields)
   // await promisify(fs.writeFile)('users.json', JSON.stringify(users))
-  await saveUsersInChunks(users)
+  const formEntries = await getFormEntries()
+  const usersWithBondeDate = users.map((i) => ({
+    ...i,
+    data_de_inscricao_no_bonde: filterByEmail(formEntries, i.email),
+  }))
+  await saveUsersInChunks(usersWithBondeDate)
 }
 
 export default { ticket, user }
