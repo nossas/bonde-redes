@@ -31,7 +31,7 @@ const SuggestionsContainer = styled.div`
 `
 
 export default class SuggestInput extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.client = GoogleMaps.createClient({
       // TODO: Change to enviroment variable
@@ -46,7 +46,7 @@ export default class SuggestInput extends React.Component {
     }
   }
 
-  handleSuggestionsFetchRequested ({ value }) {
+  handleSuggestionsFetchRequested({ value }) {
     this.client
       .geocode({ address: value, components: { country: 'brasil' } })
       .asPromise()
@@ -62,19 +62,19 @@ export default class SuggestInput extends React.Component {
       })
   }
 
-  handleSuggestionsClearRequested () {
+  handleSuggestionsClearRequested() {
     this.setState({ suggestions: [] })
   }
 
-  getSuggestionValue (suggestion) {
+  getSuggestionValue(suggestion) {
     return suggestion.address
   }
 
-  renderSuggestion (suggestion, { isHighlighted }) {
+  renderSuggestion(suggestion, { isHighlighted }) {
     return <Text>{suggestion.address}</Text>
   }
 
-  renderSuggestionsContainer ({ containerProps, children, query }) {
+  renderSuggestionsContainer({ containerProps, children, query }) {
     return (
       <SuggestionsContainer>
         <div {...containerProps}>
@@ -84,15 +84,15 @@ export default class SuggestInput extends React.Component {
     )
   }
 
-  handleSuggestionSelected (e, { suggestion }) {
+  handleSuggestionSelected(e, { suggestion }) {
     const { onSelect } = this.props
     onSelect && onSelect(suggestion)
   }
 
-  render () {
+  render() {
     const inputProps = {
       placeholder: this.props.placeholder,
-      label: this.props.label, 
+      label: this.props.label,
       hint: this.props.hint,
       value: this.state.value,
       onChange: (e, { newValue }) => this.setState({ value: newValue })
@@ -107,10 +107,10 @@ export default class SuggestInput extends React.Component {
         getSuggestionValue={this.getSuggestionValue.bind(this)}
         renderSuggestion={this.renderSuggestion.bind(this)}
         renderSuggestionsContainer={this.renderSuggestionsContainer.bind(this)}
-        alwaysRenderSuggestion={true}
+        alwaysRenderSuggestion
         inputProps={inputProps}
         shouldRenderSuggestions={value => value.trim().length > 6}
-        renderInputComponent={(props) => (
+        renderInputComponent={props => (
           <FormField
             {...props}
             inputComponent={Input}

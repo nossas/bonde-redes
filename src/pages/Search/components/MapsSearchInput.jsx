@@ -8,12 +8,12 @@ import {
 import SuggestInput from './SuggestInput'
 
 class MapsSearchInput extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = { loading: false }
   }
-  
-  render () {
+
+  render() {
     const { loading } = this.state
     const { value, ...extraProps } = this.props
 
