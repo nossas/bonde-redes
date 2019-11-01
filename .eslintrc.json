@@ -1,17 +1,57 @@
 {
-  "extends": "airbnb",
-  "env": {
-    "browser": true
-  },
-  "rules": {
-    "semi": [
-      "error",
-      "never"
-    ],
-    "comma-dangle": [
-      "error",
-      "never"
-    ],
-    "no-console": "off"
-  }
+  "root": true,
+  "overrides": [
+    {
+      "files": [
+        "src/**/*.ts",
+        "src/**/*.tsx"
+      ],
+      "extends": [
+        "airbnb",
+        "plugin:import/typescript"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "plugins": [
+        "@typescript-eslint"
+      ],
+      "settings": {
+        "project": "./tsconfig.json",
+        "import/resolver": {
+          "node": {
+            "extensions": [
+              ".js",
+              ".jsx",
+              ".ts",
+              ".tsx"
+            ],
+            "moduleDirectory": [
+              "node_modules",
+              "src/"
+            ]
+          }
+        }
+      },
+      "env": {
+        "browser": true,
+        "jest": true
+      },
+      "rules": {
+        "react/jsx-filename-extension": [
+          1,
+          {
+            "extensions": [
+              ".tsx"
+            ]
+          }
+        ],
+        "import/no-extraneous-dependencies": "off",
+        "jsx-a11y/control-has-associated-label": "off",
+        "react/button-has-type": "off",
+        "semi": "off",
+        "no-unused-vars": "off",
+        "no-unused-expressions": "off",
+        "react/no-array-index-key": "off"
+      }
+    }
+  ]
 }

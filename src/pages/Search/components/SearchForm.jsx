@@ -5,24 +5,23 @@ import {
   Flexbox2 as Flexbox,
   FormField,
   Input,
-  Select
 } from 'bonde-styleguide'
 import MapsSearchInput from './MapsSearchInput'
+import Select from '../../../components/Select'
 
 class SearchForm extends React.Component {
- 
   state = {
     geolocation: undefined,
     distance: 80,
     serviceType: ''
   }
 
-  handleSubmit (evt) {
+  handleSubmit(evt) {
     evt.preventDefault()
     this.props.onSubmit(this.state)
   }
 
-  render () {
+  render() {
     return (
       <form onSubmit={this.handleSubmit.bind(this)}>
         <MapsSearchInput
@@ -31,7 +30,7 @@ class SearchForm extends React.Component {
           placeholder='Digite o endereço'
           onChangeLocation={(geolocation) => this.setState({ geolocation })}
           value={this.state.geolocation}
-        /> 
+        />
         <FormField
           name='distance'
           label='Distância (km)'
@@ -41,27 +40,28 @@ class SearchForm extends React.Component {
           onChange={(e) => this.setState({ distance: e.target.value })}
           value={this.state.distance}
         />
-        <FormField
-          name='serviceType'
-          label='Tipo de atendimento'
-          placeholder='Digite o endereço'
-          inputComponent={Select}
-          onChange={(e) => this.setState({ serviceType: e.target.value })}
+        <Select
+          label="Tipo de atendimento"
           value={this.state.serviceType}
-          native
+          onChange={e => {
+            const value = e.target.value
+            this.setState({
+              serviceType: value
+            })
+          }}
         >
-          <option value=''>Selecione</option>
-          <option value='therapist'>Terapeuta</option>
-          <option value='lawyer'>Advogada</option>
-          <option value='individual'>MSR</option>
-        </FormField>
+          <option value="">Selecione</option>
+          <option value="therapist">Terapeuta</option>
+          <option value="lawyer">Advogada</option>
+          <option value="individual">MSR</option>
+        </Select>
         <Flexbox horizontal end>
           <Button
             type='submit'
-            disabled={(
-              this.state.geolocation === undefined
-                || this.state.serviceType === ''
-            )}
+            // disabled={(
+            //   this.state.geolocation === undefined
+            //   || this.state.serviceType === ''
+            // )}
           >
             Buscar
           </Button>
