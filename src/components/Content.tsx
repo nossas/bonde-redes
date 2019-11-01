@@ -7,7 +7,7 @@ import Table from './Table'
 
 const Content = () => {
   const {
-    visualization: { contentStateRef, toggleContentState },
+    visualization: { contentStateRef },
   } = GlobalContext
 
   const contentState = useStateLink(contentStateRef)

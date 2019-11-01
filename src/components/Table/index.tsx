@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
-import { Flexbox2 as Flexbox, Title, Loading } from 'bonde-styleguide'
+import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
 import GlobalContext from 'context'
 import { useStateLink } from '@hookstate/core'
 import dicioService from './dicioService'
-import { addAccessorVolunteer, addAccessorIndividual, columns } from './columns'
+import { addAccessorVolunteer, addAccessorIndividual } from './columns'
 import { FullWidth } from './style'
 
 const Table: React.FC = () => {

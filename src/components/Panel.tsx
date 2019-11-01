@@ -1,5 +1,5 @@
 import React, {
-  useRef, useEffect, useState, useCallback,
+  useState, useCallback,
 } from 'react'
 import { useSpring, animated } from 'react-spring'
 import styled from 'styled-components';

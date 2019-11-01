@@ -2,8 +2,6 @@ import React from 'react'
 import {
   Header as BondeHeader,
   Title,
-  Page,
-  Footer,
   Button,
   Flexbox2 as Flexbox,
 } from 'bonde-styleguide'
