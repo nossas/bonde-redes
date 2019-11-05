@@ -63,7 +63,7 @@ Select.propTypes = {
   label: PropTypes.string.isRequired,
   children: PropTypes.node,
   onChange: PropTypes.func,
-  value: PropTypes.oneOf([PropTypes.string, PropTypes.number]).isRequired,
+  value: PropTypes.oneOf(['lawyer', 'therapist', 'default', 'individual']).isRequired,
 }
 
 export default Select
