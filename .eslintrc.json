@@ -50,7 +50,8 @@
         "semi": "off",
         "no-unused-vars": "off",
         "no-unused-expressions": "off",
-        "react/no-array-index-key": "off"
+        "react/no-array-index-key": "off",
+        "react/jsx-props-no-spreading": "off"
       }
     }
   ]
