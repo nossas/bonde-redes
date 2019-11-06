@@ -2,7 +2,6 @@ import React from 'react'
 import GlobalContext from 'context'
 import { useStateLink } from '@hookstate/core'
 import { CONTENT_STATE } from 'context/content'
-import Axios from 'axios'
 import Map from './Map'
 import Table from './Table'
 

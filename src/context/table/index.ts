@@ -8,7 +8,19 @@ interface SubmittedParams {
   distance: number
 }
 
-const tableDataRef = createStateLink([])
+export interface PointUser {
+  latitude: string
+  longitude: string
+  name: string
+  email: string
+  data_de_inscricao_no_bonde?: string
+  status_inscricao: string
+  status_acolhimento: string
+  user_id: number
+  condition: string
+}
+
+const tableDataRef = createStateLink<PointUser[]>([])
 const submittedParamsRef = createStateLink<SubmittedParams>({
   lat: 0,
   lng: 0,
@@ -16,18 +28,7 @@ const submittedParamsRef = createStateLink<SubmittedParams>({
   distance: 0,
 })
 
-const stateViewRef = createStateLink({
-  viewport: {
-    latitude: -13.7056555,
-    longitude: -69.6490712,
-    zoom: 3.5,
-    bearing: 0,
-    pitch: 0,
-  },
-})
-
 export default {
-  stateViewRef,
   tableDataRef,
   submittedParamsRef,
 }

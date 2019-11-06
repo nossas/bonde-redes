@@ -1,15 +1,18 @@
 import React from 'react'
-import styled from 'styled-components'
-import ReactMapGL, { Marker, NavigationControl } from 'react-map-gl'
+import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl'
 import GlobalContext from 'context'
 import { useStateLink } from '@hookstate/core'
-import CityPin from './city-pin'
+import { PointUser } from 'context/table'
+import UserPin from './user-pin'
+import UserInfo from './user-info'
 
 const Map = () => {
-  const { table: { tableDataRef, stateViewRef } } = GlobalContext
+  const { table: { tableDataRef }, map: { stateViewRef, popupInfoRef } } = GlobalContext
 
   const tableData = useStateLink(tableDataRef)
   const state = useStateLink(stateViewRef)
+  const popupInfo = useStateLink(popupInfoRef)
+
   const handleViewportChange = ({
     bearing, latitude, longitude, pitch, zoom,
   }: typeof state['value']['viewport']) => {
@@ -24,6 +27,18 @@ const Map = () => {
     })
   }
 
+  const handleCityPinClick = (user: PointUser) => {
+    const { latitude, longitude, ...rest } = user
+    popupInfo.set({
+      ...rest,
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+      open: true,
+    })
+  }
+
+  const handlePopupClose = () => popupInfo.set((p) => ({ ...p, open: false }))
+
   return (
     <>
       <ReactMapGL
@@ -33,11 +48,31 @@ const Map = () => {
         onViewportChange={(e) => handleViewportChange(e)}
         mapboxApiAccessToken="pk.eyJ1Ijoicm9saXZlZ2FiIiwiYSI6ImNrMmt0czI5aTAwMnUzY283YmJnNnQwbHAifQ.efIGYzTj4hgD_5Weg1qIQw"
       >
-        {(tableData.value as any[]).map((i, indexI) => (
-          <Marker key={indexI} latitude={Number(i.latitude)} longitude={Number(i.longitude)}>
-            <CityPin size={20} />
+        {(tableData.value).map((i, indexI) => (
+          <Marker
+            key={indexI}
+            latitude={Number(i.latitude)}
+            longitude={Number(i.longitude)}
+          >
+            <UserPin
+              size={20}
+              onClick={handleCityPinClick}
+              user={i}
+            />
           </Marker>
         ))}
+        {popupInfo.value.open && (
+          <Popup
+            tipSize={5}
+            anchor="top"
+            latitude={popupInfo.value.latitude}
+            longitude={popupInfo.value.longitude}
+            closeOnClick={false}
+            onClose={handlePopupClose}
+          >
+            <UserInfo />
+          </Popup>
+        )}
         <div style={{ position: 'absolute', bottom: 15, left: 15 }}>
           <NavigationControl />
         </div>

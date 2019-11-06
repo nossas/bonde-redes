@@ -18,6 +18,7 @@ const query = `query ($organization_id: bigint, $condition: String) {
     occupation_area
     whatsapp
     data_de_inscricao_no_bonde
+    condition
   }
 }
 `
