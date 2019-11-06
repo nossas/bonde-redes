@@ -93,7 +93,7 @@ Panel.defaultProps = {
 
 Panel.propTypes = {
   open: PropTypes.bool.isRequired,
-  direction: PropTypes.any,
+  direction: PropTypes.oneOf<'top' | 'left'>(['top', 'left']).isRequired,
   relative: PropTypes.bool,
   className: PropTypes.string,
   size: PropTypes.number,
