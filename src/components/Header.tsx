@@ -2,13 +2,13 @@ import React from 'react'
 import {
   Header as BondeHeader,
   Title,
-  Button,
+  // Button,
   Flexbox2 as Flexbox,
 } from 'bonde-styleguide'
-import { useStateLink } from '@hookstate/core'
+// import { useStateLink } from '@hookstate/core'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import GlobalContext from '../context'
+// import GlobalContext from '../context'
 
 const StyledBondeHeader = styled(BondeHeader)`
   width: 100%;
@@ -29,31 +29,28 @@ const GrownDiv = styled.div`
   flex-grow: 1;
 `
 
-const Header: React.FC = ({ children }) => {
-  const {
-    visualization: { contentStateRef, toggleContentState },
-  } = GlobalContext
+// const {
+//   visualization: { contentStateRef, toggleContentState },
+// } = GlobalContext
 
-  const visualizationState = useStateLink(contentStateRef)
-
-  return (
-    <FlexDiv>
-      <StyledBondeHeader>
-        <Flexbox spacing="between">
-          <Title.H3 color="white">Mapa do acolhimento</Title.H3>
-          <Button onClick={() => { toggleContentState() }}>
+// const visualizationState = useStateLink(contentStateRef)
+const Header: React.FC = ({ children }) => (
+  <FlexDiv>
+    <StyledBondeHeader>
+      <Flexbox spacing="between">
+        <Title.H3 color="white">Mapa do acolhimento</Title.H3>
+        {/* <Button onClick={() => { toggleContentState() }}>
           Alternar para
             {' '}
             {visualizationState.get()}
-          </Button>
-        </Flexbox>
-      </StyledBondeHeader>
-      <GrownDiv>
-        {children}
-      </GrownDiv>
-    </FlexDiv>
-  )
-}
+          </Button> */}
+      </Flexbox>
+    </StyledBondeHeader>
+    <GrownDiv>
+      {children}
+    </GrownDiv>
+  </FlexDiv>
+)
 
 Header.defaultProps = {
   children: null,

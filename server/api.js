@@ -31,10 +31,11 @@ const main = async (req, res, next) => {
 
     const filteredUsers = users.map((user) => {
       const filteredTickets = tickets.filter(ticket => ticket.requester_id === user.user_id)
+      const ticket = filteredTickets.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))[0]
       return {
         ...user,
-        link_ticket: filteredTickets.map(ticket => ticket.ticket_id),
-        status_inscricao: filteredTickets.map(ticket => ticket.status_inscricao)
+        link_ticket: ticket && ticket.ticket_id,
+        status_inscricao: ticket && ticket.status_inscricao
       }
     })
 
@@ -54,12 +55,14 @@ const main = async (req, res, next) => {
     const filteredUsers = users.filter((user) => {
       const newUser = user
       const filteredTickets = tickets.filter(ticket => ticket.requester_id === user.user_id)
-      newUser.link_ticket = filteredTickets.map(ticket => ticket.ticket_id)
-      newUser.status_acolhimento = filteredTickets.map(ticket => ticket.status_acolhimento)
-      newUser.tipo_acolhimento = filteredTickets.map((ticket) => {
-        const tipo = ticket.subject.split(' ').slice(0, 1)[0]
-        return ['[Psicológico]', '[Jurídico]'].includes(tipo) ? tipo.slice(1, -1) : ''
-      })
+      const ticket = filteredTickets.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))[0]
+      if (!ticket) {
+        return false
+      }
+      newUser.link_ticket = ticket.ticket_id
+      newUser.status_acolhimento = ticket.status_acolhimento
+      const tipo = ticket.subject.split(' ').slice(0, 1)[0]
+      newUser.tipo_acolhimento = ['[Psicológico]', '[Jurídico]'].includes(tipo) ? tipo.slice(1, -1) : ''
 
       return filteredTickets.length > 0
     })

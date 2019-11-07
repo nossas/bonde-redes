@@ -44,12 +44,9 @@ export const columns = [
   {
     accessor: 'link_ticket',
     Header: 'Link do ticket',
-    Cell: ({ value }: valueArrayString) => value && value.map((i, indexI) => (
-      <React.Fragment key={indexI}>
-        <a href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${i}`}>{i}</a>
-        <br />
-      </React.Fragment>
-    )),
+    Cell: ({ value }: valueArrayString) => (value ? (
+      <a href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${value}`}>{value}</a>
+    ) : null),
   },
   {
     accessor: 'data_de_inscricao_no_bonde',
@@ -78,23 +75,17 @@ export const addAccessorIndividual = () => [
   {
     accessor: 'status_acolhimento',
     Header: 'Status Acolhimento',
-    Cell: ({ value }: valueArrayString) => value && value.map((i, indexI) => (
-      <React.Fragment key={indexI}>
-        <span>{i}</span>
-        <br />
-      </React.Fragment>
-    )),
+    Cell: ({ value }: valueArrayString) => (value ? (
+      <span>{value}</span>
+    ) : null),
   }, {
     accessor: 'tipo_acolhimento',
     Header: 'Tipo de acolhimento',
-    Cell: ({ value }: valueArrayString) => value && value.map((i, indexI) => (
-      <React.Fragment key={indexI}>
-        <span>{i}</span>
-        <br />
-      </React.Fragment>
-    )),
+    Cell: ({ value }: valueArrayString) => (value ? (
+      <span>{value}</span>
+    ) : null),
   },
-  ...columns.slice(5),
+  ...columns.slice(4),
 ]
 
 export const addAccessorVolunteer = () => [
@@ -102,12 +93,9 @@ export const addAccessorVolunteer = () => [
   {
     accessor: 'status_inscricao',
     Header: 'Status Inscrição',
-    Cell: ({ value }: valueArrayString) => value && value.map((i, indexI) => (
-      <React.Fragment key={indexI}>
-        <span key={indexI}>{i}</span>
-        <br />
-      </React.Fragment>
-    )),
+    Cell: ({ value }: valueArrayString) => (value ? (
+      <span>{value}</span>
+    ) : null),
   },
-  ...columns.slice(5),
+  ...columns.slice(4),
 ]

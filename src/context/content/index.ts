@@ -5,7 +5,7 @@ export enum CONTENT_STATE {
   SHOW_TABLE = 'tabela'
 }
 
-const contentStateRef = createStateLink(CONTENT_STATE.SHOW_TABLE)
+const contentStateRef = createStateLink(CONTENT_STATE.SHOW_MAP)
 const useContentState = useStateLinkUnmounted(contentStateRef)
 
 export default {

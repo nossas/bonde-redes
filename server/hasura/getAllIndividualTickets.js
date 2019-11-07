@@ -6,6 +6,7 @@ const query = `query ($organization_id: bigint, $status_acolhimento: String) {
     status_acolhimento
     ticket_id
     subject
+    created_at
   }
 }`
 
