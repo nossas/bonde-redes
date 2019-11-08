@@ -8,14 +8,17 @@ export const columns = [
   {
     accessor: 'name',
     Header: 'Nome',
+    width: 200,
   },
   {
     accessor: 'email',
     Header: 'Email',
+    width: 200,
   },
   {
     accessor: 'address',
     Header: 'Endereço de atendimento',
+    width: 300,
   },
   {
     accessor: 'distance',
@@ -55,14 +58,17 @@ export const columns = [
   {
     accessor: 'occupation_area',
     Header: 'Área de atuação',
+    width: 200,
   },
   {
     accessor: 'phone',
     Header: 'Telefone',
+    width: 150,
   },
   {
     accessor: 'whatsapp',
     Header: 'Whatsapp',
+    width: 150,
   },
   {
     accessor: 'registration_number',
