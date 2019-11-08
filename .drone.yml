@@ -108,3 +108,34 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, develop]
+
+
+  webhook-activists-publish-latest:
+    image: plugins/docker
+    repo: nossas/bonde-webhook-activists
+    group: publish
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhook-activists/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
+
+  webhook-activists-deploy-production:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/activists
+    docker_image: "nossas/bonde-webhook-activists:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploy
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
