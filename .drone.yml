@@ -59,7 +59,7 @@ pipeline:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
 
-  webhook-mail-publish:
+  webhook-mail-staging-publish:
     image: plugins/docker
     repo: nossas/bonde-webhook-mail
     group: publishing
@@ -71,7 +71,7 @@ pipeline:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
 
-  webhook-mail-deploy:
+  webhook-mail-staging-deploy:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
     service: webhooks/mail
@@ -84,7 +84,37 @@ pipeline:
       status: success
       branch: [hotfix/*, release/*, feature/*, develop]
 
-  webhook-activists-publish:
+  webhook-mail-production-publish:
+    image: plugins/docker
+    repo: nossas/bonde-webhook-mail
+    group: publish
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhook-mail/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
+
+  webhook-mail-production-deploy:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/mail
+    docker_image: "nossas/bonde-webhook-mail:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploy
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
+
+  webhook-activists-staging-publish:
     image: plugins/docker
     repo: nossas/bonde-webhook-activists
     group: publishing
@@ -96,7 +126,7 @@ pipeline:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
 
-  webhook-activists-deploy:
+  webhook-activists-staging-deploy:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
     service: webhooks/activists
@@ -110,7 +140,7 @@ pipeline:
       branch: [hotfix/*, release/*, feature/*, develop]
 
 
-  webhook-activists-publish-latest:
+  webhook-activists-production-publish:
     image: plugins/docker
     repo: nossas/bonde-webhook-activists
     group: publish
@@ -123,7 +153,7 @@ pipeline:
       status: success
       event: tag
 
-  webhook-activists-deploy-production:
+  webhook-activists-production-deploy:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
     service: webhooks/activists
