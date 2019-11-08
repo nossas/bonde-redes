@@ -37,7 +37,7 @@ class Server {
       body: notifyMail.body,
       vars: notifyMail.context
     })
-
+    this.dbg(`#${notifyMail.id} sending mail...`)
     const resp = await mail.send()
 
     if (resp.rejected.length === 0) {
@@ -51,6 +51,7 @@ class Server {
         mail: delivered.id,
         delivered_at: delivered.delivered_at
       })
+      this.dbg(`#${notifyMail.id} sending mail is done.`)
     } else {
       res.status(400).json({ mode: 'testing' })
     }
