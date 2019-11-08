@@ -4,6 +4,11 @@ import getAllIndividualUsers from './hasura/getAllIndividualUsers'
 import getAllIndividualTickets from './hasura/getAllIndividualTickets'
 import getAllVolunteerTickets from './hasura/getAllVolunteerTickets'
 
+const dicio = {
+  therapist: 'Psicóloga',
+  lawyer: 'Advogada'
+}
+
 // export default main
 const main = async (req, res, next) => {
   const {
@@ -30,8 +35,10 @@ const main = async (req, res, next) => {
     }
 
     const filteredUsers = users.map((user) => {
-      const filteredTickets = tickets.filter(ticket => ticket.requester_id === user.user_id)
-      const ticket = filteredTickets.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))[0]
+      const filteredTickets = tickets.filter(ticket => ticket.requester_id === user.user_id && ticket.status !== 'deleted')
+      const ticket = filteredTickets.find(
+        i => i.subject === `[${dicio[serviceType]}] ${user.name} - ${user.registration_number}`
+      ) || filteredTickets.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))[0]
       return {
         ...user,
         link_ticket: ticket && ticket.ticket_id,
@@ -54,7 +61,7 @@ const main = async (req, res, next) => {
 
     const filteredUsers = users.filter((user) => {
       const newUser = user
-      const filteredTickets = tickets.filter(ticket => ticket.requester_id === user.user_id)
+      const filteredTickets = tickets.filter(ticket => ticket.requester_id === user.user_id && ticket.status !== 'deleted')
       const ticket = filteredTickets.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))[0]
       if (!ticket) {
         return false

@@ -6,6 +6,8 @@ const query = `query ($organization_id: bigint) {
     status_inscricao
     ticket_id
     created_at
+    status
+    subject
   }
 }`
 
