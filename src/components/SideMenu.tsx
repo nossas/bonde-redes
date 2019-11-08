@@ -76,7 +76,7 @@ const SideMenu: React.FC = ({ children }) => {
 
   return (
     <>
-      <StyledPanel open={sideMenuOpen.value} direction="left">
+      <StyledPanel open={sideMenuOpen.value} direction="left" size={350}>
         <AnimatedImage
           style={style}
           onClick={() => {
