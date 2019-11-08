@@ -37,7 +37,7 @@
     "url-join": "^4.0.1"
   },
   "scripts": {
-    "start": "NODE_PATH=src react-scripts start",
+    "start": "node build-server/index.js",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "dev:client": "PORT=4000 react-scripts start",
     "dev:server": "PORT=5000 nodemon -r dotenv/config node_modules/.bin/babel-node ./server/index.js",
