@@ -56,7 +56,7 @@ const saveMatches = async (matches: Match[]) => {
     },
   })
 
-  response.data.errors && dbg(response.data.errors)
+  response.data.errors && dbg(response.data.errors[0])
 
   return response
 }
