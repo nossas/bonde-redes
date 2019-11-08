@@ -1,12 +1,6 @@
 import Axios from 'axios'
-import urljoin from 'url-join'
 
-const get = async (path: string, params?: any) => {
-  const { REACT_APP_API_URL } = process.env
-  return Axios.get(urljoin(REACT_APP_API_URL!, path), {
-    params,
-  })
-}
+const get = async (params?: any) => Axios.get('/api', { params })
 
 export default {
   get,

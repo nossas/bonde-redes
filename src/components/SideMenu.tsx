@@ -68,7 +68,7 @@ const SideMenu: React.FC = ({ children }) => {
       distance: distance.value,
       serviceType: serviceType.value,
     }
-    const response = await request.get('/api', params)
+    const response = await request.get(params)
     tableData.set([])
     submittedParams.set(params)
     tableData.set(response.data)
