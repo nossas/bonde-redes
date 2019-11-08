@@ -8,5 +8,6 @@ declare namespace NodeJS {
     X_HASURA_ADMIN_SECRET: string
     COMMUNITY_ID: string
     ZENDESK_ORGANIZATIONS: string
+    WIDGET_IDS: string
   }
 }

@@ -13,7 +13,7 @@ interface User {
   cor: string
   created_at: string
   custom_role_id: bigint
-  data_de_inscricao_no_bonde: string
+  data_de_inscricao_no_bonde: string | null
   default_group_id: bigint
   details: string
   disponibilidade_de_atendimentos: string
