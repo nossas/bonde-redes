@@ -45,7 +45,7 @@ export const columns = [
     accessor: 'link_ticket',
     Header: 'Link do ticket',
     Cell: ({ value }: valueArrayString) => (value ? (
-      <a href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${value}`}>{value}</a>
+      <a href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${value}`} target="_blank" rel="noopener noreferrer">{value}</a>
     ) : null),
   },
   {
