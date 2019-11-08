@@ -4,8 +4,8 @@ import dbg from './dbg'
 
 const log = dbg.extend('BondeCreatedDate')
 
-const query = `query($advogadaId: Int!, $psicologaId: Int!) {
-  form_entries(where: {widget_id: {_in: [$advogadaId, $psicologaId]}}) {
+const query = `query($advogadaId: Int!, $psicologaId: Int!, $volunteerId: Int!) {
+  form_entries(where: {widget_id: {_in: [$advogadaId, $psicologaId, $volunteerId]}}) {
     fields
     created_at
     widget_id
@@ -30,6 +30,7 @@ const getFormEntries = async () => {
   if (!yup.object().shape({
     ADVOGADA: yup.number().required(),
     PSICÓLOGA: yup.number().required(),
+    MSR: yup.number().required(),
   }).isValid(widget_ids)) {
     throw new Error('Invalid WIDGET_IDS env var')
   }
@@ -37,7 +38,8 @@ const getFormEntries = async () => {
     query,
     variables: {
       advogadaId: widget_ids.ADVOGADA,
-      psicologaId: widget_ids['PSICÓLOGA'],
+      psicologaId: widget_ids.PSICÓLOGA,
+      volunteerId: widget_ids.MSR,
     },
   }, {
     headers: {
@@ -56,7 +58,12 @@ export const filterByEmail = (formEntries: FormEntry[], email) => {
   const filteredFormEntries = formEntries.filter((i) => {
     try {
       const parsedFields = JSON.parse(i.fields)
-      return parsedFields[2].value === email
+
+      if (i.widget_id === 17633 || i.widget_id === 17628) {
+        return parsedFields[2].value === email
+      }
+
+      return parsedFields[1].value === email
     } catch (e) {
       return false
     }
