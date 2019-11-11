@@ -7,7 +7,7 @@ type geolocationType = {
   lng: number
 }
 
-const distanceRef = createStateLink(80)
+const distanceRef = createStateLink(20)
 const serviceTypeRef = createStateLink<serviceTypes>('default')
 const geolocationRef = createStateLink<geolocationType | undefined>(undefined)
 
