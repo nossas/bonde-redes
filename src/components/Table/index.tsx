@@ -40,7 +40,7 @@ const Table: React.FC = () => {
         <ReactTable
           data={tableData.value}
           columns={['lawyer', 'therapist'].includes(serviceType) ? addAccessorVolunteer() : addAccessorIndividual()}
-          defaultPageSize={10}
+          defaultPageSize={100}
           className="-striped -highlight"
         />
       </Flexbox>
