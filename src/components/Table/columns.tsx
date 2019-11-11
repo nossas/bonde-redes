@@ -4,6 +4,10 @@ type valueArrayString = {
   value: string[]
 }
 
+type valueString = {
+  value: string
+}
+
 export const columns = [
   {
     accessor: 'name',
@@ -54,6 +58,13 @@ export const columns = [
   {
     accessor: 'data_de_inscricao_no_bonde',
     Header: 'Data de inscrição no BONDE',
+    Cell: ({ value }: valueString) => {
+      if (!value) {
+        return '-'
+      }
+      const data = new Date(value)
+      return `${data.getDay()}/${data.getMonth() + 1}/${data.getFullYear()} às ${data.getHours().toFixed(2)}:${data.getMinutes().toFixed(2)}`
+    },
   },
   {
     accessor: 'occupation_area',
