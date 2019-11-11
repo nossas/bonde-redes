@@ -1,4 +1,4 @@
-import turf from 'turf'
+import * as turf from '@turf/turf'
 
 export default (pointA, pointB) => {
   const a = turf.point(pointA)
