@@ -4,7 +4,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 import path from 'path'
 
-import api from './api.js'
+import api from './api'
 
 // Assert required enviroment variables for app
 assert(process.env.ZENDESK_API_USER !== undefined, 'Required enviroment variable ZENDESK_API_USER')
