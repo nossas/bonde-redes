@@ -28,6 +28,7 @@ const popupInfoRef = createStateLink<PopupInfoRefType>({
   status_inscricao: '',
   user_id: 0,
   condition: '',
+  organization_id: 0,
 })
 
 export default {
