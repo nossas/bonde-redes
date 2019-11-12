@@ -23,14 +23,13 @@ const FixedDiv = styled.div`
 const Page = () => (
   <FlexDiv>
     <Header>
-      <SideMenu>
-        <ScrollView>
-          <Content />
-        </ScrollView>
-        <FixedDiv>
-          <Footer />
-        </FixedDiv>
-      </SideMenu>
+      <SideMenu />
+      <ScrollView>
+        <Content />
+      </ScrollView>
+      <FixedDiv>
+        <Footer />
+      </FixedDiv>
     </Header>
   </FlexDiv>
 )

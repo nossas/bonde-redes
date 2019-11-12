@@ -8,7 +8,7 @@ type valueString = {
   value: string
 }
 
-export const columns = [
+const columns = [
   {
     accessor: 'name',
     Header: 'Nome',
@@ -27,8 +27,25 @@ export const columns = [
   {
     accessor: 'distance',
     Header: 'Distância (km)',
-  },
-  {
+  }, {
+    accessor: 'status_acolhimento',
+    Header: 'Status Acolhimento',
+    Cell: ({ value }: valueArrayString) => (value ? (
+      <span>{value}</span>
+    ) : null),
+  }, {
+    accessor: 'tipo_acolhimento',
+    Header: 'Tipo de acolhimento',
+    Cell: ({ value }: valueArrayString) => (value ? (
+      <span>{value}</span>
+    ) : null),
+  }, {
+    accessor: 'status_inscricao',
+    Header: 'Status Inscrição',
+    Cell: ({ value }: valueArrayString) => (value ? (
+      <span>{value}</span>
+    ) : null),
+  }, {
     accessor: 'disponibilidade_de_atendimentos',
     Header: 'Disponibilidade de atendimento',
   },
@@ -87,32 +104,4 @@ export const columns = [
   },
 ]
 
-export const addAccessorIndividual = () => [
-  ...columns.slice(0, 4),
-  {
-    accessor: 'status_acolhimento',
-    Header: 'Status Acolhimento',
-    Cell: ({ value }: valueArrayString) => (value ? (
-      <span>{value}</span>
-    ) : null),
-  }, {
-    accessor: 'tipo_acolhimento',
-    Header: 'Tipo de acolhimento',
-    Cell: ({ value }: valueArrayString) => (value ? (
-      <span>{value}</span>
-    ) : null),
-  },
-  ...columns.slice(4),
-]
-
-export const addAccessorVolunteer = () => [
-  ...columns.slice(0, 4),
-  {
-    accessor: 'status_inscricao',
-    Header: 'Status Inscrição',
-    Cell: ({ value }: valueArrayString) => (value ? (
-      <span>{value}</span>
-    ) : null),
-  },
-  ...columns.slice(4),
-]
+export default columns

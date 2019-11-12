@@ -9,8 +9,6 @@ import {
 import GlobalContext from 'context'
 import { useStateLink } from '@hookstate/core'
 import MapsSearchInput from 'pages/Search/components/MapsSearchInput'
-import Select from './Select'
-import dicioService from './Table/dicioService'
 
 interface Props {
   onSubmit: () => void
@@ -18,24 +16,20 @@ interface Props {
 
 const Form: React.FC<Props> = ({ onSubmit }) => {
   const {
-    form: { distanceRef, serviceTypeRef, geolocationRef },
+    form: {
+      distanceRef, geolocationRef, therapistCheckboxRef, lawyerCheckboxRef, individualCheckboxRef,
+    },
   } = GlobalContext
 
   const distance = useStateLink(distanceRef)
-  const serviceType = useStateLink(serviceTypeRef)
   const geolocation = useStateLink(geolocationRef)
+  const therapistCheckbox = useStateLink(therapistCheckboxRef)
+  const lawyerCheckbox = useStateLink(lawyerCheckboxRef)
+  const individualCheckbox = useStateLink(individualCheckboxRef)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     onSubmit()
-  }
-
-  const renderOptions = () => {
-    const keys = Object.keys(dicioService) as Array<keyof typeof dicioService>
-
-    return keys.map((i) => (
-      <option key={i} value={i}>{dicioService[i]}</option>
-    ))
   }
 
   return (
@@ -56,20 +50,42 @@ const Form: React.FC<Props> = ({ onSubmit }) => {
         onChange={(e: any) => distance.set(Number(e.target.value))}
         value={distance.value}
       />
-      <Select
-        label="Tipo de atendimento"
-        value={serviceType.value}
-        onChange={(e) => serviceType.set(e.target.value)}
-      >
-        {renderOptions()}
-      </Select>
+      <label htmlFor="lawyer">
+        <input
+          type="checkbox"
+          id="lawyer"
+          onChange={() => lawyerCheckbox.set((p) => !p)}
+          checked={lawyerCheckbox.value}
+        />
+        {' '}
+        Advogada
+      </label>
+      <br />
+      <label htmlFor="therapist">
+        <input
+          type="checkbox"
+          id="therapist"
+          onChange={() => therapistCheckbox.set((p) => !p)}
+          checked={therapistCheckbox.value}
+        />
+        {' '}
+        Terapeuta
+      </label>
+      <br />
+      <label htmlFor="individual">
+        <input
+          type="checkbox"
+          id="individual"
+          onChange={() => individualCheckbox.set((p) => !p)}
+          checked={individualCheckbox.value}
+        />
+        {' '}
+        MSR
+      </label>
+      <br />
       <Flexbox horizontal end>
         <Button
           type="submit"
-          disabled={(
-            geolocation.value === undefined
-            || serviceType.value === 'default'
-          )}
         >
           Buscar
         </Button>
