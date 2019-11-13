@@ -25,7 +25,7 @@ interface DataType {
 class BondeCreatedDate {
   email: string
 
-  dbg = debug('BondeCreatedDate')
+  dbg = debug('webhooks-zendesk-BondeCreatedDate')
 
   constructor(email: string) {
     this.email = email
@@ -45,19 +45,22 @@ class BondeCreatedDate {
     } catch (e) {
       return this.dbg(e)
     }
-    const data = await axios.post<DataType>(HASURA_API_URL!, {
-      query,
-      variables: {
-        advogadaId: widget_ids.ADVOGADA,
-        psicologaId: widget_ids['PSICÓLOGA'],
-      },
-    }, {
-      headers: {
-        'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
-      },
-    })
-
-    return data.data.data.form_entries
+    try {
+      const data = await axios.post<DataType>(HASURA_API_URL!, {
+        query,
+        variables: {
+          advogadaId: widget_ids.ADVOGADA,
+          psicologaId: widget_ids['PSICÓLOGA'],
+        },
+      }, {
+        headers: {
+          'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
+        },
+      })
+      return data.data.data.form_entries
+    } catch (e) {
+      return this.dbg(e)
+    }
   }
 
   filterByEmail = (formEntries: FormEntry[]) => formEntries.filter((i) => {
@@ -72,17 +75,17 @@ class BondeCreatedDate {
   start = async () => {
     const formEntries = await this.getFormEntries()
     if (!formEntries) {
-      throw new Error('getFormEntries error')
+      return this.dbg('getFormEntries error')
     }
     const filteredFormEntries = await this.filterByEmail(formEntries)
     if (!filteredFormEntries) {
-      throw new Error('filteredFormEntries error')
+      return this.dbg('filteredFormEntries error')
     }
 
     try {
       return filteredFormEntries[0].created_at
-    } catch (e) {
-      this.dbg(e)
+    } catch {
+      this.dbg(`formEntries not found for email ${this.email}`)
       return new Date().toString()
     }
   }
