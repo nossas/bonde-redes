@@ -66,6 +66,7 @@ abstract class Base {
       let state: string | undefined
       let city: string | undefined
       let country: string | undefined
+      let tagInvalidCep = false
 
       addressComponents.forEach((
         {
@@ -87,6 +88,7 @@ abstract class Base {
       if (country !== 'BR') {
         state = undefined
         city = undefined
+        tagInvalidCep = true
       }
 
       return {
@@ -95,8 +97,10 @@ abstract class Base {
         address,
         state,
         city,
+        tagInvalidCep
       }
     }
+  
     return {
       error: GMAPS_ERRORS.INVALID_INPUT,
     }
