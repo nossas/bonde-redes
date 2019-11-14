@@ -45,6 +45,18 @@ export const filterFormName = async (data: object) => {
     case 'Recadastro: Psicólogas Ativas':
       InstanceClass = PsicologaCreateUser
       break
+    case '01. Recadastro: Advogadas Ativas':
+      InstanceClass = AdvogadaCreateUser
+      break
+    case '01. Recadastro: Psicólogas Ativas':
+      InstanceClass = PsicologaCreateUser
+      break
+    case '02. Recadastro: Advogadas Geladeira':
+      InstanceClass = AdvogadaCreateUser
+      break
+    case '02. Recadastro: Psicólogas Geladeira':
+      InstanceClass = PsicologaCreateUser
+      break
     default:
       dbg(`InstanceClass "${name}" doesn't exist`)
       return {

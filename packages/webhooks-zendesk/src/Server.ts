@@ -204,6 +204,10 @@ class Server {
         const bondeCreatedDate = new BondeCreatedDate(results.email)
         const bondeCreatedAt = await bondeCreatedDate.start()
 
+        if (!bondeCreatedAt) {
+          return this.dbg(bondeCreatedAt)
+        }
+
         const instance = await new InstanceClass!(res)
         let user
         if (instance instanceof AdvogadaCreateUser) {

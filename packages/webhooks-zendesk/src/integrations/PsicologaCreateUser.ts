@@ -175,32 +175,30 @@ class PsicologaCreateUser extends Base {
           }
         })
         .shape({
-          name: yup.string().required(),
+          name: yup.string().nullable(),
           email: yup.string().email().required(),
-          phone: yup.string().required(),
-          organization_id: yup.number().required(),
+          phone: yup.string().nullable(),
+          organization_id: yup.number().nullable(),
           user_fields: yup.object().shape({
-            whatsapp: yup.string().required(),
+            whatsapp: yup.string().nullable(),
             cep: yup
-              .string()
-              .required(),
+              .string().nullable(),
             cor: yup
-              .string()
-              .required(),
-            disponibilidade_de_atendimentos: yup.string().required(),
-            encaminhamentos: yup.string().required(),
-            atendimentos_em_andamento: yup.string().required(),
-            atendimentos_concluidos: yup.string().required(),
-            registration_number: yup.string().required(),
-            occupation_area: yup.string().required(),
-            ultima_atualizacao_de_dados: yup.date().required(),
-            latitude: yup.number(),
-            longitude: yup.number(),
-            address: yup.string(),
-            city: yup.string(),
-            state: yup.string().lowercase(),
-            condition: yup.string().required(),
-          }),
+              .string().nullable(),
+            disponibilidade_de_atendimentos: yup.string().nullable(),
+            encaminhamentos: yup.string().nullable(),
+            atendimentos_em_andamento: yup.string().nullable(),
+            atendimentos_concluidos: yup.string().nullable(),
+            registration_number: yup.string().nullable(),
+            occupation_area: yup.string().nullable(),
+            ultima_atualizacao_de_dados: yup.date().nullable(),
+            latitude: yup.number().nullable(),
+            longitude: yup.number().nullable(),
+            address: yup.string().nullable(),
+            city: yup.string().nullable(),
+            state: yup.string().lowercase().nullable(),
+            condition: yup.string().nullable(),
+          }).nullable(),
         })
         .required()
 
