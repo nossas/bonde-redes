@@ -197,7 +197,7 @@ pipeline:
 
   publish-prod-cli-zendesk:
     image: plugins/docker
-    repo: nossas/nossas/bonde-cli-zendesk
+    repo: nossas/bonde-cli-zendesk
     group: publishing
     secrets: [ docker_username, docker_password ]
     dockerfile: packages/cli-zendesk/Dockerfile
