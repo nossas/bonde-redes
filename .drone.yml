@@ -11,6 +11,7 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
   webhooks-registry-production-publish:
     image: plugins/docker
@@ -36,6 +37,7 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
   webhooks-zendesk-production-publish:
     image: plugins/docker
@@ -61,6 +63,7 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
   webhooks-solidarity-count-production-publish:
     image: plugins/docker
@@ -86,6 +89,7 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
   webhooks-solidarity-match-production-publish:
     image: plugins/docker
@@ -111,6 +115,7 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
   webhooks-mail-production-publish:
     image: plugins/docker
@@ -136,6 +141,7 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
   webhooks-activists-production-publish:
     image: plugins/docker
@@ -150,7 +156,6 @@ pipeline:
       status: success
       event: tag
 
-
   cli-mautic-staging-publish:
     image: plugins/docker
     repo: nossas/bonde-cli-mautic
@@ -162,6 +167,20 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
+
+  cli-mautic-production-publish:
+    image: plugins/docker
+    repo: nossas/bonde-cli-mautic
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/cli-mautic/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
 
   cli-zendesk-staging-publish:
     image: plugins/docker
@@ -174,7 +193,20 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
+  cli-zendesk-production-publish:
+    image: plugins/docker
+    repo: nossas/nossas/bonde-cli-zendesk
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/cli-zendesk/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
 
   webhooks-registry-staging-deploy:
     image: peloton/drone-rancher
@@ -188,6 +220,7 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
   webhooks-registry-production-deploy:
     image: peloton/drone-rancher
@@ -235,6 +268,7 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
   webhooks-zendesk-production-deploy:
     image: peloton/drone-rancher
@@ -265,11 +299,12 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
   webhooks-solidarity-count-production-deploy:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
-    service: webhooks/mail
+    service: webhooks/solidarity-count
     docker_image: "nossas/bonde-webhooks-solidarity-count:${DRONE_TAG##v}"
     timeout: 360
     group: deploying
@@ -295,11 +330,12 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
   webhooks-solidarity-match-production-deploy:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
-    service: webhooks/mail
+    service: webhooks/solidarity-match
     docker_image: "nossas/bonde-webhooks-solidarity-match:${DRONE_TAG##v}"
     timeout: 360
     group: deploying
@@ -325,6 +361,7 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
   webhooks-mail-production-deploy:
     image: peloton/drone-rancher
@@ -355,6 +392,7 @@ pipeline:
     when:
       status: success
       branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
   webhooks-activists-production-deploy:
     image: peloton/drone-rancher
