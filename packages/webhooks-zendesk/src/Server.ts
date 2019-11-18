@@ -237,7 +237,8 @@ class Server {
 
         const resultTicket = await this.createTicket(instance, createdUser, dateSubmitted, res)
         if (resultTicket) {
-          return this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}"`)
+          this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}"`)
+          return res.status(200).json('Success updated ticket')
         }
         return this.dbg('Failed to create ticket')
       })
