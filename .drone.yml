@@ -206,6 +206,23 @@ pipeline:
       status: success
       event: tag
 
+  cli-zendesk-production-deploy:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/cli-zendesk
+    docker_image: "nossas/bonde-cli-zendesk:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
+
   webhooks-zendesk-staging-deploy:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
