@@ -16,7 +16,7 @@ class PsicologaCreateTicket extends Base {
       description: yup.string().required(),
       custom_fields: yup.array().of(yup.object().shape({
         id: yup.number().required(),
-        value: yup.mixed().required(),
+        value: yup.mixed().nullable(),
       })),
       status_inscricao: yup.string().required(),
       created_at: yup.string().required(),
