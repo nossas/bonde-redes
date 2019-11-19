@@ -120,7 +120,7 @@ class AdvogadaCreateUser extends Base {
       // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
     }
     const {
-      error, lat: latitude, lng: longitude, address, city, state, tagInvalidCep
+      error, lat: latitude, lng: longitude, address, city, state, tagInvalidCep,
     } = await this.getAddress(newData.cep)
 
     let tag: string[] | undefined
@@ -206,7 +206,7 @@ class AdvogadaCreateUser extends Base {
             city: yup.string().nullable(),
             state: yup.string().lowercase().nullable(),
             condition: yup.string().nullable(),
-            tag: yup.array(yup.string()).nullable()
+            tag: yup.array(yup.string()).nullable(),
           }).nullable(),
         })
         .required()
