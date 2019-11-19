@@ -118,10 +118,15 @@ class PsicologaCreateUser extends Base {
       // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
     }
     const {
-      error, lat: latitude, lng: longitude, address, city, state,
+      error, lat: latitude, lng: longitude, address, city, state, tagInvalidCep,
     } = await this.getAddress(verifiedData.cep)
+
+    let tag: string[] | undefined
     if (error === GMAPS_ERRORS.INVALID_INPUT) {
+      tag = ['cep-incorreto']
       // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
+    } else {
+      tag = tagInvalidCep ? ['cep-incorreto'] : undefined
     }
 
     return {
@@ -131,6 +136,7 @@ class PsicologaCreateUser extends Base {
       address,
       city,
       state,
+      tag,
     }
   }
 
@@ -139,7 +145,7 @@ class PsicologaCreateUser extends Base {
     const condition: [CONDITION] = [CONDITION.UNSET]
     newData = await this.verificaDiretrizesAtendimento(condition, newData)
     newData = await this.verificaEstudoDeCaso(condition, newData)
-    const validatedData = await this.verificaLocalização(condition, newData)
+    newData = await this.verificaLocalização(condition, newData)
 
     try {
       const zendeskValidation = yup
@@ -198,11 +204,12 @@ class PsicologaCreateUser extends Base {
             city: yup.string().nullable(),
             state: yup.string().lowercase().nullable(),
             condition: yup.string().nullable(),
+            tag: yup.array(yup.string()).nullable(),
           }).nullable(),
         })
         .required()
 
-      const zendeskData = await zendeskValidation.validate(validatedData, {
+      const zendeskData = await zendeskValidation.validate(newData, {
         stripUnknown: true,
       })
 
