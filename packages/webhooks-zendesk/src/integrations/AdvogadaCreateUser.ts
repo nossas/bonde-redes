@@ -123,12 +123,12 @@ class AdvogadaCreateUser extends Base {
       error, lat: latitude, lng: longitude, address, city, state, tagInvalidCep,
     } = await this.getAddress(newData.cep)
 
-    let tag: string[] | undefined
+    let tags: string[] | undefined
     if (error === GMAPS_ERRORS.INVALID_INPUT) {
-      tag = ['cep-incorreto']
+      tags = ['cep-incorreto']
       // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
     } else {
-      tag = tagInvalidCep ? ['cep-incorreto'] : undefined
+      tags = tagInvalidCep ? ['cep-incorreto'] : undefined
     }
 
     return {
@@ -138,7 +138,7 @@ class AdvogadaCreateUser extends Base {
       address,
       city,
       state,
-      tag,
+      tags,
     }
   }
 
@@ -147,7 +147,9 @@ class AdvogadaCreateUser extends Base {
     const condition: [CONDITION] = [CONDITION.UNSET]
     newData = await this.verificaDiretrizesAtendimento(condition, newData)
     newData = await this.verificaEstudoDeCaso(condition, newData)
-    newData = await this.verificaLocalização(condition, newData)
+    const validatedResult = await this.verificaLocalização(condition, newData)
+
+    const { tags } = validatedResult
 
     try {
       const zendeskValidation = yup
@@ -163,7 +165,9 @@ class AdvogadaCreateUser extends Base {
         .from('insira_seu_numero_de_regi', 'registration_number')
         .from('qual_sua_area_de_atuacao', 'occupation_area')
         .transform((obj) => {
-          const { email, phone, ...userFields } = obj
+          const {
+            email, phone, ...userFields
+          } = obj
           let { disponibilidade_de_atendimentos } = obj
           if (disponibilidade_de_atendimentos === '6') {
             disponibilidade_de_atendimentos = '5_ou_mais'
@@ -206,12 +210,11 @@ class AdvogadaCreateUser extends Base {
             city: yup.string().nullable(),
             state: yup.string().lowercase().nullable(),
             condition: yup.string().nullable(),
-            tag: yup.array(yup.string()).nullable(),
           }).nullable(),
         })
         .required()
 
-      const zendeskData = await zendeskValidation.validate(newData, {
+      const zendeskData = await zendeskValidation.validate(validatedResult, {
         stripUnknown: true,
       })
 
@@ -220,7 +223,10 @@ class AdvogadaCreateUser extends Base {
           ...zendeskData,
         },
       }
-      return this.send(dataToBeSent)
+      return {
+        tags,
+        response: await this.send(dataToBeSent),
+      }
     } catch (e) {
       return this.dbg('validation failed', e)
     }

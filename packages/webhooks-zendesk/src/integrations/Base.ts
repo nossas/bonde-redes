@@ -97,10 +97,10 @@ abstract class Base {
         address,
         state,
         city,
-        tagInvalidCep
+        tagInvalidCep,
       }
     }
-  
+
     return {
       error: GMAPS_ERRORS.INVALID_INPUT,
     }
@@ -135,7 +135,7 @@ abstract class Base {
       })
       return result
     } catch (e) {
-      return this.dbg(JSON.stringify(e.response.data, null, 2))
+      return this.dbg(e)
     }
   }
 
