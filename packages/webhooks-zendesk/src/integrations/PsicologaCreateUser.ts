@@ -118,10 +118,15 @@ class PsicologaCreateUser extends Base {
       // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
     }
     const {
-      error, lat: latitude, lng: longitude, address, city, state,
+      error, lat: latitude, lng: longitude, address, city, state, tagInvalidCep,
     } = await this.getAddress(verifiedData.cep)
+
+    let tags: string[] | undefined
     if (error === GMAPS_ERRORS.INVALID_INPUT) {
+      tags = ['cep-incorreto']
       // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
+    } else {
+      tags = tagInvalidCep ? ['cep-incorreto'] : undefined
     }
 
     return {
@@ -131,6 +136,7 @@ class PsicologaCreateUser extends Base {
       address,
       city,
       state,
+      tags,
     }
   }
 
@@ -139,7 +145,9 @@ class PsicologaCreateUser extends Base {
     const condition: [CONDITION] = [CONDITION.UNSET]
     newData = await this.verificaDiretrizesAtendimento(condition, newData)
     newData = await this.verificaEstudoDeCaso(condition, newData)
-    const validatedData = await this.verificaLocalização(condition, newData)
+    const validatedResult = await this.verificaLocalização(condition, newData)
+
+    const { tags } = validatedResult
 
     try {
       const zendeskValidation = yup
@@ -202,7 +210,7 @@ class PsicologaCreateUser extends Base {
         })
         .required()
 
-      const zendeskData = await zendeskValidation.validate(validatedData, {
+      const zendeskData = await zendeskValidation.validate(validatedResult, {
         stripUnknown: true,
       })
 
@@ -211,7 +219,10 @@ class PsicologaCreateUser extends Base {
           ...zendeskData,
         },
       }
-      return this.send(dataToBeSent)
+      return {
+        tags,
+        response: await this.send(dataToBeSent),
+      }
     } catch (e) {
       return this.dbg('validation failed', e)
     }

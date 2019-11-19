@@ -10,6 +10,7 @@ import PsicologaUpdateTicket from './integrations/PsicologaUpdateTicket'
 import { FILTER_SERVICE_STATUS, filterService } from './filterService'
 import { FILTER_FORM_NAME_STATUS, filterFormName } from './filterFormName'
 import BondeCreatedDate from './integrations/BondeCreatedDate'
+import addTagsToTicket from './zendesk/addTagsToTicket'
 
 interface DataType {
   data: {
@@ -216,18 +217,22 @@ class Server {
           user = await instance.start(results!, bondeCreatedAt!)
         }
 
-        if (!user) {
-          return undefined
+        if (!user.response) {
+          this.dbg('Failed to create user')
+          return res.status(500).json('Failed to create user')
         }
 
         const {
-          data: {
-            user: createdUser, user: {
-              created_at: responseCreatedAt,
-              updated_at: responseUpdatedAt,
-              id: userId,
+          response: {
+            data: {
+              user: createdUser, user: {
+                created_at: responseCreatedAt,
+                updated_at: responseUpdatedAt,
+                id: userId,
+              },
             },
           },
+          tags,
         } = user
         if (responseCreatedAt === responseUpdatedAt) {
           this.dbg(`Success, created user "${userId}"!`)
@@ -237,11 +242,19 @@ class Server {
 
         const resultTicket = await this.createTicket(instance, createdUser, dateSubmitted, res)
         if (resultTicket) {
-          this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}"`)
-          return res.status(200).json('Success updated ticket')
+          this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}".`)
+
+          if (tags) {
+            const response = await addTagsToTicket(resultTicket.data.ticket.id, tags)
+            if (response && response.status === 200) {
+              this.dbg(`Success add tag "${tags}" to ticket "${resultTicket.data.ticket.id}".`)
+            }
+          }
+
+          return res.status(200).json('Success finish integration')
         }
         this.dbg('Failed to create ticket')
-        return res.status(500).json('Failed to update ticket')
+        return res.status(500).json('Failed failed integration')
       })
       .listen(Number(PORT), '0.0.0.0', () => {
         this.dbg(`Server listen on port ${PORT}`)
