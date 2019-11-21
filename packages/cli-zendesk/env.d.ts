@@ -9,5 +9,8 @@ declare namespace NodeJS {
     COMMUNITY_ID: string
     ZENDESK_ORGANIZATIONS: string
     WIDGET_IDS: string
+    ELASTIC_APM_SERVICE_NAME: string
+    ELASTIC_APM_SECRET_TOKEN: string
+    ELASTIC_APM_SERVER_URL: string
   }
 }
