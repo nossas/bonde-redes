@@ -9,5 +9,8 @@ declare namespace NodeJS {
     WIDGET_IDS: string
     HASURA_API_URL: string
     X_HASURA_ADMIN_SECRET: string
+    ELASTIC_APM_SERVICE_NAME: string
+    ELASTIC_APM_SECRET_TOKEN: string
+    ELASTIC_APM_SERVER_URL: string
   }
 }
