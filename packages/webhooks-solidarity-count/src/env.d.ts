@@ -10,5 +10,8 @@ declare namespace NodeJS {
     HASURA_API_URL: string
     X_HASURA_ADMIN_SECRET: string
     COMMUNITY_ID: string
+    ELASTIC_APM_SERVICE_NAME: string
+    ELASTIC_APM_SECRET_TOKEN: string
+    ELASTIC_APM_SERVER_URL: string
   }
 }

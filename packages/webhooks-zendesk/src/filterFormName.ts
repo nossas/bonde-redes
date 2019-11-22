@@ -38,31 +38,18 @@ export const filterFormName = async (data: object) => {
   }
   const { 'mautic.form_on_submit': [{ submission: { form: { name }, results, dateSubmitted }, timestamp }] } = validationResult
   let InstanceClass
-  switch (name) {
-    case 'Recadastro: Advogadas Ativas':
+  if (typeof name === 'string') {
+    if (name.toLowerCase().includes('cadastro: advogadas')) {
       InstanceClass = AdvogadaCreateUser
-      break
-    case 'Recadastro: Psicólogas Ativas':
+    } else if (name.toLowerCase().includes('cadastro: psicólogas')) {
       InstanceClass = PsicologaCreateUser
-      break
-    case '01. Recadastro: Advogadas Ativas':
-      InstanceClass = AdvogadaCreateUser
-      break
-    case '01. Recadastro: Psicólogas Ativas':
-      InstanceClass = PsicologaCreateUser
-      break
-    case '02. Recadastro: Advogadas Geladeira':
-      InstanceClass = AdvogadaCreateUser
-      break
-    case '02. Recadastro: Psicólogas Geladeira':
-      InstanceClass = PsicologaCreateUser
-      break
-    default:
+    } else {
       dbg(`InstanceClass "${name}" doesn't exist`)
       return {
         status: FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED,
         name,
       }
+    }
   }
   return {
     status: FILTER_FORM_NAME_STATUS.SUCCESS,
