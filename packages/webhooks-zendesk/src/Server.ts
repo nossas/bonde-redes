@@ -174,6 +174,29 @@ class Server {
     })
   }
 
+  checkNames = ({ primeiro_nome, sobrenome_completo }: any) => {
+    let aux = ''
+    if (
+      typeof primeiro_nome === 'string'
+      && primeiro_nome.length > 0
+    ) {
+      aux += primeiro_nome
+    }
+
+    if (
+      typeof sobrenome_completo === 'string'
+      && sobrenome_completo.length > 0
+    ) {
+      aux += ` ${sobrenome_completo}`
+    }
+
+    if (aux.length > 0) {
+      return aux
+    }
+
+    return null
+  }
+
   start = () => {
     const { PORT } = process.env
     this.server
@@ -202,7 +225,10 @@ class Server {
         if (!results || !dateSubmitted) {
           return res.status(400).json('Invalid request, failed to parse results')
         }
-        const bondeCreatedDate = new BondeCreatedDate(results.email)
+        const bondeCreatedDate = new BondeCreatedDate(
+          results.email,
+          this.checkNames(results),
+        )
         const bondeCreatedAt = await bondeCreatedDate.start()
 
         if (!bondeCreatedAt) {
@@ -212,9 +238,9 @@ class Server {
         const instance = await new InstanceClass!(res)
         let user
         if (instance instanceof AdvogadaCreateUser) {
-          user = await instance.start(results, bondeCreatedAt!)
+          user = await instance.start(results, bondeCreatedAt.created_at!, bondeCreatedAt.name)
         } else if (instance instanceof PsicologaCreateUser) {
-          user = await instance.start(results!, bondeCreatedAt!)
+          user = await instance.start(results!, bondeCreatedAt.created_at!, bondeCreatedAt.name)
         }
 
         if (!user.response) {
