@@ -140,7 +140,7 @@ class PsicologaCreateUser extends Base {
     }
   }
 
-  start = async (data: object, createdAt: string) => {
+  start = async (data: object, createdAt: string, name: string) => {
     let newData = data
     const condition: [CONDITION] = [CONDITION.UNSET]
     newData = await this.verificaDiretrizesAtendimento(condition, newData)
@@ -169,7 +169,7 @@ class PsicologaCreateUser extends Base {
             disponibilidade_de_atendimentos = '5_ou_mais'
           }
           return {
-            name: `${obj.firstname} ${obj.lastname}`,
+            name,
             email,
             phone,
             organization_id: this.organizations[this.organization],
