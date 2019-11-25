@@ -142,7 +142,7 @@ class AdvogadaCreateUser extends Base {
     }
   }
 
-  start = async (data: any, createdAt: string) => {
+  start = async (data: any, createdAt: string, name: string) => {
     let newData = data
     const condition: [CONDITION] = [CONDITION.UNSET]
     newData = await this.verificaDiretrizesAtendimento(condition, newData)
@@ -173,7 +173,7 @@ class AdvogadaCreateUser extends Base {
             disponibilidade_de_atendimentos = '5_ou_mais'
           }
           return {
-            name: `${obj.firstname} ${obj.lastname}`,
+            name,
             email,
             phone,
             organization_id: this.organizations[this.organization],

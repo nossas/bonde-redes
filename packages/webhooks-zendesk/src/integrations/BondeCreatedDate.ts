@@ -25,10 +25,13 @@ interface DataType {
 class BondeCreatedDate {
   email: string
 
+  name: string | null
+
   dbg = debug('webhooks-zendesk-BondeCreatedDate')
 
-  constructor(email: string) {
+  constructor(email: string, name: string | null) {
     this.email = email
+    this.name = name
   }
 
   getFormEntries = async () => {
@@ -83,10 +86,18 @@ class BondeCreatedDate {
     }
 
     try {
-      return filteredFormEntries[0].created_at
+      const parsedFields = JSON.parse(filteredFormEntries[0].fields)
+      const aux = {
+        created_at: filteredFormEntries[0].created_at,
+        name: (typeof this.name !== 'string' || this.name.length === 0) ? `${parsedFields[0].value} ${parsedFields[1].value}` : this.name,
+      }
+      return aux
     } catch {
       this.dbg(`formEntries not found for email ${this.email}`)
-      return new Date().toString()
+      return {
+        created_at: new Date().toString(),
+        name: this.name || 'sem nome',
+      }
     }
   }
 }
