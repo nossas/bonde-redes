@@ -24,6 +24,6 @@
     "dev": "DEBUG=webhooks-solidarity-count* tsc-watch --onSuccess \"node dist/index.js\"",
     "clean": "rm -rf node_modules dist",
     "build": "tsc",
-    "test": "jest"
+    "test": "DEBUG=webhooks-solidarity-count* jest"
   }
 }
