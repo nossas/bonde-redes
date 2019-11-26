@@ -1,0 +1,45 @@
+{
+  "some-other-property": 27,
+  "custom_fields": [
+    {
+      "id": 360021879811,
+      "value": "Rio de Janeiro"
+    },
+    {
+      "id": 360016631592,
+      "value": "Luisa ASD"
+    },
+    {
+      "id": 360017432652,
+      "value": "2019-11-05"
+    },
+    {
+      "id": 360016631632,
+      "value": "https://mapadoacolhimento.zendesk.com/agent/tickets/14259"
+    },
+    {
+      "id": 360017056851,
+      "value": null
+    },
+    {
+      "id": 360021665652,
+      "value": "aprovada"
+    },
+    {
+      "id": 360014379412,
+      "value": "atendimento__iniciado"
+    },
+    {
+      "id": 360021812712,
+      "value": "84999999999"
+    },
+    {
+      "id": 360021879791,
+      "value": "rj"
+    },
+    {
+      "id": 360016681971,
+      "value": "Maria"
+    }
+  ]
+}
