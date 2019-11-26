@@ -1,4 +1,4 @@
-import Base from './Base'
+import ZendeskBase from './ZendeskBase'
 
 interface RequesterFields {
   atendimentos_em_andamento_calculado_: number
@@ -6,7 +6,7 @@ interface RequesterFields {
   encaminhamentos_realizados_calculado_: number
 }
 
-const updateRequesterFields = (user_id: number, fields: RequesterFields) => Base.put(`users/${user_id}`, {
+const updateRequesterFields = (user_id: number, fields: RequesterFields) => ZendeskBase.put(`users/${user_id}`, {
   user: {
     user_fields: {
       ...fields,

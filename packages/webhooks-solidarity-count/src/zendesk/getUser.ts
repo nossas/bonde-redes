@@ -1,10 +1,10 @@
-import Base from './Base'
+import ZendeskBase from './ZendeskBase'
 import User from '../interfaces/User'
 
 interface Response {
   user: User
 }
 
-const getUser = (id: number) => Base.get<Response>(`users/${id}`)
+const getUser = (id: number) => ZendeskBase.get<Response>(`users/${id}`)
 
 export default getUser
