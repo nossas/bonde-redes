@@ -1,8 +1,8 @@
-import axios from 'axios'
 import dbg from './dbg'
 import User from '../interfaces/User'
-import { generateRequestVariables } from './base'
-import { HasuraResponse, isError } from '../interfaces/HasuraResponse'
+import generateRequestVariables from './generateRequestVariables'
+import HasuraBase from './HasuraBase'
+import isError, { HasuraResponse } from './isError'
 
 const log = dbg.extend('saveUsers')
 
@@ -45,17 +45,9 @@ interface Response {
 }
 
 const updateUserTicketCount = async (users: User[]) => {
-  const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const query = createQuery(users)
   const variables = generateRequestVariables(users)
-  const response = await axios.post<HasuraResponse<'insert_solidarity_users', Response>>(HASURA_API_URL, {
-    query,
-    variables,
-  }, {
-    headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
-    },
-  })
+  const response = await HasuraBase<HasuraResponse<'insert_solidarity_users', Response>>(query, variables)
 
   if (isError(response.data)) {
     return log(response.data.errors)

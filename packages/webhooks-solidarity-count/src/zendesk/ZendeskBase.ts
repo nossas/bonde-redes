@@ -2,11 +2,6 @@ import urljoin from 'url-join'
 import axios from 'axios'
 import dbg from './dbg'
 
-export enum GMAPS_ERRORS {
-  REQUEST_FAILED,
-  INVALID_INPUT
-}
-
 const log = dbg.extend('base')
 
 const get = async <T>(url: string, params?: any) => {
