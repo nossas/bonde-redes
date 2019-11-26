@@ -142,9 +142,11 @@ interface Response {
 
 const saveTickets = async (tickets: TicketHasuraIn[]) => {
   const validatedTickets = (await validate.validate(tickets, { stripUnknown: true }))
+  const query = createQuery(validatedTickets)
+  const variables = generateRequestVariables(validatedTickets)
   const response = await HasuraBase<HasuraResponse<'insert_solidarity_tickets', Response>>(
-    createQuery(validatedTickets),
-    generateRequestVariables(validatedTickets),
+    query,
+    variables,
   )
 
   if (isError(response.data)) {

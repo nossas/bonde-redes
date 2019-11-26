@@ -1,5 +1,8 @@
 /* eslint-disable import/first */
 import dotenv from 'dotenv'
+import { install } from 'source-map-support'
+
+install()
 
 dotenv.config()
 
