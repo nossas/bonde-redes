@@ -1,9 +1,9 @@
 import * as yup from 'yup'
 import dbg from './dbg'
-import { Ticket } from './interfaces/Ticket'
+import { TicketHasuraIn } from './interfaces/Ticket'
 import { ORGANIZATIONS } from './interfaces/Organizations'
 
-const verifyOrganization = async (ticket: Ticket) => {
+const verifyOrganization = async (ticket: TicketHasuraIn) => {
   const { ZENDESK_ORGANIZATIONS } = process.env
   try {
     const organizations = await yup.object().shape({

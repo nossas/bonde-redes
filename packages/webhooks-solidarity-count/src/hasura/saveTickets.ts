@@ -1,9 +1,9 @@
-import axios from 'axios'
 import * as yup from 'yup'
-import { Ticket } from '../interfaces/Ticket'
+import { TicketZendesk, TicketHasuraIn } from '../interfaces/Ticket'
 import dbg from './dbg'
-import { generateRequestVariables } from './base'
-import { isError, HasuraResponse } from '../interfaces/HasuraResponse'
+import generateRequestVariables from './generateRequestVariables'
+import HasuraBase from './HasuraBase'
+import isError, { HasuraResponse } from './isError'
 
 const generateVariablesIndex = (index: number) => `
 $assignee_id_${index}: bigint
@@ -60,11 +60,11 @@ cidade: $cidade_${index}
 community_id: $community_id_${index}
 `
 
-const generateVariables = (tickets: Ticket[]) => tickets.map(
+const generateVariables = (tickets: TicketZendesk[]) => tickets.map(
   (_, index) => generateVariablesIndex(index),
 ).flat()
 
-const generateObjects = (tickets: Ticket[]) => `[${tickets.map((_, index) => `{${generateObjectsIndex(index)}}`).join(',')}]`
+const generateObjects = (tickets: TicketZendesk[]) => `[${tickets.map((_, index) => `{${generateObjectsIndex(index)}}`).join(',')}]`
 
 const createQuery = (tickets: any) => `mutation (${generateVariables(tickets)}){
   insert_solidarity_tickets(objects: ${generateObjects(tickets)}, on_conflict: {
@@ -140,17 +140,14 @@ interface Response {
   affected_rows: number
 }
 
-const saveTickets = async (tickets: Ticket[]) => {
-  const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
+const saveTickets = async (tickets: TicketHasuraIn[]) => {
   const validatedTickets = (await validate.validate(tickets, { stripUnknown: true }))
-  const response = await axios.post<HasuraResponse<'insert_solidarity_tickets', Response>>(HASURA_API_URL, {
-    query: createQuery(validatedTickets),
-    variables: generateRequestVariables(validatedTickets),
-  }, {
-    headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
-    },
-  })
+  const query = createQuery(validatedTickets)
+  const variables = generateRequestVariables(validatedTickets)
+  const response = await HasuraBase<HasuraResponse<'insert_solidarity_tickets', Response>>(
+    query,
+    variables,
+  )
 
   if (isError(response.data)) {
     return log(response.data.errors)

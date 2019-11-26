@@ -1,8 +1,8 @@
-import axios from 'axios'
 import User from '../interfaces/User'
 import dbg from './dbg'
-import { generateRequestVariables } from './base'
-import { isError, HasuraResponse } from '../interfaces/HasuraResponse'
+import generateRequestVariables from './generateRequestVariables'
+import HasuraBase from './HasuraBase'
+import isError, { HasuraResponse } from './isError'
 
 const generateVariablesIndex = (index: number) => `
 $active_${index}: Boolean
@@ -216,17 +216,12 @@ interface Response {
 }
 
 const saveUsers = async (users: User[]) => {
-  const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const query = createQuery(users)
   const variables = generateRequestVariables(users)
-  const response = await axios.post<HasuraResponse<'insert_solidarity_users', Response>>(HASURA_API_URL, {
+  const response = await HasuraBase<HasuraResponse<'insert_solidarity_users', Response>>(
     query,
     variables,
-  }, {
-    headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
-    },
-  })
+  )
 
   if (isError(response.data)) {
     return log(response.data.errors)

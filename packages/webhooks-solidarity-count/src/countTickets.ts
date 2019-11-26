@@ -1,6 +1,6 @@
-import { Ticket } from './interfaces/Ticket'
+import { TicketZendesk, customFields } from './interfaces/Ticket'
 
-const countTickets = (tickets: Ticket[]) => {
+const countTickets = (tickets: Array<TicketZendesk & customFields>) => {
   const userCount = {
     atendimentos_em_andamento_calculado_: 0,
     atendimentos_concludos_calculado_: 0,
