@@ -22,10 +22,11 @@ const main = async (req, res, next) => {
         i => i.subject === `[${dicio(user.organizationId)}] ${user.name} - ${user.registration_number}`
       ) || filteredTickets.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))[0]
 
+      const status_inscricao = (ticket && ticket.status_inscricao) || '-'
       return {
         ...user,
         link_ticket: ticket && ticket.ticket_id,
-        status_inscricao: ticket && ticket.status_inscricao
+        status_inscricao
       }
     } else {
       const ticket = filteredTickets.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))[0]

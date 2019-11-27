@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo, useCallback } from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
@@ -26,20 +26,27 @@ const Table: React.FC = () => {
     therapist,
   } = submittedParams.value
 
-  const filterByDistance = (data: PointUser[]) => data.filter((i) => {
+  const filterByDistance = useCallback((data: PointUser[]) => data.map((i) => {
+    const pointA = [Number(i.latitude), Number(i.longitude)]
+
+    return {
+      ...i,
+      distance: (
+        !Number.isNaN(pointA[0])
+        && !Number.isNaN(pointA[1])
+        && lat
+        && lng
+        && Number(turf.distance([lat, lng], pointA)).toFixed(2)
+      ),
+    }
+  }).filter((i) => {
     if (!lat || !lng) {
       return true
     }
+    return i.distance && Number(i.distance) < distance
+  }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
-    const pointA = [Number(i.latitude), Number(i.longitude)]
-    if (Number.isNaN(pointA[0]) || Number.isNaN(pointA[1])) {
-      return false
-    }
-
-    return turf.distance([lat, lng], pointA) < distance
-  })
-
-  const filterByCategory = (data: PointUser[]) => data.filter((i) => {
+  const filterByCategory = useCallback((data: PointUser[]) => data.filter((i) => {
     const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS!)
 
     if (i.organization_id === zendeskOrganizations.therapist) {
@@ -57,17 +64,17 @@ const Table: React.FC = () => {
     }
 
     return true
-  })
+  }), [individual, lawyer, therapist])
 
-  const filteredTableData = () => {
+  const filteredTableData = useMemo(() => {
     let data = tableData.get()
     data = filterByDistance(data)
     data = filterByCategory(data)
 
     return data
-  }
+  }, [filterByCategory, filterByDistance, tableData])
 
-  return filteredTableData().length === 0 ? (
+  return filteredTableData.length === 0 ? (
     <FullWidth>
       <Flexbox>
         <Title.H4 margin={{ bottom: 30 }}>
@@ -80,11 +87,11 @@ const Table: React.FC = () => {
       <Flexbox vertical>
         <Title.H2 margin={{ bottom: 20 }}>Match realizado!</Title.H2>
         <Title.H4 margin={{ bottom: 30 }}>
-          {`${tableData.get().length} usuárias encontradas em um raio de ${distance}km.`}
+          {`${filteredTableData.length} usuárias encontradas em um raio de ${distance}km.`}
         </Title.H4>
         <br />
         <ReactTable
-          data={filteredTableData()}
+          data={filteredTableData}
           columns={columns}
           defaultPageSize={100}
           className="-striped -highlight"

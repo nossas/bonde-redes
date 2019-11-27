@@ -28,6 +28,9 @@ const columns = [
     accessor: 'distance',
     Header: 'Distância (km)',
   }, {
+    accessor: 'condition',
+    Header: 'Status da mulher',
+  }, {
     accessor: 'status_acolhimento',
     Header: 'Status Acolhimento',
     Cell: ({ value }: valueArrayString) => (value ? (

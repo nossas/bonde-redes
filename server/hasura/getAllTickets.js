@@ -4,6 +4,7 @@ const query = `query {
   solidarity_tickets {
     requester_id
     status_inscricao
+    status_acolhimento
     ticket_id
     created_at
     status
