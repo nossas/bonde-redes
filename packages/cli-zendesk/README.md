@@ -1,5 +1,11 @@
 Este pacote é um programa em linha de comando que quando executado realiza a integração de todos os tickets do zendesk para o banco de dados através de requisições em graphql.
 
+```
+Options:
+  -m, --mode <mode>  Required. Selects the operation mode. It can be "ticket" or "user"
+  -h, --help         output usage information
+```
+
 As variáveis de ambiente que precisam ser configuradas estão descritas a seguir:
 
 - ZENDESK_API_URL - url da api do zendesk
