@@ -27,11 +27,14 @@ class BondeCreatedDate {
 
   name: string | null
 
+  cep: string | null
+
   dbg = debug('webhooks-zendesk-BondeCreatedDate')
 
-  constructor(email: string, name: string | null) {
+  constructor(email: string, name: string | null, cep: string | null) {
     this.email = email
     this.name = name
+    this.cep = cep
   }
 
   getFormEntries = async () => {
@@ -86,17 +89,25 @@ class BondeCreatedDate {
     }
 
     try {
-      const parsedFields = JSON.parse(filteredFormEntries[0].fields)
+      const [
+        { value: name },
+        { value: lastname },
+        _,
+        __,
+        { value: cep },
+      ] = JSON.parse(filteredFormEntries[0].fields)
       const aux = {
-        created_at: filteredFormEntries[0].created_at,
-        name: (typeof this.name !== 'string' || this.name.length === 0) ? `${parsedFields[0].value} ${parsedFields[1].value}` : this.name,
+        createdAt: filteredFormEntries[0].created_at,
+        name: (typeof this.name !== 'string' || this.name.length === 0) ? `${name} ${lastname}` : this.name,
+        cep: (typeof this.cep !== 'string' || this.cep?.length === 0) ? String(cep) : this.cep,
       }
       return aux
     } catch {
       this.dbg(`formEntries not found for email ${this.email}`)
       return {
-        created_at: new Date().toString(),
+        createdAt: new Date().toString(),
         name: this.name || 'sem nome',
+        cep: this.cep ?? undefined,
       }
     }
   }
