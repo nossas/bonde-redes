@@ -197,6 +197,14 @@ class Server {
     return null
   }
 
+  checkCep = (cep: any) => {
+    if (typeof cep === 'string' && cep.length > 0) {
+      return cep
+    }
+
+    return null
+  }
+
   start = () => {
     const { PORT } = process.env
     this.server
@@ -228,6 +236,7 @@ class Server {
         const bondeCreatedDate = new BondeCreatedDate(
           results.email,
           this.checkNames(results),
+          this.checkCep(results.cep),
         )
         const bondeCreatedAt = await bondeCreatedDate.start()
 
@@ -238,9 +247,9 @@ class Server {
         const instance = await new InstanceClass!(res)
         let user
         if (instance instanceof AdvogadaCreateUser) {
-          user = await instance.start(results, bondeCreatedAt.created_at!, bondeCreatedAt.name)
+          user = await instance.start(results, bondeCreatedAt)
         } else if (instance instanceof PsicologaCreateUser) {
-          user = await instance.start(results!, bondeCreatedAt.created_at!, bondeCreatedAt.name)
+          user = await instance.start(results!, bondeCreatedAt)
         }
 
         if (!user.response) {
