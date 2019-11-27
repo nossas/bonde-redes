@@ -18,7 +18,7 @@ apm.start({
 })
 
 import { install } from 'source-map-support'
-import prompts from 'prompts'
+import commander from 'commander'
 import signale from 'signale'
 import checkConfig from './checkConfig'
 import dbg from './dbg'
@@ -26,30 +26,27 @@ import App from './App'
 
 install()
 
+const program = new commander.Command()
+program
+  .option('-m, --mode <mode>', 'Required. Selects the operation mode. It can be "ticket" or "user"')
+
 const init = async () => {
   try {
     checkConfig()
-    const module = await prompts({
-      type: 'select',
-      name: 'module',
-      message: 'Which module you want to execute?',
-      choices: [
-        { title: 'Ticket', value: 'ticket' },
-        { title: 'User', value: 'user' },
-      ],
-    })
 
-    signale.time('duration')
-    switch (module.module) {
-      case 'ticket':
-        await App.ticket()
-        break
-      case 'user':
-        await App.user()
-        break
-      default:
-        signale.timeEnd('duration')
-        signale.success('successfully finished')
+    program.parse(process.argv)
+    if (program.mode === 'ticket') {
+      signale.time('duration')
+      await App.ticket()
+      signale.timeEnd('duration')
+    } else if (program.mode === 'user') {
+      signale.time('duration')
+      await App.user()
+      signale.timeEnd('duration')
+    } else if (program.mode === undefined) {
+      signale.fatal('operation mode is required')
+    } else {
+      signale.fatal(`'${program.mode}' is not a valid operation mode`)
     }
   } catch (e) {
     dbg(e)
