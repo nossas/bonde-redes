@@ -221,7 +221,7 @@ const saveUsers = async (users: User[]) => {
     },
   })
 
-  response.data.errors && dbg(response.data.errors)
+  response.data.errors && dbg(response.data.errors[0])
 
   return response
 }
