@@ -9,6 +9,12 @@ export enum CONDITION {
   REPROVADA_ESTUDO_DE_CASO = 'reprovada_estudo_de_caso',
 }
 
+interface InputFromMautic {
+  createdAt: string
+  name: string
+  cep?: string
+}
+
 class PsicologaCreateUser extends Base {
   organization = 'PSICÓLOGA'
 
@@ -108,13 +114,13 @@ class PsicologaCreateUser extends Base {
 
   private verificaLocalização = async (condition: [CONDITION], data: object) => {
     const verificaCep = yup.object().shape({
-      cep: yup.string().required(),
+      cep: yup.string().nullable(),
     }).required()
     let verifiedData
     try {
       verifiedData = await verificaCep.validate(data)
     } catch (e) {
-      return undefined
+      return {}
       // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
     }
     const {
@@ -140,8 +146,11 @@ class PsicologaCreateUser extends Base {
     }
   }
 
-  start = async (data: object, createdAt: string, name: string) => {
-    let newData = data
+  start = async (data: any, { createdAt, name, cep }: InputFromMautic) => {
+    let newData = {
+      ...data,
+      cep,
+    }
     const condition: [CONDITION] = [CONDITION.UNSET]
     newData = await this.verificaDiretrizesAtendimento(condition, newData)
     newData = await this.verificaEstudoDeCaso(condition, newData)
