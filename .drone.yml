@@ -239,10 +239,10 @@ pipeline:
       status: success
       event: tag
 
-  deploy-stag-cli-zendesk:
+  deploy-stag-cli-zendesk-user:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
-    service: webhooks/cli-zendesk
+    service: webhooks/cli-zendesk-user
     group: deploying
     docker_image: nossas/bonde-cli-zendesk:${DRONE_BRANCH/\//-}
     timeout: 360
@@ -253,10 +253,41 @@ pipeline:
       branch: [hotfix/*, release/*, feature/*, develop]
       event: push
 
-  deploy-prod-cli-zendesk:
+  deploy-stag-cli-zendesk-ticket:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
-    service: webhooks/cli-zendesk
+    service: webhooks/cli-zendesk-ticket
+    group: deploying
+    docker_image: nossas/bonde-cli-zendesk:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [ rancher_access_key, rancher_secret_key ]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
+
+  deploy-prod-cli-zendesk-user:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/cli-zendesk-user
+    docker_image: "nossas/bonde-cli-zendesk:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
+
+  deploy-prod-cli-zendesk-ticket:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/cli-zendesk-ticket
     docker_image: "nossas/bonde-cli-zendesk:${DRONE_TAG##v}"
     timeout: 360
     group: deploying
