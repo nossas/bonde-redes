@@ -67,7 +67,7 @@ export const filterByEmail = (formEntries: FormEntry[], email) => {
     } catch (e) {
       return false
     }
-  })
+  }).sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
 
   if (filteredFormEntries.length === 0) {
     log(`Sem data do bonde para o email ${email}.`)
