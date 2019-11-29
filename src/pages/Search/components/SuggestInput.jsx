@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import AutoSuggest from 'react-autosuggest'
 import { FormField, Input, Text } from 'bonde-styleguide'
@@ -30,93 +30,78 @@ const SuggestionsContainer = styled.div`
   }
 `
 
-export default class SuggestInput extends React.Component {
-  constructor(props) {
-    super(props)
-    this.client = GoogleMaps.createClient({
-      // TODO: Change to enviroment variable
-      key: process.env.REACT_APP_GOOGLE_CLIENT_KEY,
-      Promise
+
+const googleClient = GoogleMaps.createClient({
+  // TODO: Change to enviroment variable
+  key: process.env.REACT_APP_GOOGLE_CLIENT_KEY,
+  Promise
+})
+
+const handleSuggestionsFetchRequested = ({ value }, setSuggestions) => {
+  googleClient
+    .geocode({ address: value, components: { country: 'brasil' } })
+    .asPromise()
+    .then((res) => {
+      console.log({google: res})
+      if (res.json && res.json.results) {
+        const suggestions = res.json.results.map(addr => ({
+          address: addr.formatted_address,
+          location: addr.geometry.location
+        }))
+        setSuggestions(suggestions)
+        return Promise.resolve()
+      }
     })
-
-    this.state = {
-      selected: '',
-      value: '',
-      suggestions: []
-    }
-  }
-
-  handleSuggestionsFetchRequested({ value }) {
-    this.client
-      .geocode({ address: value, components: { country: 'brasil' } })
-      .asPromise()
-      .then((res) => {
-        if (res.json && res.json.results) {
-          const suggestions = res.json.results.map(addr => ({
-            address: addr.formatted_address,
-            location: addr.geometry.location
-          }))
-          this.setState({ suggestions })
-          return Promise.resolve()
-        }
-      })
-  }
-
-  handleSuggestionsClearRequested() {
-    this.setState({ suggestions: [] })
-  }
-
-  getSuggestionValue(suggestion) {
-    return suggestion.address
-  }
-
-  renderSuggestion(suggestion, { isHighlighted }) {
-    return <Text>{suggestion.address}</Text>
-  }
-
-  renderSuggestionsContainer({ containerProps, children, query }) {
-    return (
-      <SuggestionsContainer>
-        <div {...containerProps}>
-          {children}
-        </div>
-      </SuggestionsContainer>
-    )
-  }
-
-  handleSuggestionSelected(e, { suggestion }) {
-    const { onSelect } = this.props
-    onSelect && onSelect(suggestion)
-  }
-
-  render() {
-    const inputProps = {
-      placeholder: this.props.placeholder,
-      label: this.props.label,
-      hint: this.props.hint,
-      value: this.state.value,
-      onChange: (e, { newValue }) => this.setState({ value: newValue })
-    }
-
-    return (
-      <AutoSuggest
-        suggestions={this.state.suggestions}
-        onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested.bind(this)}
-        onSuggestionsClearRequested={this.handleSuggestionsClearRequested.bind(this)}
-        onSuggestionSelected={this.handleSuggestionSelected.bind(this)}
-        getSuggestionValue={this.getSuggestionValue.bind(this)}
-        renderSuggestion={this.renderSuggestion.bind(this)}
-        renderSuggestionsContainer={this.renderSuggestionsContainer.bind(this)}
-        alwaysRenderSuggestion
-        inputProps={inputProps}
-        shouldRenderSuggestions={value => value.trim().length > 6}
-        renderInputComponent={props => (
-          <FormField
-            {...props}
-            inputComponent={Input}
-          />
-        )}
-      />
-    )
-  }
 }
+
+const getSuggestionValue = (suggestion) => suggestion.address
+
+const renderSuggestion = (suggestion, { isHighlighted }) =>
+  <Text>{suggestion.address}</Text>
+
+const renderSuggestionsContainer = ({ containerProps, children, query }) => {
+  return (
+    <SuggestionsContainer>
+      <div {...containerProps}>
+        {children}
+      </div>
+    </SuggestionsContainer>
+  )
+}
+
+const SuggestInput = ({ placeholder, label, hint, onSelect }) => {
+  const [selected, setSelected] = useState()
+  const [value, setValue] = useState('')
+  const [suggestions, setSuggestions] = useState([])
+  const handleSuggestionSelected = onSelect => onSelect && onSelect(suggestions)
+  const inputProps = {
+    placeholder: placeholder,
+    label: label,
+    hint: hint,
+    value: value,
+    onChange: (e, { newValue }) => setValue(newValue)
+  }
+  return (
+    <AutoSuggest
+      suggestions={suggestions}
+      onSuggestionsFetchRequested={value => handleSuggestionsFetchRequested(value, setSuggestions)}
+      onSuggestionsClearRequested={() => setSuggestions([])}
+      onSuggestionSelected={() => handleSuggestionSelected(onSelect)}
+      getSuggestionValue={getSuggestionValue}
+      renderSuggestion={renderSuggestion}
+      renderSuggestionsContainer={renderSuggestionsContainer}
+      alwaysRenderSuggestion
+      inputProps={inputProps}
+      shouldRenderSuggestions={value => value.trim().length > 6}
+      renderInputComponent={props => (
+        <FormField
+          {...props}
+          inputComponent={Input}
+          style={{"color": "#ffffff"}}
+        />
+      )}
+    />
+  )
+}
+
+export default SuggestInput
