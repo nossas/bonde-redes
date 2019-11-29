@@ -67,9 +67,11 @@ const Table: React.FC = () => {
   }), [individual, lawyer, therapist])
 
   const filteredTableData = useMemo(() => {
-    let data = tableData.get()
-    data = filterByDistance(data)
-    data = filterByCategory(data)
+    const data = filterByCategory(
+      filterByDistance(
+        tableData.get(),
+      ),
+    )
 
     return data
   }, [filterByCategory, filterByDistance, tableData])
