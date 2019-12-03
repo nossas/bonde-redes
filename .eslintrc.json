@@ -8,6 +8,7 @@
       ],
       "extends": [
         "airbnb",
+        "airbnb/hooks",
         "plugin:import/typescript"
       ],
       "parser": "@typescript-eslint/parser",

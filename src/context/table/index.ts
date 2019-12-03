@@ -1,11 +1,12 @@
 import { createStateLink } from '@hookstate/core';
-import dicioService from 'components/Table/dicioService';
 
 interface SubmittedParams {
-  lat: number
-  lng: number
-  serviceType: keyof typeof dicioService
+  lat: number | null
+  lng: number | null
   distance: number
+  therapist: boolean
+  lawyer: boolean
+  individual: boolean
 }
 
 export interface PointUser {
@@ -18,14 +19,17 @@ export interface PointUser {
   status_acolhimento: string
   user_id: number
   condition: string
+  organization_id: number
 }
 
 const tableDataRef = createStateLink<PointUser[]>([])
 const submittedParamsRef = createStateLink<SubmittedParams>({
-  lat: 0,
-  lng: 0,
-  serviceType: 'default',
-  distance: 0,
+  lat: null,
+  lng: null,
+  distance: 20,
+  therapist: true,
+  lawyer: true,
+  individual: true,
 })
 
 export default {

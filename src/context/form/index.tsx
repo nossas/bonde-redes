@@ -8,11 +8,15 @@ type geolocationType = {
 }
 
 const distanceRef = createStateLink(20)
-const serviceTypeRef = createStateLink<serviceTypes>('default')
 const geolocationRef = createStateLink<geolocationType | undefined>(undefined)
+const lawyerCheckboxRef = createStateLink(true)
+const therapistCheckboxRef = createStateLink(true)
+const individualCheckboxRef = createStateLink(true)
 
 export default {
   distanceRef,
-  serviceTypeRef,
   geolocationRef,
+  lawyerCheckboxRef,
+  therapistCheckboxRef,
+  individualCheckboxRef,
 }

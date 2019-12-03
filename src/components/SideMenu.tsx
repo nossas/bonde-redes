@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Spacing, Title, Text } from 'bonde-styleguide'
 import { useStateLink } from '@hookstate/core'
@@ -6,7 +6,6 @@ import SearchIcon from 'assets/search.svg'
 import AngleLeftIcon from 'assets/angle-left.svg'
 import { animated, useSpring } from 'react-spring'
 import request from 'util/request'
-import PropTypes from 'prop-types'
 import GlobalContext from '../context'
 import Panel from './Panel'
 import Form from './Form'
@@ -31,18 +30,14 @@ const StyledImage = styled.img`
 
 const AnimatedImage = animated(StyledImage)
 
-const SideMenu: React.FC = ({ children }) => {
+const SideMenu: React.FC = () => {
   const {
-    sideMenu: {
-      isSideMenuOpenRef,
-      toggleSideMenu,
-      isSearchIconPanelOpenRef,
-      toggleSearchIconPanel,
-    },
     form: {
       distanceRef,
       geolocationRef,
-      serviceTypeRef,
+      individualCheckboxRef,
+      lawyerCheckboxRef,
+      therapistCheckboxRef,
     },
     table: {
       tableDataRef,
@@ -50,67 +45,64 @@ const SideMenu: React.FC = ({ children }) => {
     },
   } = GlobalContext
 
-  const sideMenuOpen = useStateLink(isSideMenuOpenRef)
-  const searchIconPanelOpen = useStateLink(isSearchIconPanelOpenRef)
+  const [sideMenuOpen, setSideMenuOpen] = useState(true)
+  const [searchIconPanelOpen, setSearchIconPanelOpen] = useState(false)
   const distance = useStateLink(distanceRef)
   const geolocation = useStateLink(geolocationRef)
-  const serviceType = useStateLink(serviceTypeRef)
+  const individualCheckbox = useStateLink(individualCheckboxRef)
+  const lawyerCheckbox = useStateLink(lawyerCheckboxRef)
+  const therapistCheckbox = useStateLink(therapistCheckboxRef)
   const tableData = useStateLink(tableDataRef)
   const submittedParams = useStateLink(submittedParamsRef)
 
+  useEffect(() => {
+    (async () => {
+      const response = await request.get()
+      tableData.set(response.data)
+    })()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const style = useSpring({
-    transform: `translateX(${searchIconPanelOpen.value ? 100 : 0}%)`,
+    transform: `translateX(${searchIconPanelOpen ? 100 : 0}%)`,
   })
 
   const submit = async () => {
-    const params = {
+    submittedParams.set({
       ...geolocation.value!,
       distance: distance.value,
-      serviceType: serviceType.value,
-    }
-    const response = await request.get(params)
-    tableData.set([])
-    submittedParams.set(params)
-    tableData.set(response.data)
+      individual: individualCheckbox.value,
+      lawyer: lawyerCheckbox.value,
+      therapist: therapistCheckbox.value,
+    })
   }
 
   return (
-    <>
-      <StyledPanel open={sideMenuOpen.value} direction="left" size={350}>
-        <AnimatedImage
-          style={style}
-          onClick={() => {
-            toggleSideMenu()
-            toggleSearchIconPanel()
-          }}
-          src={sideMenuOpen.value ? AngleLeftIcon : SearchIcon}
-          width={50}
-          height={50}
-        />
-        <Spacing margin={{ bottom: 15 }}>
-          <Title.H2 align="center">Novo Match</Title.H2>
-        </Spacing>
-        <Spacing margin={{ bottom: 35 }}>
-          <Text align="center">Insira os dados da pessoa e o tipo de atendimento que você deseja buscar:</Text>
-        </Spacing>
-        <Form onSubmit={async () => {
-          toggleSideMenu()
-          toggleSearchIconPanel()
-          submit()
+    <StyledPanel open={sideMenuOpen} direction="left" size={350}>
+      <AnimatedImage
+        style={style}
+        onClick={() => {
+          setSideMenuOpen((p) => !p)
+          setSearchIconPanelOpen((p) => !p)
         }}
-        />
-      </StyledPanel>
-      {children}
-    </>
+        src={sideMenuOpen ? AngleLeftIcon : SearchIcon}
+        width={50}
+        height={50}
+      />
+      <Spacing margin={{ bottom: 15 }}>
+        <Title.H2 align="center">Novo Match</Title.H2>
+      </Spacing>
+      <Spacing margin={{ bottom: 35 }}>
+        <Text align="center">Insira os dados da pessoa e o tipo de atendimento que você deseja buscar:</Text>
+      </Spacing>
+      <Form onSubmit={async () => {
+        setSideMenuOpen((p) => !p)
+        setSearchIconPanelOpen((p) => !p)
+        submit()
+      }}
+      />
+    </StyledPanel>
   )
-}
-
-SideMenu.defaultProps = {
-  children: null,
-}
-
-SideMenu.propTypes = {
-  children: PropTypes.node,
 }
 
 export default SideMenu
