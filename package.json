@@ -31,7 +31,7 @@
     "react-map-gl": "^5.1.1",
     "react-scripts": "3.2.0",
     "react-spring": "^8.0.27",
-    "react-table": "^6.10.3",
+    "react-table": "6.10.3",
     "styled-components": "^4.4.1",
     "typescript": "^3.7.2"
   },
