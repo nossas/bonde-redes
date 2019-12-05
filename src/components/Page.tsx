@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { Footer } from 'bonde-styleguide'
 import Header from './Header'
-import SideMenu from './SideMenu'
 import Content from './Content'
 
 const FlexDiv = styled.div`
@@ -23,7 +22,6 @@ const FixedDiv = styled.div`
 const Page = () => (
   <FlexDiv>
     <Header>
-      <SideMenu />
       <ScrollView>
         <Content />
       </ScrollView>

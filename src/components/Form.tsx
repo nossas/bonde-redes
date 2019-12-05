@@ -6,6 +6,7 @@ import {
   FormField,
   Input,
 } from 'bonde-styleguide'
+import styled from 'styled-components'
 import GlobalContext from 'context'
 import { useStateLink } from '@hookstate/core'
 import MapsSearchInput from 'pages/Search/components/MapsSearchInput'
@@ -13,6 +14,38 @@ import MapsSearchInput from 'pages/Search/components/MapsSearchInput'
 interface Props {
   onSubmit: () => void
 }
+
+const FormWrapper = styled.form`
+  width: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+`
+const StyledField = styled(FormField)`
+  padding: 0;
+  color: rgba(255, 255, 255, 1);
+  position: relative;
+  top: 16px;
+`
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+`
+
+const LabelsWrapper = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+`
+
+const StyledLabel = styled.label`
+  font-size: 13px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.15;
+  color: rgba(170, 170, 170, 1);
+  padding-right: 10px;
+`
 
 const Form: React.FC<Props> = ({ onSubmit }) => {
   const {
@@ -33,7 +66,7 @@ const Form: React.FC<Props> = ({ onSubmit }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <FormWrapper onSubmit={handleSubmit}>
       <MapsSearchInput
         name="address"
         label="Endereço"
@@ -41,7 +74,7 @@ const Form: React.FC<Props> = ({ onSubmit }) => {
         onChangeLocation={(e: any) => geolocation.set(e)}
         value={geolocation.value}
       />
-      <FormField
+      <StyledField
         name="distance"
         label="Distância (km)"
         placeholder="Informe o raio de busca"
@@ -50,47 +83,50 @@ const Form: React.FC<Props> = ({ onSubmit }) => {
         onChange={(e: any) => distance.set(Number(e.target.value))}
         value={distance.value}
       />
-      <label htmlFor="lawyer">
-        <input
-          type="checkbox"
-          id="lawyer"
-          onChange={() => lawyerCheckbox.set((p) => !p)}
-          checked={lawyerCheckbox.value}
-        />
-        {' '}
-        Advogada
-      </label>
-      <br />
-      <label htmlFor="therapist">
-        <input
-          type="checkbox"
-          id="therapist"
-          onChange={() => therapistCheckbox.set((p) => !p)}
-          checked={therapistCheckbox.value}
-        />
-        {' '}
-        Terapeuta
-      </label>
-      <br />
-      <label htmlFor="individual">
-        <input
-          type="checkbox"
-          id="individual"
-          onChange={() => individualCheckbox.set((p) => !p)}
-          checked={individualCheckbox.value}
-        />
-        {' '}
-        MSR
-      </label>
-      <br />
-      <Flexbox horizontal end>
-        <Button
-          type="submit"
-        >
-          Buscar
-        </Button>
-      </Flexbox>
-    </form>
+      <Column>
+        <LabelsWrapper>
+          <StyledLabel htmlFor="lawyer">
+            <input
+              type="checkbox"
+              id="lawyer"
+              onChange={() => lawyerCheckbox.set((p) => !p)}
+              checked={lawyerCheckbox.value}
+            />
+            {' '}
+            Advogada
+          </StyledLabel>
+          <br />
+          <StyledLabel htmlFor="therapist">
+            <input
+              type="checkbox"
+              id="therapist"
+              onChange={() => therapistCheckbox.set((p) => !p)}
+              checked={therapistCheckbox.value}
+            />
+            {' '}
+            Terapeuta
+          </StyledLabel>
+          <br />
+          <StyledLabel htmlFor="individual">
+            <input
+              type="checkbox"
+              id="individual"
+              onChange={() => individualCheckbox.set((p) => !p)}
+              checked={individualCheckbox.value}
+            />
+            {' '}
+            MSR
+          </StyledLabel>
+        </LabelsWrapper>
+        <Flexbox middle>
+          <Button
+            type="submit"
+          >
+            Buscar
+          </Button>
+        </Flexbox>
+      </Column>
+    </FormWrapper>
   )
 }
 
