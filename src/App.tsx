@@ -1,5 +1,5 @@
 import React from 'react' 
-import { Route } from 'react-router'
+import { Route, Redirect } from 'react-router'
 import { Router } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -8,8 +8,9 @@ import { Footer } from 'bonde-styleguide'
 import history from './history'
 
 import Header from './components/Header'
-import Geobonde from './pages/Geobonde/Table'
-import Map from './pages/Geobonde/Map'
+import Geobonde from './pages/Geobonde/Table/'
+import Map from './pages/Geobonde/Map/'
+import Match from './pages/Match/Table/'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -30,9 +31,18 @@ const App = () =>
     <AppWrapper className="app">
       <Header />
       <AppBody className="app-body">
-        <Route path="/geobonde" exact component={Geobonde} />
-        <Route path="/geobonde/map" exact component={Map} />
-        {/* <Route path="/match" component={Projetos} /> */}
+        <Route exact path="/">
+          <Redirect to="/match" />
+        </Route>
+        <Route path="/geobonde" exact>
+          <Geobonde/>
+        </Route>
+        <Route path="/geobonde/map" exact>
+          <Map />
+        </Route>
+        <Route exact path="/match">
+          <Match />
+        </Route>
       </AppBody>
       <Footer />
     </AppWrapper>
