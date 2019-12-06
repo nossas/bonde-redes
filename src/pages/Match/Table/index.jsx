@@ -12,26 +12,24 @@ import columns from './columns'
 
 const Table = () => {
   const {
-    table: { tableDataRef, submittedParamsRef },
+    matchTable: { volunteerRef, submittedParamsRef },
+    table: { tableDataRef }
   } = GlobalContext
 
-  const tableData = useStateLink(tableDataRef)
+  const volunteer = useStateLink(volunteerRef)
   const submittedParams = useStateLink(submittedParamsRef)
+  // table data from header, geobonde table - maybe do something universal
+  const tableData = useStateLink(tableDataRef)
 
-  const {
-    distance,
-    lat,
-    lng,
-    individual,
-    lawyer,
-    therapist,
-  } = submittedParams.value
-
+  const { latitude, longitude, name } = volunteer.value
+  // aqui onde pode setar distancia variavel depois
+  const distance = 20
+  const lat = Number(latitude)
+  const lng = Number(longitude)
   const filterByDistance = useCallback((data) =>
     data
       .map((i) => {
         const pointA = [Number(i.latitude), Number(i.longitude)]
-
         return {
           ...i,
           distance: (
@@ -44,34 +42,19 @@ const Table = () => {
         }
       })
       .filter((i) => {
-        if (!lat || !lng) {
-          return true
-        }
+        if (!lat || !lng) return true
         return i.distance && Number(i.distance) < distance
       })
       .sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
-  const filterByCategory = useCallback((data) => 
-    data
+  const filterByCategory = data => {
+    return data
       .filter((i) => {
-      const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS)
-
-      if (i.organization_id === zendeskOrganizations.therapist) {
-        if (!therapist) {
-          return false
-        }
-      } else if (i.organization_id === zendeskOrganizations.lawyer) {
-        if (!lawyer) {
-          return false
-        }
-      } else if (i.organization_id === zendeskOrganizations.individual) {
-        if (!individual) {
-          return false
-        }
-      }
-
-      return true
-    }), [individual, lawyer, therapist])
+        const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS)
+        if (i.organization_id === zendeskOrganizations.individual) return true
+        return false
+    })
+  }
 
   const filteredTableData = useMemo(() => {
     const data = filterByCategory(
@@ -79,11 +62,8 @@ const Table = () => {
         tableData.get(),
       ),
     )
-
     return data
   }, [filterByCategory, filterByDistance, tableData])
-
-  const volunteer = 'Débora Silva'
 
   return filteredTableData.length === 0 ? (
     <FullWidth>
@@ -101,7 +81,7 @@ const Table = () => {
         </Spacing>
         <Spacing margin="25">
           <Title.H5 color="#444444">
-            {`${filteredTableData.length} solicitações de MSRs próximas de ${volunteer}`}
+            {`${filteredTableData.length} solicitações de MSRs próximas de ${name}`}
           </Title.H5>
         </Spacing>
         <ReactTable
