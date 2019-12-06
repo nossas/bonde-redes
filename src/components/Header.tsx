@@ -10,7 +10,7 @@ import {
   // Button,
   Flexbox
 } from 'bonde-styleguide'
-import request from 'util/request'
+import request from 'services/request'
 import GlobalContext from '../context'
 
 import Form from './Form'
@@ -37,6 +37,7 @@ const FlexDiv = styled.div`
 // `
 
 // const visualizationState = useStateLink(contentStateRef)
+const isMatch = (path: string) => path === '/match'
 
 const Header: React.FC = ({ children }) => {
 
@@ -57,14 +58,16 @@ const Header: React.FC = ({ children }) => {
     <FlexDiv>
       <StyledBondeHeader>
         <Flexbox alignItems="middle" fullSize row horizontal>
-          <Title.H3 color="white">Mapa do acolhimento</Title.H3>
+          <Title.H2 color="white">
+            {isMatch(path) ? 'Match' : 'Mapa do acolhimento'}
+          </Title.H2>
           {/* <Button onClick={() => { toggleContentState() }}>
             Alternar para
               {' '}
               {visualizationState.get()}
             </Button> */}
           <IfElse
-            condition={path === '/match'} 
+            condition={isMatch(path)} 
             True={<MatchForm />}
             False={<Form />}
           />
