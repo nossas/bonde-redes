@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import { useStateLink } from '@hookstate/core'
 
 import GlobalContext from 'context'
+import { getUserData } from 'services/utils'
 
 import Select from './Select'
 import dicioAgent from 'pages/Match/Table/dicioAgent'
@@ -26,21 +27,27 @@ const StyledField = styled(FormField)`
   position: relative;
   top: 16px;
 `
-
 const MatchForm = () => {
   const {
     matchForm: {
       volunteerEmailRef, agentsRef
     },
-    matchTable: { submittedParamsRef }
+    matchTable: { submittedParamsRef, volunteerRef },
+    table: { tableDataRef }
   } = GlobalContext
 
+  const tableData = useStateLink(tableDataRef)
   const submittedParams = useStateLink(submittedParamsRef)
   const email = useStateLink(volunteerEmailRef)
   const agents = useStateLink(agentsRef)
+  const volunteer = useStateLink(volunteerRef)
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    // buscando dados voluntaria atraves do email
+    const data = tableData.get()
+    const user = getUserData(email.value, data)
+    volunteer.set({ ...user })
     submittedParams.set({
       email: email.value,
       agent: agents.value,
@@ -61,7 +68,7 @@ const MatchForm = () => {
       <Select
         label="Agente"
         onChange={(e) => agents.set(e.target.value)}
-        value={'default'}
+        value={agents.value}
         dicio={dicioAgent}
       />
       <Flexbox middle>
