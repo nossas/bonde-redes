@@ -3,8 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 const Wrapper = styled.div`
-  width: 100%;
-  padding-bottom: 17px;
+  width: 200px;
 `
 
 const DivText = styled.label`
@@ -31,16 +30,21 @@ const StyledSelect = styled.select`
   width: 100%;
 `;
 
-interface Props {
-  label: string
-  onChange?: (e: any) => void
-  value: any
-  children?: React.ReactNode
-}
+// interface Props {
+//   label: string
+//   onChange?: (e: any) => void
+//   value: any
+//   dicio?: any
+// }
 
-const Select: React.FC<Props> = ({
-  label, children, onChange, value,
-}) => (
+const renderOptions = (dicio) => 
+  Object.keys(dicio).map((i) => 
+    <option key={i} value={i}>{dicio[i]}</option>
+  )
+
+const Select = ({
+  label, dicio, onChange, value,
+}) => 
   <Wrapper>
     <DivText>
       {label.toUpperCase()}
@@ -48,11 +52,10 @@ const Select: React.FC<Props> = ({
     <br />
     <WrapperSelect>
       <StyledSelect value={value} onChange={onChange}>
-        {children}
+        {renderOptions(dicio)}
       </StyledSelect>
     </WrapperSelect>
   </Wrapper>
-)
 
 Select.defaultProps = {
   children: null,
@@ -61,9 +64,9 @@ Select.defaultProps = {
 
 Select.propTypes = {
   label: PropTypes.string.isRequired,
-  children: PropTypes.node,
+  dicio: PropTypes.object.isRequired,
   onChange: PropTypes.func,
-  value: PropTypes.oneOf(['lawyer', 'therapist', 'default', 'individual']).isRequired,
+  value: PropTypes.object.isRequired,
 }
 
 export default Select
