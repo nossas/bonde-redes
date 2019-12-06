@@ -9,11 +9,11 @@ import {
 import styled from 'styled-components'
 import GlobalContext from 'context'
 import { useStateLink } from '@hookstate/core'
-import MapsSearchInput from 'pages/Search/components/MapsSearchInput'
+import MapsSearchInput from './Search/MapsSearchInput'
 
-interface Props {
-  onSubmit: () => void
-}
+// interface Props {
+//   onSubmit: () => void
+// }
 
 const FormWrapper = styled.form`
   width: 70%;
@@ -47,22 +47,30 @@ const StyledLabel = styled.label`
   padding-right: 10px;
 `
 
-const Form: React.FC<Props> = ({ onSubmit }) => {
+const Form: React.FC = () => {
   const {
     form: {
       distanceRef, geolocationRef, therapistCheckboxRef, lawyerCheckboxRef, individualCheckboxRef,
     },
+    table: { submittedParamsRef }
   } = GlobalContext
 
-  const distance = useStateLink(distanceRef)
+  const submittedParams = useStateLink(submittedParamsRef)
   const geolocation = useStateLink(geolocationRef)
-  const therapistCheckbox = useStateLink(therapistCheckboxRef)
-  const lawyerCheckbox = useStateLink(lawyerCheckboxRef)
+  const distance = useStateLink(distanceRef)
   const individualCheckbox = useStateLink(individualCheckboxRef)
+  const lawyerCheckbox = useStateLink(lawyerCheckboxRef)
+  const therapistCheckbox = useStateLink(therapistCheckboxRef)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    onSubmit()
+    submittedParams.set({
+      ...geolocation.value!,
+      distance: distance.value,
+      individual: individualCheckbox.value,
+      lawyer: lawyerCheckbox.value,
+      therapist: therapistCheckbox.value,
+    })
   }
 
   return (
@@ -128,10 +136,6 @@ const Form: React.FC<Props> = ({ onSubmit }) => {
       </Column>
     </FormWrapper>
   )
-}
-
-Form.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 }
 
 export default Form

@@ -2,17 +2,20 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useStateLink } from '@hookstate/core'
 import styled from 'styled-components'
+import { useLocation } from 'react-router-dom'
+
 import {
   Header as BondeHeader,
   Title,
   // Button,
   Flexbox
 } from 'bonde-styleguide'
-
 import request from 'util/request'
 import GlobalContext from '../context'
 
 import Form from './Form'
+import { IfElse } from './If'
+import MatchForm from './MatchForm'
 
 const StyledBondeHeader = styled(BondeHeader)`
   width: 100%;
@@ -24,51 +27,21 @@ const StyledBondeHeader = styled(BondeHeader)`
 const FlexDiv = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
 `
 
-const GrownDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  flex-grow: 1;
-`
+// const GrownDiv = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   position: relative;
+//   flex-grow: 1;
+// `
 
 // const visualizationState = useStateLink(contentStateRef)
 
 const Header: React.FC = ({ children }) => {
 
-  const {
-    form: {
-      distanceRef,
-      geolocationRef,
-      individualCheckboxRef,
-      lawyerCheckboxRef,
-      therapistCheckboxRef,
-    },
-    table: {
-      tableDataRef,
-      submittedParamsRef,
-    },
-  } = GlobalContext
-  
-  const distance = useStateLink(distanceRef)
-  const geolocation = useStateLink(geolocationRef)
-  const individualCheckbox = useStateLink(individualCheckboxRef)
-  const lawyerCheckbox = useStateLink(lawyerCheckboxRef)
-  const therapistCheckbox = useStateLink(therapistCheckboxRef)
+  const { table: { tableDataRef } } = GlobalContext
   const tableData = useStateLink(tableDataRef)
-  const submittedParams = useStateLink(submittedParamsRef)
-  
-  const submit = async () => {
-    submittedParams.set({
-      ...geolocation.value!,
-      distance: distance.value,
-      individual: individualCheckbox.value,
-      lawyer: lawyerCheckbox.value,
-      therapist: therapistCheckbox.value,
-    })
-  }
 
   useEffect(() => {
     (async () => {
@@ -77,7 +50,8 @@ const Header: React.FC = ({ children }) => {
     })()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  
+
+  const { pathname: path } = useLocation()
 
   return (
     <FlexDiv>
@@ -89,12 +63,16 @@ const Header: React.FC = ({ children }) => {
               {' '}
               {visualizationState.get()}
             </Button> */}
-          <Form onSubmit={async () => submit()} />
+          <IfElse
+            condition={path === '/match'} 
+            True={<MatchForm />}
+            False={<Form />}
+          />
         </Flexbox>
       </StyledBondeHeader>
-      <GrownDiv>
+      {/* <GrownDiv>
         {children}
-      </GrownDiv>
+      </GrownDiv> */}
     </FlexDiv>
   )
 }
