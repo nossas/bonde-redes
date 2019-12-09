@@ -1,30 +1,37 @@
 import { createStateLink } from '@hookstate/core';
 
-interface SubmittedParams {
-  email: string
-  agent: string
-}
-
 interface Volunteer {
   latitude: string
   longitude: string
   email: string
-  tipo_acolhimento: string
+  organization_id: number
 }
 
 const volunteerRef = createStateLink<Volunteer>({
   latitude: '0',
   longitude: '0',
   email: '',
-  tipo_acolhimento: '',
+  organization_id: 0
 })
 
-const submittedParamsRef = createStateLink<SubmittedParams>({
-  email: "",
-  agent: "",
-})
+interface MatchUsers {
+  latitude: string
+  longitude: string
+  name: string
+  email: string
+  data_de_inscricao_no_bonde?: string
+  status_inscricao: string
+  status_acolhimento: string
+  user_id: number
+  condition: string
+  organization_id: number
+  tipo_de_acholhimento: string
+  link_ticket: number
+}
+
+const tableDataRef = createStateLink<MatchUsers[]>([])
 
 export default {
-  submittedParamsRef,
-  volunteerRef
+  volunteerRef,
+  tableDataRef
 }

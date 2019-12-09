@@ -6,25 +6,24 @@ import * as turf from '@turf/turf'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
 
 import GlobalContext from 'context'
-import { PointUser } from 'context/table'
 import { FullWidth, Spacing } from './style'
 import columns from './columns'
 
 const Table = () => {
   const {
-    matchTable: { volunteerRef, submittedParamsRef },
-    table: { tableDataRef }
+    matchTable: { volunteerRef, tableDataRef },
   } = GlobalContext
 
   const volunteer = useStateLink(volunteerRef)
   // table data from header, geobonde table - maybe do something universal
   const tableData = useStateLink(tableDataRef)
 
-  const { latitude, longitude, name, tipo_acolhimento } = volunteer.value
+  const { latitude, longitude, name, organization_id } = volunteer.value
   // aqui onde pode setar distancia variavel depois
   const distance = 20
   const lat = Number(latitude)
   const lng = Number(longitude)
+  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS)
 
   const filterByDistance = useCallback((data) =>
     data
@@ -47,24 +46,27 @@ const Table = () => {
       })
       .sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
-  const filterByUserType = data => {
-    return data
-      .filter((i) => {
-        const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS)
-        if (i.organization_id === zendeskOrganizations.individual) return true
-        return false
-    })
+  const filterByUserType = data => data.filter(
+    (i) => i.organization_id === zendeskOrganizations.individual
+  )
+
+  const checkVolunteerCategory = () => {
+    if (organization_id === zendeskOrganizations.lawyer) return 'jurídico'
+    if(organization_id === zendeskOrganizations.therapist) return 'psicológico' 
   }
 
   const filterByCategory = data => data.filter(
-    (i) => i.tipo_acolhimento === tipo_acolhimento
-  )
+    (i) => (
+        i.tipo_de_acolhimento === checkVolunteerCategory() || i.tipo_de_acolhimento === 'psicológico_e_jurídico'
+      )
+    )
 
   const filteredTableData = useMemo(() => {
-    // console.log('FILTER', filterByCategory(tableData.get))
     const data = filterByUserType(
       filterByDistance(
-        tableData.get(),
+        filterByCategory(
+          tableData.get()
+        ),
       ),
     )
     return data
