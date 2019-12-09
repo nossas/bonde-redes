@@ -1,5 +1,5 @@
 import React from 'react'
-import { BtnWarning } from './style'
+import Forward from 'components/BtnFoward'
 import { Flexbox2 as Flexbox } from 'bonde-styleguide'
 
 type valueArrayString = {
@@ -55,10 +55,12 @@ const columns = [
       <a href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${value}`} target="_blank" rel="noopener noreferrer">{value}</a>
     ) : null),
   }, {
-    acessor: '',
+    accessor: 'link_ticket',
     Header: 'Ação',
     width: 200,
-    Cell: <Flexbox middle><BtnWarning light>Encaminhar</BtnWarning></Flexbox>
+    Cell: ({ value }: valueArrayString) => (value ? (
+      <Flexbox middle><Forward id={value}/></Flexbox>
+    ) : null),
   }
 ]
 
