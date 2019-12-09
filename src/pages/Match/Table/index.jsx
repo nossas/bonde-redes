@@ -11,7 +11,7 @@ import columns from './columns'
 
 const Table = () => {
   const {
-    matchTable: { tableDataRef },
+    table: { tableDataRef },
     matchForm: { volunteerRef }
   } = GlobalContext
 

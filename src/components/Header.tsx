@@ -43,23 +43,19 @@ const Header: React.FC = ({ children }) => {
 
   const {
     table: { tableDataRef },
-    matchTable: { tableDataRef: matchTableDataRef }
   } = GlobalContext
-  const { pathname: path } = useLocation()
-
+  
   const tableData = useStateLink(tableDataRef)
-  const matchTableData = useStateLink(matchTableDataRef)
-
+  const { pathname: path } = useLocation()
+  
   useEffect(() => {
     (async () => {
       const response = await request.get()
-      isMatch(path)
-        ? matchTableData.set(response.data)
-        : tableData.set(response.data)
+      tableData.set(response.data)
     })()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
+  
   return (
     <FlexDiv>
       <StyledBondeHeader>

@@ -32,7 +32,7 @@ const MatchForm = () => {
     matchForm: {
       volunteerEmailRef, zendeskAgentRef, volunteerRef
     },
-    matchTable: { tableDataRef },
+    table: { tableDataRef },
   } = GlobalContext
 
   const tableData = useStateLink(tableDataRef)

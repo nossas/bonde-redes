@@ -13,7 +13,8 @@ const BtnWarning = styled(Button)`
 const Foward = ({ id }) => {
   const {
     matchForm: { zendeskAgentRef, volunteerRef },
-    matchTable: { tableDataRef, individualRef },
+    table: { tableDataRef },
+    matchTable: { individualRef }
   } = GlobalContext
 
   const volunteer = useStateLink(volunteerRef)
