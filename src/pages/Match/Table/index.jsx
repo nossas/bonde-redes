@@ -11,7 +11,8 @@ import columns from './columns'
 
 const Table = () => {
   const {
-    matchTable: { volunteerRef, tableDataRef },
+    matchTable: { tableDataRef },
+    matchForm: { volunteerRef }
   } = GlobalContext
 
   const volunteer = useStateLink(volunteerRef)

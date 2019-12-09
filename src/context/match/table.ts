@@ -1,19 +1,5 @@
 import { createStateLink } from '@hookstate/core';
 
-interface Volunteer {
-  latitude: string
-  longitude: string
-  email: string
-  organization_id: number
-}
-
-const volunteerRef = createStateLink<Volunteer>({
-  latitude: '0',
-  longitude: '0',
-  email: '',
-  organization_id: 0
-})
-
 interface MatchUsers {
   latitude: string
   longitude: string
@@ -31,7 +17,19 @@ interface MatchUsers {
 
 const tableDataRef = createStateLink<MatchUsers[]>([])
 
+interface Individual {
+  email: string
+  name: string
+  link_ticket: number
+}
+
+const individualRef = createStateLink<Individual>({
+  email: '',
+  name: '',
+  link_ticket: 0
+})
+
 export default {
-  volunteerRef,
-  tableDataRef
+  tableDataRef,
+  individualRef
 }

@@ -41,18 +41,24 @@ const isMatch = (path: string) => path === '/match'
 
 const Header: React.FC = ({ children }) => {
 
-  const { table: { tableDataRef } } = GlobalContext
+  const {
+    table: { tableDataRef },
+    matchTable: { tableDataRef: matchTableDataRef }
+  } = GlobalContext
+  const { pathname: path } = useLocation()
+
   const tableData = useStateLink(tableDataRef)
+  const matchTableData = useStateLink(matchTableDataRef)
 
   useEffect(() => {
     (async () => {
       const response = await request.get()
-      tableData.set(response.data)
+      isMatch(path)
+        ? matchTableData.set(response.data)
+        : tableData.set(response.data)
     })()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const { pathname: path } = useLocation()
 
   return (
     <FlexDiv>

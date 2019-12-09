@@ -30,28 +30,22 @@ const StyledField = styled(FormField)`
 const MatchForm = () => {
   const {
     matchForm: {
-      volunteerEmailRef, agentsRef
+      volunteerEmailRef, zendeskAgentRef, volunteerRef
     },
-    matchTable: { submittedParamsRef, volunteerRef },
-    table: { tableDataRef }
+    matchTable: { tableDataRef },
   } = GlobalContext
 
   const tableData = useStateLink(tableDataRef)
-  const submittedParams = useStateLink(submittedParamsRef)
   const email = useStateLink(volunteerEmailRef)
-  const agents = useStateLink(agentsRef)
+  const zendeskAgent = useStateLink(zendeskAgentRef)
   const volunteer = useStateLink(volunteerRef)
 
   const handleSubmit = (e) => {
     e.preventDefault()
     // buscando dados voluntaria atraves do email
     const data = tableData.get()
-    const user = getUserData(email.value, data)
+    const user = getUserData(email.value, data, "email")
     volunteer.set({ ...user })
-    submittedParams.set({
-      email: email.value,
-      agent: agents.value,
-    })
   }
 
   return (
@@ -67,8 +61,8 @@ const MatchForm = () => {
       />
       <Select
         label="Agente"
-        onChange={(e) => agents.set(e.target.value)}
-        value={agents.value}
+        onChange={(e) => zendeskAgent.set(e.target.value)}
+        value={zendeskAgent.value}
         dicio={dicioAgent}
       />
       <Flexbox middle>
