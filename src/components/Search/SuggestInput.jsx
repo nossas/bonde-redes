@@ -42,7 +42,6 @@ const handleSuggestionsFetchRequested = ({ value }, setSuggestions) => {
     .geocode({ address: value, components: { country: 'brasil' } })
     .asPromise()
     .then((res) => {
-      console.log({google: res})
       if (res.json && res.json.results) {
         const suggestions = res.json.results.map(addr => ({
           address: addr.formatted_address,

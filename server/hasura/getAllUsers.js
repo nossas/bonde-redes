@@ -20,6 +20,7 @@ const query = `query {
     whatsapp
     data_de_inscricao_no_bonde
     condition
+    tipo_de_acolhimento
   }
 }`
 

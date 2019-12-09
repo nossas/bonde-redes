@@ -53,6 +53,8 @@ UserPin.propTypes = {
     user_id: PropTypes.number.isRequired,
     condition: PropTypes.string.isRequired,
     organization_id: PropTypes.number.isRequired,
+    tipo_de_acholhimento: PropTypes.string.isRequired,
+    link_ticket: PropTypes.number.isRequired
   }).isRequired,
 }
 

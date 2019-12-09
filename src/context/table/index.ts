@@ -20,6 +20,8 @@ export interface PointUser {
   user_id: number
   condition: string
   organization_id: number
+  tipo_de_acholhimento: string
+  link_ticket: number
 }
 
 const tableDataRef = createStateLink<PointUser[]>([])

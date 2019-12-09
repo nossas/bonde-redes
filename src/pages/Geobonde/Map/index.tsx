@@ -7,7 +7,10 @@ import UserPin from './user-pin'
 import UserInfo from './user-info'
 
 const Map = () => {
-  const { table: { tableDataRef }, map: { stateViewRef, popupInfoRef } } = GlobalContext
+  const {
+    table: { tableDataRef },
+    map: { stateViewRef, popupInfoRef }
+  } = GlobalContext
 
   const tableData = useStateLink(tableDataRef)
   const state = useStateLink(stateViewRef)
@@ -28,16 +31,19 @@ const Map = () => {
   }
 
   const handleCityPinClick = (user: PointUser) => {
-    const { latitude, longitude, ...rest } = user
-    popupInfo.set({
-      ...rest,
+    const { latitude, longitude } = user
+    popupInfo.set(prevState => ({
+      ...prevState,
       latitude: Number(latitude),
       longitude: Number(longitude),
-      open: true,
-    })
+      open: !prevState.open,
+    }))
   }
 
-  const handlePopupClose = () => popupInfo.set((p) => ({ ...p, open: false }))
+  const handlePopupClose = () => popupInfo.set(prevState => ({
+    ...prevState,
+    open: !prevState.open
+  }))
 
   return (
     <>
