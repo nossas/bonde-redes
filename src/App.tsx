@@ -1,7 +1,51 @@
-import 'mapbox-gl/dist/mapbox-gl.css'
-import React from 'react'
-import Page from './components/Page'
+import React from 'react' 
+import { Route, Redirect } from 'react-router'
+import { Router } from 'react-router-dom'
+import styled from 'styled-components'
 
-const App = () => <Page />
+import 'mapbox-gl/dist/mapbox-gl.css'
+import { Footer } from 'bonde-styleguide'
+import history from './history'
+
+import Header from './components/Header'
+import Geobonde from './pages/Geobonde/Table/'
+import Map from './pages/Geobonde/Map/'
+import Match from './pages/Match/Table/'
+
+const AppWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const AppBody = styled.div`
+  min-height: 100vh;
+  flex-grow: 1;
+`
+
+// const FixedFooter = styled.div`
+//   flex-shrink: 0;
+// `
+  
+const App = () => 
+  <Router history={history}>
+    <AppWrapper className="app">
+      <Header />
+      <AppBody className="app-body">
+        <Route exact path="/">
+          <Redirect to="/match" />
+        </Route>
+        <Route path="/geobonde" exact>
+          <Geobonde/>
+        </Route>
+        <Route path="/geobonde/map" exact>
+          <Map />
+        </Route>
+        <Route exact path="/match">
+          <Match />
+        </Route>
+      </AppBody>
+      <Footer />
+    </AppWrapper>
+  </Router>
 
 export default App
