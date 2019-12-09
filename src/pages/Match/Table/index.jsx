@@ -17,15 +17,15 @@ const Table = () => {
   } = GlobalContext
 
   const volunteer = useStateLink(volunteerRef)
-  const submittedParams = useStateLink(submittedParamsRef)
   // table data from header, geobonde table - maybe do something universal
   const tableData = useStateLink(tableDataRef)
 
-  const { latitude, longitude, name } = volunteer.value
+  const { latitude, longitude, name, tipo_acolhimento } = volunteer.value
   // aqui onde pode setar distancia variavel depois
   const distance = 20
   const lat = Number(latitude)
   const lng = Number(longitude)
+
   const filterByDistance = useCallback((data) =>
     data
       .map((i) => {
@@ -47,7 +47,7 @@ const Table = () => {
       })
       .sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
-  const filterByCategory = data => {
+  const filterByUserType = data => {
     return data
       .filter((i) => {
         const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS)
@@ -56,8 +56,13 @@ const Table = () => {
     })
   }
 
+  const filterByCategory = data => data.filter(
+    (i) => i.tipo_acolhimento === tipo_acolhimento
+  )
+
   const filteredTableData = useMemo(() => {
-    const data = filterByCategory(
+    // console.log('FILTER', filterByCategory(tableData.get))
+    const data = filterByUserType(
       filterByDistance(
         tableData.get(),
       ),
