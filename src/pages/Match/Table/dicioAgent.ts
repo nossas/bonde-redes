@@ -2,7 +2,7 @@ const dicioAgent = {
   'larissa@nossas.org': 'Larissa',
   'ana@nossas.org': 'Ana',
   'gabi@nossas.org': 'Gabriela',
-  'pirola@nossas.org': 'Pirola'
+  'voluntaria@nossas.org': 'Voluntária'
 }
 
 export default dicioAgent
