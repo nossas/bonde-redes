@@ -3,13 +3,13 @@ import { createStateLink } from '@hookstate/core';
 interface Individual {
   email: string
   name: string
-  link_ticket: number
+  ticket_id: number
 }
 
 const individualRef = createStateLink<Individual>({
   email: '',
   name: '',
-  link_ticket: 0
+  ticket_id: 0
 })
 
 export default {

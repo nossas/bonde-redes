@@ -15,13 +15,14 @@ export interface PointUser {
   name: string
   email: string
   data_de_inscricao_no_bonde?: string
-  status_inscricao: string
-  status_acolhimento: string
   user_id: number
   condition: string
   organization_id: number
   tipo_de_acholhimento: string
-  link_ticket: number
+  status_acolhimento: string
+  status_inscricao: string
+  ticket_status: string
+  ticket_id: number
 }
 
 const tableDataRef = createStateLink<PointUser[]>([])

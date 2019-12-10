@@ -37,7 +37,7 @@ const columns = [
       <span>{value}</span>
     ) : null),
   }, {
-    accessor: 'tipo_acolhimento',
+    accessor: 'tipo_de_acolhimento',
     Header: 'Tipo de acolhimento',
     Cell: ({ value }: valueArrayString) => (value ? (
       <span>{value}</span>
@@ -69,7 +69,7 @@ const columns = [
     Header: 'Atendimentos em andamento [calculado]',
   },
   {
-    accessor: 'link_ticket',
+    accessor: 'ticket_id',
     Header: 'Link do ticket',
     Cell: ({ value }: valueArrayString) => (value ? (
       <a href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${value}`} target="_blank" rel="noopener noreferrer">{value}</a>

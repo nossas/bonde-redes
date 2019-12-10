@@ -24,13 +24,14 @@ const popupInfoRef = createStateLink<PopupInfoRefType>({
   name: '',
   data_de_inscricao_no_bonde: '',
   email: '',
-  status_acolhimento: '',
-  status_inscricao: '',
   user_id: 0,
   condition: '',
   organization_id: 0,
   tipo_de_acholhimento: '',
-  link_ticket: 0
+  status_acolhimento: '',
+  status_inscricao: '',
+  ticket_status: '',
+  ticket_id: 0
 })
 
 export default {
