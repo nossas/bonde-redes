@@ -16,12 +16,10 @@ const Table = () => {
   } = GlobalContext
 
   const volunteer = useStateLink(volunteerRef)
-  // table data from header, geobonde table - maybe do something universal
   const tableData = useStateLink(tableDataRef)
 
   const { latitude, longitude, name, organization_id } = volunteer.value
-  // aqui onde pode setar distancia variavel depois
-  const distance = 20
+  const distance = 50
   const lat = Number(latitude)
   const lng = Number(longitude)
   const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS)
@@ -60,13 +58,19 @@ const Table = () => {
     (i) => (
         i.tipo_de_acolhimento === checkVolunteerCategory() || i.tipo_de_acolhimento === 'psicológico_e_jurídico'
       )
-    )
+  )
+  
+  const filterByTicketStatus = data => data.filter((i) => (
+    i.ticket_status === 'new' || i.ticket_status === 'open' && i.status_acolhimento === 'solicitacao_recebida'
+  ))
 
   const filteredTableData = useMemo(() => {
     const data = filterByUserType(
       filterByDistance(
         filterByCategory(
-          tableData.get()
+          filterByTicketStatus(
+            tableData.get()
+          )
         ),
       ),
     )
