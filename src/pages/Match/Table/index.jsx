@@ -79,7 +79,15 @@ const Table = () => {
     return i.distance && Number(i.distance) < distance
   }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
-  const filteredTableData = () => tableData.get()
+  const filteredTableData = useMemo(() => {
+    const data = filterByCategory(
+      filterByDistance(
+        tableData.get(),
+      ),
+    )
+  console.log({data})
+    return data
+  }, [filterByCategory, filterByDistance, tableData])
 
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
