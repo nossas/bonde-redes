@@ -5,13 +5,19 @@ import {
   Text,
 } from 'bonde-styleguide'
 import SuggestInput from './SuggestInput'
+import styled from 'styled-components'
+
+const SearchAddress = styled.div`
+  flex-direction: column;
+  display: flex;
+`
 
 const MapsSearchInput = ({ value, onChangeLocation, ...extraProps }) => {
 
   const [loading, setLoading] = useState(false)
 
   return (
-    <Fragment>
+    <SearchAddress>
       <SuggestInput
         {...extraProps}
         onSelect={(suggestion) => onChangeLocation(suggestion.location)}
@@ -30,7 +36,7 @@ const MapsSearchInput = ({ value, onChangeLocation, ...extraProps }) => {
           </Text>
         </Flexbox>
       )}
-    </Fragment>
+    </SearchAddress>
   )
 }
 
