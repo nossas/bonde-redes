@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Flexbox2 as Flexbox,
@@ -14,15 +14,13 @@ const SearchAddress = styled.div`
 
 const MapsSearchInput = ({ value, onChangeLocation, ...extraProps }) => {
 
-  const [loading, setLoading] = useState(false)
-
   return (
     <SearchAddress>
       <SuggestInput
         {...extraProps}
         onSelect={(suggestion) => onChangeLocation(suggestion.location)}
       />
-      {!loading && value && (
+      {value && (
         <Flexbox spacing="between">
           <Text fontSize={13}>
             <b>Lat:</b>
