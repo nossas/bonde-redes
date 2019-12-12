@@ -18,12 +18,11 @@ import { If } from 'components/If'
 import Popup from 'components/Popup'
 
 // https://wa.me/whatsappphonenumber/?text=urlencodedtext
-
-const createWhatsappLink = number => {
-  const whatsappphonenumber = parseNumber(number)
-  const urlencodedtext = encondeText(text)
-  return `https://wa.me/${whatsappphonenumber}/?text=${urlencodedtext}`
-}
+// const createWhatsappLink = number => {
+//   const whatsappphonenumber = parseNumber(number)
+//   const urlencodedtext = encondeText(text)
+//   return `https://wa.me/${whatsappphonenumber}/?text=${urlencodedtext}`
+// }
 
 const Table = () => {
   const {
@@ -91,7 +90,7 @@ const Table = () => {
       ),
     )
     return data
-  }, [filterByCategory, filterByDistance, filterByTicketStatus, filterByUserType, tableData])
+  }, [filterByDistance, tableData, organization_id])
 
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
