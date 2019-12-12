@@ -80,12 +80,15 @@ const Table = () => {
   }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
   const filteredTableData = useMemo(() => {
-    const data = filterByCategory(
+    const data = filterByUserType(
       filterByDistance(
-        tableData.get(),
+        filterByTicketStatus(
+            filterByCategory(
+            tableData.get(), organization_id
+          )
+        )
       ),
     )
-  console.log({data})
     return data
   }, [filterByCategory, filterByDistance, tableData])
 
