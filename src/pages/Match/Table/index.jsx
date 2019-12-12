@@ -83,14 +83,14 @@ const Table = () => {
     const data = filterByUserType(
       filterByDistance(
         filterByTicketStatus(
-            filterByCategory(
+          filterByCategory(
             tableData.get(), organization_id
           )
         )
       ),
     )
     return data
-  }, [filterByCategory, filterByDistance, tableData])
+  }, [filterByDistance, tableData, organization_id])
 
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
