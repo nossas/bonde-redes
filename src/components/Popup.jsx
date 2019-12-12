@@ -29,12 +29,12 @@ const Popup = ({ confirm, success, error, isOpen, onClose, volunteerName, indivi
         <If condition={confirm.isEnabled}>
           {Confirm({ ...confirm, volunteerName, individualName })}
         </If>
-        {/*<If condition={success.isEnabled}>
+        <If condition={success.isEnabled}>
           {Success({ ...success, volunteerName, individualName })}
         </If>
         <If condition={error.isEnabled}>
           {Error({ ...error, volunteerName, individualName })}
-        </If>*/}
+        </If>
       </StyledFlexbox>
   </StyledModal>
   )
@@ -44,6 +44,7 @@ const StyledLink = styled(Link)`
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 500;
+  cursor: pointer;
 `
 
 const Confirm = ({ individualName, volunteerName, onClose, onSubmit }) => (
@@ -59,7 +60,7 @@ const Confirm = ({ individualName, volunteerName, onClose, onSubmit }) => (
 
 const Success = ({ individualName, volunteerName, onClose, onSubmit }) => (
   <>
-    <Title.H2>Encaminhamento Realizado</Title.H2>
+    <Title.H2 align="center">Encaminhamento Realizado</Title.H2>
     <Text align="center">
       EBA! {individualName} foi encaminhada para {volunteerName}.
     </Text>
