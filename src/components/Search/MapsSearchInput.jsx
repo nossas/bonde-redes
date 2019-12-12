@@ -1,22 +1,26 @@
-import React, { Fragment, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Flexbox2 as Flexbox,
   Text,
 } from 'bonde-styleguide'
 import SuggestInput from './SuggestInput'
+import styled from 'styled-components'
+
+const SearchAddress = styled.div`
+  flex-direction: column;
+  display: flex;
+`
 
 const MapsSearchInput = ({ value, onChangeLocation, ...extraProps }) => {
 
-  const [loading, setLoading] = useState(false)
-
   return (
-    <Fragment>
+    <SearchAddress>
       <SuggestInput
         {...extraProps}
         onSelect={(suggestion) => onChangeLocation(suggestion.location)}
       />
-      {!loading && value && (
+      {value && (
         <Flexbox spacing="between">
           <Text fontSize={13}>
             <b>Lat:</b>
@@ -30,7 +34,7 @@ const MapsSearchInput = ({ value, onChangeLocation, ...extraProps }) => {
           </Text>
         </Flexbox>
       )}
-    </Fragment>
+    </SearchAddress>
   )
 }
 

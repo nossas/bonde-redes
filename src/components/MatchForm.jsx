@@ -44,7 +44,11 @@ const MatchForm = () => {
     e.preventDefault()
     // buscando dados voluntaria atraves do email
     const data = tableData.get()
-    const user = getUserData(email.value, data, "email")
+    const user = getUserData({
+      user: email.value,
+      data,
+      filterBy: "email"
+    })
     volunteer.set({ ...user })
   }
 

@@ -48,13 +48,14 @@ UserPin.propTypes = {
     name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
     data_de_inscricao_no_bonde: PropTypes.string,
-    status_inscricao: PropTypes.string.isRequired,
-    status_acolhimento: PropTypes.string.isRequired,
     user_id: PropTypes.number.isRequired,
     condition: PropTypes.string.isRequired,
     organization_id: PropTypes.number.isRequired,
     tipo_de_acholhimento: PropTypes.string.isRequired,
-    link_ticket: PropTypes.number.isRequired
+    status_acolhimento: PropTypes.string.isRequired,
+    status_inscricao: PropTypes.string.isRequired,
+    ticket_status: PropTypes.string.isRequired,
+    ticket_id: PropTypes.number.isRequired,
   }).isRequired,
 }
 

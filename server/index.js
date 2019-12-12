@@ -28,7 +28,7 @@ app.use((err, req, res, next) => {
 })
 
 app.get('/api', asyncMiddleware(api))
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'))
 })
 

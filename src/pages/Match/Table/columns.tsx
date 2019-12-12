@@ -32,7 +32,7 @@ const columns = [
     accessor: 'priority',
     Header: 'Prioridade',
   }, {
-    accessor: 'tipo_acolhimento',
+    accessor: 'tipo_de_acolhimento',
     Header: 'Tipo de acolhimento',
     Cell: ({ value }: valueArrayString) => (value ? (
       <span>{value}</span>
@@ -49,13 +49,13 @@ const columns = [
       return `${data.getDay()}/${data.getMonth() + 1}/${data.getFullYear()} às ${data.getHours().toFixed(2)}:${data.getMinutes().toFixed(2)}`
     },
   }, {
-    accessor: 'link_ticket',
+    accessor: 'ticket_id',
     Header: 'Link',
     Cell: ({ value }: valueArrayString) => (value ? (
       <a href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${value}`} target="_blank" rel="noopener noreferrer">{value}</a>
     ) : null),
   }, {
-    accessor: 'link_ticket',
+    accessor: 'ticket_id',
     Header: 'Ação',
     width: 200,
     Cell: ({ value }: valueArrayString) => (value ? (
