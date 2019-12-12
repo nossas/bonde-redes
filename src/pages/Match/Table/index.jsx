@@ -7,6 +7,7 @@ import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
 
 import GlobalContext from 'context'
 import { encodeText } from 'services/utils'
+import request from 'services/request'
 import { FullWidth, Spacing } from './style'
 import {
   filterByCategory,
@@ -22,7 +23,7 @@ import Popup from 'components/Popup'
 //   const whatsappphonenumber = parseNumber(number)
 //   const urlencodedtext = encondeText(text)
 //   return `https://wa.me/${whatsappphonenumber}/?text=${urlencodedtext}`
-// }
+// } 
 
 const Table = () => {
   const {
@@ -41,18 +42,18 @@ const Table = () => {
   const { confirm, forward, wrapper } = popups.value
   const {
     email: individualEmail,
-    name: individualName,
-    ticket_id: individualTicket
+    name: individual_name,
+    ticket_id: individual_ticket_id
   } = individual.value
 
   const {
     latitude,
     longitude,
-    email: volunteerEmail,
-    name: volunteerName,
-    ticket_id: volunteerTicket,
+    email: volunteer_email,
+    name: volunteer_name,
+    ticket_id: volunteer_ticket_id,
     whatsapp: volunteerNumber,
-    organization_id
+    organization_id: volunteer_organization_id
   } = volunteer.value
 
   const distance = 50
@@ -84,16 +85,47 @@ const Table = () => {
       filterByDistance(
         filterByTicketStatus(
           filterByCategory(
-            tableData.get(), organization_id
+            tableData.get(), volunteer_organization_id
           )
         )
       ),
     )
     return data
-  }, [filterByDistance, tableData, organization_id])
+  }, [filterByDistance, tableData, volunteer_organization_id])
 
   const [success, setSuccess] = useState(false)
-  const [error, setError] = useState(false)
+  const [error, setError] = useState({ status: false, message: ''})
+
+  const submitConfirm = async (requestBody) => {
+    try {
+      const response = await request.post(requestBody)
+      if (response.status === 200) {
+        setSuccess(true)
+        popups.set(prevState => ({
+          ...prevState,
+          confirm: false,
+          forward: true
+        }))
+      }
+    }
+    catch(e) {
+      console.log(e)
+      setError({
+        status: true,
+        message: e
+      })
+    }
+  }
+
+  const closeAllPopups = () => {
+    setSuccess(false)
+    setError(false)
+    popups.set({
+      wrapper: false,
+      confirm: false,
+      forward: false
+    })
+  }
 
   return filteredTableData.length === 0 ? (
     <FullWidth>
@@ -112,7 +144,7 @@ const Table = () => {
           </Spacing>
           <Spacing margin="25">
             <Title.H5 color="#444444">
-              {`${filteredTableData.length} solicitações de MSRs próximas de ${volunteerName}`}
+              {`${filteredTableData.length} solicitações de MSRs próximas de ${volunteer_name}`}
             </Title.H5>
           </Spacing>
           <ReactTable
@@ -125,39 +157,40 @@ const Table = () => {
       </FullWidth>
       <If condition={wrapper}>
         <Popup
-          individualName={individualName}
-          volunteerName={volunteerName}
-          confirm={{
-            onClose: () => popups.set({
-              confirm: false,
-              wrapper: false
-            }),
-            onSubmit: () => alert('encaminhando!'),
-            isEnabled: confirm
-          }}
-          success={{
-            onClose: () => popups.set({
-              forward: false,
-              wrapper: false
-            }),
-            onSubmit: () => alert('encaminhando!'),
-            isEnabled: success,
-          }}
-          error={{
-            onClose: () => popups.set({
-              forward: false,
-              wrapper: false
-            }),
-            onSubmit: () => alert('encaminhando novamente!'),
-            isEnabled: error,
-            message: 'erro'
-          }} 
-          isOpen={wrapper}
-          onClose={() => popups.set({
-            wrapper: false,
-            confirm: false,
-            forward: false
-          })}
+            individualName={individual_name}
+            volunteerName={volunteer_name}
+            confirm={{
+              onClose: closeAllPopups,
+              onSubmit: () => submitConfirm({
+                volunteer_email,
+                volunteer_ticket_id,
+                volunteer_organization_id,
+                individual_name,
+                individual_ticket_id,
+                agent: zendeskAgent.value,
+              }),
+              isEnabled: confirm
+            }}
+            success={{
+              onClose: closeAllPopups,
+              onSubmit: () => alert('encaminhando!'),
+              isEnabled: success,
+            }}
+            error={{
+              onClose: closeAllPopups,
+              onSubmit: () => submitConfirm({
+                volunteer_email,
+                volunteer_ticket_id,
+                volunteer_organization_id,
+                individual_name,
+                individual_ticket_id,
+                agent: zendeskAgent.value,
+              }),
+              isEnabled: error.status,
+              message: error.message
+            }}
+            isOpen={wrapper}
+            onClose={closeAllPopups}
         />
       </If>
     </Fragment>
