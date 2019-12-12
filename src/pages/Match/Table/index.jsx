@@ -82,10 +82,13 @@ const Table = () => {
   const filteredTableData = useMemo(() => {
     const data = filterByCategory(
       filterByDistance(
-        tableData.get(),
+        filterByTicketStatus(
+          filterByUserType(
+            tableData.get(),
+          )
+        )
       ),
     )
-  console.log({data})
     return data
   }, [filterByCategory, filterByDistance, tableData])
 
