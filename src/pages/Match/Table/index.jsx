@@ -59,38 +59,27 @@ const Table = () => {
   const lat = Number(latitude)
   const lng = Number(longitude)
 
-  const filterByDistance = useCallback((data) => data
-    .map((i) => {
-      const pointA = [Number(i.latitude), Number(i.longitude)]
-      return {
-        ...i,
-        distance: (
-          !Number.isNaN(pointA[0])
-          && !Number.isNaN(pointA[1])
-          && lat
-          && lng
-          && Number(turf.distance([lat, lng], pointA)).toFixed(2)
-        ),
-      }
-    })
-    .filter((i) => {
-      if (!lat || !lng) return true
-      return i.distance && Number(i.distance) < distance
-    })
-    .sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
+  const filterByDistance = useCallback((data) => data.map((i) => {
+    const pointA = [Number(i.latitude), Number(i.longitude)]
 
-  const filteredTableData = useMemo(() => {
-    const data = filterByUserType(
-      filterByDistance(
-        filterByTicketStatus(
-          filterByCategory(
-            tableData.get(), organization_id
-          )
-        ),
+    return {
+      ...i,
+      distance: (
+        !Number.isNaN(pointA[0])
+        && !Number.isNaN(pointA[1])
+        && lat
+        && lng
+        && Number(turf.distance([lat, lng], pointA)).toFixed(2)
       ),
-    )
-    return data
-  }, [filterByDistance, tableData, organization_id])
+    }
+  }).filter((i) => {
+    if (!lat || !lng) {
+      return true
+    }
+    return i.distance && Number(i.distance) < distance
+  }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
+
+  const filteredTableData = () => tableData.get()
 
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
