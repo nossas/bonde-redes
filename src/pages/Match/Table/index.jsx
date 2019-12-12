@@ -6,7 +6,7 @@ import * as turf from '@turf/turf'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
 
 import GlobalContext from 'context'
-import { encodeText } from 'services/utils'
+import { encodeText, whatsappText, parseNumber } from 'services/utils'
 import request from 'services/request'
 import { FullWidth, Spacing } from './style'
 import {
@@ -19,11 +19,12 @@ import { If } from 'components/If'
 import Popup from 'components/Popup'
 
 // https://wa.me/whatsappphonenumber/?text=urlencodedtext
-// const createWhatsappLink = number => {
-//   const whatsappphonenumber = parseNumber(number)
-//   const urlencodedtext = encondeText(text)
-//   return `https://wa.me/${whatsappphonenumber}/?text=${urlencodedtext}`
-// } 
+const createWhatsappLink = (number, textVariables) => {
+  if(!number) return false
+  const whatsappphonenumber = parseNumber(number)
+  const urlencodedtext = encodeText(whatsappText(textVariables))
+  return `https://wa.me/55${whatsappphonenumber}/?text=${urlencodedtext}`
+} 
 
 const Table = () => {
   const {
@@ -52,7 +53,7 @@ const Table = () => {
     email: volunteer_email,
     name: volunteer_name,
     ticket_id: volunteer_ticket_id,
-    whatsapp: volunteerNumber,
+    whatsapp: volunteer_number,
     organization_id: volunteer_organization_id
   } = volunteer.value
 
@@ -100,7 +101,7 @@ const Table = () => {
     try {
       const response = await request.post(requestBody)
       if (response.status === 200) {
-        setSuccess(true)
+        setError({ status: true, message: 'deu merda'})
         popups.set(prevState => ({
           ...prevState,
           confirm: false,
@@ -173,7 +174,9 @@ const Table = () => {
             }}
             success={{
               onClose: closeAllPopups,
-              onSubmit: () => alert('encaminhando!'),
+              link: () => createWhatsappLink(
+                volunteer_number, { volunteer_name, individual_name, agent: zendeskAgent.value }
+              ),
               isEnabled: success,
             }}
             error={{
