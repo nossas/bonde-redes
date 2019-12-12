@@ -23,7 +23,7 @@ const Popup = ({ confirm, success, error, isOpen, onClose, volunteerName, indivi
     <StyledModal
       opened={isOpen}
       onClose={onClose}
-      width={30}
+      width={20}
     >
       <StyledFlexbox middle vertical spacing="evenly">
         <If condition={confirm.isEnabled}>
@@ -58,13 +58,15 @@ const Confirm = ({ individualName, volunteerName, onClose, onSubmit }) => (
   </>
 )
 
-const Success = ({ individualName, volunteerName, onClose, onSubmit }) => (
+const Success = ({ individualName, volunteerName, onClose, link }) => (
   <>
     <Title.H2 align="center">Encaminhamento Realizado</Title.H2>
     <Text align="center">
       EBA! {individualName} foi encaminhada para {volunteerName}.
     </Text>
-    <Button onClick={onSubmit}>enviar whats para voluntária</Button>
+    <a href={link()} target="_blank" alt="Enviar mensagem no Whatsapp">
+      <Button>enviar whats para voluntária</Button>
+    </a>
     <StyledLink onClick={onClose}>fazer nova busca</StyledLink>
   </>
 )
@@ -74,19 +76,25 @@ const Box = styled(Flexbox)`
   background-color: #eeeeee;
 `
 
+const ErrorWrapper = styled(Flexbox)`
+  @media(min-width: 576px) { min-height: 400px; }
+  justify-content: space-evenly;
+  align-items: center;
+`
+
 const Error = ({ individualName, volunteerName, onClose, onSubmit, message }) => (
-  <>
+  <ErrorWrapper vertical>
     <Title.H2>Ops!</Title.H2>
     <Text align="center">
       Encontramos um erro e {individualName} não pôde ser encaminhada para {volunteerName}
     </Text>
-    <Text>Clique abaixo para tentar outra vez. Se o erro persistir, comunique o time de tech.</Text>
+    <Text align="center">Clique abaixo para tentar outra vez. Se o erro persistir, comunique o time de tech.</Text>
     <Box middle>
       <Text>{message}</Text>
     </Box>
     <Button onClick={onSubmit}>encaminhar novamente</Button>
     <StyledLink onClick={onClose}>voltar para o match</StyledLink>
-  </>
+  </ErrorWrapper>
 )
 
 export default Popup

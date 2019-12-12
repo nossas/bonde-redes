@@ -20,7 +20,7 @@ import Popup from 'components/Popup'
 
 // https://wa.me/whatsappphonenumber/?text=urlencodedtext
 const createWhatsappLink = (number, textVariables) => {
-  if(!number) return false
+  if(!number) alert('Essa voluntária não possui Whatsapp')
   const whatsappphonenumber = parseNumber(number)
   const urlencodedtext = encodeText(whatsappText(textVariables))
   return `https://wa.me/55${whatsappphonenumber}/?text=${urlencodedtext}`
@@ -101,7 +101,7 @@ const Table = () => {
     try {
       const response = await request.post(requestBody)
       if (response.status === 200) {
-        setError({ status: true, message: 'deu merda'})
+        setSuccess(true)
         popups.set(prevState => ({
           ...prevState,
           confirm: false,
