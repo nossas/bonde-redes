@@ -1,5 +1,20 @@
 import zendesk from 'node-zendesk'
-const { ZENDESK_API_URL, ZENDESK_API_USER, ZENDESK_API_TOKEN } = process.env
+import volunteerComment from './comments/volunteer'
+import individualComment from './comments/individual'
+
+const {
+  ZENDESK_API_URL,
+  ZENDESK_API_USER,
+  ZENDESK_API_TOKEN,
+  REACT_APP_ZENDESK_ORGANIZATIONS
+} = process.env
+
+const zendeskOrganizations = JSON.parse(REACT_APP_ZENDESK_ORGANIZATIONS)
+const volunteerType = id => {
+  if (id === zendeskOrganizations.lawyer) return 'Advogada'
+  if (id === zendeskOrganizations.therapist) return 'Psicóloga'
+  throw "Volunteer organization_id not supported"
+}
 
 const main = async (req, res, next) => {
   // res.json(req.body);
@@ -17,28 +32,118 @@ const main = async (req, res, next) => {
   //   }
   //   res.json(JSON.stringify(result.verified, null, 2, true));
   // });
-  // client.tickets.show(req.body.individual_ticket_id, (err, req, result) => {
+  
+  const client = zendesk.createClient({
+    username: ZENDESK_API_USER,
+    token: ZENDESK_API_TOKEN,
+    remoteUri: ZENDESK_API_URL
+  });
+  
+  const {
+    volunteer_name,
+    volunteer_ticket_id,
+    volunteer_registry,
+    volunteer_tel,
+    volunteer_user_id,
+    volunteer_organization_id,
+    individual_name,
+    individual_ticket_id,
+    agent
+  } = req.body
+
+  const assignee_name = 'Ana'
+  var individualTicket = {
+    "ticket":
+    {
+      "status": "pending",
+      "assignee_id": agent,
+      "fields": [
+        {
+          "id": 360016631592,
+          "value": volunteer_name
+        }
+      ],
+      "comment": {
+        "body": individualComment({
+          volunteer: {
+            name: volunteer_name,
+            registry: volunteer_registry,
+            tel: volunteer_tel
+          },
+          assignee_name,
+          individual_name
+        }),
+        "author_id": agent,
+        "public": true,
+      },
+    }
+  };
+
+  // const volunteerTicket = {
+  //   "ticket": {
+  //     "status": "pending",
+  //     "recipient": volunteer_name,
+  //     "requester_id": volunteer_user_id,
+  //     "submitter_id": agent,
+  //     "assignee_id": agent,
+  //     "subject": `[${volunteerType(volunteer_organization_id)}] ${volunteer_name}`,
+  //     "fields": [
+  //       {
+  //         "id": 360016681971,
+  //         "value": individual_name
+  //       },
+  //       {
+  //         "id": 360016631632,
+  //         "value": `https://mapadoacolhimento.zendesk.com/agent/tickets/${individual_ticket_id}`
+  //       }
+  //     ],
+  //     "comments": {
+  //       "body": volunteerComment({
+  //         volunteer_name,
+  //         individual_name,
+  //         assignee_name
+  //       }),
+  //       "author_id": agent,
+  //       "public": true,
+  //     },
+  //   }
+  // }
+
+  var ticket = {
+    "ticket":
+    {
+      "requester_id": volunteer_user_id,
+      "status": "pending",
+      "subject":"My printer is on fire!",
+      "comment": {
+        "body": "The smoke is very colorful."
+      }
+    }
+  };
+
+
+  // client.tickets.getComments(volunteer_ticket_id, (err, req, result) => {
   //   if (err) return handleError(err);
   //   res.json(result, null, 2, true);
   // });
-  
-  const client = zendesk.createClient({
-    username:  ZENDESK_API_USER,
-    token:     ZENDESK_API_TOKEN,
-    remoteUri: ZENDESK_API_URL 
-  });
-  console.log({ ticketID: req.body.individual_ticket_id })
-  var ticket = {
-    "ticket":
-      {
-        "status":"pending",
-      }
-  };
-  const ticket_id = req.body.individual_ticket_id
-  client.tickets.update(ticket_id, ticket, (err, req, result) => {
+
+  // client.tickets.show(volunteer_ticket_id, (err, req, result) => {
+  //   if (err) return handleError(err);
+  //   console.log(volunteerTicket)
+  //   res.json(result, null, 2, true);
+  // });
+
+  // client.tickets.update(volunteer_ticket_id, volunteerTicket, (err, req, result) => {
+  //   if (err) return handleError(err);
+  //   res.json(result, null, 2, true);
+  // });
+
+  client.tickets.create(ticket, (err, req, result) => {
     if (err) return handleError(err);
     res.json(result, null, 2, true);
   });
+    
+  // res.json(volunteerTicket)
 
   const handleError = err => {
     console.log(err);
@@ -47,6 +152,32 @@ const main = async (req, res, next) => {
 }
 
 export default main
+
+// {
+//   "ticket": {
+//       "status": "pending", // status do acolhimento
+//       "recipient": "Ana", // nome da voluntária
+//       "requester_id": 377577169651 // user_id da voluntária
+//       "submitter_id": 373018450472, // agente que cria o ticket
+//       "assignee_id": 373018450472, // responsavel pelo ticket
+//       "subject": "[Advogada] Ana", // titulo do ticket
+//       "fields": [
+//           {
+//               "id": 360016681971, // nome da msr
+//               "value": "Joana"
+//           },
+//           {
+//               "id": 360016631632, // link do match (link do ticket da msr)
+//               "value": "https://mapadoacolhimento.zendesk.com/agent/tickets/12586"
+//           }
+//       ],
+//       "comments": { // comentário público para a voluntária
+//           "body": "Olá, Ana!\n\nBoa notícia!\nViemos te contar que o seu número de atendimento acaba de ser enviado para a Joana, pois você é a voluntária disponível mais próxima.\n\n**Para o nosso registro, é muito importante que nos avise sempre que iniciar os atendimentos. Lembre-se de que eles devem ser integralmente gratuitos e que o seu comprometimento em acolhê-la e acompanhá-la neste momento é fundamental.**\n\nEm anexo, estamos te enviando dois documentos muito importantes: **as diretrizes de atendimento do Mapa do Acolhimento, com todas as nossas regras e valores, e a Guia do Acolhimento,** uma cartilha para te ajudar a conduzir os atendimentos da melhor forma possível.\n\nQualquer dúvida ou dificuldade, por favor nos comunique.\nÉ muito bom saber que podemos contar com você!\nUm abraço,\n\nAna do Mapa do Acolhimento",
+//           "author_id": 373018450472,
+//           "public": true
+//       }
+//   }
+// }
 
 // {
 //   "url": "https://mapadoacolhimento.zendesk.com/api/v2/tickets/12586.json",
