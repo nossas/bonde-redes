@@ -61,7 +61,11 @@ const main = async (req, res, next) => {
         {
           "id": 360016631592,
           "value": volunteer_name
-        }
+        },
+        {
+          "id": 360014379412,
+          "value": 'encaminhamento__realizado'
+        },
       ],
       "comment": {
         "body": individualComment({
@@ -79,45 +83,38 @@ const main = async (req, res, next) => {
     }
   };
 
-  // const volunteerTicket = {
-  //   "ticket": {
-  //     "status": "pending",
-  //     "recipient": volunteer_name,
-  //     "requester_id": volunteer_user_id,
-  //     "submitter_id": agent,
-  //     "assignee_id": agent,
-  //     "subject": `[${volunteerType(volunteer_organization_id)}] ${volunteer_name}`,
-  //     "fields": [
-  //       {
-  //         "id": 360016681971,
-  //         "value": individual_name
-  //       },
-  //       {
-  //         "id": 360016631632,
-  //         "value": `https://mapadoacolhimento.zendesk.com/agent/tickets/${individual_ticket_id}`
-  //       }
-  //     ],
-  //     "comments": {
-  //       "body": volunteerComment({
-  //         volunteer_name,
-  //         individual_name,
-  //         assignee_name
-  //       }),
-  //       "author_id": agent,
-  //       "public": true,
-  //     },
-  //   }
-  // }
-
-  var ticket = {
+  const volunteerTicket = {
     "ticket":
     {
       "requester_id": volunteer_user_id,
+      "submitter_id": agent,
+      "assignee_id": agent,
       "status": "pending",
-      "subject":"My printer is on fire!",
+      "recipient": volunteer_name,
+      "subject": `[${volunteerType(volunteer_organization_id)}] ${volunteer_name}`,
       "comment": {
-        "body": "The smoke is very colorful."
-      }
+        "body": volunteerComment({
+          volunteer_name,
+          individual_name,
+          assignee_name
+        }),
+        "author_id": agent,
+        "public": true,
+      },
+      "fields": [
+        {
+          "id": 360016681971,
+          "value": individual_name
+        },
+        {
+          "id": 360016631632,
+          "value": `https://mapadoacolhimento.zendesk.com/agent/tickets/${individual_ticket_id}`
+        },
+        {
+          "id": 360014379412,
+          "value": 'encaminhamento__realizado'
+        },
+      ],
     }
   };
 
@@ -129,20 +126,24 @@ const main = async (req, res, next) => {
 
   // client.tickets.show(volunteer_ticket_id, (err, req, result) => {
   //   if (err) return handleError(err);
-  //   console.log(volunteerTicket)
   //   res.json(result, null, 2, true);
   // });
 
-  // client.tickets.update(volunteer_ticket_id, volunteerTicket, (err, req, result) => {
-  //   if (err) return handleError(err);
-  //   res.json(result, null, 2, true);
-  // });
+  
+  const updateTicket = () => {
+    client.tickets.update(volunteer_ticket_id, volunteerTicket, (err, req, result) => {
+      if (err) return handleError(err);
+      res.json(result, null, 2, true);
+    });
+  }
 
-  client.tickets.create(ticket, (err, req, result) => {
+  client.tickets.create(volunteerTicket, (err, req, result) => {
     if (err) return handleError(err);
     res.json(result, null, 2, true);
+    // const { id } = result
+    // updateTicket(id)
   });
-    
+  
   // res.json(volunteerTicket)
 
   const handleError = err => {
@@ -161,16 +162,16 @@ export default main
 //       "submitter_id": 373018450472, // agente que cria o ticket
 //       "assignee_id": 373018450472, // responsavel pelo ticket
 //       "subject": "[Advogada] Ana", // titulo do ticket
-//       "fields": [
-//           {
-//               "id": 360016681971, // nome da msr
-//               "value": "Joana"
-//           },
-//           {
-//               "id": 360016631632, // link do match (link do ticket da msr)
-//               "value": "https://mapadoacolhimento.zendesk.com/agent/tickets/12586"
-//           }
-//       ],
+      // "fields": [
+      //     {
+      //         "id": 360016681971, // nome da msr
+      //         "value": "Joana"
+      //     },
+      //     {
+      //         "id": 360016631632, // link do match (link do ticket da msr)
+      //         "value": "https://mapadoacolhimento.zendesk.com/agent/tickets/12586"
+      //     }
+      // ],
 //       "comments": { // comentário público para a voluntária
 //           "body": "Olá, Ana!\n\nBoa notícia!\nViemos te contar que o seu número de atendimento acaba de ser enviado para a Joana, pois você é a voluntária disponível mais próxima.\n\n**Para o nosso registro, é muito importante que nos avise sempre que iniciar os atendimentos. Lembre-se de que eles devem ser integralmente gratuitos e que o seu comprometimento em acolhê-la e acompanhá-la neste momento é fundamental.**\n\nEm anexo, estamos te enviando dois documentos muito importantes: **as diretrizes de atendimento do Mapa do Acolhimento, com todas as nossas regras e valores, e a Guia do Acolhimento,** uma cartilha para te ajudar a conduzir os atendimentos da melhor forma possível.\n\nQualquer dúvida ou dificuldade, por favor nos comunique.\nÉ muito bom saber que podemos contar com você!\nUm abraço,\n\nAna do Mapa do Acolhimento",
 //           "author_id": 373018450472,
