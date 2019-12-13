@@ -1,6 +1,7 @@
 import zendesk from 'node-zendesk'
 import volunteerComment from './comments/volunteer'
 import individualComment from './comments/individual'
+import validate from './validator/forward'
 
 const {
   ZENDESK_API_URL,
@@ -153,6 +154,13 @@ const main = async (req, res, next) => {
   }
 
   const createTicket = () => {
+    const { errors, isValid } = validate(req.body)
+
+    // Check Validation
+    if (!isValid) {
+      return res.status(400).json(errors)
+    }
+
     return client.tickets.create(volunteerTicket, (err, req, result) => {
       if (err) {
         return handleError({
