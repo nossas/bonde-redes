@@ -26,22 +26,7 @@ const getCurrentDate = () => {
 }
 
 const main = async (req, res, next) => {
-  // res.json(req.body);
-  // const client = zendesk.createClient({
-  //   username:  ZENDESK_API_USER,
-  //   token:     'oauth_token',
-  //   remoteUri: ZENDESK_API_URL,
-  //   oauth: true,
-  //   asUser: req.body.agent
-  // });
-  // client.users.auth((err, req, result) => {
-  //   if (err) {
-  //     console.log(err);
-  //     return;
-  //   }
-  //   res.json(JSON.stringify(result.verified, null, 2, true));
-  // });
-  
+
   const client = zendesk.createClient({
     username: ZENDESK_API_USER,
     token: ZENDESK_API_TOKEN,
@@ -52,7 +37,7 @@ const main = async (req, res, next) => {
     volunteer_name,
     volunteer_ticket_id,
     volunteer_registry,
-    volunteer_tel,
+    volunteer_phone,
     volunteer_user_id,
     volunteer_organization_id,
     individual_name,
@@ -89,7 +74,7 @@ const main = async (req, res, next) => {
           volunteer: {
             name: volunteer_name,
             registry: volunteer_registry,
-            tel: volunteer_tel
+            tel: volunteer_phone
           },
           assignee_name,
           individual_name
@@ -163,20 +148,24 @@ const main = async (req, res, next) => {
           message: "The MSR ticket couldn't be updated"
         })
       }
-      res.json(result, null, 2, true);
+      res.json({ ticketId: id })
     });
   }
 
-  client.tickets.create(volunteerTicket, (err, req, result) => {
-    if (err) {
-      return handleError({
-        error: err,
-        message: "The Volunteer ticket couldn't be created"
-      })
-    }
-    const { id } = result
-    updateTicket(id)
-  });
+  const createTicket = () => {
+    return client.tickets.create(volunteerTicket, (err, req, result) => {
+      if (err) {
+        return handleError({
+          error: err,
+          message: "The Volunteer ticket couldn't be created"
+        })
+      }
+      const { id } = result
+      updateTicket(id)
+    });
+  }
+
+  createTicket()
 }
 
 export default main
