@@ -51,9 +51,11 @@ const Table = () => {
     longitude,
     email: volunteer_email,
     name: volunteer_name,
-    ticket_id: volunteer_ticket_id,
-    whatsapp: volunteer_number,
-    organization_id: volunteer_organization_id
+    whatsapp: volunteer_whatsapp,
+    organization_id: volunteer_organization_id,
+    phone: volunteer_phone,
+    user_id: volunteer_user_id,
+    registration_number: volunteer_registry
   } = volunteer.value
 
   const distance = 50
@@ -95,11 +97,14 @@ const Table = () => {
 
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState({ status: false, message: ''})
+  const [ticketId, setTicketId] = useState(0)
 
   const submitConfirm = async (requestBody) => {
     try {
       const response = await request.post(requestBody)
+
       if (response.status === 200) {
+        setTicketId(response.data && response.data.ticketId)
         setSuccess(true)
         popups.set(prevState => ({
           ...prevState,
@@ -162,31 +167,36 @@ const Table = () => {
             confirm={{
               onClose: closeAllPopups,
               onSubmit: () => submitConfirm({
-                volunteer_email,
-                volunteer_ticket_id,
-                volunteer_organization_id,
+                agent: zendeskAgent.value,
                 individual_name,
                 individual_ticket_id,
-                agent: zendeskAgent.value,
-              }),
+                volunteer_name,
+                volunteer_user_id,
+                volunteer_registry,
+                volunteer_phone,
+                volunteer_organization_id,
+            }),
               isEnabled: confirm
             }}
             success={{
               onClose: closeAllPopups,
               link: () => createWhatsappLink(
-                volunteer_number, { volunteer_name, individual_name, agent: zendeskAgent.value }
+                volunteer_whatsapp, { volunteer_name, individual_name, agent: zendeskAgent.value }
               ),
               isEnabled: success,
+              ticketId
             }}
             error={{
               onClose: closeAllPopups,
               onSubmit: () => submitConfirm({
-                volunteer_email,
-                volunteer_ticket_id,
-                volunteer_organization_id,
+                agent: zendeskAgent.value,
                 individual_name,
                 individual_ticket_id,
-                agent: zendeskAgent.value,
+                volunteer_name,
+                volunteer_user_id,
+                volunteer_registry,
+                volunteer_phone,
+                volunteer_organization_id,
               }),
               isEnabled: error.status,
               message: error.message

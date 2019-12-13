@@ -58,13 +58,25 @@ const Confirm = ({ individualName, volunteerName, onClose, onSubmit }) => (
   </>
 )
 
-const Success = ({ individualName, volunteerName, onClose, link }) => (
+const Success = ({ individualName, volunteerName, onClose, link, ticketId }) => (
   <>
     <Title.H2 align="center">Encaminhamento Realizado</Title.H2>
     <Text align="center">
       EBA! {individualName} foi encaminhada para {volunteerName}.
     </Text>
-    <a href={link()} target="_blank" alt="Enviar mensagem no Whatsapp">
+    <Link
+      href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${ticketId}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Acesse o ticket do match
+    </Link>
+    <a
+      href={link()}
+      target="_blank"
+      rel="noopener noreferrer"
+      alt="Enviar mensagem no Whatsapp"
+    >
       <Button>enviar whats para voluntária</Button>
     </a>
     <StyledLink onClick={onClose}>fazer nova busca</StyledLink>
