@@ -16,6 +16,15 @@ const volunteerType = id => {
   throw "Volunteer organization_id not supported"
 }
 
+const getCurrentDate = () => {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, '0')
+  const mm = String(today.getMonth() + 1).padStart(2, '0')
+  const yyyy = today.getFullYear()
+
+  return `${yyyy}-${mm}-${dd}`
+}
+
 const main = async (req, res, next) => {
   // res.json(req.body);
   // const client = zendesk.createClient({
@@ -52,7 +61,7 @@ const main = async (req, res, next) => {
   } = req.body
 
   const assignee_name = 'Ana'
-  var individualTicket = {
+  var individualTicket = matchTicketId => ({
     "ticket":
     {
       "status": "pending",
@@ -65,6 +74,14 @@ const main = async (req, res, next) => {
         {
           "id": 360014379412,
           "value": 'encaminhamento__realizado'
+        },
+        {
+          "id": 360016631632,
+          "value": `https://mapadoacolhimento.zendesk.com/agent/tickets/${matchTicketId}`
+        },
+        {
+          "id": 360017432652,
+          "value": String(getCurrentDate())
         },
       ],
       "comment": {
@@ -81,7 +98,7 @@ const main = async (req, res, next) => {
         "public": true,
       },
     }
-  };
+  })
 
   const volunteerTicket = {
     "ticket":
@@ -90,7 +107,6 @@ const main = async (req, res, next) => {
       "submitter_id": agent,
       "assignee_id": agent,
       "status": "pending",
-      "recipient": volunteer_name,
       "subject": `[${volunteerType(volunteer_organization_id)}] ${volunteer_name}`,
       "comment": {
         "body": volunteerComment({
@@ -114,6 +130,10 @@ const main = async (req, res, next) => {
           "id": 360014379412,
           "value": 'encaminhamento__realizado'
         },
+        {
+          "id": 360017432652,
+          "value": String(getCurrentDate())
+        },
       ],
     }
   };
@@ -129,83 +149,64 @@ const main = async (req, res, next) => {
   //   res.json(result, null, 2, true);
   // });
 
+  const handleError = ({ error, message }) => {
+    console.log(error);
+    res.json({ error, message })
+    process.exit(-1);
+  }
   
-  const updateTicket = () => {
-    client.tickets.update(volunteer_ticket_id, volunteerTicket, (err, req, result) => {
-      if (err) return handleError(err);
+  const updateTicket = id => {
+    client.tickets.update(individual_ticket_id, individualTicket(id), (err, req, result) => {
+      if (err) {
+        return handleError({
+          error: err,
+          message: "The MSR ticket couldn't be updated"
+        })
+      }
       res.json(result, null, 2, true);
     });
   }
 
   client.tickets.create(volunteerTicket, (err, req, result) => {
-    if (err) return handleError(err);
-    res.json(result, null, 2, true);
-    // const { id } = result
-    // updateTicket(id)
+    if (err) {
+      return handleError({
+        error: err,
+        message: "The Volunteer ticket couldn't be created"
+      })
+    }
+    const { id } = result
+    updateTicket(id)
   });
-  
-  // res.json(volunteerTicket)
-
-  const handleError = err => {
-    console.log(err);
-    process.exit(-1);
-  }
 }
 
 export default main
 
 // {
-//   "ticket": {
-//       "status": "pending", // status do acolhimento
-//       "recipient": "Ana", // nome da voluntária
-//       "requester_id": 377577169651 // user_id da voluntária
-//       "submitter_id": 373018450472, // agente que cria o ticket
-//       "assignee_id": 373018450472, // responsavel pelo ticket
-//       "subject": "[Advogada] Ana", // titulo do ticket
-      // "fields": [
-      //     {
-      //         "id": 360016681971, // nome da msr
-      //         "value": "Joana"
-      //     },
-      //     {
-      //         "id": 360016631632, // link do match (link do ticket da msr)
-      //         "value": "https://mapadoacolhimento.zendesk.com/agent/tickets/12586"
-      //     }
-      // ],
-//       "comments": { // comentário público para a voluntária
-//           "body": "Olá, Ana!\n\nBoa notícia!\nViemos te contar que o seu número de atendimento acaba de ser enviado para a Joana, pois você é a voluntária disponível mais próxima.\n\n**Para o nosso registro, é muito importante que nos avise sempre que iniciar os atendimentos. Lembre-se de que eles devem ser integralmente gratuitos e que o seu comprometimento em acolhê-la e acompanhá-la neste momento é fundamental.**\n\nEm anexo, estamos te enviando dois documentos muito importantes: **as diretrizes de atendimento do Mapa do Acolhimento, com todas as nossas regras e valores, e a Guia do Acolhimento,** uma cartilha para te ajudar a conduzir os atendimentos da melhor forma possível.\n\nQualquer dúvida ou dificuldade, por favor nos comunique.\nÉ muito bom saber que podemos contar com você!\nUm abraço,\n\nAna do Mapa do Acolhimento",
-//           "author_id": 373018450472,
-//           "public": true
-//       }
-//   }
-// }
-
-// {
-//   "url": "https://mapadoacolhimento.zendesk.com/api/v2/tickets/12586.json",
-//   "id": 12586,
-//   "external_id": "1231000",
+//   "url": "https://mapadoacolhimento.zendesk.com/api/v2/tickets/15617.json",
+//   "id": 15617,
+//   "external_id": null,
 //   "via": {
-//       "channel": "api",
+//       "channel": "web",
 //       "source": {
 //           "from": {},
 //           "to": {},
 //           "rel": null
 //       }
 //   },
-//   "created_at": "2019-08-07T21:37:06Z",
-//   "updated_at": "2019-09-24T21:49:20Z",
+//   "created_at": "2019-11-28T18:49:55Z",
+//   "updated_at": "2019-12-09T04:19:15Z",
 //   "type": null,
-//   "subject": "[Jurídico] teste, Natal - RN",
-//   "raw_subject": "[Jurídico] teste, Natal - RN",
-//   "description": "Importado pelo BONDE.",
+//   "subject": "[Advogada] GABRIELA",
+//   "raw_subject": "[Advogada] GABRIELA",
+//   "description": "**EMAIL PARA A MSR**\nOlá, Irma!\n\nBoa notícia!\n\nConseguimos localizar uma advogada​ disponível próxima a você. Estamos te enviando os dados abaixo para que entre em contato em até 30 dias. É muito importante atentar-se a esse prazo pois, após esse período, a sua vaga irá expirar. Não se preocupe, caso você não consiga, poderá se cadastrar novamente no futuro.\n\nAdvogada​: GABRIELA\nTelefone: 48984782324​\nOAB: 49225\n\nTodos os atendimentos do Mapa devem ser gratuitos pelo tempo que durarem. Caso você seja cobrada, comunique imediatamente a nossa equipe. No momento de contato com a voluntária, por favor, identifique que você buscou ajuda via Mapa do Acolhimento.\n\nAgradecemos pela coragem, pela confiança e esperamos que seja bem acolhida! Pedimos que entre em contato para compartilhar a sua experiência de atendimento.\n\nUm abraço,\nAle, da equipe Mapa do Acolhimento",
 //   "priority": null,
-//   "status": "new",
+//   "status": "open",
 //   "recipient": null,
-//   "requester_id": 385569543392,
-//   "submitter_id": 385569543392,
-//   "assignee_id": null,
-//   "organization_id": 360273031591,
-//   "group_id": null,
+//   "requester_id": 377567481991,
+//   "submitter_id": 377510044432,
+//   "assignee_id": 373018450472,
+//   "organization_id": 360269610652,
+//   "group_id": 360004360071,
 //   "collaborator_ids": [],
 //   "follower_ids": [],
 //   "email_cc_ids": [],
@@ -215,31 +216,36 @@ export default main
 //   "is_public": true,
 //   "due_at": null,
 //   "tags": [
-//       "inscrita",
-//       "psicológico_e_jurídico",
-//       "rn",
-//       "solicitação_recebida"
+//       "1",
+//       "antiga",
+//       "branca",
+//       "disponivel",
+//       "encaminhamento__realizado",
+//       "jurídico",
+//       "mapa",
+//       "migracao-01",
+//       "sc"
 //   ],
 //   "custom_fields": [
 //       {
 //           "id": 360021879811,
-//           "value": "cidade6"
+//           "value": null
 //       },
 //       {
 //           "id": 360016631592,
-//           "value": ""
+//           "value": null
 //       },
 //       {
 //           "id": 360017432652,
-//           "value": null
+//           "value": "2019-11-28"
 //       },
 //       {
 //           "id": 360016631632,
-//           "value": null
+//           "value": "https://mapadoacolhimento.zendesk.com/agent/tickets/8757"
 //       },
 //       {
 //           "id": 360017056851,
-//           "value": "2019-08-07"
+//           "value": null
 //       },
 //       {
 //           "id": 360021665652,
@@ -247,7 +253,7 @@ export default main
 //       },
 //       {
 //           "id": 360014379412,
-//           "value": "solicitação_recebida"
+//           "value": "encaminhamento__realizado"
 //       },
 //       {
 //           "id": 360021812712,
@@ -259,7 +265,7 @@ export default main
 //       },
 //       {
 //           "id": 360016681971,
-//           "value": "teste"
+//           "value": "Irma"
 //       }
 //   ],
 //   "satisfaction_rating": null,
@@ -267,23 +273,23 @@ export default main
 //   "fields": [
 //       {
 //           "id": 360021879811,
-//           "value": "cidade6"
+//           "value": null
 //       },
 //       {
 //           "id": 360016631592,
-//           "value": ""
+//           "value": null
 //       },
 //       {
 //           "id": 360017432652,
-//           "value": null
+//           "value": "2019-11-28"
 //       },
 //       {
 //           "id": 360016631632,
-//           "value": null
+//           "value": "https://mapadoacolhimento.zendesk.com/agent/tickets/8757"
 //       },
 //       {
 //           "id": 360017056851,
-//           "value": "2019-08-07"
+//           "value": null
 //       },
 //       {
 //           "id": 360021665652,
@@ -291,7 +297,7 @@ export default main
 //       },
 //       {
 //           "id": 360014379412,
-//           "value": "solicitação_recebida"
+//           "value": "encaminhamento__realizado"
 //       },
 //       {
 //           "id": 360021812712,
@@ -303,7 +309,7 @@ export default main
 //       },
 //       {
 //           "id": 360016681971,
-//           "value": "teste"
+//           "value": "Irma"
 //       }
 //   ],
 //   "followup_ids": [],
