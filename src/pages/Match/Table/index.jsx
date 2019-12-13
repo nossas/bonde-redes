@@ -18,7 +18,6 @@ import columns from './columns'
 import { If } from 'components/If'
 import Popup from 'components/Popup'
 
-// https://wa.me/whatsappphonenumber/?text=urlencodedtext
 const createWhatsappLink = (number, textVariables) => {
   if(!number) alert('Essa voluntária não possui Whatsapp')
   const whatsappphonenumber = parseNumber(number)
