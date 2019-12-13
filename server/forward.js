@@ -10,20 +10,30 @@ const main = async (req, res, next) => {
   //   oauth: true,
   //   asUser: req.body.agent
   // });
+  // client.users.auth((err, req, result) => {
+  //   if (err) {
+  //     console.log(err);
+  //     return;
+  //   }
+  //   res.json(JSON.stringify(result.verified, null, 2, true));
+  // });
   
   const client = zendesk.createClient({
     username:  ZENDESK_API_USER,
     token:     ZENDESK_API_TOKEN,
     remoteUri: ZENDESK_API_URL 
   });
-
-  client.users.auth((err, req, result) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    res.json(JSON.stringify(result.verified, null, 2, true));
+  console.log({ ticketID: req.body.individual_ticket_id })
+  client.tickets.show(req.body.individual_ticket_id, (err, req, result) => {
+    if (err) return handleError(err);
+    res.json(result, null, 2, true);
   });
+  
+  const handleError = err => {
+    console.log(err);
+    process.exit(-1);
+  }
+
 }
 
 export default main
