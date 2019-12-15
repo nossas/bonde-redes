@@ -12,7 +12,10 @@ interface Volunteer {
   email: string
   organization_id: number
   name: string
-  link_ticket: number
+  whatsapp: number
+  user_id: number
+  phone: string
+  registration_number: string
 }
 
 const volunteerRef = createStateLink<Volunteer>({
@@ -21,7 +24,10 @@ const volunteerRef = createStateLink<Volunteer>({
   email: '',
   organization_id: 0,
   name: '',
-  link_ticket: 0
+  whatsapp: 0,
+  user_id: 0,
+  phone: '',
+  registration_number: ''
 })
 
 export default {

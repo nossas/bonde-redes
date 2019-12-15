@@ -16,6 +16,7 @@ const Table: React.FC = () => {
 
   const tableData = useStateLink(tableDataRef)
   const submittedParams = useStateLink(submittedParamsRef)
+  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS!)
 
   const {
     distance,
@@ -47,7 +48,6 @@ const Table: React.FC = () => {
   }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
   const filterByCategory = useCallback((data: PointUser[]) => data.filter((i) => {
-    const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS!)
 
     if (i.organization_id === zendeskOrganizations.therapist) {
       if (!therapist) {
@@ -66,10 +66,23 @@ const Table: React.FC = () => {
     return true
   }), [individual, lawyer, therapist])
 
+  const isVolunteer = (organization_id: number) => [zendeskOrganizations['therapist'], zendeskOrganizations['lawyer']].includes(organization_id)
+
+  const filterByUserCondition = (data: PointUser[]) => data.filter(
+    (i) => {
+      if (isVolunteer(i.organization_id)) {
+        return i.condition === 'disponivel' || i.condition === 'aprovada' || i.condition === 'desabilitada'
+      }
+      return true
+    }
+  )
+      
   const filteredTableData = useMemo(() => {
     const data = filterByCategory(
       filterByDistance(
-        tableData.get(),
+        filterByUserCondition(
+          tableData.get(),
+        )
       ),
     )
 

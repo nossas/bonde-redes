@@ -4,6 +4,7 @@ import table from './table'
 import map from './map'
 import matchForm from './match/form'
 import matchTable from './match/table'
+import popups from './popup'
 
 const GlobalContext = {
   visualization,
@@ -11,7 +12,8 @@ const GlobalContext = {
   table,
   map,
   matchForm,
-  matchTable
+  matchTable,
+  popups
 }
 
 export default GlobalContext
