@@ -1,11 +1,13 @@
-FROM node:10-alpine
-MAINTAINER Nossas <tech@nossas.org>
+FROM node:12-alpine
 
-ENV NODE_ENV production
-WORKDIR /code
+RUN yarn global add pnpm
 
-COPY package.json /code
-COPY package-lock.json /code
-RUN npm i
+WORKDIR /usr/src/app
 
-COPY . /code
+COPY ./ .
+
+RUN pnpm m i --filter bonde-microservices --filter solidarity-client
+
+RUN pnpm m run build --filter solidarity-client
+
+CMD node ./packages/solidarity-client/server/dist

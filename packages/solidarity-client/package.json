@@ -56,7 +56,7 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "dev:client": "PORT=4000 react-scripts start",
-    "dev:server": "PORT=5000 tsc-watch --build server/tsconfig.json  --onSuccess \"node ./dist/server/index.js\"",
+    "dev:server": "PORT=5000 tsc-watch --build server/tsconfig.json  --onSuccess \"node ./server/dist/server/index.js\"",
     "start": "node server/dist",
     "build": "react-scripts build && tsc --build server/tsconfig.json",
     "test": "react-scripts test",

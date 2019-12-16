@@ -10,9 +10,9 @@ require('dotenv-safe').config()
 // import forward from './forward'
 
 // Assert required enviroment variables for app
-assert(process.env.ZENDESK_API_USER !== undefined, 'Required enviroment variable ZENDESK_API_USER')
-assert(process.env.ZENDESK_API_TOKEN !== undefined, 'Required enviroment variable ZENDESK_API_TOKEN')
-assert(process.env.PORT !== undefined, 'Required enviroment PORT')
+// assert(process.env.ZENDESK_API_USER !== undefined, 'Required enviroment variable ZENDESK_API_USER')
+// assert(process.env.ZENDESK_API_TOKEN !== undefined, 'Required enviroment variable ZENDESK_API_TOKEN')
+// assert(process.env.PORT !== undefined, 'Required enviroment PORT')
 
 const asyncMiddleware = fn => (req, res, next) => {
   Promise.resolve(fn(req, res, next))

@@ -208,6 +208,32 @@ pipeline:
       status: success
       event: tag
 
+  publish-stag-solidarity-client:
+    image: plugins/docker
+    repo: nossas/bonde-solidarity-client
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/solidarity-client/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
+
+  publish-prod-solidarity-client:
+    image: plugins/docker
+    repo: nossas/bonde-solidarity-client
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/solidarity-client/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
+
   deploy-stag-webhooks-registry:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
@@ -475,6 +501,37 @@ pipeline:
     url: http://cluster.bonde.org
     service: webhooks/activists
     docker_image: "nossas/bonde-webhooks-activists:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
+
+  deploy-stag-solidarity-client:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webservers/match-voluntarias
+    group: deploying
+    docker_image: nossas/bonde-solidarity-client:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [ rancher_access_key, rancher_secret_key ]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
+
+  deploy-prod-solidarity-client:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webservers/match-voluntarias
+    docker_image: "nossas/bonde-solidarity-client:${DRONE_TAG##v}"
     timeout: 360
     group: deploying
     confirm: true
