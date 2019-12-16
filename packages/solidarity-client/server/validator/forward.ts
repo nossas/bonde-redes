@@ -4,8 +4,18 @@ import isEmpty from './is-empty'
 const checkField = input => !isEmpty(input) ? String(input) : ''
 
 const validate = data => {
-  const errors = {}
-  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS)
+  const errors = {
+    agent: '',
+    individual_name: '',
+    individual_ticket_id: '',
+    volunteer_name: '',
+    volunteer_user_id: '',
+    volunteer_registry: '',
+    volunteer_phone: '',
+    volunteer_organization_id: ''
+
+  }
+  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS || '{}')
   const checkedData = {
     ...data,
     agent: checkField(data.agent),
@@ -17,7 +27,7 @@ const validate = data => {
     volunteer_phone: checkField(data.volunteer_phone),
     volunteer_organization_id: checkField(data.volunteer_organization_id)
   }
-    
+
   // Agent
   if (!Validator.isNumeric(checkedData.agent, { no_symbols: true })) {
     errors.agent = 'ID do agente deve conter apenas números'

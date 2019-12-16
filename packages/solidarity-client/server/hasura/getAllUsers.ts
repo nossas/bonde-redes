@@ -1,8 +1,9 @@
 import axios from 'axios'
 
-const query = `query ($organization_id: bigint, $condition: String) {
-  solidarity_users(where: {organization_id: {_eq: $organization_id}, condition: {_eq: $condition}}) {
+const query = `query {
+  solidarity_users(where: {longitude: {_is_null: false}, latitude: {_is_null: false}}) {
     address
+    organization_id
     user_id
     atendimentos_concludos_calculado_
     atendimentos_em_andamento_calculado_
@@ -19,20 +20,22 @@ const query = `query ($organization_id: bigint, $condition: String) {
     whatsapp
     data_de_inscricao_no_bonde
     condition
+    tipo_de_acolhimento
   }
-}
-`
+}`
 
-const getAllIndividualUsers = async (organization_id, condition) => {
+const getAllUsers = async (
+  // organization_id, condition
+  ) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
-  const response = await axios.post(HASURA_API_URL, {
+  const response = await axios.post(HASURA_API_URL || '', {
     query,
-    variables: {
-      organization_id, condition
-    }
+    // variables: {
+    //   organization_id, condition
+    // }
   }, {
     headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
+      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET || ''
     }
   })
 
@@ -44,4 +47,4 @@ const getAllIndividualUsers = async (organization_id, condition) => {
   }
 }
 
-export default getAllIndividualUsers
+export default getAllUsers

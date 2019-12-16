@@ -23,7 +23,7 @@ const query = `query ($organization_id: bigint, $condition: [String!]) {
 
 const getAllVolunteerUsers = async (organization_id, condition) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
-  const response = await axios.post(HASURA_API_URL, {
+  const response = await axios.post(HASURA_API_URL || '', {
     query,
     variables: {
       organization_id, condition

@@ -12,13 +12,15 @@ const query = `query {
   }
 }`
 
-const getAllTickets = async (organization_id) => {
+const getAllTickets = async (
+  // organization_id
+  ) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
-  const response = await axios.post(HASURA_API_URL, {
+  const response = await axios.post(HASURA_API_URL || '', {
     query,
-    variables: {
-      organization_id
-    }
+    // variables: {
+    //   organization_id
+    // }
   }, {
     headers: {
       'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
