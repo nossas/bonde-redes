@@ -1,4 +1,14 @@
 pipeline:
+  staging-build:
+    image: node:12-alpine
+    commands:
+      - yarn global add pnpm
+      - pnpm i
+      # - pnpm run lint
+      # - pnpm m run test
+      - pnpm m run build
+    when:
+      event: [push]
 
   publish-stag-webhooks-registry:
     image: plugins/docker
