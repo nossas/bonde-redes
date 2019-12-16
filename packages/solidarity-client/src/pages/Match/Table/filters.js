@@ -6,7 +6,7 @@ export const filterByUserType = data => data.filter(
 
 export const checkVolunteerCategory = volunteerCategory => {
   if (volunteerCategory === zendeskOrganizations.lawyer) return 'jurídico'
-  if(volunteerCategory === zendeskOrganizations.therapist) return 'psicológico' 
+  if(volunteerCategory === zendeskOrganizations.therapist) return 'psicológico'
 }
 
 export const filterByCategory = (data, volunteerCategory) => data.filter(
@@ -18,6 +18,6 @@ export const filterByCategory = (data, volunteerCategory) => data.filter(
 
 export const filterByTicketStatus = data => data.filter(
   (i) => (
-    i.ticket_status === 'new' || i.ticket_status === 'open' && i.status_acolhimento === 'solicitacao_recebida'
+    (i.ticket_status === 'new' || i.ticket_status === 'open') && i.status_acolhimento === 'solicitacao_recebida'
   )
 )

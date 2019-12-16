@@ -39,9 +39,12 @@ const Table = () => {
   const zendeskAgent = useStateLink(zendeskAgentRef)
   const individual = useStateLink(individualRef)
 
-  const { confirm, forward, wrapper } = popups.value
   const {
-    email: individualEmail,
+    confirm,
+    // forward,
+    wrapper } = popups.value
+  const {
+    // email: individualEmail,
     name: individual_name,
     ticket_id: individual_ticket_id
   } = individual.value
@@ -49,7 +52,7 @@ const Table = () => {
   const {
     latitude,
     longitude,
-    email: volunteer_email,
+    // email: volunteer_email,
     name: volunteer_name,
     whatsapp: volunteer_whatsapp,
     organization_id: volunteer_organization_id,

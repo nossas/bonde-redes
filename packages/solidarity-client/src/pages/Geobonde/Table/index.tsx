@@ -64,6 +64,7 @@ const Table: React.FC = () => {
     }
 
     return true
+    // eslint-disable-next-line
   }), [individual, lawyer, therapist])
 
   const isVolunteer = (organization_id: number) => [zendeskOrganizations['therapist'], zendeskOrganizations['lawyer']].includes(organization_id)
@@ -87,6 +88,7 @@ const Table: React.FC = () => {
     )
 
     return data
+    // eslint-disable-next-line
   }, [filterByCategory, filterByDistance, tableData])
 
   return filteredTableData.length === 0 ? (
