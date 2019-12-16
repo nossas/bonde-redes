@@ -1,5 +1,5 @@
 import React from 'react';
-import GlobalContext from 'context';
+import GlobalContext from '../../../context';
 import { useStateLink } from '@hookstate/core';
 
 const UserInfo: React.FC = () => {

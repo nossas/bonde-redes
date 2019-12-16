@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { useStateLink } from '@hookstate/core'
 import { Button } from 'bonde-styleguide'
 
-import { getUserData } from 'services/utils'
-import GlobalContext from 'context'
+import { getUserData } from '../../../../../../services/utils'
+import GlobalContext from '../../../context'
 
 const BtnWarning = styled(Button)`
   border-color: #EE0090;

@@ -5,9 +5,9 @@ import { useStateLink } from '@hookstate/core'
 import * as turf from '@turf/turf'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
 
-import GlobalContext from 'context'
-import { encodeText, whatsappText, parseNumber } from 'services/utils'
-import request from 'services/request'
+import GlobalContext from '../../../context'
+import { encodeText, whatsappText, parseNumber } from '../../../services/utils'
+import request from '../../../services/request'
 import { FullWidth, Spacing } from './style'
 import {
   filterByCategory,
@@ -15,15 +15,15 @@ import {
   filterByUserType
 } from './filters'
 import columns from './columns'
-import { If } from 'components/If'
-import Popup from 'components/Popup'
+import { If } from '../../../components/If'
+import Popup from '../../../components/Popup'
 
 const createWhatsappLink = (number, textVariables) => {
   if(!number) alert('Essa voluntária não possui Whatsapp')
   const whatsappphonenumber = parseNumber(number)
   const urlencodedtext = encodeText(whatsappText(textVariables))
   return `https://wa.me/55${whatsappphonenumber}/?text=${urlencodedtext}`
-} 
+}
 
 const Table = () => {
   const {

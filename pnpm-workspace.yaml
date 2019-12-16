@@ -9,3 +9,4 @@ packages:
   - 'packages/webhooks-zendesk'
   - 'packages/webhook-mail'
   - 'packages/webhook-activists'
+  - 'packages/solidarity-client'

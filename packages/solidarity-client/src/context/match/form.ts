@@ -1,5 +1,5 @@
 import { createStateLink } from '@hookstate/core'
-import dicioAgent from 'pages/Match/Table/dicioAgent'
+import dicioAgent from '../../pages/Match/Table/dicioAgent'
 
 type agentTypes = keyof typeof dicioAgent | 'default'
 

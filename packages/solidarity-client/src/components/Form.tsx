@@ -7,7 +7,7 @@ import {
   Input,
 } from 'bonde-styleguide'
 import styled from 'styled-components'
-import GlobalContext from 'context'
+import GlobalContext from '../context'
 import { useStateLink } from '@hookstate/core'
 import MapsSearchInput from './Search/MapsSearchInput'
 

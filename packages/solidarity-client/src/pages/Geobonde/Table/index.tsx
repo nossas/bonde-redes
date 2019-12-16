@@ -2,10 +2,10 @@ import React, { useMemo, useCallback } from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
-import GlobalContext from 'context'
+import GlobalContext from '../../../context'
 import { useStateLink } from '@hookstate/core'
 import * as turf from '@turf/turf'
-import { PointUser } from 'context/table'
+import { PointUser } from '../../../context/table'
 import { FullWidth } from './style'
 import columns from './columns'
 
@@ -76,7 +76,7 @@ const Table: React.FC = () => {
       return true
     }
   )
-      
+
   const filteredTableData = useMemo(() => {
     const data = filterByCategory(
       filterByDistance(

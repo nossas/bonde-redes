@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl'
-import GlobalContext from 'context'
+import GlobalContext from '../../../context'
 import { useStateLink } from '@hookstate/core'
-import { PointUser } from 'context/table'
+import { PointUser } from '../../../context/table'
 import UserPin from './user-pin'
 import UserInfo from './user-info'
 

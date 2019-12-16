@@ -1,5 +1,5 @@
 import React from 'react'
-import Forward from 'components/BtnFoward'
+import Forward from '../../../components/BtnFoward'
 import { Flexbox2 as Flexbox } from 'bonde-styleguide'
 
 type valueArrayString = {

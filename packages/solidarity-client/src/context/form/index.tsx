@@ -1,5 +1,5 @@
 import { createStateLink } from '@hookstate/core'
-import dicioService from 'pages/Geobonde/Table/dicioService'
+import dicioService from '../../pages/Geobonde/Table/dicioService'
 
 type serviceTypes = keyof typeof dicioService | 'default'
 type geolocationType = {

@@ -1,4 +1,4 @@
-import React from 'react' 
+import React from 'react'
 import { Route, Redirect } from 'react-router'
 import { Router } from 'react-router-dom'
 import styled from 'styled-components'
@@ -25,8 +25,8 @@ const AppBody = styled.div`
 // const FixedFooter = styled.div`
 //   flex-shrink: 0;
 // `
-  
-const App = () => 
+
+const App = () =>
   <Router history={history}>
     <AppWrapper className="app">
       <Header />

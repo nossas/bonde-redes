@@ -1,5 +1,5 @@
 import { createStateLink } from '@hookstate/core'
-import { PointUser } from 'context/table'
+import { PointUser } from '../../context/table'
 
 const stateViewRef = createStateLink({
   viewport: {

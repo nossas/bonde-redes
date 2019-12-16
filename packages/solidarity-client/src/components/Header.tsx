@@ -10,7 +10,7 @@ import {
   // Button,
   Flexbox
 } from 'bonde-styleguide'
-import request from 'services/request'
+import request from '../services/request'
 import GlobalContext from '../context'
 
 import Form from './Form'
@@ -44,10 +44,10 @@ const Header: React.FC = ({ children }) => {
   const {
     table: { tableDataRef },
   } = GlobalContext
-  
+
   const tableData = useStateLink(tableDataRef)
   const { pathname: path } = useLocation()
-  
+
   useEffect(() => {
     (async () => {
       const response = await request.get()
@@ -55,7 +55,7 @@ const Header: React.FC = ({ children }) => {
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  
+
   return (
     <FlexDiv>
       <StyledBondeHeader>
@@ -69,7 +69,7 @@ const Header: React.FC = ({ children }) => {
               {visualizationState.get()}
             </Button> */}
           <IfElse
-            condition={isMatch(path)} 
+            condition={isMatch(path)}
             True={<MatchForm />}
             False={<Form />}
           />
