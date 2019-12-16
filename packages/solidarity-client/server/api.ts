@@ -3,7 +3,7 @@ import getAllUsers from './hasura/getAllUsers'
 import getAllTickets from './hasura/getAllTickets'
 
 const main = async (req, res, next) => {
-  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS)
+  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS || '')
   const dicio = (organizationId) => {
     const keys = Object.keys(zendeskOrganizations)
     const key = keys.findIndex(i => zendeskOrganizations[i] === organizationId)
@@ -32,12 +32,12 @@ const main = async (req, res, next) => {
       const ticket = filterDeletedTickets(user).find(
         i => i.subject === `[${dicio(user.organizationId)}] ${user.name} - ${user.registration_number}`
       ) || filterDeletedTickets(user)
-        .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))[0]
+        .sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at))[0]
 
       return fuseUserWithTicket(objectValidation(ticket), user)
     } else {
       const ticket = filterDeletedTickets(user)
-        .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))[0]
+        .sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at))[0]
 
       // if (!ticket) return user
 

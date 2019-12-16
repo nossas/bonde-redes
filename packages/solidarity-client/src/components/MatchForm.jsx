@@ -9,8 +9,8 @@ import {
 import styled from 'styled-components'
 import { useStateLink } from '@hookstate/core'
 
-import GlobalContext from '../../../context'
-import { getUserData } from '../../../services/utils'
+import GlobalContext from '../context'
+import { getUserData } from '../services/utils'
 
 import Select from './Select'
 import dicioAgent from '../pages/Match/Table/dicioAgent'

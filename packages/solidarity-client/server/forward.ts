@@ -10,7 +10,7 @@ const {
   REACT_APP_ZENDESK_ORGANIZATIONS
 } = process.env
 
-const zendeskOrganizations = JSON.parse(REACT_APP_ZENDESK_ORGANIZATIONS)
+const zendeskOrganizations = JSON.parse(REACT_APP_ZENDESK_ORGANIZATIONS || '')
 const volunteerType = id => {
   if (id === zendeskOrganizations.lawyer) return 'Advogada'
   if (id === zendeskOrganizations.therapist) return 'Psicóloga'
@@ -29,11 +29,11 @@ const getCurrentDate = () => {
 const main = async (req, res, next) => {
 
   const client = zendesk.createClient({
-    username: ZENDESK_API_USER,
-    token: ZENDESK_API_TOKEN,
-    remoteUri: ZENDESK_API_URL
+    username: ZENDESK_API_USER || '',
+    token: ZENDESK_API_TOKEN || '',
+    remoteUri: ZENDESK_API_URL || ''
   });
-  
+
   const {
     volunteer_name,
     volunteer_ticket_id,
@@ -50,7 +50,7 @@ const main = async (req, res, next) => {
   var individualTicket = matchTicketId => ({
     "ticket":
     {
-      "status": "pending",
+      // "status": 'pending',
       "assignee_id": agent,
       "fields": [
         {
@@ -92,7 +92,7 @@ const main = async (req, res, next) => {
       "requester_id": volunteer_user_id,
       "submitter_id": agent,
       "assignee_id": agent,
-      "status": "pending",
+      // "status": 'pending',
       "subject": `[${volunteerType(volunteer_organization_id)}] ${volunteer_name}`,
       "comment": {
         "body": volunteerComment({
@@ -140,7 +140,7 @@ const main = async (req, res, next) => {
     res.json({ error, message })
     process.exit(-1);
   }
-  
+
   const updateTicket = id => {
     client.tickets.update(individual_ticket_id, individualTicket(id), (err, req, result) => {
       if (err) {
@@ -161,7 +161,7 @@ const main = async (req, res, next) => {
       return res.status(400).json(errors)
     }
 
-    return client.tickets.create(volunteerTicket, (err, req, result) => {
+    return client.tickets.create(volunteerTicket, (err, req, result: any) => {
       if (err) {
         return handleError({
           error: err,

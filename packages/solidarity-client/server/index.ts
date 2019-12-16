@@ -4,9 +4,10 @@ import cors from 'cors'
 import morgan from 'morgan'
 import path from 'path'
 import body_parser from 'body-parser'
+require('dotenv-safe').config()
 
-import api from './api'
-import forward from './forward'
+// import api from './api'
+// import forward from './forward'
 
 // Assert required enviroment variables for app
 assert(process.env.ZENDESK_API_USER !== undefined, 'Required enviroment variable ZENDESK_API_USER')
@@ -30,8 +31,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'an error occurred' })
 })
 
-app.get('/api', asyncMiddleware(api))
-app.post('/api/forward', asyncMiddleware(forward))
+// app.get('/api', asyncMiddleware(api))
+// app.post('/api/forward', asyncMiddleware(forward))
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'))
@@ -39,4 +40,4 @@ app.get('*', (req, res) => {
 
 app.listen(port, () => console.log(`Match Voluntarios App listening on port ${port}!`))
 
-export default app
+// export default app
