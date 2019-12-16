@@ -66,7 +66,7 @@ Select.propTypes = {
   label: PropTypes.string.isRequired,
   dicio: PropTypes.object.isRequired,
   onChange: PropTypes.func,
-  value: PropTypes.object.isRequired,
+  value: PropTypes.string.isRequired,
 }
 
 export default Select

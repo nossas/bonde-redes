@@ -86,14 +86,16 @@ const Table = () => {
     if (input === zendeskOrganizations.lawyer) return 'jurídico'
     if(input === zendeskOrganizations.therapist) return 'psicológico'
   }
-  
+
+  // eslint-disable-next-line
   const filterByCategory = data => data.filter(
     (i) => (
       i.tipo_de_acolhimento === volunteer_category(volunteer_organization_id) ||
       i.tipo_de_acolhimento === 'psicológico_e_jurídico'
     )
   )
-
+  
+  // eslint-disable-next-line
   const filterByUserType = data => data.filter(
     (i) => i.organization_id === zendeskOrganizations.individual
   )
@@ -116,7 +118,6 @@ const Table = () => {
         )
       )
     )
-    console.log({data})
     return data
   }, [filterByDistance, filterByCategory, filterByUserType, tableData])
 
@@ -125,7 +126,6 @@ const Table = () => {
   const [ticketId, setTicketId] = useState(0)
 
   const submitConfirm = async (requestBody) => {
-    console.log(requestBody)
     const mockedBody = {
       "volunteer_name": "Ana Teste teste",
       "individual_name": "ANA MSR teste match automatizado",
