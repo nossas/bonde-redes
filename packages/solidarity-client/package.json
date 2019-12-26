@@ -34,6 +34,7 @@
     "concurrently": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv-safe": "^8.2.0",
+    "easy-peasy": "^3.2.6",
     "express": "^4.17.1",
     "history": "^4.10.1",
     "mapbox-gl": "^1.6.0",
@@ -56,8 +57,8 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "dev:client": "PORT=4000 react-scripts start",
-    "dev:server": "PORT=5000 tsc-watch --build server/tsconfig.json  --onSuccess \"node ./server/dist/index.js\"",
-    "start": "node server/dist",
+    "dev:server": "PORT=5000 tsc-watch --build server/tsconfig.json  --onSuccess \"node -r dotenv-safe/config ./server/dist/index.js\"",
+    "start": "node -r dotenv-safe/config server/dist",
     "build": "react-scripts build && tsc --build server/tsconfig.json",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

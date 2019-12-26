@@ -4,8 +4,6 @@ import cors from 'cors'
 import morgan from 'morgan'
 import path from 'path'
 import body_parser from 'body-parser'
-require('dotenv-safe').config()
-
 import api from './api'
 import forward from './forward'
 
