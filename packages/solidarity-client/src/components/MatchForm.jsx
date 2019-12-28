@@ -11,12 +11,13 @@ import styled from 'styled-components'
 import { useStateLink } from '@hookstate/core'
 import useForm from 'react-hook-form';
 import { RHFInput } from 'react-hook-form-input';
+import { useStoreActions } from 'easy-peasy';
 
-import GlobalContext from 'context'
-import { getUserData } from 'services/utils'
+import GlobalContext from '../context'
+import { getUserData } from '../services/utils'
 
 import Select from './Select'
-import dicioAgent from 'pages/Match/Table/dicioAgent'
+import dicioAgent from '../pages/Match/Table/dicioAgent'
 
 const FormWrapper = styled.form`
   width: 70%;
@@ -36,25 +37,26 @@ const StyledFlexbox = styled(Flexbox)`
 
 const MatchForm = () => {
   const {
-    matchForm: { volunteerRef },
     table: { tableDataRef },
   } = GlobalContext
 
   const tableData = useStateLink(tableDataRef)
-  const volunteer = useStateLink(volunteerRef)
+  const setVolunteer = useStoreActions(actions => actions.volunteer.setVolunteer);
+  const setAgent = useStoreActions(actions => actions.agent.setAgent)
 
-  const send = (inputValues) => {
+  const send = ({ email, agent }) => {
     // buscando dados voluntaria atraves do email
     const data = tableData.get()
     const user = getUserData({
-      user: inputValues.email,
+      user: email,
       data,
       filterBy: "email"
     })
     // TODO: Tratar erro de nao achar uma usuaria com esse email
-    volunteer.set({ ...user })
+    setVolunteer(user)
+    setAgent(agent)
   }
-  
+
   const { handleSubmit, register, setValue, errors, getValues } = useForm();
 
   return (

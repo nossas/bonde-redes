@@ -4,6 +4,7 @@ import ReactTable from 'react-table'
 import { useStateLink } from '@hookstate/core'
 import * as turf from '@turf/turf'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
+import { useStoreState } from 'easy-peasy'
 
 import GlobalContext from '../../../context'
 import { encodeText, whatsappText, parseNumber } from '../../../services/utils'
@@ -25,14 +26,14 @@ const Table = () => {
   const {
     table: { tableDataRef },
     matchTable: { individualRef },
-    matchForm: { volunteerRef, zendeskAgentRef },
     popups: { popupsRef }
   } = GlobalContext
 
-  const volunteer = useStateLink(volunteerRef)
+  const volunteer = useStoreState(state => state.volunteer.data)
+  const zendeskAgent = useStoreState(state => state.agent.data)
+
   const tableData = useStateLink(tableDataRef)
   const popups = useStateLink(popupsRef)
-  const zendeskAgent = useStateLink(zendeskAgentRef)
   const individual = useStateLink(individualRef)
 
   const {
@@ -55,7 +56,7 @@ const Table = () => {
     phone: volunteer_phone,
     user_id: volunteer_user_id,
     registration_number: volunteer_registry
-  } = volunteer.value
+  } = volunteer
 
   const distance = 50
   const lat = Number(latitude)
@@ -137,6 +138,7 @@ const Table = () => {
       "volunteer_user_id": 377577169651
     }
     try {
+      // TODO: Fazer uma thunk action
       const response = await request.post(JSON.stringify(mockedBody))
 
       if (response.status === 200) {
@@ -203,7 +205,7 @@ const Table = () => {
             confirm={{
               onClose: closeAllPopups,
               onSubmit: () => submitConfirm({
-                agent: zendeskAgent.value,
+                agent: zendeskAgent,
                 individual_name,
                 individual_ticket_id,
                 volunteer_name,
@@ -217,7 +219,7 @@ const Table = () => {
             success={{
               onClose: closeAllPopups,
               link: () => createWhatsappLink(
-                volunteer_whatsapp, { volunteer_name, individual_name, agent: zendeskAgent.value }
+                volunteer_whatsapp, { volunteer_name, individual_name, agent: zendeskAgent }
               ),
               isEnabled: success,
               ticketId
@@ -225,7 +227,7 @@ const Table = () => {
             error={{
               onClose: closeAllPopups,
               onSubmit: () => submitConfirm({
-                agent: zendeskAgent.value,
+                agent: zendeskAgent,
                 individual_name,
                 individual_ticket_id,
                 volunteer_name,
