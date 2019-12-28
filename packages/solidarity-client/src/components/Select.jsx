@@ -43,7 +43,7 @@ const renderOptions = (dicio) =>
   )
 
 const Select = ({
-  label, dicio, onChange, value,
+  label, dicio, onChange, value, defaultValue
 }) => 
   <Wrapper>
     <DivText>
@@ -52,6 +52,7 @@ const Select = ({
     <br />
     <WrapperSelect>
       <StyledSelect value={value} onChange={onChange}>
+        <option>{defaultValue}</option>
         {renderOptions(dicio)}
       </StyledSelect>
     </WrapperSelect>
