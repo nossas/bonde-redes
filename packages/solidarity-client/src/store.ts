@@ -1,7 +1,7 @@
 import { createStore } from 'easy-peasy';
-import GlobalModel from '../src/models'
+import GlobalModel from './models'
 
-const { volunteerModel, agentModel } = GlobalModel
+const { volunteerModel, agentModel, popupModel } = GlobalModel
 
 const productsModel = {
   items: {
@@ -17,7 +17,8 @@ const storeModel = {
   products: productsModel,
   basket: basketModel,
   volunteer: volunteerModel,
-  agent: agentModel
+  agent: agentModel,
+  popups: popupModel
 };
 
 const store = createStore(storeModel);

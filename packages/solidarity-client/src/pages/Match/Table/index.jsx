@@ -4,7 +4,7 @@ import ReactTable from 'react-table'
 import { useStateLink } from '@hookstate/core'
 import * as turf from '@turf/turf'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
-import { useStoreState } from 'easy-peasy'
+import { useStoreState, useStoreActions } from 'easy-peasy'
 
 import GlobalContext from '../../../context'
 import { encodeText, whatsappText, parseNumber } from '../../../services/utils'
@@ -26,20 +26,21 @@ const Table = () => {
   const {
     table: { tableDataRef },
     matchTable: { individualRef },
-    popups: { popupsRef }
   } = GlobalContext
 
   const volunteer = useStoreState(state => state.volunteer.data)
   const zendeskAgent = useStoreState(state => state.agent.data)
+  const popups = useStoreState(state => state.popups.data)
 
   const tableData = useStateLink(tableDataRef)
-  const popups = useStateLink(popupsRef)
   const individual = useStateLink(individualRef)
+  const setPopup = useStoreActions(actions => actions.popups.setPopup)
 
   const {
     confirm,
     // forward,
-    wrapper } = popups.value
+    wrapper
+  } = popups
   const {
     // email: individualEmail,
     name: individual_name,
@@ -163,7 +164,7 @@ const Table = () => {
   const closeAllPopups = () => {
     setSuccess(false)
     setError(false)
-    popups.set({
+    setPopup({
       wrapper: false,
       confirm: false,
       forward: false
