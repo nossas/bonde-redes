@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useStateLink } from '@hookstate/core'
 import styled from 'styled-components'
 import { useLocation } from 'react-router-dom'
+import { useStoreActions } from 'easy-peasy';
 
 import {
   Header as BondeHeader,
@@ -11,7 +11,6 @@ import {
   Flexbox
 } from 'bonde-styleguide'
 import request from '../services/request'
-import GlobalContext from '../context'
 
 import Form from './Form'
 import { IfElse } from './If'
@@ -40,18 +39,13 @@ const FlexDiv = styled.div`
 const isMatch = (path: string) => path === '/match'
 
 const Header: React.FC = ({ children }) => {
-
-  const {
-    table: { tableDataRef },
-  } = GlobalContext
-
-  const tableData = useStateLink(tableDataRef)
   const { pathname: path } = useLocation()
-
+  const setTableData = useStoreActions((actions: any) => actions.table.setTable)
+  
   useEffect(() => {
     (async () => {
       const response = await request.get()
-      tableData.set(response.data)
+      setTableData(response.data)
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
