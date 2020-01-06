@@ -3,19 +3,15 @@ import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
 import GlobalContext from '../../../context'
-import { useStateLink } from '@hookstate/core'
+import { useStoreState } from 'easy-peasy'
 import * as turf from '@turf/turf'
-import { PointUser } from '../../../context/table'
+import { User } from '../../../models/table-data'
 import { FullWidth } from './style'
 import columns from './columns'
 
 const Table: React.FC = () => {
-  const {
-    table: { tableDataRef, submittedParamsRef },
-  } = GlobalContext
-
-  const tableData = useStateLink(tableDataRef)
-  const submittedParams = useStateLink(submittedParamsRef)
+  const tableData = useStoreState(state => state.table.data)
+  const searchForm = useStoreState(state => state.geobonde.form)
   const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS!)
 
   const {
@@ -25,9 +21,9 @@ const Table: React.FC = () => {
     individual,
     lawyer,
     therapist,
-  } = submittedParams.value
+  } = searchForm
 
-  const filterByDistance = useCallback((data: PointUser[]) => data.map((i) => {
+  const filterByDistance = useCallback((data: User[]) => data.map((i) => {
     const pointA = [Number(i.latitude), Number(i.longitude)]
 
     return {
@@ -47,7 +43,7 @@ const Table: React.FC = () => {
     return i.distance && Number(i.distance) < distance
   }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
-  const filterByCategory = useCallback((data: PointUser[]) => data.filter((i) => {
+  const filterByCategory = useCallback((data: User[]) => data.filter((i) => {
 
     if (i.organization_id === zendeskOrganizations.therapist) {
       if (!therapist) {
@@ -69,7 +65,7 @@ const Table: React.FC = () => {
 
   const isVolunteer = (organization_id: number) => [zendeskOrganizations['therapist'], zendeskOrganizations['lawyer']].includes(organization_id)
 
-  const filterByUserCondition = (data: PointUser[]) => data.filter(
+  const filterByUserCondition = (data: User[]) => data.filter(
     (i) => {
       if (isVolunteer(i.organization_id)) {
         return i.condition === 'disponivel' || i.condition === 'aprovada' || i.condition === 'desabilitada'
@@ -82,7 +78,7 @@ const Table: React.FC = () => {
     const data = filterByCategory(
       filterByDistance(
         filterByUserCondition(
-          tableData.get(),
+          tableData,
         )
       ),
     )
