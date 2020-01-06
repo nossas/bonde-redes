@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components'
-import { useStateLink } from '@hookstate/core'
 import { Button } from 'bonde-styleguide'
+import { useStoreState } from 'easy-peasy';
 
 import { getUserData } from '../services/utils'
-import GlobalContext from '../context'
 
 const BtnWarning = styled(Button)`
   border-color: #EE0090;
@@ -12,35 +11,28 @@ const BtnWarning = styled(Button)`
 `
 
 const Foward = ({ id }) => {
-  const {
-    table: { tableDataRef },
-    matchTable: { individualRef },
-    popups: { popupsRef }
-  } = GlobalContext
 
-  const individual = useStateLink(individualRef)
-  const tableData = useStateLink(tableDataRef)
-  const popups = useStateLink(popupsRef)
+  const setIndividual = useStoreState(state => state.individual.setIndividual)
+  const setPopup = useStoreState(state => state.popups.setPopup)
+  const tableData = useStoreState(state => state.table.data)
 
-  const setIndividual = () => {
-    const data = tableData.get()
+  const onClick = () => {
     const user = getUserData({
       user: id,
-      data,
+      tableData,
       filterBy: "ticket_id"
     })
-    individual.set({ ...user })
-    popups.set(prevState => ({
-      ...prevState,
+    setIndividual({ ...user })
+    setPopup({
       confirm: true,
       wrapper:  true
-    }))
+    })
   }
 
   return (
     <BtnWarning
       light
-      onClick={setIndividual}
+      onClick={onClick}
     >
       Encaminhar
     </BtnWarning>
