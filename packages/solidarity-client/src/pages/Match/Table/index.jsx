@@ -1,12 +1,10 @@
 import React, { useMemo, useCallback, Fragment, useState } from 'react'
 import 'react-table/react-table.css'
 import ReactTable from 'react-table'
-import { useStateLink } from '@hookstate/core'
 import * as turf from '@turf/turf'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 
-import GlobalContext from '../../../context'
 import { encodeText, whatsappText, parseNumber } from '../../../services/utils'
 import request from '../../../services/request'
 import { FullWidth, Spacing } from './style'
@@ -23,17 +21,12 @@ const createWhatsappLink = (number, textVariables) => {
 }
 
 const Table = () => {
-  const {
-    table: { tableDataRef },
-    matchTable: { individualRef },
-  } = GlobalContext
 
   const volunteer = useStoreState(state => state.volunteer.data)
   const zendeskAgent = useStoreState(state => state.agent.data)
   const popups = useStoreState(state => state.popups.data)
-
-  const tableData = useStateLink(tableDataRef)
-  const individual = useStateLink(individualRef)
+  const tableData = useStoreState(state => state.table.data)
+  const individual = useStoreState(state => state.individual.data)
   const setPopup = useStoreActions(actions => actions.popups.setPopup)
 
   const {
@@ -45,7 +38,7 @@ const Table = () => {
     // email: individualEmail,
     name: individual_name,
     ticket_id: individual_ticket_id
-  } = individual.value
+  } = individual
 
   const {
     latitude,
@@ -115,7 +108,7 @@ const Table = () => {
       filterByTicketStatus(
         filterByDistance(
           filterByCategory(
-            tableData.get()
+            tableData
           )
         )
       )
