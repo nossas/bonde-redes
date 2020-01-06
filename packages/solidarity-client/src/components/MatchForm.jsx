@@ -11,7 +11,7 @@ import styled from 'styled-components'
 import { useStateLink } from '@hookstate/core'
 import useForm from 'react-hook-form';
 import { RHFInput } from 'react-hook-form-input';
-import { useStoreActions } from 'easy-peasy';
+import { useStoreActions, useStoreState } from 'easy-peasy';
 
 import GlobalContext from '../context'
 import { getUserData } from '../services/utils'
@@ -36,20 +36,15 @@ const StyledFlexbox = styled(Flexbox)`
 `
 
 const MatchForm = () => {
-  const {
-    table: { tableDataRef },
-  } = GlobalContext
-
-  const tableData = useStateLink(tableDataRef)
+  const tableData = useStoreState(state => state.table.data)
   const setVolunteer = useStoreActions(actions => actions.volunteer.setVolunteer);
   const setAgent = useStoreActions(actions => actions.agent.setAgent)
 
   const send = ({ email, agent }) => {
     // buscando dados voluntaria atraves do email
-    const data = tableData.get()
     const user = getUserData({
       user: email,
-      data,
+      tableData,
       filterBy: "email"
     })
     // TODO: Tratar erro de nao achar uma usuaria com esse email
