@@ -1,4 +1,4 @@
-import { action } from 'easy-peasy';
+import { action } from 'easy-peasy'
 import dicioAgent from '../pages/Match/Table/dicioAgent'
 
 type agentTypes = keyof typeof dicioAgent | 'default'
