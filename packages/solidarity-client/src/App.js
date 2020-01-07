@@ -13,7 +13,6 @@ import Header from './components/Header'
 import Geobonde from './pages/Geobonde/Table'
 import Map from './pages/Geobonde/Map'
 import Match from './pages/Match/Table'
-import Test from './pages/Test'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -47,7 +46,6 @@ const App = () => (
           <Route exact path="/match">
             <Match />
           </Route>
-          <Route path="/test"><Test/></Route>
         </AppBody>
         <Footer />
       </AppWrapper>

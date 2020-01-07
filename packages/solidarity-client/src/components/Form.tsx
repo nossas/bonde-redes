@@ -7,8 +7,9 @@ import {
   Input,
 } from 'bonde-styleguide'
 import styled from 'styled-components'
-import GlobalContext from '../context'
-import { useStateLink } from '@hookstate/core'
+import { useStoreActions } from 'easy-peasy'
+import useForm from 'react-hook-form'
+
 import MapsSearchInput from './Search/MapsSearchInput'
 
 // interface Props {
@@ -48,39 +49,36 @@ const StyledLabel = styled.label`
 `
 
 const Form: React.FC = () => {
+
   const {
-    form: {
-      distanceRef, geolocationRef, therapistCheckboxRef, lawyerCheckboxRef, individualCheckboxRef,
-    },
-    table: { submittedParamsRef }
-  } = GlobalContext
+    register,
+    setValue,
+    handleSubmit,
+    errors,
+    getValues
+  } = useForm()
+  const setForm = useStoreActions((actions: any) => actions.geobonde.setForm)
 
-  const submittedParams = useStateLink(submittedParamsRef)
-  const geolocation = useStateLink(geolocationRef)
-  const distance = useStateLink(distanceRef)
-  const individualCheckbox = useStateLink(individualCheckboxRef)
-  const lawyerCheckbox = useStateLink(lawyerCheckboxRef)
-  const therapistCheckbox = useStateLink(therapistCheckboxRef)
+  React.useEffect(() => {
+    register({ name: "geolocation" })
+    register({ name: "distance" })
+  }, [register])
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleChange = (field: string, value: string | number) => setValue(field, value)
+
+  const onSubmit = (data: object, e: any) => {
     e.preventDefault()
-    submittedParams.set({
-      ...geolocation.value!,
-      distance: distance.value,
-      individual: individualCheckbox.value,
-      lawyer: lawyerCheckbox.value,
-      therapist: therapistCheckbox.value,
-    })
-  }
+    setForm(data)
+  };
 
   return (
-    <FormWrapper onSubmit={handleSubmit}>
+    <FormWrapper onSubmit={handleSubmit(onSubmit)}>
       <MapsSearchInput
         name="address"
         label="Endereço"
         placeholder="Digite o endereço"
-        onChangeLocation={(e: any) => geolocation.set(e)}
-        value={geolocation.value}
+        onChangeLocation={(e: any) => handleChange("geolocation", e)}
+        value={getValues().geolocation}
       />
       <StyledField
         name="distance"
@@ -88,17 +86,15 @@ const Form: React.FC = () => {
         placeholder="Informe o raio de busca"
         type="number"
         inputComponent={Input}
-        onChange={(e: any) => distance.set(Number(e.target.value))}
-        value={distance.value}
+        onChange={(e: any) => handleChange("distance", Number(e.target.value))}
       />
       <Column>
         <LabelsWrapper>
           <StyledLabel htmlFor="lawyer">
             <input
               type="checkbox"
-              id="lawyer"
-              onChange={() => lawyerCheckbox.set((p) => !p)}
-              checked={lawyerCheckbox.value}
+              name="lawyer"
+              ref={register}
             />
             {' '}
             Advogada
@@ -107,9 +103,8 @@ const Form: React.FC = () => {
           <StyledLabel htmlFor="therapist">
             <input
               type="checkbox"
-              id="therapist"
-              onChange={() => therapistCheckbox.set((p) => !p)}
-              checked={therapistCheckbox.value}
+              name="therapist"
+              ref={register}
             />
             {' '}
             Terapeuta
@@ -118,9 +113,8 @@ const Form: React.FC = () => {
           <StyledLabel htmlFor="individual">
             <input
               type="checkbox"
-              id="individual"
-              onChange={() => individualCheckbox.set((p) => !p)}
-              checked={individualCheckbox.value}
+              name="individual"
+              ref={register}
             />
             {' '}
             MSR

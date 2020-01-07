@@ -43,7 +43,7 @@ const renderOptions = (dicio) =>
   )
 
 const Select = ({
-  label, dicio, onChange, value, defaultValue
+  label, dicio, defaultValue, register, name
 }) => 
   <Wrapper>
     <DivText>
@@ -51,7 +51,7 @@ const Select = ({
     </DivText>
     <br />
     <WrapperSelect>
-      <StyledSelect value={value} onChange={onChange}>
+      <StyledSelect name={name} ref={register}>
         <option>{defaultValue}</option>
         {renderOptions(dicio)}
       </StyledSelect>
@@ -67,7 +67,7 @@ Select.propTypes = {
   label: PropTypes.string.isRequired,
   dicio: PropTypes.object.isRequired,
   onChange: PropTypes.func,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
 }
 
 export default Select

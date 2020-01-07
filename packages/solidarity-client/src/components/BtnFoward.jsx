@@ -19,7 +19,7 @@ const Foward = ({ id }) => {
   const onClick = () => {
     const user = getUserData({
       user: id,
-      tableData,
+      data: tableData,
       filterBy: "ticket_id"
     })
     setIndividual({ ...user })

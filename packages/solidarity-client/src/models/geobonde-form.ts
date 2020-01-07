@@ -20,8 +20,8 @@ const form = <FormParams>({
 
 const geobondeForm = {
   form,
-  setTable: action((state, payload) => ({
-    data: payload
+  setForm: action((state, payload) => ({
+    form: { ...payload }
   }))
 };
 

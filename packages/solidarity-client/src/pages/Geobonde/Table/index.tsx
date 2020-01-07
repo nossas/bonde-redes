@@ -1,10 +1,10 @@
 import React, { useMemo, useCallback } from 'react'
 import ReactTable from 'react-table'
-import 'react-table/react-table.css'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
-import GlobalContext from '../../../context'
 import { useStoreState } from 'easy-peasy'
 import * as turf from '@turf/turf'
+
+import 'react-table/react-table.css'
 import { User } from '../../../models/table-data'
 import { FullWidth } from './style'
 import columns from './columns'

@@ -18,7 +18,7 @@ const MapsSearchInput = ({ value, onChangeLocation, ...extraProps }) => {
     <SearchAddress>
       <SuggestInput
         {...extraProps}
-        onSelect={(suggestion) => onChangeLocation(suggestion.location)}
+        onSelect={suggestion => onChangeLocation(suggestion.location)}
       />
       {value && (
         <Flexbox spacing="between">
