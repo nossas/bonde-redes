@@ -2,8 +2,7 @@ import { createStore } from 'easy-peasy';
 import GlobalModel from './models'
 
 const {
-  volunteerModel,
-  agentModel,
+  matchFormModel,
   popupModel,
   geobondeForm,
   tableModel,
@@ -11,8 +10,7 @@ const {
 } = GlobalModel
 
 const storeModel = {
-  volunteer: volunteerModel,
-  agent: agentModel,
+  match: matchFormModel,
   popups: popupModel,
   table: tableModel,
   geobonde: geobondeForm,

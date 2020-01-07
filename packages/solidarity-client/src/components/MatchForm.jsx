@@ -37,14 +37,14 @@ const StyledFlexbox = styled(Flexbox)`
 
 const MatchForm = () => {
   const tableData = useStoreState(state => state.table.data)
-  const setVolunteer = useStoreActions(actions => actions.volunteer.setVolunteer);
-  const setAgent = useStoreActions(actions => actions.agent.setAgent)
+  const setVolunteer = useStoreActions(actions => actions.match.setVolunteer);
+  const setAgent = useStoreActions(actions => actions.match.setAgent)
 
   const send = ({ email, agent }) => {
     // buscando dados voluntaria atraves do email
     const user = getUserData({
       user: email,
-      tableData,
+      data: tableData,
       filterBy: "email"
     })
     // TODO: Tratar erro de nao achar uma usuaria com esse email

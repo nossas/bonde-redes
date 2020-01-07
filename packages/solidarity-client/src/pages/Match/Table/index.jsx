@@ -22,11 +22,12 @@ const createWhatsappLink = (number, textVariables) => {
 
 const Table = () => {
 
-  const volunteer = useStoreState(state => state.volunteer.data)
-  const zendeskAgent = useStoreState(state => state.agent.data)
+  const volunteer = useStoreState(state => state.match.volunteer)
+  const zendeskAgent = useStoreState(state => state.match.agent)
   const popups = useStoreState(state => state.popups.data)
   const tableData = useStoreState(state => state.table.data)
   const individual = useStoreState(state => state.individual.data)
+
   const setPopup = useStoreActions(actions => actions.popups.setPopup)
 
   const {
