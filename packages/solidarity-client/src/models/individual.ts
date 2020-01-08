@@ -6,7 +6,7 @@ interface Individual {
   ticket_id: number
 }
 
-const data: Individual = ({
+const data: Individual =  ({
   email: '',
   name: '',
   ticket_id: 0

@@ -48,6 +48,17 @@ const StyledLabel = styled.label`
   padding-right: 10px;
 `
 
+interface GeobondeForm {
+  geolocation: {
+    lat: string | null
+    lng: string | null
+  }
+  distance: number
+  therapist: boolean
+  lawyer: boolean
+  individual: boolean
+}
+
 const Form: React.FC = () => {
 
   const {
@@ -55,7 +66,7 @@ const Form: React.FC = () => {
     setValue,
     handleSubmit,
     getValues
-  } = useForm()
+  } = useForm<GeobondeForm>()
   const setForm = useStoreActions((actions: any) => actions.geobonde.setForm)
 
   React.useEffect(() => {
@@ -65,9 +76,13 @@ const Form: React.FC = () => {
 
   const handleChange = (field: string, value: string | number) => setValue(field, value)
 
-  const onSubmit = (data: object, e: any) => {
+  const onSubmit = (data, e: any) => {
     e.preventDefault()
-    setForm(data)
+    setForm({
+      ...data,
+      lat: data.geolocation.lat,
+      lng: data.geolocation.lng
+    })
   };
 
   return (
