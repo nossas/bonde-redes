@@ -8,7 +8,7 @@ import {
 } from 'bonde-styleguide'
 import styled from 'styled-components'
 import { useStoreActions } from 'easy-peasy'
-import useForm from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import MapsSearchInput from './Search/MapsSearchInput'
 
