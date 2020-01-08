@@ -1,20 +1,21 @@
 import React from 'react';
 import styled from 'styled-components'
 import { Button } from 'bonde-styleguide'
-import { useStoreState } from 'easy-peasy';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 
 import { getUserData } from '../services/utils'
 
 const BtnWarning = styled(Button)`
-  border-color: #EE0090;
-  color: #EE0090
+  border-color: ${props => props.disabled ? 'unset' : '#EE0090'}
+  color: ${props => props.disabled ? '#fff' : '#EE0090'}
 `
 
 const Foward = ({ id }) => {
 
-  const setIndividual = useStoreState(state => state.individual.setIndividual)
-  const setPopup = useStoreState(state => state.popups.setPopup)
+  const setIndividual = useStoreActions(actions => actions.individual.setIndividual)
+  const setPopup = useStoreActions(actions => actions.popups.setPopup)
   const tableData = useStoreState(state => state.table.data)
+  const volunteer = useStoreState(state => state.match.volunteer)
 
   const onClick = () => {
     const user = getUserData({
@@ -22,7 +23,7 @@ const Foward = ({ id }) => {
       data: tableData,
       filterBy: "ticket_id"
     })
-    setIndividual({ ...user })
+    setIndividual(user)
     setPopup({
       confirm: true,
       wrapper:  true
@@ -33,6 +34,7 @@ const Foward = ({ id }) => {
     <BtnWarning
       light
       onClick={onClick}
+      disabled={volunteer.email === ''}
     >
       Encaminhar
     </BtnWarning>
