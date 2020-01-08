@@ -12,7 +12,11 @@ const data = undefined
 const fowardModel = {
   data,
   fowardTickets: thunk(async (actions: any, payload: Foward) => {
-    const { setError, setSuccess, data } = payload
+    const {
+      setError,
+      setSuccess,
+      // data
+    } = payload
     const mockedBody = {
       "volunteer_name": "Ana Teste teste",
       "individual_name": "ANA MSR teste match automatizado",

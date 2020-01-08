@@ -16,7 +16,7 @@ export interface User {
   ticket_id: number
 }
 
-const data = <User[]>([])
+const data: User[] = ([])
 
 const tableModel = {
   data,

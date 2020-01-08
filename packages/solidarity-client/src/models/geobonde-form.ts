@@ -9,7 +9,7 @@ interface FormParams {
   individual: boolean
 }
 
-const form = <FormParams>({
+const form: FormParams = ({
   lat: null,
   lng: null,
   distance: 20,

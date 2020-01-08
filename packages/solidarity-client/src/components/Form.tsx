@@ -54,7 +54,6 @@ const Form: React.FC = () => {
     register,
     setValue,
     handleSubmit,
-    errors,
     getValues
   } = useForm()
   const setForm = useStoreActions((actions: any) => actions.geobonde.setForm)

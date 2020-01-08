@@ -6,7 +6,6 @@ import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 
 import { encodeText, whatsappText, parseNumber } from '../../../services/utils'
-import request from '../../../services/request'
 import { FullWidth, Spacing } from './style'
 import columns from './columns'
 
