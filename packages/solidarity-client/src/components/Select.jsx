@@ -28,7 +28,12 @@ const WrapperSelect = styled.div`
 
 const StyledSelect = styled.select`
   width: 100%;
+  color: rgba(255,255,255,1)
 `;
+
+const Option = styled.option`
+  color: #000000;
+`
 
 // interface Props {
 //   label: string
@@ -39,11 +44,11 @@ const StyledSelect = styled.select`
 
 const renderOptions = (dicio) => 
   Object.keys(dicio).map((i) => 
-    <option key={i} value={i}>{dicio[i]}</option>
+    <Option key={i} value={i}>{dicio[i]}</Option>
   )
 
 const Select = ({
-  label, dicio, defaultValue, register, name
+  label, dicio, defaultValue, name, register
 }) => 
   <Wrapper>
     <DivText>
@@ -52,22 +57,21 @@ const Select = ({
     <br />
     <WrapperSelect>
       <StyledSelect name={name} ref={register}>
-        <option>{defaultValue}</option>
+        <Option value="default">{defaultValue}</Option>
         {renderOptions(dicio)}
       </StyledSelect>
     </WrapperSelect>
   </Wrapper>
 
 Select.defaultProps = {
-  children: null,
-  onChange: () => {},
+  defaultValue: 'default',
 }
 
 Select.propTypes = {
   label: PropTypes.string.isRequired,
   dicio: PropTypes.object.isRequired,
-  onChange: PropTypes.func,
-  value: PropTypes.string,
+  defaultValue: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
 }
 
 export default Select

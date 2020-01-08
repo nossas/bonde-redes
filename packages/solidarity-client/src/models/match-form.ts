@@ -30,12 +30,9 @@ const agent: agentTypes = 'default'
 
 const matchFormModel = {
   volunteer,
-  setVolunteer: action((state, payload) => ({
-    volunteer: { ...payload }
-  })),
   agent,
-  setAgent: action((state, payload) => ({
-    agent: payload
+  setForm: action((state, payload) => ({
+    ...payload
   }))
 };
 
