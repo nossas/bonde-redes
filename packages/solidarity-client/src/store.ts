@@ -6,7 +6,8 @@ const {
   popupModel,
   geobondeForm,
   tableModel,
-  individualModel
+  individualModel,
+  errorModel
 } = GlobalModel
 
 const storeModel = {
@@ -14,7 +15,8 @@ const storeModel = {
   popups: popupModel,
   table: tableModel,
   geobonde: geobondeForm,
-  individual: individualModel
+  individual: individualModel,
+  error: errorModel
 };
 
 const store = createStore(storeModel);
