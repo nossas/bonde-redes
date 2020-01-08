@@ -15,7 +15,7 @@ const data = <Individual>({
 const individualModel = {
   data,
   setIndividual: action((state, payload) => ({
-    data: payload
+    data: { ...payload }
   }))
 };
 
