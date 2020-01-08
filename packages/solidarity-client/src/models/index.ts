@@ -5,6 +5,7 @@ import tableModel from './table-data'
 import geobondeForm from './geobonde-form'
 import individualModel from './individual'
 import errorModel from './error'
+import fowardModel from './foward'
 
 export default {
   matchFormModel,
@@ -12,5 +13,6 @@ export default {
   tableModel,
   geobondeForm,
   individualModel,
-  errorModel
+  errorModel,
+  fowardModel
 }

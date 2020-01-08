@@ -28,9 +28,11 @@ const Table = () => {
   const tableData = useStoreState(state => state.table.data)
   const individual = useStoreState(state => state.individual.data)
   const error = useStoreState(state => state.error.error)
+  const resData = useStoreState(state => state.foward.data)
 
   const setPopup = useStoreActions(actions => actions.popups.setPopup)
   const setError = useStoreActions(actions => actions.error.setError)
+  const fowardTickets = useStoreActions(actions => actions.foward.fowardTickets)
   
   const [success, setSuccess] = useState(false)
 
@@ -121,35 +123,12 @@ const Table = () => {
     return data
   }, [filterByDistance, filterByCategory, filterByUserType, tableData])
 
-  const [ticketId, setTicketId] = useState(0)
-
   const submitConfirm = async (requestBody) => {
-    const mockedBody = {
-      "volunteer_name": "Ana Teste teste",
-      "individual_name": "ANA MSR teste match automatizado",
-      "individual_ticket_id": 16013,
-      "agent": 373018450472,
-      "volunteer_organization_id": 360269610652,
-      "volunteer_registry": "99999",
-      "volunteer_phone": "11999999999",
-      "volunteer_user_id": 377577169651
-    }
-    try {
-      // TODO: Fazer uma thunk action
-      const response = await request.post(JSON.stringify(mockedBody))
-
-      if (response.status === 200) {
-        setTicketId(response.data && response.data.ticketId)
-        setSuccess(true)
-      }
-    }
-    catch (err) {
-      console.log(err)
-      setError({
-        status: true,
-        message: err && err.message
-      })
-    }
+    fowardTickets({
+      setError,
+      setSuccess,
+      data: requestBody
+    })
   }
 
   const onConfirm = () => {
@@ -221,7 +200,7 @@ const Table = () => {
                 volunteer_whatsapp, { volunteer_name, individual_name, agent: zendeskAgent }
               ),
               isEnabled: success,
-              ticketId
+              ticketId: resData && resData.ticketId
             }}
             error={{
               onClose: closeAllPopups,
