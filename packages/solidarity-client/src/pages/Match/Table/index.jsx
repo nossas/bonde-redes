@@ -27,14 +27,18 @@ const Table = () => {
   const popups = useStoreState(state => state.popups.data)
   const tableData = useStoreState(state => state.table.data)
   const individual = useStoreState(state => state.individual.data)
+  const error = useStoreState(state => state.error.error)
 
   const setPopup = useStoreActions(actions => actions.popups.setPopup)
+  const setError = useStoreActions(actions => actions.error.setError)
+  
+  const [success, setSuccess] = useState(false)
 
   const {
     confirm,
-    // forward,
     wrapper
   } = popups
+
   const {
     // email: individualEmail,
     name: individual_name,
@@ -80,7 +84,7 @@ const Table = () => {
 
   const volunteer_category = input => {
     if (input === zendeskOrganizations.lawyer) return 'jurídico'
-    if(input === zendeskOrganizations.therapist) return 'psicológico'
+    if (input === zendeskOrganizations.therapist) return 'psicológico'
   }
 
   // eslint-disable-next-line
@@ -98,7 +102,7 @@ const Table = () => {
   
   const filterByTicketStatus = data => data.filter(
     (i) => {
-      if(i.ticket_status === 'new' || i.ticket_status === 'open') return true
+      if (i.ticket_status === 'new' || i.ticket_status === 'open') return true
       if (i.status_acolhimento === 'solicitacao_recebida') return true
       return false
     }
@@ -117,8 +121,6 @@ const Table = () => {
     return data
   }, [filterByDistance, filterByCategory, filterByUserType, tableData])
 
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState({ status: false, message: ''})
   const [ticketId, setTicketId] = useState(0)
 
   const submitConfirm = async (requestBody) => {
@@ -139,29 +141,40 @@ const Table = () => {
       if (response.status === 200) {
         setTicketId(response.data && response.data.ticketId)
         setSuccess(true)
-        popups.set(prevState => ({
-          ...prevState,
-          confirm: false,
-          forward: true
-        }))
       }
     }
-    catch(e) {
-      console.log(e)
+    catch (err) {
+      console.log(err)
       setError({
         status: true,
-        message: e
+        message: err && err.message
       })
     }
   }
 
+  const onConfirm = () => {
+    setPopup({ ...popups, confirm: false })
+    return submitConfirm({
+      agent: zendeskAgent,
+      individual_name,
+      individual_ticket_id,
+      volunteer_name,
+      volunteer_user_id,
+      volunteer_registry,
+      volunteer_phone,
+      volunteer_organization_id,
+    })
+  }
+
   const closeAllPopups = () => {
+    setError({
+      status: false,
+      message: ''
+    })
     setSuccess(false)
-    setError(false)
     setPopup({
       wrapper: false,
-      confirm: false,
-      forward: false
+      confirm: false
     })
   }
 
@@ -199,16 +212,7 @@ const Table = () => {
             volunteerName={volunteer_name}
             confirm={{
               onClose: closeAllPopups,
-              onSubmit: () => submitConfirm({
-                agent: zendeskAgent,
-                individual_name,
-                individual_ticket_id,
-                volunteer_name,
-                volunteer_user_id,
-                volunteer_registry,
-                volunteer_phone,
-                volunteer_organization_id,
-            }),
+              onSubmit: onConfirm,
               isEnabled: confirm
             }}
             success={{
