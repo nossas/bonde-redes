@@ -27,13 +27,13 @@ const Table = () => {
   const tableData = useStoreState(state => state.table.data)
   const individual = useStoreState(state => state.individual.data)
   const error = useStoreState(state => state.error.error)
-  const resData = useStoreState(state => state.foward.data)
 
   const setPopup = useStoreActions(actions => actions.popups.setPopup)
   const setError = useStoreActions(actions => actions.error.setError)
   const fowardTickets = useStoreActions(actions => actions.foward.fowardTickets)
   
   const [success, setSuccess] = useState(false)
+  const [ticketId, setTicketId] = useState(0)
 
   const {
     confirm,
@@ -107,8 +107,6 @@ const Table = () => {
 //    }
 //  )
 
-  console.log({ tableData })
-
   const filteredTableData = useMemo(() => {
     const data = filterByDistance(
       tableData,
@@ -119,11 +117,12 @@ const Table = () => {
   }, [filterByDistance, tableData])
 
   const submitConfirm = async (requestBody) => {
-    fowardTickets({
+    const req = await fowardTickets({
       setError,
       setSuccess,
       data: requestBody
     })
+    if (req.status === 200) setTicketId(req.data.ticketId)
   }
 
   const onConfirm = () => {
@@ -195,7 +194,7 @@ const Table = () => {
                 volunteer_whatsapp, { volunteer_name, individual_name, agent: zendeskAgent }
               ),
               isEnabled: success,
-              ticketId: resData && resData.ticketId
+              ticketId
             }}
             error={{
               onClose: closeAllPopups,
