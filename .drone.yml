@@ -4,12 +4,17 @@ pipeline:
     environment:
       - COMMUNITY_ID=1
       - REACT_APP_ZENDESK_ORGANIZATIONS={"lawyer":360269610652,"individual":360273031591,"therapist":360282119532}
+      - ZENDESK_API_URL=https://mapadoacolhimento.zendesk.com/api/v2/
     commands:
+      - export REACT_APP_GOOGLE_CLIENT_KEY=$STAG_GOOGLE_CLIENT
+      - export ZENDESK_API_TOKEN=$STGA_ZENDESK_API_TOKEN
+      - export ZENDESK_API_USER=$STGA_ZENDESK_API_USER
       - yarn global add pnpm
       - pnpm i
       # - pnpm run lint
       # - pnpm m run test
       - pnpm m run build
+    secrets: [ stag_google_client, stag_zendesk_token, stag_zendesk_user ]
     when:
       event: [push]
 
