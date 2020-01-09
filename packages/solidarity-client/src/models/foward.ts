@@ -17,18 +17,18 @@ const fowardModel = {
       setSuccess,
       // data
     } = payload
-    const mockedBody = {
-      "volunteer_name": "Ana Teste teste",
-      "individual_name": "ANA MSR teste match automatizado",
-      "individual_ticket_id": 16013,
-      "agent": 373018450472,
-      "volunteer_organization_id": 360269610652,
-      "volunteer_registry": "99999",
-      "volunteer_phone": "11999999999",
-      "volunteer_user_id": 377577169651
-    }
+    // const mockedBody = {
+    //   "volunteer_name": "Ana Teste teste",
+    //   "individual_name": "ANA MSR teste match automatizado",
+    //   "individual_ticket_id": 16013,
+    //   "agent": 373018450472,
+    //   "volunteer_organization_id": 360269610652,
+    //   "volunteer_registry": "99999",
+    //   "volunteer_phone": "11999999999",
+    //   "volunteer_user_id": 377577169651
+    // }
     try {
-      const response = await request.post(JSON.stringify(mockedBody))
+      const response = await request.post(JSON.stringify(data))
       setSuccess(true)
       if (response.status === 200) {
         actions.setResponse(response.data)
