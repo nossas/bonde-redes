@@ -66,7 +66,14 @@ const Form: React.FC = () => {
     setValue,
     handleSubmit,
     getValues
-  } = useForm<GeobondeForm>()
+  } = useForm<GeobondeForm>({
+    defaultValues: {
+      distance: 20,
+      therapist: true,
+      lawyer: true,
+      individual: true,
+    },
+  })
   const setForm = useStoreActions((actions: any) => actions.geobonde.setForm)
 
   React.useEffect(() => {
@@ -100,6 +107,7 @@ const Form: React.FC = () => {
         placeholder="Informe o raio de busca"
         type="number"
         inputComponent={Input}
+        value={getValues().distance}
         onChange={(e: any) => handleChange("distance", Number(e.target.value))}
       />
       <Column>
