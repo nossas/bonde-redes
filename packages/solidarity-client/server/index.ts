@@ -23,7 +23,7 @@ const port = process.env.PORT
 app.use(body_parser.json())
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'))
 app.use(cors())
-app.use(express.static(path.resolve(__dirname, '..', 'build')))
+app.use(express.static(path.join(__dirname, '..', '..', 'build')))
 app.use((err, req, res, next) => {
   console.error(err)
   res.status(500).json({ message: 'an error occurred' })
@@ -32,8 +32,8 @@ app.use((err, req, res, next) => {
 app.get('/api', asyncMiddleware(api))
 app.post('/api/forward', asyncMiddleware(forward))
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'))
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'build', 'index.html'))
 })
 
 app.listen(port, () => console.log(`Match Voluntarios App listening on port ${port}!`))
