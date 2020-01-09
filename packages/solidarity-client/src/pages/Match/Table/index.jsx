@@ -61,7 +61,7 @@ const Table = () => {
   const distance = 50
   const lat = Number(latitude)
   const lng = Number(longitude)
-  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS || '{}')
+//  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS || '{}')
 
   const filterByDistance = useCallback((data) => data.map((i) => {
     const pointA = [Number(i.latitude), Number(i.longitude)]
@@ -83,44 +83,40 @@ const Table = () => {
     return i.distance && Number(i.distance) < distance
   }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
-  const volunteer_category = input => {
-    if (input === zendeskOrganizations.lawyer) return 'jurídico'
-    if (input === zendeskOrganizations.therapist) return 'psicológico'
-  }
+//  const volunteer_category = input => {
+//    if (input === zendeskOrganizations.lawyer) return 'jurídico'
+//    if (input === zendeskOrganizations.therapist) return 'psicológico'
+//  }
 
-  // eslint-disable-next-line
-  const filterByCategory = data => data.filter(
-    (i) => (
-      i.tipo_de_acolhimento === volunteer_category(volunteer_organization_id) ||
-      i.tipo_de_acolhimento === 'psicológico_e_jurídico'
-    )
-  )
+//  const filterByCategory = data => data.filter(
+//    (i) => (
+//      i.tipo_de_acolhimento === volunteer_category(volunteer_organization_id) ||
+//      i.tipo_de_acolhimento === 'psicológico_e_jurídico'
+//    )
+//  )
   
-  // eslint-disable-next-line
-  const filterByUserType = data => data.filter(
-    (i) => i.organization_id === zendeskOrganizations.individual
-  )
-  
-  const filterByTicketStatus = data => data.filter(
-    (i) => {
-      if (i.ticket_status === 'new' || i.ticket_status === 'open') return true
-      if (i.status_acolhimento === 'solicitacao_recebida') return true
-      return false
-    }
-  )
+//  const filterByUserType = data => data.filter(
+//    (i) => i.organization_id === zendeskOrganizations.individual
+//  )
+//  
+//  const filterByTicketStatus = data => data.filter(
+//    (i) => {
+//      if (i.ticket_status === 'new' || i.ticket_status === 'open') return true
+//      if (i.status_acolhimento === 'solicitacao_recebida') return true
+//      return false
+//    }
+//  )
+
+  console.log({ tableData })
 
   const filteredTableData = useMemo(() => {
-    const data = filterByUserType(
-      filterByTicketStatus(
-        filterByDistance(
-          filterByCategory(
-            tableData
-          )
-        )
-      )
+    const data = filterByDistance(
+      tableData,
     )
+
     return data
-  }, [filterByDistance, filterByCategory, filterByUserType, tableData])
+    // eslint-disable-next-line
+  }, [filterByDistance, tableData])
 
   const submitConfirm = async (requestBody) => {
     fowardTickets({

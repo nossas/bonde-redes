@@ -63,28 +63,25 @@ const Table: React.FC = () => {
     // eslint-disable-next-line
   }), [individual, lawyer, therapist])
 
-  const isVolunteer = (organization_id: number) => [zendeskOrganizations['therapist'], zendeskOrganizations['lawyer']].includes(organization_id)
+//  const isVolunteer = (organization_id: number) => [zendeskOrganizations//['therapist'], zendeskOrganizations['lawyer']].includes(organization_id)
 
-  const filterByUserCondition = (data: User[]) => data.filter(
-    (i) => {
-      if (isVolunteer(i.organization_id)) {
-        return i.condition === 'disponivel' || i.condition === 'aprovada' || i.condition === 'desabilitada'
-      }
-      return true
-    }
-  )
+//  const filterByUserCondition = (data: User[]) => data.filter(
+//    (i) => {
+//      if (isVolunteer(i.organization_id)) {
+//        return i.condition === 'disponivel' || i.condition === 'aprovada' || //i.condition === 'desabilitada'
+//      }
+//      return true
+//    }
+//  )
 
   const filteredTableData = useMemo(() => {
     const data = filterByCategory(
       filterByDistance(
-        filterByUserCondition(
-          tableData,
-        )
+        tableData,
       ),
     )
 
     return data
-    // eslint-disable-next-line
   }, [filterByCategory, filterByDistance, tableData])
 
   return filteredTableData.length === 0 ? (
