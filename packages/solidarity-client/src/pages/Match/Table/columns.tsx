@@ -55,7 +55,7 @@ const columns = [
       <a href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${value}`} target="_blank" rel="noopener noreferrer">{value}</a>
     ) : null),
   }, {
-    accessor: 'ticket_id',
+    accessor: 'user_id',
     Header: 'Ação',
     width: 200,
     Cell: ({ value }: valueArrayString) => (value ? (

@@ -18,10 +18,11 @@ const Foward = ({ id }) => {
   const volunteer = useStoreState(state => state.match.volunteer)
 
   const onClick = () => {
+    // TODO: Tratar caso em que a usuária não tem user_id
     const user = getUserData({
       user: id,
       data: tableData,
-      filterBy: "ticket_id"
+      filterBy: "user_id"
     })
     setIndividual(user)
     setPopup({
