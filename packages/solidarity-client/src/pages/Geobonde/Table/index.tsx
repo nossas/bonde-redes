@@ -12,7 +12,7 @@ import columns from './columns'
 const Table: React.FC = () => {
   const tableData = useStoreState(state => state.table.data)
   const searchForm = useStoreState(state => state.geobonde.form)
-  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS!)
+  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS || '{}')
 
   const {
     distance,

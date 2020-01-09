@@ -3,7 +3,7 @@ import getAllUsers from './hasura/getAllUsers'
 import getAllTickets from './hasura/getAllTickets'
 
 const main = async (req, res, next) => {
-  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS || '')
+  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS || '{}')
   const dicio = (organizationId) => {
     const keys = Object.keys(zendeskOrganizations)
     const key = keys.findIndex(i => zendeskOrganizations[i] === organizationId)

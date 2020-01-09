@@ -1,5 +1,4 @@
 export const getUserData = ({ user, data, filterBy }) => {
-  console.log({user, data, filterBy})
   const filter = data.filter((i) => user === i[filterBy])
   return filter[0]
 }

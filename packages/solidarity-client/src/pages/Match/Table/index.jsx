@@ -61,7 +61,7 @@ const Table = () => {
   const distance = 50
   const lat = Number(latitude)
   const lng = Number(longitude)
-  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS)
+  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS || '{}')
 
   const filterByDistance = useCallback((data) => data.map((i) => {
     const pointA = [Number(i.latitude), Number(i.longitude)]
