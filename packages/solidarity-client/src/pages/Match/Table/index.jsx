@@ -108,19 +108,17 @@ const Table = () => {
       return false
     }
   )
-
+  console.log({tableData})
   const filteredTableData = useMemo(() => {
-    const data = filterByUserType(
-      filterByTicketStatus(
-        filterByDistance(
-          filterByCategory(
-            tableData
-          )
-        )
-      )
+    const data = filterByCategory(
+      filterByDistance(
+        tableData,
+      ),
     )
+
     return data
-  }, [filterByDistance, filterByCategory, filterByUserType, tableData])
+    // eslint-disable-next-line
+  }, [filterByCategory, filterByDistance, tableData])
 
   const submitConfirm = async (requestBody) => {
     fowardTickets({

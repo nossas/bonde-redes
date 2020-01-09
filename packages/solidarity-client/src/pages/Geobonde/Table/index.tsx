@@ -77,9 +77,7 @@ const Table: React.FC = () => {
   const filteredTableData = useMemo(() => {
     const data = filterByCategory(
       filterByDistance(
-        filterByUserCondition(
-          tableData,
-        )
+        tableData,
       ),
     )
 
