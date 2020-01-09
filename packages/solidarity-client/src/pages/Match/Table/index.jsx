@@ -98,14 +98,6 @@ const Table = () => {
 //  const filterByUserType = data => data.filter(
 //    (i) => i.organization_id === zendeskOrganizations.individual
 //  )
-//  
-//  const filterByTicketStatus = data => data.filter(
-//    (i) => {
-//      if (i.ticket_status === 'new' || i.ticket_status === 'open') return true
-//      if (i.status_acolhimento === 'solicitacao_recebida') return true
-//      return false
-//    }
-//  )
 
   const filteredTableData = useMemo(() => {
     const data = filterByDistance(

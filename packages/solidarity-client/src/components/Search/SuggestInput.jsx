@@ -47,8 +47,6 @@ export default class SuggestInput extends React.Component {
   }
 
   handleSuggestionsFetchRequested({ value }) {
-    console.log('googleClientKey', process.env.REACT_APP_GOOGLE_CLIENT_KEY)
-    console.log('envs', process.env)
     this.client
       .geocode({ address: value, components: { country: 'brasil' } })
       .asPromise()

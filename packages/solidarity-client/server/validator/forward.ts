@@ -5,7 +5,6 @@ const checkField = input => !isEmpty(input) ? String(input) : ''
 
 const hasError = errors => {
   const check = Object.values(errors).filter(i => i !== undefined)
-  console.log(check, check.length)
   return check.length > 0
 }
 
@@ -103,7 +102,6 @@ const validate = data => {
   if (Validator.equals(checkedData.volunteer_organization_id, zendeskOrganizations.individual)) {
     errors = { ...errors, volunteer_organization_id: 'organization_id da voluntária não é válido' }
   }
-  console.log({errors, isValid: hasError(errors)})
   return {
     errors,
     isValid: !hasError(errors)
