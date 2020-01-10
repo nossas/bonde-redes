@@ -11,3 +11,12 @@ const addDistance = (user, pointA) => {
 
 export default (result, pointA) => result
   .map(user => addDistance(user, pointA))
+
+interface Organizations {
+  lawyer: number
+  therapist: number
+  individual: number
+}
+
+const parseZendeskOrganizations = input => JSON.parse(input)
+export const zendeskOrganizations: Organizations = parseZendeskOrganizations(process.env.REACT_APP_ZENDESK_ORGANIZATIONS!)
