@@ -3,7 +3,7 @@ pipeline:
     image: node:10-alpine
     environment:
       - COMMUNITY_ID=1
-      - REACT_APP_ZENDESK_ORGANIZATIONS={"lawyer":360269610652,"individual":360273031591,"therapist":360282119532}
+      - REACT_APP_ZENDESK_ORGANIZATIONS="{\"lawyer\":360269610652,\"individual\":360273031591,\"therapist\":360282119532}"
       - ZENDESK_API_URL=https://mapadoacolhimento.zendesk.com/api/v2/
     commands:
       - export REACT_APP_GOOGLE_CLIENT_KEY=$STAG_GOOGLE_CLIENT
