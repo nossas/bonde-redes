@@ -5,7 +5,13 @@ import * as turf from '@turf/turf'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 
-import { encodeText, whatsappText, parseNumber } from '../../../services/utils'
+import {
+  encodeText,
+  whatsappText,
+  parseNumber,
+  isVolunteer,
+  zendeskOrganizations
+} from '../../../services/utils'
 import { FullWidth, Spacing } from './style'
 import columns from './columns'
 
@@ -61,7 +67,6 @@ const Table = () => {
   const distance = 50
   const lat = Number(latitude)
   const lng = Number(longitude)
-//  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS || '{}')
 
   const filterByDistance = useCallback((data) => data.map((i) => {
     const pointA = [Number(i.latitude), Number(i.longitude)]
@@ -83,25 +88,34 @@ const Table = () => {
     return i.distance && Number(i.distance) < distance
   }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
-//  const volunteer_category = input => {
-//    if (input === zendeskOrganizations.lawyer) return 'jurídico'
-//    if (input === zendeskOrganizations.therapist) return 'psicológico'
-//  }
+  const volunteer_category = input => {
+    if (input === zendeskOrganizations.lawyer) return 'jurídico'
+    if (input === zendeskOrganizations.therapist) return 'psicológico'
+  }
 
-//  const filterByCategory = data => data.filter(
-//    (i) => (
-//      i.tipo_de_acolhimento === volunteer_category(volunteer_organization_id) ||
-//      i.tipo_de_acolhimento === 'psicológico_e_jurídico'
-//    )
-//  )
-  
-//  const filterByUserType = data => data.filter(
-//    (i) => i.organization_id === zendeskOrganizations.individual
-//  )
+  const filterByCategoryAndUserType = useCallback((data) => data.filter((i) => {
+    const selectedCategory = volunteer_category(volunteer_organization_id)
+
+    if (!isVolunteer(i.organization_id)) {
+      switch (i.tipo_de_acolhimento) {
+       case selectedCategory:
+        return true
+       case 'psicológico_e_jurídico':
+         return true
+       default:
+         return false
+      }
+    } 
+
+    return false
+    // eslint-disable-next-line
+  }), [volunteer_organization_id])
 
   const filteredTableData = useMemo(() => {
     const data = filterByDistance(
-      tableData,
+      filterByCategoryAndUserType(
+        tableData,
+      )
     )
 
     return data
