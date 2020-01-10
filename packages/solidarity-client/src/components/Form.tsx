@@ -5,10 +5,11 @@ import {
   Flexbox2 as Flexbox,
   FormField,
   Input,
+  Text
 } from 'bonde-styleguide'
 import styled from 'styled-components'
 import { useStoreActions } from 'easy-peasy'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 
 import MapsSearchInput from './Search/MapsSearchInput'
 
@@ -65,7 +66,11 @@ const Form: React.FC = () => {
     register,
     setValue,
     handleSubmit,
-    getValues
+    getValues,
+    errors,
+    control,
+    setError,
+    clearError
   } = useForm<GeobondeForm>({
     defaultValues: {
       distance: 20,
@@ -78,38 +83,51 @@ const Form: React.FC = () => {
 
   React.useEffect(() => {
     register({ name: "geolocation" })
-    register({ name: "distance" })
   }, [register])
 
-  const handleChange = (field: string, value: string | number) => setValue(field, value)
+  const handleChange = (field: string, value: string | number) => {
+    clearError(field)
+    return setValue(field, value)
+  }
 
   const onSubmit = (data, e: any) => {
     e.preventDefault()
-    setForm({
+
+    if (typeof data.geolocation === 'undefined') return setError("geolocation", "required", "Esse campo é obrigatório")
+
+    return setForm({
       ...data,
       lat: data.geolocation.lat,
       lng: data.geolocation.lng
     })
-  };
+  }
 
   return (
     <FormWrapper onSubmit={handleSubmit(onSubmit)}>
-      <MapsSearchInput
-        name="address"
-        label="Endereço"
-        placeholder="Digite o endereço"
-        onChangeLocation={(e: any) => handleChange("geolocation", e)}
-        value={getValues().geolocation}
-      />
-      <StyledField
-        name="distance"
-        label="Distância (km)"
-        placeholder="Informe o raio de busca"
-        type="number"
-        inputComponent={Input}
-        value={getValues().distance}
-        onChange={(e: any) => handleChange("distance", Number(e.target.value))}
-      />
+      <div>
+        <MapsSearchInput
+          name="address"
+          label="Endereço"
+          placeholder="Digite o endereço"
+          onChangeLocation={(e: any) => handleChange("geolocation", e)}
+          value={getValues().geolocation}
+        />
+        <Text color="#ffffff">
+          {errors.geolocation && errors.geolocation['message']}
+        </Text>
+      </div>
+      <Controller
+          as={
+            <StyledField
+              label="Distância (km)"
+              placeholder="Informe o raio de busca"
+              type="number"
+              inputComponent={Input}
+            />
+          }
+          name="distance"
+          control={control}
+        />
       <Column>
         <LabelsWrapper>
           <StyledLabel htmlFor="lawyer">
