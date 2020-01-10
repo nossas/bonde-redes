@@ -10,7 +10,7 @@ const {
   REACT_APP_ZENDESK_ORGANIZATIONS
 } = process.env
 
-const zendeskOrganizations = REACT_APP_ZENDESK_ORGANIZATIONS || '{}'
+const zendeskOrganizations = JSON.parse(REACT_APP_ZENDESK_ORGANIZATIONS || '{}')
 const volunteerType = id => {
   console.log({
     volunteerType: typeof id,
