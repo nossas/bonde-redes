@@ -29,6 +29,8 @@ const Table = () => {
 
   const volunteer = useStoreState(state => state.match.volunteer)
   const zendeskAgent = useStoreState(state => state.match.agent)
+  const zendeskAgentName = useStoreState(state => state.match.assignee_name)
+
   const popups = useStoreState(state => state.popups.data)
   const tableData = useStoreState(state => state.table.data)
   const individual = useStoreState(state => state.individual.data)
@@ -128,7 +130,7 @@ const Table = () => {
       setSuccess,
       data: requestBody
     })
-    if (req.status === 200) setTicketId(req.data.ticketId)
+    if (req && req.status === 200) setTicketId(req.data.ticketId)
   }
 
   const onConfirm = () => {
@@ -142,6 +144,7 @@ const Table = () => {
       volunteer_registry,
       volunteer_phone,
       volunteer_organization_id,
+      assignee_name: zendeskAgentName
     })
   }
 
@@ -213,6 +216,7 @@ const Table = () => {
                 volunteer_registry,
                 volunteer_phone,
                 volunteer_organization_id,
+                assignee_name: zendeskAgentName
               }),
               isEnabled: error.status,
               message: error.message

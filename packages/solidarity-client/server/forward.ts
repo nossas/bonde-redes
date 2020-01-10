@@ -10,10 +10,18 @@ const {
   REACT_APP_ZENDESK_ORGANIZATIONS
 } = process.env
 
-const zendeskOrganizations = JSON.parse(REACT_APP_ZENDESK_ORGANIZATIONS || '{}')
+const zendeskOrganizations = REACT_APP_ZENDESK_ORGANIZATIONS || '{}'
 const volunteerType = id => {
-  if (id === zendeskOrganizations.lawyer) return 'Advogada'
-  if (id === zendeskOrganizations.therapist) return 'Psicóloga'
+  console.log({
+    volunteerType: typeof id,
+    type: typeof zendeskOrganizations,
+    type2: typeof zendeskOrganizations["lawyer"],
+    withoutParse: REACT_APP_ZENDESK_ORGANIZATIONS,
+    withParse: zendeskOrganizations,
+    isTrue: id === zendeskOrganizations["lawyer"]
+  })
+  if (id === zendeskOrganizations["lawyer"]) return 'Advogada'
+  if (id === zendeskOrganizations["therapist"]) return 'Psicóloga'
   throw "Volunteer organization_id not supported"
 }
 
@@ -43,10 +51,10 @@ const main = async (req, res, next) => {
     volunteer_organization_id,
     individual_name,
     individual_ticket_id,
-    agent
+    agent,
+    assignee_name
   } = req.body
 
-  const assignee_name = 'Ana'
   var individualTicket = matchTicketId => ({
     "ticket":
     {

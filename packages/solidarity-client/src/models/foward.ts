@@ -15,8 +15,9 @@ const fowardModel = {
     const {
       setError,
       setSuccess,
-      // data
+      data
     } = payload
+    console.log(JSON.stringify(data))
     const mockedBody = {
       "volunteer_name": "Ana Teste teste",
       "individual_name": "ANA MSR teste match automatizado",
@@ -25,7 +26,8 @@ const fowardModel = {
       "volunteer_organization_id": 360269610652,
       "volunteer_registry": "99999",
       "volunteer_phone": "11999999999",
-      "volunteer_user_id": 377577169651
+      "volunteer_user_id": 377577169651,
+      "assignee_name": "Ana"
     }
     try {
       const response = await request.post(mockedBody)

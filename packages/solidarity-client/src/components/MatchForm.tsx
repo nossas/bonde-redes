@@ -11,7 +11,7 @@ import styled from 'styled-components'
 import { useForm, Controller } from 'react-hook-form'
 import { useStoreActions, useStoreState } from 'easy-peasy'
 
-import { getUserData, emailValidation } from '../services/utils'
+import { getUserData, emailValidation, getAgentName } from '../services/utils'
 
 import Select from './Select'
 import dicioAgent from '../pages/Match/Table/dicioAgent'
@@ -53,10 +53,15 @@ const MatchForm = () => {
       data: tableData,
       filterBy: "email"
     })
+    const assignee_name = getAgentName(data.agent)
 
     if (typeof user === 'undefined') return setError("email", "notFound", "Não existe uma voluntária com esse e-mail")
     
-    setForm({ volunteer: user, agent: data.agent })
+    setForm({
+      volunteer: user,
+      agent: data.agent,
+      assignee_name
+    })
   }
 
   return (

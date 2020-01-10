@@ -27,10 +27,12 @@ const volunteer: Volunteer = {
 
 type agentTypes = keyof typeof dicioAgent | 'default'
 const agent: agentTypes = 'default'
+const assignee_name: string = ''
 
 const matchFormModel = {
   volunteer,
   agent,
+  assignee_name,
   setForm: action((state, payload) => ({
     ...payload
   }))
