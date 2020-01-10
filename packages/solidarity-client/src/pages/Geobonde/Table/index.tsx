@@ -8,11 +8,11 @@ import 'react-table/react-table.css'
 import { User } from '../../../models/table-data'
 import { FullWidth } from './style'
 import columns from './columns'
+import { zendeskOrganizations, isVolunteer } from '../../../services/utils'
 
 const Table: React.FC = () => {
   const tableData = useStoreState(state => state.table.data)
   const searchForm = useStoreState(state => state.geobonde.form)
-  const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS || '{}')
 
   const {
     distance,
@@ -63,26 +63,33 @@ const Table: React.FC = () => {
     // eslint-disable-next-line
   }), [individual, lawyer, therapist])
 
-//  const isVolunteer = (organization_id: number) => [zendeskOrganizations//['therapist'], zendeskOrganizations['lawyer']].includes(organization_id)
-
-//  const filterByUserCondition = (data: User[]) => data.filter(
-//    (i) => {
-//      if (isVolunteer(i.organization_id)) {
-//        return i.condition === 'disponivel' || i.condition === 'aprovada' || //i.condition === 'desabilitada'
-//      }
-//      return true
-//    }
-//  )
+  const filterByUserCondition = useCallback((data: User[]) => data.filter((i) => {
+    if (isVolunteer(i.organization_id)) {
+      switch (i.condition) {
+       case 'disponivel':
+        return true
+       case 'aprovada':
+         return true
+       case 'desabilitada':
+         return true
+       default:
+         return false
+      }
+    } else if (!isVolunteer(i.organization_id)) return true
+    return false
+  }), [])
 
   const filteredTableData = useMemo(() => {
     const data = filterByCategory(
       filterByDistance(
-        tableData,
+        filterByUserCondition(
+          tableData,
+        )
       ),
     )
 
     return data
-  }, [filterByCategory, filterByDistance, tableData])
+  }, [filterByCategory, filterByDistance, filterByUserCondition, tableData])
 
   return filteredTableData.length === 0 ? (
     <FullWidth>
