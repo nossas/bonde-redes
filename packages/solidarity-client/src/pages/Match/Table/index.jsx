@@ -16,7 +16,7 @@ import { FullWidth, Spacing } from './style'
 import columns from './columns'
 
 import { If } from '../../../components/If'
-import Popup from '../../../components/Popup'
+import Popup from '../../../components/Popups/Popup'
 
 const createWhatsappLink = (number, textVariables) => {
   if(!number) alert('Essa voluntária não possui Whatsapp')
@@ -49,7 +49,6 @@ const Table = () => {
   } = popups
 
   const {
-    // email: individualEmail,
     name: individual_name,
     ticket_id: individual_ticket_id
   } = individual
@@ -57,7 +56,6 @@ const Table = () => {
   const {
     latitude,
     longitude,
-    // email: volunteer_email,
     name: volunteer_name,
     whatsapp: volunteer_whatsapp,
     organization_id: volunteer_organization_id,
@@ -207,17 +205,7 @@ const Table = () => {
             }}
             error={{
               onClose: closeAllPopups,
-              onSubmit: () => submitConfirm({
-                agent: zendeskAgent,
-                individual_name,
-                individual_ticket_id,
-                volunteer_name,
-                volunteer_user_id,
-                volunteer_registry,
-                volunteer_phone,
-                volunteer_organization_id,
-                assignee_name: zendeskAgentName
-              }),
+              onSubmit: onConfirm,
               isEnabled: error.status,
               message: error.message
             }}

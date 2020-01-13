@@ -1,22 +1,20 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
-  Modal,
-  Flexbox2 as Flexbox,
   Title,
   Text,
   Button,
   Link
 } from 'bonde-styleguide'
-import styled from 'styled-components'
-import { If } from './If'
 
-const StyledFlexbox = styled(Flexbox)`
-  min-height: 250px;  
-`
-
-const StyledModal = styled(Modal)`
-  overflow: hidden;
-`
+import { If } from '../If'
+import {
+  StyledFlexbox,
+  StyledModal,
+  StyledLink,
+  ErrorWrapper,
+  Box
+} from './styles'
 
 const Popup = ({ confirm, success, error, isOpen, onClose, volunteerName, individualName }) => {
   return (
@@ -39,13 +37,6 @@ const Popup = ({ confirm, success, error, isOpen, onClose, volunteerName, indivi
   </StyledModal>
   )
 }
-
-const StyledLink = styled(Link)`
-  text-transform: uppercase;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-`
 
 const Confirm = ({ individualName, volunteerName, onClose, onSubmit }) => (
   <>
@@ -75,24 +66,12 @@ const Success = ({ individualName, volunteerName, onClose, link, ticketId }) => 
       href={link()}
       target="_blank"
       rel="noopener noreferrer"
-      alt="Enviar mensagem no Whatsapp"
     >
       <Button>enviar whats para voluntária</Button>
     </a>
     <StyledLink onClick={onClose}>fazer nova busca</StyledLink>
   </>
 )
-
-const Box = styled(Flexbox)`
-  padding: 15px;
-  background-color: #eeeeee;
-`
-
-const ErrorWrapper = styled(Flexbox)`
-  @media(min-width: 576px) { min-height: 400px; }
-  justify-content: space-evenly;
-  align-items: center;
-`
 
 const Error = ({ individualName, volunteerName, onClose, onSubmit, message }) => (
   <ErrorWrapper vertical>
@@ -108,5 +87,33 @@ const Error = ({ individualName, volunteerName, onClose, onSubmit, message }) =>
     <StyledLink onClick={onClose}>voltar para o match</StyledLink>
   </ErrorWrapper>
 )
+
+Popup.propTypes = {
+  confirm: PropTypes.shape({
+    onClose: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    isEnabled: PropTypes.bool.isRequired
+  }),
+  success: PropTypes.shape({
+    onClose: PropTypes.func.isRequired,
+    link: PropTypes.func.isRequired,
+    isEnabled: PropTypes.bool.isRequired,
+    ticketId: PropTypes.number.isRequired
+  }),
+  error: PropTypes.shape({
+    onClose: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    isEnabled: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired
+  }),
+  isOpen: PropTypes.bool.isRequired,
+  volunteerName: PropTypes.string.isRequired,
+  individualName: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+}
+
+Popup.defaultProps = {
+  isOpen: false
+}
 
 export default Popup

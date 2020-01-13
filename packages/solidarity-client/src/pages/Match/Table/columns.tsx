@@ -59,7 +59,7 @@ const columns = [
     Header: 'Ação',
     width: 200,
     Cell: ({ value }: valueArrayString) => (value ? (
-      <Flexbox middle><Forward id={value}/></Flexbox>
+      <Flexbox middle><Forward id={Number(value)}/></Flexbox>
     ) : null),
   }
 ]
