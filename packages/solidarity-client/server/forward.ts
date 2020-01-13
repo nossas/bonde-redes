@@ -50,11 +50,6 @@ const main = async (req, res, next) => {
     assignee_name
   } = req.body
 
-  console.log({
-    body: req.body,
-    id: volunteer_organization_id
-  })
-
   var individualTicket = matchTicketId => ({
     "ticket":
     {

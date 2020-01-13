@@ -4,22 +4,29 @@ import request from '../services/request'
 interface Foward {
   setError: Function
   setSuccess: Function
-  data: Object
+  data: {
+    volunteer_name: string
+    individual_name: string
+    individual_ticket_id: number
+    agent: number
+    volunteer_organization_id: number
+    volunteer_registry: string
+    volunteer_phone: string
+    volunteer_user_id: number
+  }
 }
 
-const data = undefined
-
 const fowardModel = {
-  data,
+  data: {},
   fowardTickets: thunk(async (actions: any, payload: Foward) => {
     const {
       setError,
       setSuccess,
       data
     } = payload
-    console.log(JSON.stringify(data))
     try {
-      const response = await request.post(JSON.stringify(data))
+      console.log(data)
+      const response = await request.post(data)
       setSuccess(true)
       return response
     }

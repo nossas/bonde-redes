@@ -21,6 +21,10 @@ const app = express()
 const port = process.env.PORT
 
 app.use(body_parser.json())
+app.use(body_parser.urlencoded({
+  extended: true
+}));
+
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'))
 app.use(cors())
 app.use(express.static(path.join(__dirname, '..', '..', 'build')))
@@ -32,7 +36,7 @@ app.use((err, req, res, next) => {
 app.get('/api', asyncMiddleware(api))
 app.post('/api/forward', asyncMiddleware(forward))
 
-app.get('/*', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'build', 'index.html'))
 })
 
