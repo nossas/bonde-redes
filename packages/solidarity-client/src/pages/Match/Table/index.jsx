@@ -59,7 +59,7 @@ const Table = () => {
     name: volunteer_name,
     whatsapp: volunteer_whatsapp,
     organization_id: volunteer_organization_id,
-    phone: volunteer_phone,
+    phone,
     user_id: volunteer_user_id,
     registration_number: volunteer_registry
   } = volunteer
@@ -140,7 +140,7 @@ const Table = () => {
       volunteer_name,
       volunteer_user_id,
       volunteer_registry,
-      volunteer_phone,
+      volunteer_phone: Number(parseNumber(phone)),
       volunteer_organization_id,
       assignee_name: zendeskAgentName
     })

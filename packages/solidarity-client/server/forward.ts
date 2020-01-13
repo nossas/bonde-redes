@@ -11,10 +11,6 @@ const {
 } = process.env
 
 const volunteerType = id => {
-  console.log({
-    zendeskOrganizations,
-    id
-  })
   if (id === zendeskOrganizations.lawyer) return 'Advogada'
   if (id === zendeskOrganizations.therapist) return 'Psicóloga'
   throw "Volunteer organization_id not supported"
