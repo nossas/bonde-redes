@@ -11,8 +11,12 @@ const {
 } = process.env
 
 const volunteerType = id => {
-  if (id === zendeskOrganizations["lawyer"]) return 'Advogada'
-  if (id === zendeskOrganizations["therapist"]) return 'Psicóloga'
+  console.log({
+    zendeskOrganizations,
+    id
+  })
+  if (id === zendeskOrganizations.lawyer) return 'Advogada'
+  if (id === zendeskOrganizations.therapist) return 'Psicóloga'
   throw "Volunteer organization_id not supported"
 }
 
@@ -45,6 +49,11 @@ const main = async (req, res, next) => {
     agent,
     assignee_name
   } = req.body
+
+  console.log({
+    body: req.body,
+    id: volunteer_organization_id
+  })
 
   var individualTicket = matchTicketId => ({
     "ticket":

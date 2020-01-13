@@ -2,20 +2,18 @@ import React from 'react'
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl'
 import GlobalContext from '../../../context'
 import { useStateLink } from '@hookstate/core'
-import { PointUser } from '../../../context/table'
+import { User } from '../../../models/table-data'
 import UserPin from './user-pin'
 import UserInfo from './user-info'
-
+import { useStoreState } from 'easy-peasy'
 const Map = () => {
   const {
-    table: { tableDataRef },
     map: { stateViewRef, popupInfoRef }
   } = GlobalContext
 
-  const tableData = useStateLink(tableDataRef)
   const state = useStateLink(stateViewRef)
   const popupInfo = useStateLink(popupInfoRef)
-
+  const tableData = useStoreState(state => state.table.data)
   const handleViewportChange = ({
     bearing, latitude, longitude, pitch, zoom,
   }: typeof state['value']['viewport']) => {
@@ -30,7 +28,7 @@ const Map = () => {
     })
   }
 
-  const handleCityPinClick = (user: PointUser) => {
+  const handleCityPinClick = (user: User) => {
     const { latitude, longitude } = user
     popupInfo.set(prevState => ({
       ...prevState,

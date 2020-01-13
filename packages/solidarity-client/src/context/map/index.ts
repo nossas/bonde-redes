@@ -1,5 +1,5 @@
 import { createStateLink } from '@hookstate/core'
-import { PointUser } from '../../context/table'
+import { User } from '../../models/table-data'
 
 const stateViewRef = createStateLink({
   viewport: {
@@ -11,7 +11,7 @@ const stateViewRef = createStateLink({
   },
 })
 
-type PopupInfoRefType = Omit<PointUser, 'latitude' | 'longitude'> & {
+type PopupInfoRefType = Omit<User, 'latitude' | 'longitude'> & {
   latitude: number
   longitude: number
   open: boolean
