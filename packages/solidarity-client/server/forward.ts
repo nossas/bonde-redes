@@ -45,7 +45,7 @@ const main = async (req, res, next) => {
   const individualTicket = matchTicketId => ({
     "ticket":
     {
-      // "status": 'pending',
+      "status": "pending",
       "assignee_id": agent,
       "fields": [
         {
@@ -88,7 +88,7 @@ const main = async (req, res, next) => {
       "requester_id": volunteer_user_id,
       "submitter_id": agent,
       "assignee_id": agent,
-      // "status": 'pending',
+      "status": "pending",
       "subject": `[${getVolunteerType(volunteer_organization_id).type}] ${volunteer_name}`,
       "comment": {
         "body": volunteerComment({
@@ -147,6 +147,7 @@ const main = async (req, res, next) => {
   }
 
   const createTicket = (tokens) => {
+    // @ts-ignore
     return client.tickets.create(volunteerTicket(), (err, req, result: any) => {
       if (err) {
         return handleError({
@@ -182,7 +183,7 @@ const main = async (req, res, next) => {
     }
 
     // Upload guia
-    client.attachments.upload(path.resolve(__dirname, '..',
+    return client.attachments.upload(path.resolve(__dirname, '..',
       './assets/guia_do_acolhimento.pdf'),
       {
         filename: 'Guia_do_Acolhimento.pdf'
