@@ -223,7 +223,7 @@ const Table = () => {
             success={{
               onClose: closeAllPopups,
               link: () => createWhatsappLink(
-                volunteer_whatsapp, { volunteer_name, individual_name, agent: zendeskAgent }
+                volunteer_whatsapp, { volunteer_name, individual_name, agent: zendeskAgentName }
               ),
               isEnabled: success,
               ticketId
