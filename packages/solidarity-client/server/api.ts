@@ -12,6 +12,7 @@ const main = async (req, res, next) => {
       lawyer: 'Advogada'
     })[keys[key]]
   }
+
   const tickets = await getAllTickets()
   const users = await getAllUsers()
 

@@ -111,13 +111,31 @@ const Table = () => {
     // eslint-disable-next-line
   }), [volunteer_organization_id])
 
+  const filterByStatus = useCallback((data) => data.filter((i) => {
+    if (i.status_acolhimento === 'solicitação_recebida') {
+      switch (i.ticket_status) {
+       case 'open':
+        return true
+       case 'new':
+         return true
+       default:
+         return false
+      }
+    } 
+
+    return false
+    // eslint-disable-next-line
+  }), [])
+
   const filteredTableData = useMemo(() => {
     const data = filterByDistance(
       filterByCategoryAndUserType(
-        tableData,
+        filterByStatus(
+          tableData,
+        )
       )
     )
-
+    console.log(data)
     return data
     // eslint-disable-next-line
   }, [filterByDistance, tableData])
