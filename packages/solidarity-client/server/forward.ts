@@ -209,7 +209,6 @@ const main = async (req, res, next) => {
           
           // Update ticket with both files
           const tokens = [guia, diretriz]
-          console.log(tokens)
           return createTicket(tokens)
       })
     })

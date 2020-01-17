@@ -42,6 +42,7 @@ const Table = () => {
   
   const [success, setSuccess] = useState(false)
   const [ticketId, setTicketId] = useState(0)
+  const [isLoading, setLoader] = useState(false)
 
   const {
     confirm,
@@ -127,15 +128,17 @@ const Table = () => {
     // eslint-disable-next-line
   }), [])
 
+  const filterByEmail = useCallback((data) => data.filter((i) => i.email === 'teste2@email.com'), [])
+
   const filteredTableData = useMemo(() => {
-    const data = filterByDistance(
-      filterByCategoryAndUserType(
-        filterByStatus(
+    const data = filterByCategoryAndUserType(
+      filterByStatus(
+        filterByEmail(
           tableData,
         )
       )
     )
-    console.log(data)
+
     return data
     // eslint-disable-next-line
   }, [filterByDistance, tableData])
@@ -146,11 +149,15 @@ const Table = () => {
       setSuccess,
       data: requestBody
     })
-    if (req && req.status === 200) setTicketId(req.data.ticketId)
+    if (req && req.status === 200) {
+      setLoader(false)
+      setTicketId(req.data.ticketId)
+    }
   }
 
   const onConfirm = () => {
     setPopup({ ...popups, confirm: false })
+    setLoader(true)
     return submitConfirm({
       agent: zendeskAgent,
       individual_name,
@@ -229,6 +236,7 @@ const Table = () => {
             }}
             isOpen={wrapper}
             onClose={closeAllPopups}
+            isLoading={isLoading}
         />
       </If>
     </Fragment>

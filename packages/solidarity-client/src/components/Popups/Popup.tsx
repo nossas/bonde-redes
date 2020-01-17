@@ -4,7 +4,8 @@ import {
   Title,
   Text,
   Button,
-  Link
+  Link,
+  Loading
 } from 'bonde-styleguide'
 
 import { If } from '../If'
@@ -16,7 +17,7 @@ import {
   Box
 } from './styles'
 
-const Popup = ({ confirm, success, error, isOpen, onClose, volunteerName, individualName }) => {
+const Popup = ({ confirm, success, error, isOpen, onClose, volunteerName, individualName, isLoading }) => {
   return (
     <StyledModal
       opened={isOpen}
@@ -24,6 +25,9 @@ const Popup = ({ confirm, success, error, isOpen, onClose, volunteerName, indivi
       width={20}
     >
       <StyledFlexbox middle vertical spacing="evenly">
+        <If condition={isLoading}>
+          <Loading />
+        </If>
         <If condition={confirm.isEnabled}>
           {Confirm({ ...confirm, volunteerName, individualName })}
         </If>
