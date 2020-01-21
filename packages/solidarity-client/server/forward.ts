@@ -77,7 +77,7 @@ const main = async (req, res, next) => {
           individual_name
         }),
         "author_id": agent,
-        "public": true,
+        "public": false,
       },
     }
   })

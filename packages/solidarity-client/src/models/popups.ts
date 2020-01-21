@@ -3,11 +3,13 @@ import { action } from 'easy-peasy';
 interface Popups {
   confirm: boolean
   wrapper: boolean
+  noPhoneNumber: boolean
 }
 
 const data: Popups = {
   confirm: false,
-  wrapper: false
+  wrapper: false,
+  noPhoneNumber: false
 }
 
 const popupsModel = {

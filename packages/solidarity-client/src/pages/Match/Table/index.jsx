@@ -18,13 +18,6 @@ import columns from './columns'
 import { If } from '../../../components/If'
 import Popup from '../../../components/Popups/Popup'
 
-const createWhatsappLink = (number, textVariables) => {
-  if(!number) alert('Essa voluntária não possui Whatsapp')
-  const whatsappphonenumber = parseNumber(number)
-  const urlencodedtext = encodeText(whatsappText(textVariables))
-  return `https://wa.me/55${whatsappphonenumber}/?text=${urlencodedtext}`
-}
-
 const Table = () => {
 
   const volunteer = useStoreState(state => state.match.volunteer)
@@ -46,7 +39,8 @@ const Table = () => {
 
   const {
     confirm,
-    wrapper
+    wrapper,
+    noPhoneNumber
   } = popups
 
   const {
@@ -68,6 +62,12 @@ const Table = () => {
   const distance = 50
   const lat = Number(latitude)
   const lng = Number(longitude)
+
+  const createWhatsappLink = (number, textVariables) => {
+    const whatsappphonenumber = parseNumber(number)
+    const urlencodedtext = encodeText(whatsappText(textVariables))
+    return `https://api.whatsapp.com/send?phone=55${whatsappphonenumber}&text=${urlencodedtext}`
+  }
 
   const filterByDistance = useCallback((data) => data.map((i) => {
     const pointA = [Number(i.latitude), Number(i.longitude)]
@@ -128,12 +128,12 @@ const Table = () => {
     // eslint-disable-next-line
   }), [])
 
-  const filterByEmail = useCallback((data) => data.filter((i) => i.email === 'teste2@email.com'), [])
+  // const filterByEmail = useCallback((data) => data.filter((i) => i.email === 'teste2@email.com'), [])
 
   const filteredTableData = useMemo(() => {
-    const data = filterByCategoryAndUserType(
-      filterByStatus(
-        filterByEmail(
+    const data = filterByDistance(
+      filterByCategoryAndUserType(
+        filterByStatus(
           tableData,
         )
       )
@@ -156,6 +156,11 @@ const Table = () => {
   }
 
   const onConfirm = () => {
+    if (!volunteer_whatsapp) return setPopup({
+      ...popups,
+      noPhoneNumber: true,
+      confirm: false
+    })
     setPopup({ ...popups, confirm: false })
     setLoader(true)
     return submitConfirm({
@@ -233,6 +238,11 @@ const Table = () => {
               onSubmit: onConfirm,
               isEnabled: error.status,
               message: error.message
+            }}
+            warning={{
+              isEnabled: noPhoneNumber,
+              id: volunteer_user_id,
+              name: volunteer_name
             }}
             isOpen={wrapper}
             onClose={closeAllPopups}

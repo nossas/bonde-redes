@@ -17,7 +17,7 @@ import {
   Box
 } from './styles'
 
-const Popup = ({ confirm, success, error, isOpen, onClose, volunteerName, individualName, isLoading }) => {
+const Popup = ({ confirm, success, error, warning, isOpen, onClose, volunteerName, individualName, isLoading }) => {
   return (
     <StyledModal
       opened={isOpen}
@@ -37,10 +37,33 @@ const Popup = ({ confirm, success, error, isOpen, onClose, volunteerName, indivi
         <If condition={error.isEnabled}>
           {Error({ ...error, volunteerName, individualName })}
         </If>
+        <If condition={warning.isEnabled}>
+          {Warning({ ...warning })}
+        </If>
       </StyledFlexbox>
   </StyledModal>
   )
 }
+
+const Warning = ({ name, id }) => (
+  <>
+    <Title.H2>Ops!</Title.H2>
+    <Text align="center">
+      Telefone Inválido ):
+    </Text>
+    <Text align="center">
+      A voluntária{' '}
+      <Link
+        href={`https://mapadoacolhimento.zendesk.com/agent/users/${id}/requested_tickets`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {name}
+      </Link> 
+      {' '}não possui número de Whastapp
+    </Text>
+  </>
+)
 
 const Confirm = ({ individualName, volunteerName, onClose, onSubmit }) => (
   <>
@@ -67,7 +90,7 @@ const Success = ({ individualName, volunteerName, onClose, link, ticketId }) => 
       Acesse o ticket do match
     </Link>
     <a
-      href={link()}
+      href={link}
       target="_blank"
       rel="noopener noreferrer"
     >
