@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, Fragment, useState } from 'react'
 import 'react-table/react-table.css'
 import ReactTable from 'react-table'
-import * as turf from '@turf/turf'
+// import * as turf from '@turf/turf'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 
@@ -49,8 +49,8 @@ const Table = () => {
   } = individual
 
   const {
-    latitude,
-    longitude,
+    // latitude,
+    // longitude,
     name: volunteer_name,
     whatsapp: volunteer_whatsapp,
     organization_id: volunteer_organization_id,
@@ -59,9 +59,9 @@ const Table = () => {
     registration_number: volunteer_registry
   } = volunteer
 
-  const distance = 50
-  const lat = Number(latitude)
-  const lng = Number(longitude)
+  // const distance = 50
+  // const lat = Number(latitude)
+  // const lng = Number(longitude)
 
   const createWhatsappLink = (number, textVariables) => {
     if (!number) return ''
@@ -70,25 +70,25 @@ const Table = () => {
     return `https://api.whatsapp.com/send?phone=55${whatsappphonenumber}&text=${urlencodedtext}`
   }
 
-  const filterByDistance = useCallback((data) => data.map((i) => {
-    const pointA = [Number(i.latitude), Number(i.longitude)]
+  // const filterByDistance = useCallback((data) => data.map((i) => {
+  //   const pointA = [Number(i.latitude), Number(i.longitude)]
 
-    return {
-      ...i,
-      distance: (
-        !Number.isNaN(pointA[0])
-        && !Number.isNaN(pointA[1])
-        && lat
-        && lng
-        && Number(turf.distance([lat, lng], pointA)).toFixed(2)
-      ),
-    }
-  }).filter((i) => {
-    if (!lat || !lng) {
-      return true
-    }
-    return i.distance && Number(i.distance) < distance
-  }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
+  //   return {
+  //     ...i,
+  //     distance: (
+  //       !Number.isNaN(pointA[0])
+  //       && !Number.isNaN(pointA[1])
+  //       && lat
+  //       && lng
+  //       && Number(turf.distance([lat, lng], pointA)).toFixed(2)
+  //     ),
+  //   }
+  // }).filter((i) => {
+  //   if (!lat || !lng) {
+  //     return true
+  //   }
+  //   return i.distance && Number(i.distance) < distance
+  // }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
   const volunteer_category = input => {
     if (input === zendeskOrganizations.lawyer) return 'jurídico'
@@ -129,10 +129,10 @@ const Table = () => {
     // eslint-disable-next-line
   }), [])
 
-  // const filterByEmail = useCallback((data) => data.filter((i) => i.email === 'teste2@email.com'), [])
+  const filterByEmail = useCallback((data) => data.filter((i) => i.email === 'teste2@email.com'), [])
 
   const filteredTableData = useMemo(() => {
-    const data = filterByDistance(
+    const data = filterByEmail(
       filterByCategoryAndUserType(
         filterByStatus(
           tableData,
@@ -142,7 +142,7 @@ const Table = () => {
 
     return data
     // eslint-disable-next-line
-  }, [filterByDistance, tableData])
+  }, [tableData])
 
   const submitConfirm = async (requestBody) => {
     const req = await fowardTickets({
