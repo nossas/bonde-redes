@@ -64,6 +64,7 @@ const Table = () => {
   const lng = Number(longitude)
 
   const createWhatsappLink = (number, textVariables) => {
+    if (!number) return ''
     const whatsappphonenumber = parseNumber(number)
     const urlencodedtext = encodeText(whatsappText(textVariables))
     return `https://api.whatsapp.com/send?phone=55${whatsappphonenumber}&text=${urlencodedtext}`
@@ -170,7 +171,7 @@ const Table = () => {
       volunteer_name,
       volunteer_user_id,
       volunteer_registry,
-      volunteer_phone: Number(parseNumber(phone)),
+      volunteer_phone: Number(parseNumber(phone || 0)),
       volunteer_organization_id,
       assignee_name: zendeskAgentName
     })

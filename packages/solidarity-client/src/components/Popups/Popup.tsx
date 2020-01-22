@@ -22,7 +22,7 @@ const Popup = ({ confirm, success, error, warning, isOpen, onClose, volunteerNam
     <StyledModal
       opened={isOpen}
       onClose={onClose}
-      width={20}
+      width={30}
     >
       <StyledFlexbox middle vertical spacing="evenly">
         <If condition={isLoading}>
@@ -38,14 +38,14 @@ const Popup = ({ confirm, success, error, warning, isOpen, onClose, volunteerNam
           {Error({ ...error, volunteerName, individualName })}
         </If>
         <If condition={warning.isEnabled}>
-          {Warning({ ...warning })}
+          {Warning({ ...warning, onClose })}
         </If>
       </StyledFlexbox>
   </StyledModal>
   )
 }
 
-const Warning = ({ name, id }) => (
+const Warning = ({ name, id, onClose }) => (
   <>
     <Title.H2>Ops!</Title.H2>
     <Text align="center">
@@ -62,6 +62,7 @@ const Warning = ({ name, id }) => (
       </Link> 
       {' '}não possui número de Whastapp
     </Text>
+    <StyledLink onClick={onClose}>fazer nova busca</StyledLink>
   </>
 )
 
@@ -90,7 +91,7 @@ const Success = ({ individualName, volunteerName, onClose, link, ticketId }) => 
       Acesse o ticket do match
     </Link>
     <a
-      href={link}
+      href={link()}
       target="_blank"
       rel="noopener noreferrer"
     >
