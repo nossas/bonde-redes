@@ -46,7 +46,7 @@ const columns = [
         return '-'
       }
       const data = new Date(value)
-      return `${data.getDay()}/${data.getMonth() + 1}/${data.getFullYear()} às ${data.getHours().toFixed(2)}:${data.getMinutes().toFixed(2)}`
+      return data.toLocaleDateString('pt-BR')
     },
   }, {
     accessor: 'ticket_id',
