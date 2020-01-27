@@ -6,8 +6,8 @@ WORKDIR /usr/src/app
 
 COPY ./ .
 
-RUN pnpm m i --filter bonde-microservices --filter bonde-cli-zendesk
+# RUN pnpm m i --filter bonde-microservices --filter bonde-cli-zendesk
 
-RUN pnpm m run build --filter bonde-cli-zendesk
+# RUN pnpm m run build --filter bonde-cli-zendesk
 
 CMD node ./packages/cli-zendesk/dist

@@ -1,7 +1,3 @@
-node_modules
-packages/webhooks-registry/node_modules
-packages/webhooks-zendesk/node_modules
-packages/webhooks-auth/node_modules
 .env
 packages/webhooks-registry/.env
 packages/webhooks-zendesk/.env

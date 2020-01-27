@@ -1,10 +1,22 @@
+# CLI-Zendesk
+
 Este pacote é um programa em linha de comando que quando executado realiza a integração de todos os tickets do zendesk para o banco de dados através de requisições em graphql.
 
-```
 Options:
+
+``` bash
   -m, --mode <mode>  Required. Selects the operation mode. It can be "ticket" or "user"
   -h, --help         output usage information
 ```
+
+## Passo a passo para executar o micro serviço
+
+- Na raiz do repositorio, rode:
+ `pnpm m i`
+- Entao execute o serviço para buscar os usuários com:
+  `pnpm run dev:user`
+- E para buscas os tickets:
+  `pnpm run dev:ticket`
 
 As variáveis de ambiente que precisam ser configuradas estão descritas a seguir:
 
