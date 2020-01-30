@@ -438,36 +438,36 @@ pipeline:
       status: success
       event: tag
 
-  deploy-stag-webhooks-solidarity-match:
-    image: peloton/drone-rancher
-    url: http://cluster.bonde.org
-    service: webhooks/solidarity-match
-    group: deploying
-    docker_image: nossas/bonde-webhooks-solidarity-match:${DRONE_BRANCH/\//-}
-    timeout: 360
-    confirm: true
-    secrets: [ rancher_access_key, rancher_secret_key ]
-    when:
-      status: success
-      branch: [hotfix/*, release/*, feature/*, develop]
-      event: push
+  # deploy-stag-webhooks-solidarity-match:
+  #   image: peloton/drone-rancher
+  #   url: http://cluster.bonde.org
+  #   service: webhooks/solidarity-match
+  #   group: deploying
+  #   docker_image: nossas/bonde-webhooks-solidarity-match:${DRONE_BRANCH/\//-}
+  #   timeout: 360
+  #   confirm: true
+  #   secrets: [ rancher_access_key, rancher_secret_key ]
+  #   when:
+  #     status: success
+  #     branch: [hotfix/*, release/*, feature/*, develop]
+  #     event: push
 
-  deploy-prod-webhooks-solidarity-match:
-    image: peloton/drone-rancher
-    url: http://cluster.bonde.org
-    service: webhooks/solidarity-match
-    docker_image: "nossas/bonde-webhooks-solidarity-match:${DRONE_TAG##v}"
-    timeout: 360
-    group: deploying
-    confirm: true
-    secrets:
-      - source: rancher_access_key_prod
-        target: rancher_access_key
-      - source: rancher_secret_key_prod
-        target: rancher_secret_key
-    when:
-      status: success
-      event: tag
+  # deploy-prod-webhooks-solidarity-match:
+  #   image: peloton/drone-rancher
+  #   url: http://cluster.bonde.org
+  #   service: webhooks/solidarity-match
+  #   docker_image: "nossas/bonde-webhooks-solidarity-match:${DRONE_TAG##v}"
+  #   timeout: 360
+  #   group: deploying
+  #   confirm: true
+  #   secrets:
+  #     - source: rancher_access_key_prod
+  #       target: rancher_access_key
+  #     - source: rancher_secret_key_prod
+  #       target: rancher_secret_key
+  #   when:
+  #     status: success
+  #     event: tag
 
   deploy-stag-webhooks-mail:
     image: peloton/drone-rancher
