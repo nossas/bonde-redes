@@ -1,8 +1,8 @@
 pipeline:
-  staging-build:
+  build:
     image: node:10-alpine
     environment:
-      - COMMUNITY_ID=1
+      - COMMUNITY_ID=40
       - REACT_APP_ZENDESK_ORGANIZATIONS={"lawyer":360269610652,"individual":360273031591,"therapist":360282119532}
       - ZENDESK_API_URL=https://mapadoacolhimento.zendesk.com/api/v2/
     commands:
@@ -11,90 +11,90 @@ pipeline:
       - export ZENDESK_API_USER=$STGA_ZENDESK_API_USER
       - yarn global add pnpm
       - pnpm i
-      # - pnpm run lint
-      # - pnpm m run test
       - pnpm m run build
     secrets: [ stag_google_client, stag_zendesk_token, stag_zendesk_user ]
     when:
-      event: [push]
+      event: [push, tag]
 
-  # publish-stag-webhooks-registry:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-webhooks-registry
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/webhooks-registry/Dockerfile
-  #   tags:
-  #     - ${DRONE_BRANCH/\//-}
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, support/*, develop]
-  #     event: push
+  publish-stag-webhooks-registry:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-registry
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhooks-registry/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
-  # publish-prod-webhooks-registry:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-webhooks-registry
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/webhooks-registry/Dockerfile
-  #   tags:
-  #     - ${DRONE_TAG##v}
-  #     - latest
-  #   when:
-  #     status: success
-  #     event: tag
+  publish-prod-webhooks-registry:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-registry
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhooks-registry/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
 
-  # publish-stag-webhooks-zendesk:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-webhooks-zendesk
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/webhooks-zendesk/Dockerfile
-  #   tags:
-  #     - ${DRONE_BRANCH/\//-}
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, support/*, develop]
-  #     event: push
+  publish-stag-webhooks-zendesk:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-zendesk
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhooks-zendesk/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
-  # publish-prod-webhooks-zendesk:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-webhooks-zendesk
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/webhooks-zendesk/Dockerfile
-  #   tags:
-  #     - ${DRONE_TAG##v}
-  #     - latest
-  #   when:
-  #     status: success
-  #     event: tag
+  publish-prod-webhooks-zendesk:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-zendesk
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhooks-zendesk/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
 
-  # publish-stag-webhooks-solidarity-count:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-webhooks-solidarity-count
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/webhooks-solidarity-count/Dockerfile
-  #   tags:
-  #     - ${DRONE_BRANCH/\//-}
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, support/*, develop]
-  #     event: push
+  publish-stag-webhooks-solidarity-count:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-solidarity-count
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhooks-solidarity-count/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
-  # publish-prod-webhooks-solidarity-count:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-webhooks-solidarity-count
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/webhooks-solidarity-count/Dockerfile
-  #   tags:
-  #     - ${DRONE_TAG##v}
-  #     - latest
-  #   when:
-  #     status: success
-  #     event: tag
+  publish-prod-webhooks-solidarity-count:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-solidarity-count
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhooks-solidarity-count/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
+
+  ## Solidarity match dont works
 
   # publish-stag-webhooks-solidarity-match:
   #   image: plugins/docker
@@ -122,109 +122,109 @@ pipeline:
   #     status: success
   #     event: tag
 
-  # publish-stag-webhooks-mail:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-webhooks-mail
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/webhook-mail/Dockerfile
-  #   tags:
-  #     - ${DRONE_BRANCH/\//-}
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, support/*, develop]
-  #     event: push
+  publish-stag-webhooks-mail:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-mail
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhook-mail/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
-  # publish-prod-webhooks-mail:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-webhooks-mail
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/webhook-mail/Dockerfile
-  #   tags:
-  #     - ${DRONE_TAG##v}
-  #     - latest
-  #   when:
-  #     status: success
-  #     event: tag
+  publish-prod-webhooks-mail:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-mail
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhook-mail/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
 
-  # publish-stag-webhooks-activists:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-webhooks-activists
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/webhook-activists/Dockerfile
-  #   tags:
-  #     - ${DRONE_BRANCH/\//-}
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, support/*, develop]
-  #     event: push
+  publish-stag-webhooks-activists:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-activists
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhook-activists/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
-  # publish-prod-webhooks-activists:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-webhooks-activists
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/webhook-activists/Dockerfile
-  #   tags:
-  #     - ${DRONE_TAG##v}
-  #     - latest
-  #   when:
-  #     status: success
-  #     event: tag
+  publish-prod-webhooks-activists:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-activists
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/webhook-activists/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
 
-  # publish-stag-cli-mautic:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-cli-mautic
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/cli-mautic/Dockerfile
-  #   tags:
-  #     - ${DRONE_BRANCH/\//-}
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, support/*, develop]
-  #     event: push
+  publish-stag-cli-mautic:
+    image: plugins/docker
+    repo: nossas/bonde-cli-mautic
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/cli-mautic/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
-  # publish-prod-cli-mautic:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-cli-mautic
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/cli-mautic/Dockerfile
-  #   tags:
-  #     - ${DRONE_TAG##v}
-  #     - latest
-  #   when:
-  #     status: success
-  #     event: tag
+  publish-prod-cli-mautic:
+    image: plugins/docker
+    repo: nossas/bonde-cli-mautic
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/cli-mautic/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
 
-  # publish-stag-cli-zendesk:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-cli-zendesk
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/cli-zendesk/Dockerfile
-  #   tags:
-  #     - ${DRONE_BRANCH/\//-}
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, support/*, develop]
-  #     event: push
+  publish-stag-cli-zendesk:
+    image: plugins/docker
+    repo: nossas/bonde-cli-zendesk
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/cli-zendesk/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
-  # publish-prod-cli-zendesk:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-cli-zendesk
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/cli-zendesk/Dockerfile
-  #   tags:
-  #     - ${DRONE_TAG##v}
-  #     - latest
-  #   when:
-  #     status: success
-  #     event: tag
+  publish-prod-cli-zendesk:
+    image: plugins/docker
+    repo: nossas/bonde-cli-zendesk
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/cli-zendesk/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
 
   publish-stag-solidarity-client:
     image: plugins/docker
@@ -252,191 +252,191 @@ pipeline:
       status: success
       event: tag
 
-  # deploy-stag-webhooks-registry:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/registry
-  #   group: deploying
-  #   docker_image: nossas/bonde-webhooks-registry:${DRONE_BRANCH/\//-}
-  #   timeout: 360
-  #   confirm: true
-  #   secrets: [ rancher_access_key, rancher_secret_key ]
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, develop]
-  #     event: push
+  deploy-stag-webhooks-registry:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/registry
+    group: deploying
+    docker_image: nossas/bonde-webhooks-registry:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [ rancher_access_key, rancher_secret_key ]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
-  # deploy-prod-webhooks-registry:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/registry
-  #   docker_image: "nossas/bonde-webhooks-registry:${DRONE_TAG##v}"
-  #   timeout: 360
-  #   group: deploying
-  #   confirm: true
-  #   secrets:
-  #     - source: rancher_access_key_prod
-  #       target: rancher_access_key
-  #     - source: rancher_secret_key_prod
-  #       target: rancher_secret_key
-  #   when:
-  #     status: success
-  #     event: tag
+  deploy-prod-webhooks-registry:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/registry
+    docker_image: "nossas/bonde-webhooks-registry:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
 
-  # deploy-stag-cli-zendesk-user:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/cli-zendesk-user
-  #   group: deploying
-  #   docker_image: nossas/bonde-cli-zendesk:${DRONE_BRANCH/\//-}
-  #   timeout: 360
-  #   confirm: true
-  #   secrets: [ rancher_access_key, rancher_secret_key ]
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, develop]
-  #     event: push
+  deploy-stag-cli-zendesk-user:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/cli-zendesk-user
+    group: deploying
+    docker_image: nossas/bonde-cli-zendesk:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [ rancher_access_key, rancher_secret_key ]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
-#   deploy-stag-cli-zendesk-ticket:
-#     image: peloton/drone-rancher
-#     url: http://cluster.bonde.org
-#     service: webhooks/cli-zendesk-ticket
-#     group: deploying
-#     docker_image: nossas/bonde-cli-zendesk:${DRONE_BRANCH/\//-}
-#     timeout: 360
-#     confirm: true
-#     secrets: [ rancher_access_key, rancher_secret_key ]
-#     when:
-#       status: success
-#       branch: [hotfix/*, release/*, feature/*, develop]
-#       event: push
+  deploy-stag-cli-zendesk-ticket:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/cli-zendesk-ticket
+    group: deploying
+    docker_image: nossas/bonde-cli-zendesk:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [ rancher_access_key, rancher_secret_key ]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
-# deploy-prod-cli-zendesk-user:
-#   image: peloton/drone-rancher
-#   url: http://cluster.bonde.org
-#   service: webhooks/cli-zendesk-user
-#   docker_image: "nossas/bonde-cli-zendesk:${DRONE_TAG##v}"
-#   timeout: 360
-#   group: deploying
-#   confirm: true
-#   secrets:
-#     - source: rancher_access_key_prod
-#       target: rancher_access_key
-#     - source: rancher_secret_key_prod
-#       target: rancher_secret_key
-#   when:
-#     status: success
-#     event: tag
+  deploy-prod-cli-zendesk-user:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/cli-zendesk-user
+    docker_image: "nossas/bonde-cli-zendesk:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
 
-#   deploy-prod-cli-zendesk-ticket:
-#     image: peloton/drone-rancher
-#     url: http://cluster.bonde.org
-#     service: webhooks/cli-zendesk-ticket
-#     docker_image: "nossas/bonde-cli-zendesk:${DRONE_TAG##v}"
-#     timeout: 360
-#     group: deploying
-#     confirm: true
-#     secrets:
-#       - source: rancher_access_key_prod
-#         target: rancher_access_key
-#       - source: rancher_secret_key_prod
-#         target: rancher_secret_key
-#     when:
-#       status: success
-#       event: tag
+  deploy-prod-cli-zendesk-ticket:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/cli-zendesk-ticket
+    docker_image: "nossas/bonde-cli-zendesk:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
 
-  # deploy-stag-cli-mautic:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/cli-mautic
-  #   group: deploying
-  #   docker_image: nossas/bonde-cli-mautic:${DRONE_BRANCH/\//-}
-  #   timeout: 360
-  #   confirm: true
-  #   secrets: [ rancher_access_key, rancher_secret_key ]
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, develop]
-  #     event: push
+  deploy-stag-cli-mautic:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/cli-mautic
+    group: deploying
+    docker_image: nossas/bonde-cli-mautic:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [ rancher_access_key, rancher_secret_key ]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
-  # deploy-prod-cli-mautic:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/cli-mautic
-  #   docker_image: "nossas/bonde-cli-mautic:${DRONE_TAG##v}"
-  #   timeout: 360
-  #   group: deploying
-  #   confirm: true
-  #   secrets:
-  #     - source: rancher_access_key_prod
-  #       target: rancher_access_key
-  #     - source: rancher_secret_key_prod
-  #       target: rancher_secret_key
-  #   when:
-  #     status: success
-  #     event: tag
+  deploy-prod-cli-mautic:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/cli-mautic
+    docker_image: "nossas/bonde-cli-mautic:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
 
-  # deploy-stag-webhooks-zendesk:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/zendesk
-  #   group: deploying
-  #   docker_image: nossas/bonde-webhooks-zendesk:${DRONE_BRANCH/\//-}
-  #   timeout: 360
-  #   confirm: true
-  #   secrets: [ rancher_access_key, rancher_secret_key ]
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, develop]
-  #     event: push
+  deploy-stag-webhooks-zendesk:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/zendesk
+    group: deploying
+    docker_image: nossas/bonde-webhooks-zendesk:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [ rancher_access_key, rancher_secret_key ]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
-  # deploy-prod-webhooks-zendesk:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/zendesk
-  #   docker_image: "nossas/bonde-webhooks-zendesk:${DRONE_TAG##v}"
-  #   timeout: 360
-  #   group: deploying
-  #   confirm: true
-  #   secrets:
-  #     - source: rancher_access_key_prod
-  #       target: rancher_access_key
-  #     - source: rancher_secret_key_prod
-  #       target: rancher_secret_key
-  #   when:
-  #     status: success
-  #     event: tag
+  deploy-prod-webhooks-zendesk:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/zendesk
+    docker_image: "nossas/bonde-webhooks-zendesk:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
 
-  # deploy-stag-webhooks-solidarity-count:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/solidarity-count
-  #   group: deploying
-  #   docker_image: nossas/bonde-webhooks-solidarity-count:${DRONE_BRANCH/\//-}
-  #   timeout: 360
-  #   confirm: true
-  #   secrets: [ rancher_access_key, rancher_secret_key ]
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, develop]
-  #     event: push
+  deploy-stag-webhooks-solidarity-count:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/solidarity-count
+    group: deploying
+    docker_image: nossas/bonde-webhooks-solidarity-count:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [ rancher_access_key, rancher_secret_key ]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
-  # deploy-prod-webhooks-solidarity-count:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/solidarity-count
-  #   docker_image: "nossas/bonde-webhooks-solidarity-count:${DRONE_TAG##v}"
-  #   timeout: 360
-  #   group: deploying
-  #   confirm: true
-  #   secrets:
-  #     - source: rancher_access_key_prod
-  #       target: rancher_access_key
-  #     - source: rancher_secret_key_prod
-  #       target: rancher_secret_key
-  #   when:
-  #     status: success
-  #     event: tag
+  deploy-prod-webhooks-solidarity-count:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/solidarity-count
+    docker_image: "nossas/bonde-webhooks-solidarity-count:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
 
   # deploy-stag-webhooks-solidarity-match:
   #   image: peloton/drone-rancher
@@ -469,67 +469,67 @@ pipeline:
   #     status: success
   #     event: tag
 
-  # deploy-stag-webhooks-mail:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/mail
-  #   group: deploying
-  #   docker_image: nossas/bonde-webhooks-mail:${DRONE_BRANCH/\//-}
-  #   timeout: 360
-  #   confirm: true
-  #   secrets: [ rancher_access_key, rancher_secret_key ]
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, develop]
-  #     event: push
+  deploy-stag-webhooks-mail:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/mail
+    group: deploying
+    docker_image: nossas/bonde-webhooks-mail:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [ rancher_access_key, rancher_secret_key ]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
-  # deploy-prod-webhooks-mail:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/mail
-  #   docker_image: "nossas/bonde-webhooks-mail:${DRONE_TAG##v}"
-  #   timeout: 360
-  #   group: deploying
-  #   confirm: true
-  #   secrets:
-  #     - source: rancher_access_key_prod
-  #       target: rancher_access_key
-  #     - source: rancher_secret_key_prod
-  #       target: rancher_secret_key
-  #   when:
-  #     status: success
-  #     event: tag
+  deploy-prod-webhooks-mail:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/mail
+    docker_image: "nossas/bonde-webhooks-mail:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
 
-  # deploy-stag-webhooks-activists:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/activists
-  #   group: deploying
-  #   docker_image: nossas/bonde-webhooks-activists:${DRONE_BRANCH/\//-}
-  #   timeout: 360
-  #   confirm: true
-  #   secrets: [ rancher_access_key, rancher_secret_key ]
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, develop]
-  #     event: push
+  deploy-stag-webhooks-activists:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/activists
+    group: deploying
+    docker_image: nossas/bonde-webhooks-activists:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [ rancher_access_key, rancher_secret_key ]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
-  # deploy-prod-webhooks-activists:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/activists
-  #   docker_image: "nossas/bonde-webhooks-activists:${DRONE_TAG##v}"
-  #   timeout: 360
-  #   group: deploying
-  #   confirm: true
-  #   secrets:
-  #     - source: rancher_access_key_prod
-  #       target: rancher_access_key
-  #     - source: rancher_secret_key_prod
-  #       target: rancher_secret_key
-  #   when:
-  #     status: success
-  #     event: tag
+  deploy-prod-webhooks-activists:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/activists
+    docker_image: "nossas/bonde-webhooks-activists:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
 
   deploy-stag-solidarity-client:
     image: peloton/drone-rancher
