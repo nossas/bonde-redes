@@ -36,11 +36,11 @@ export const getCurrentDate = () => {
 export const getVolunteerFile = id => {
   if (id === LAWYER) return {
     path: 'diretrizes_atendimento_advogada.pdf',
-    filename: 'Diretrizes_de_Atendimento___Advogadas_Volunta_rias.pdf'
+    filename: 'Diretrizes_de_Atendimento___Advogadas_Voluntarias.pdf'
   }
   if (id === THERAPIST) return {
     path: 'diretrizes_atendimento_psicologa.pdf',
-    filename: 'Diretrizes_de_Atendimento___Psico_logas_Volunta_rias.pdf'
+    filename: 'Diretrizes_de_Atendimento___Psicologas_Voluntarias.pdf'
   }
   throw "Volunteer organization_id not supported in search for file"
 }
