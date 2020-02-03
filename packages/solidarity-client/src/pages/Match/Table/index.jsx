@@ -142,7 +142,7 @@ const Table = () => {
 
     return data
     // eslint-disable-next-line
-  }, [tableData])
+  }, [filterByDistance, tableData])
 
   const submitConfirm = async (requestBody) => {
     const req = await fowardTickets({
