@@ -6,8 +6,8 @@ WORKDIR /usr/src/app
 
 COPY ./ .
 
-RUN pnpm m i --filter bonde-microservices --filter bonde-webhooks-solidarity-count
+# RUN pnpm m i --filter bonde-microservices --filter bonde-webhooks-solidarity-count
 
-RUN pnpm m run build --filter bonde-webhooks-solidarity-count
+# RUN pnpm m run build --filter bonde-webhooks-solidarity-count
 
 CMD node ./packages/webhooks-solidarity-count/dist

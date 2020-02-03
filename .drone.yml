@@ -1,4 +1,20 @@
 pipeline:
+  build:
+    image: node:10-alpine
+    environment:
+      - COMMUNITY_ID=40
+      - REACT_APP_ZENDESK_ORGANIZATIONS={"lawyer":360269610652,"individual":360273031591,"therapist":360282119532}
+      - ZENDESK_API_URL=https://mapadoacolhimento.zendesk.com/api/v2/
+    commands:
+      - export REACT_APP_GOOGLE_CLIENT_KEY=$STAG_GOOGLE_CLIENT
+      - export ZENDESK_API_TOKEN=$STGA_ZENDESK_API_TOKEN
+      - export ZENDESK_API_USER=$STGA_ZENDESK_API_USER
+      - yarn global add pnpm
+      - pnpm i
+      - pnpm m run build
+    secrets: [ stag_google_client, stag_zendesk_token, stag_zendesk_user ]
+    when:
+      event: [push, tag]
 
   publish-stag-webhooks-registry:
     image: plugins/docker
@@ -78,31 +94,33 @@ pipeline:
       status: success
       event: tag
 
-  publish-stag-webhooks-solidarity-match:
-    image: plugins/docker
-    repo: nossas/bonde-webhooks-solidarity-match
-    group: publishing
-    secrets: [ docker_username, docker_password ]
-    dockerfile: packages/webhooks-solidarity-match/Dockerfile
-    tags:
-      - ${DRONE_BRANCH/\//-}
-    when:
-      status: success
-      branch: [hotfix/*, release/*, feature/*, support/*, develop]
-      event: push
+  ## Solidarity match dont works
 
-  publish-prod-webhooks-solidarity-match:
-    image: plugins/docker
-    repo: nossas/bonde-webhooks-solidarity-match
-    group: publishing
-    secrets: [ docker_username, docker_password ]
-    dockerfile: packages/webhooks-solidarity-match/Dockerfile
-    tags:
-      - ${DRONE_TAG##v}
-      - latest
-    when:
-      status: success
-      event: tag
+  # publish-stag-webhooks-solidarity-match:
+  #   image: plugins/docker
+  #   repo: nossas/bonde-webhooks-solidarity-match
+  #   group: publishing
+  #   secrets: [ docker_username, docker_password ]
+  #   dockerfile: packages/webhooks-solidarity-match/Dockerfile
+  #   tags:
+  #     - ${DRONE_BRANCH/\//-}
+  #   when:
+  #     status: success
+  #     branch: [hotfix/*, release/*, feature/*, support/*, develop]
+  #     event: push
+
+  # publish-prod-webhooks-solidarity-match:
+  #   image: plugins/docker
+  #   repo: nossas/bonde-webhooks-solidarity-match
+  #   group: publishing
+  #   secrets: [ docker_username, docker_password ]
+  #   dockerfile: packages/webhooks-solidarity-match/Dockerfile
+  #   tags:
+  #     - ${DRONE_TAG##v}
+  #     - latest
+  #   when:
+  #     status: success
+  #     event: tag
 
   publish-stag-webhooks-mail:
     image: plugins/docker
@@ -201,6 +219,32 @@ pipeline:
     group: publishing
     secrets: [ docker_username, docker_password ]
     dockerfile: packages/cli-zendesk/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
+
+  publish-stag-solidarity-client:
+    image: plugins/docker
+    repo: nossas/bonde-solidarity-client
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/solidarity-client/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
+
+  publish-prod-solidarity-client:
+    image: plugins/docker
+    repo: nossas/bonde-solidarity-client
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/solidarity-client/Dockerfile
     tags:
       - ${DRONE_TAG##v}
       - latest
@@ -394,36 +438,36 @@ pipeline:
       status: success
       event: tag
 
-  deploy-stag-webhooks-solidarity-match:
-    image: peloton/drone-rancher
-    url: http://cluster.bonde.org
-    service: webhooks/solidarity-match
-    group: deploying
-    docker_image: nossas/bonde-webhooks-solidarity-match:${DRONE_BRANCH/\//-}
-    timeout: 360
-    confirm: true
-    secrets: [ rancher_access_key, rancher_secret_key ]
-    when:
-      status: success
-      branch: [hotfix/*, release/*, feature/*, develop]
-      event: push
+  # deploy-stag-webhooks-solidarity-match:
+  #   image: peloton/drone-rancher
+  #   url: http://cluster.bonde.org
+  #   service: webhooks/solidarity-match
+  #   group: deploying
+  #   docker_image: nossas/bonde-webhooks-solidarity-match:${DRONE_BRANCH/\//-}
+  #   timeout: 360
+  #   confirm: true
+  #   secrets: [ rancher_access_key, rancher_secret_key ]
+  #   when:
+  #     status: success
+  #     branch: [hotfix/*, release/*, feature/*, develop]
+  #     event: push
 
-  deploy-prod-webhooks-solidarity-match:
-    image: peloton/drone-rancher
-    url: http://cluster.bonde.org
-    service: webhooks/solidarity-match
-    docker_image: "nossas/bonde-webhooks-solidarity-match:${DRONE_TAG##v}"
-    timeout: 360
-    group: deploying
-    confirm: true
-    secrets:
-      - source: rancher_access_key_prod
-        target: rancher_access_key
-      - source: rancher_secret_key_prod
-        target: rancher_secret_key
-    when:
-      status: success
-      event: tag
+  # deploy-prod-webhooks-solidarity-match:
+  #   image: peloton/drone-rancher
+  #   url: http://cluster.bonde.org
+  #   service: webhooks/solidarity-match
+  #   docker_image: "nossas/bonde-webhooks-solidarity-match:${DRONE_TAG##v}"
+  #   timeout: 360
+  #   group: deploying
+  #   confirm: true
+  #   secrets:
+  #     - source: rancher_access_key_prod
+  #       target: rancher_access_key
+  #     - source: rancher_secret_key_prod
+  #       target: rancher_secret_key
+  #   when:
+  #     status: success
+  #     event: tag
 
   deploy-stag-webhooks-mail:
     image: peloton/drone-rancher
@@ -475,6 +519,37 @@ pipeline:
     url: http://cluster.bonde.org
     service: webhooks/activists
     docker_image: "nossas/bonde-webhooks-activists:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
+
+  deploy-stag-solidarity-client:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webservers/match-voluntarias
+    group: deploying
+    docker_image: nossas/bonde-solidarity-client:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [ rancher_access_key, rancher_secret_key ]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
+
+  deploy-prod-solidarity-client:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webservers/match-voluntarias
+    docker_image: "nossas/bonde-solidarity-client:${DRONE_TAG##v}"
     timeout: 360
     group: deploying
     confirm: true

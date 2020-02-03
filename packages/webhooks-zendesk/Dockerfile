@@ -6,8 +6,8 @@ WORKDIR /usr/src/app
 
 COPY ./ .
 
-RUN pnpm m i --filter bonde-microservices --filter bonde-webhooks-zendesk
+# RUN pnpm m i --filter bonde-microservices --filter bonde-webhooks-zendesk
 
-RUN pnpm m run build --filter bonde-webhooks-zendesk
+# RUN pnpm m run build --filter bonde-webhooks-zendesk
 
 CMD node ./packages/webhooks-zendesk/dist
