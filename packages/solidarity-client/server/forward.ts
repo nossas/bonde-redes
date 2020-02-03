@@ -37,9 +37,9 @@ const main = async (req, res, next) => {
   } = req.body
 
   const handleError = ({ error, message }) => {
-    console.log(error);
+    console.log(error)
     res.json({ error, message })
-    process.exit(-1);
+    process.exit(-1)
   }
 
   const individualTicket = matchTicketId => ({
