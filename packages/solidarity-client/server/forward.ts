@@ -77,7 +77,7 @@ const main = async (req, res, next) => {
           individual_name
         }),
         "author_id": agent,
-        "public": false,
+        "public": true,
       },
     }
   })
@@ -129,7 +129,7 @@ const main = async (req, res, next) => {
           assignee_name
         }),
         "author_id": agent,
-        "public": false,
+        "public": true,
         "uploads": tokens
       }
     }
