@@ -34,8 +34,10 @@ const columns = [
   }, {
     accessor: 'tipo_de_acolhimento',
     Header: 'Tipo de acolhimento',
-    Cell: ({ value }: valueArrayString) => (value ? (
-      <span>{value}</span>
+    Cell: ({ value }: valueString) => (value ? (
+      <Flexbox middle>
+        <span>{value === 'juridico' ? 'Jurídico' : 'Psicológico'}</span>
+      </Flexbox>
     ) : null),
     width: 200
   }, {

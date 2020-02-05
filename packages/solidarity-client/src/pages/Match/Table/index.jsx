@@ -91,8 +91,8 @@ const Table = () => {
   }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
   const volunteer_category = input => {
-    if (input === zendeskOrganizations.lawyer) return 'jurídico'
-    if (input === zendeskOrganizations.therapist) return 'psicológico'
+    if (input === zendeskOrganizations.lawyer) return 'juridico'
+    if (input === zendeskOrganizations.therapist) return 'psicologico'
   }
 
   const filterByCategoryAndUserType = useCallback((data) => data.filter((i) => {

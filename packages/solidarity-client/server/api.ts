@@ -17,7 +17,9 @@ const main = async (req, res, next) => {
   const users = await getAllUsers()
 
   const isVolunteer = ({ organization_id }) => [zendeskOrganizations['therapist'], zendeskOrganizations['lawyer']].includes(organization_id)
+
   const filterDeletedTickets = ({ user_id }) => tickets.filter(ticket => ticket.requester_id === user_id && ticket.status !== 'deleted')
+
   const fuseUserWithTicket = ({ status_inscricao = '-', status_acolhimento = '-', status = '-', ticket_id = '-' }, user) => ({
     ...user,
     status_inscricao,
@@ -37,17 +39,21 @@ const main = async (req, res, next) => {
 
       return fuseUserWithTicket(objectValidation(ticket), user)
     } else {
-      const ticket = filterDeletedTickets(user)
-        .sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at))[0]
+      const ticket = filterDeletedTickets(user).sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at))[0]
+
+      if (user.tipo_de_acolhimento === 'psicológico_e_jurídico' && ticket) {
+        const str = (ticket.subject).toLowerCase()
+        const removeSpecialCaracters = str.replace(/[^\w\s]/ig, '')
+        const match = removeSpecialCaracters.match(/\b(psicolgico|jurdico)\b/g)
+        if (match && match.length > 0) {
+          user.tipo_de_acolhimento = match[0] === 'jurdico'
+            ? 'juridico'
+            : 'psicologico'  
+        }
+      }
 
       // if (!ticket) return user
-
-      // user.link_ticket = ticket.ticket_id
       // user.status_acolhimento = ticket.status_acolhimento
-      //const tipo = ticket.subject.split(' ').slice(0, 1)[0]
-      //user.tipo_de_acolhimento   = ['[psicológico]', '[jurídico]'].includes(tipo)
-      //  ? tipo.slice(1, -1)
-      // : ''
 
       return fuseUserWithTicket(objectValidation(ticket), user)
     }
