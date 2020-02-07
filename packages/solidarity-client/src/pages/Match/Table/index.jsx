@@ -99,19 +99,13 @@ const Table = () => {
     const selectedCategory = volunteer_category(volunteer_organization_id)
 
     if (!isVolunteer(i.organization_id)) {
-      switch (i.tipo_de_acolhimento) {
-       case selectedCategory:
-        return true
-       case 'psicológico_e_jurídico':
-         return true
-       default:
-         return false
-      }
-    } 
+      return i.tipo_de_acolhimento === selectedCategory
+    }
 
     return false
+  }
     // eslint-disable-next-line
-  }), [volunteer_organization_id])
+  ), [volunteer_organization_id])
 
   const filterByStatus = useCallback((data) => data.filter((i) => {
     if (i.status_acolhimento === 'solicitação_recebida') {
