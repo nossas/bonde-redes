@@ -12,48 +12,49 @@ const main = async (req, res, next) => {
       lawyer: 'Advogada'
     })[keys[key]]
   }
-
+  
   const tickets = await getAllTickets()
   const users = await getAllUsers()
+  
+  // doesnt have deleted status and is welcoming ticket
+  const isValidTicket = (ticket) => ticket.status !== 'deleted' && getSupportType(ticket.subject).length > 0
+  
+  const getSupportType = subject => {
+    const str = subject.toLowerCase()
+    const removeSpecialCaracters = str.replace(/[^\w\s]/ig, '')
+    // retorna se no subject existe algum match dos termos 
+    const match = removeSpecialCaracters.match(/\b(psicolgico|jurdico)\b/g) 
+    return match && match.length > 0 ? match : []
+  }
+  
+  const getUserFromTicket = (ticket) => users.filter(user => user.user_id === ticket.requester_id) 
 
-  const isVolunteer = ({ organization_id }) => [zendeskOrganizations['therapist'], zendeskOrganizations['lawyer']].includes(organization_id)
-  const filterDeletedTickets = ({ user_id }) => tickets.filter(ticket => ticket.requester_id === user_id && ticket.status !== 'deleted')
-  const fuseUserWithTicket = ({ status_inscricao = '-', status_acolhimento = '-', status = '-', ticket_id = '-' }, user) => ({
-    ...user,
-    status_inscricao,
-    status_acolhimento,
-    ticket_status: status,
-    ticket_id
-  })
-
-  const objectValidation = value => typeof value !== 'undefined' ? value : {}
-
-  const usersWithTickets = users.map((user) => {
-    if (isVolunteer(user)) {
-      const ticket = filterDeletedTickets(user).find(
-        i => i.subject === `[${dicio(user.organizationId)}] ${user.name} - ${user.registration_number}`
-      ) || filterDeletedTickets(user)
-        .sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at))[0]
-
-      return fuseUserWithTicket(objectValidation(ticket), user)
-    } else {
-      const ticket = filterDeletedTickets(user)
-        .sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at))[0]
-
-      // if (!ticket) return user
-
-      // user.link_ticket = ticket.ticket_id
-      // user.status_acolhimento = ticket.status_acolhimento
-      //const tipo = ticket.subject.split(' ').slice(0, 1)[0]
-      //user.tipo_de_acolhimento   = ['[psicológico]', '[jurídico]'].includes(tipo)
-      //  ? tipo.slice(1, -1)
-      // : ''
-
-      return fuseUserWithTicket(objectValidation(ticket), user)
+  const getTicketType = (type, subject) => {
+    if (type === 'psicológico_e_jurídico') {
+      const match = getSupportType(subject)
+      if (match.length > 0) {
+        return match[0] === 'jurdico'
+          ? 'jurídico'
+          : 'psicológico'  
+      }
     }
-  })
+    return typeof type !== 'undefined' ? type : '-'
+  }
 
-  res.json(usersWithTickets)
+  const ticketsWithUser = tickets
+    .filter(ticket => isValidTicket(ticket))
+    .map(ticket => {
+      const user = getUserFromTicket(ticket)[0] || {}
+      return {
+        ...ticket,
+        ...user,
+        ticket_status: ticket.status,
+        ticket_created_at: ticket.created_at,
+        tipo_de_acolhimento: getTicketType(user.tipo_de_acolhimento, ticket.subject),
+      }
+    })
+
+  res.json(ticketsWithUser)
 }
 
 export default main
