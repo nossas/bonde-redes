@@ -1,5 +1,5 @@
 import { createStateLink } from '@hookstate/core'
-import { User } from '../../models/table-data'
+import { Ticket } from '../../models/table-data'
 
 const stateViewRef = createStateLink({
   viewport: {
@@ -11,7 +11,7 @@ const stateViewRef = createStateLink({
   },
 })
 
-type PopupInfoRefType = Omit<User, 'latitude' | 'longitude'> & {
+type PopupInfoRefType = Omit<Ticket, 'latitude' | 'longitude'> & {
   latitude: number
   longitude: number
   open: boolean
@@ -27,11 +27,12 @@ const popupInfoRef = createStateLink<PopupInfoRefType>({
   user_id: 0,
   condition: '',
   organization_id: 0,
-  tipo_de_acholhimento: '',
+  tipo_de_acolhimento: '',
   status_acolhimento: '',
   status_inscricao: '',
   ticket_status: '',
-  ticket_id: 0
+  ticket_id: 0,
+  ticket_created_at: ''
 })
 
 export default {
