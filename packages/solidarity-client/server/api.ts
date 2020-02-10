@@ -15,7 +15,7 @@ const main = async (req, res, next) => {
   
   const tickets = await getAllTickets()
   const users = await getAllUsers()
-  
+
   // doesnt have deleted status and is welcoming ticket
   const isValidTicket = (ticket) => ticket.status !== 'deleted' && getSupportType(ticket.subject).length > 0
   
@@ -23,7 +23,7 @@ const main = async (req, res, next) => {
     const str = subject.toLowerCase()
     const removeSpecialCaracters = str.replace(/[^\w\s]/ig, '')
     // retorna se no subject existe algum match dos termos 
-    const match = removeSpecialCaracters.match(/\b(psicolgico|jurdico)\b/g) 
+    const match = removeSpecialCaracters.match(/\b(psicolgico|jurdico|psicloga|advogada)\b/g) 
     return match && match.length > 0 ? match : []
   }
   
