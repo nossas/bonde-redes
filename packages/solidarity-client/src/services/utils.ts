@@ -1,9 +1,6 @@
 import dicioAgent from '../pages/Match/Table/dicioAgent'
 
-export const getUserData = ({ user, data, filterBy }) => {
-  const filter = data.filter((i) => user === i[filterBy])
-  return filter[0]
-}
+export const getUserData = ({ user, data, filterBy }) => data.filter((i) => user === i[filterBy])[0]
 
 export const encodeText = input => encodeURIComponent(input)
 
@@ -22,3 +19,8 @@ export const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORG
 export const isVolunteer = (organization_id: number) => [zendeskOrganizations['therapist'], zendeskOrganizations['lawyer']].includes(organization_id)
 
 export const getAgentName = (agent: number) => dicioAgent[agent]
+
+export const volunteer_category = input => {
+  if (input === zendeskOrganizations.lawyer) return 'jurídico'
+  if (input === zendeskOrganizations.therapist) return 'psicológico'
+}
