@@ -1,25 +1,30 @@
 import { TicketZendesk, customFields } from './interfaces/Ticket'
 
 const countTickets = (tickets: Array<TicketZendesk & customFields>) => {
-  let userCount = {
+  const userCount = {
     atendimentos_em_andamento_calculado_: 0,
     atendimentos_concludos_calculado_: 0,
     encaminhamentos_realizados_calculado_: 0,
   }
 
-
-  tickets.map((i) => {
-    if (i.status === 'pending') {
+  tickets
+    .filter((i) => i.status === 'pending')
+    .map((i) => {
       switch (i.status_acolhimento) {
         case 'atendimento__iniciado':
-          return userCount.atendimentos_em_andamento_calculado_ += 1
+          userCount.atendimentos_em_andamento_calculado_ += 1
+          break
         case 'atendimento__concluído':
-          return userCount.atendimentos_concludos_calculado_ += 1
+          userCount.atendimentos_concludos_calculado_ += 1
+          break
         case 'encaminhamento__realizado':
-          return userCount.encaminhamentos_realizados_calculado_ += 1
+          userCount.encaminhamentos_realizados_calculado_ += 1
+          break
+        default:
+          return false
       }
-    }
-  })
+      return false
+    })
 
   return userCount
 }
