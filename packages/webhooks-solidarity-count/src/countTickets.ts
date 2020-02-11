@@ -7,15 +7,24 @@ const countTickets = (tickets: Array<TicketZendesk & customFields>) => {
     encaminhamentos_realizados_calculado_: 0,
   }
 
-  tickets.forEach((i) => {
-    if (i.status_acolhimento === 'atendimento__iniciado') {
-      userCount.atendimentos_em_andamento_calculado_ += 1
-    } else if (i.status_acolhimento === 'atendimento__concluído') {
-      userCount.atendimentos_concludos_calculado_ += 1
-    } else if (i.status_acolhimento === 'encaminhamento__realizado' || i.status_acolhimento === 'encaminhamento__realizado_para_serviço_público') {
-      userCount.encaminhamentos_realizados_calculado_ += 1
-    }
-  })
+  tickets
+    .filter((i) => i.status === 'pending')
+    .map((i) => {
+      switch (i.status_acolhimento) {
+        case 'atendimento__iniciado':
+          userCount.atendimentos_em_andamento_calculado_ += 1
+          break
+        case 'atendimento__concluído':
+          userCount.atendimentos_concludos_calculado_ += 1
+          break
+        case 'encaminhamento__realizado':
+          userCount.encaminhamentos_realizados_calculado_ += 1
+          break
+        default:
+          return false
+      }
+      return false
+    })
 
   return userCount
 }
