@@ -1,6 +1,12 @@
 import { action } from 'easy-peasy'
 
-export interface User {
+export interface Ticket {
+  tipo_de_acolhimento: string
+  status_inscricao: string
+  status_acolhimento: string
+  ticket_status: string
+  ticket_id: number
+  ticket_created_at: string
   latitude: string
   longitude: string
   name: string
@@ -9,14 +15,9 @@ export interface User {
   user_id: number
   condition: string
   organization_id: number
-  tipo_de_acholhimento: string
-  status_acolhimento: string
-  status_inscricao: string
-  ticket_status: string
-  ticket_id: number
 }
 
-const data: User[] = ([])
+const data: Ticket[] = ([])
 
 const tableModel = {
   data,

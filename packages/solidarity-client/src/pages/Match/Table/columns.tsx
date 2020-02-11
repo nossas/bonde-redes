@@ -36,17 +36,17 @@ const columns = [
     Header: 'Tipo de acolhimento',
     Cell: ({ value }: valueArrayString) => (value ? (
       <span>{value}</span>
-    ) : null),
+    ) : '-'),
     width: 200
   }, {
-    accessor: 'data_de_inscricao_no_bonde',
-    Header: 'Data de inscrição no BONDE',
+    accessor: 'ticket_created_at',
+    Header: 'Data de criação do ticket',
     Cell: ({ value }: valueString) => {
       if (!value) {
         return '-'
       }
       const data = new Date(value)
-      return `${data.getDay()}/${data.getMonth() + 1}/${data.getFullYear()} às ${data.getHours().toFixed(2)}:${data.getMinutes().toFixed(2)}`
+      return data.toLocaleDateString('pt-BR')
     },
   }, {
     accessor: 'ticket_id',

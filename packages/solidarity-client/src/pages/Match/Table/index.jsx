@@ -10,7 +10,7 @@ import {
   whatsappText,
   parseNumber,
   isVolunteer,
-  zendeskOrganizations
+  volunteer_category
 } from '../../../services/utils'
 import { FullWidth, Spacing } from './style'
 import columns from './columns'
@@ -59,6 +59,9 @@ const Table = () => {
     registration_number: volunteer_registry
   } = volunteer
 
+  const volunteerFirstName = volunteer_name.split(' ')[0]
+  const selectedCategory = volunteer_category(volunteer_organization_id)
+
   const distance = 50
   const lat = Number(latitude)
   const lng = Number(longitude)
@@ -90,38 +93,18 @@ const Table = () => {
     return i.distance && Number(i.distance) < distance
   }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
-  const volunteer_category = input => {
-    if (input === zendeskOrganizations.lawyer) return 'jurídico'
-    if (input === zendeskOrganizations.therapist) return 'psicológico'
-  }
-
-  const filterByCategoryAndUserType = useCallback((data) => data.filter((i) => {
-    const selectedCategory = volunteer_category(volunteer_organization_id)
-
-    if (!isVolunteer(i.organization_id)) {
-      switch (i.tipo_de_acolhimento) {
-       case selectedCategory:
-        return true
-       case 'psicológico_e_jurídico':
-         return true
-       default:
-         return false
-      }
-    } 
-
-    return false
+  const filterByCategoryAndUserType = useCallback((data) => data.filter((i) => !isVolunteer(i.organization_id) && i.tipo_de_acolhimento === selectedCategory
     // eslint-disable-next-line
-  }), [volunteer_organization_id])
+  ), [volunteer_organization_id])
 
   const filterByStatus = useCallback((data) => data.filter((i) => {
     if (i.status_acolhimento === 'solicitação_recebida') {
       switch (i.ticket_status) {
-       case 'open':
-        return true
-       case 'new':
-         return true
-       default:
-         return false
+        case 'open':
+        case 'new': 
+          return true
+        default:
+          return false
       }
     } 
 
@@ -142,7 +125,7 @@ const Table = () => {
 
     return data
     // eslint-disable-next-line
-  }, [tableData])
+  }, [filterByDistance, tableData])
 
   const submitConfirm = async (requestBody) => {
     const req = await fowardTickets({
@@ -229,7 +212,7 @@ const Table = () => {
             success={{
               onClose: closeAllPopups,
               link: () => createWhatsappLink(
-                volunteer_whatsapp, { volunteer_name, individual_name, agent: zendeskAgentName }
+                volunteer_whatsapp, { volunteer_name: volunteerFirstName, individual_name, agent: zendeskAgentName }
               ),
               isEnabled: success,
               ticketId

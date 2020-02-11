@@ -2,7 +2,7 @@ import React from 'react'
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl'
 import GlobalContext from '../../../context'
 import { useStateLink } from '@hookstate/core'
-import { User } from '../../../models/table-data'
+import { Ticket } from '../../../models/table-data'
 import UserPin from './user-pin'
 import UserInfo from './user-info'
 import { useStoreState } from 'easy-peasy'
@@ -28,7 +28,7 @@ const Map = () => {
     })
   }
 
-  const handleCityPinClick = (user: User) => {
+  const handleCityPinClick = (user: Ticket) => {
     const { latitude, longitude } = user
     popupInfo.set(prevState => ({
       ...prevState,

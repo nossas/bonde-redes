@@ -36,10 +36,12 @@ const main = async (req, res, next) => {
     assignee_name
   } = req.body
 
+  const volunteerFirstName = volunteer_name.split(' ')[0]
+
   const handleError = ({ error, message }) => {
-    console.log(error);
+    console.log(error)
     res.json({ error, message })
-    process.exit(-1);
+    process.exit(-1)
   }
 
   const individualTicket = matchTicketId => ({
@@ -69,7 +71,7 @@ const main = async (req, res, next) => {
         "body": individualComment({
           volunteer_type: getVolunteerType(volunteer_organization_id),
           volunteer: {
-            name: volunteer_name,
+            name: volunteerFirstName,
             registry: volunteer_registry,
             tel: volunteer_phone
           },
@@ -77,7 +79,7 @@ const main = async (req, res, next) => {
           individual_name
         }),
         "author_id": agent,
-        "public": false,
+        "public": true,
       },
     }
   })
@@ -89,10 +91,10 @@ const main = async (req, res, next) => {
       "submitter_id": agent,
       "assignee_id": agent,
       "status": "pending",
-      "subject": `[${getVolunteerType(volunteer_organization_id).type}] ${volunteer_name}`,
+      "subject": `[${getVolunteerType(volunteer_organization_id).type}] ${volunteerFirstName}`,
       "comment": {
         "body": volunteerComment({
-          volunteer_name,
+          volunteer_name: volunteerFirstName,
           individual_name,
           assignee_name
         }),
@@ -124,12 +126,12 @@ const main = async (req, res, next) => {
     "ticket": {
       "comment": {
         "body": volunteerComment({
-          volunteer_name,
+          volunteer_name: volunteerFirstName,
           individual_name,
           assignee_name
         }),
         "author_id": agent,
-        "public": false,
+        "public": true,
         "uploads": tokens
       }
     }

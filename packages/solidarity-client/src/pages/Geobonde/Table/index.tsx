@@ -5,7 +5,7 @@ import { useStoreState } from 'easy-peasy'
 import * as turf from '@turf/turf'
 
 import 'react-table/react-table.css'
-import { User } from '../../../models/table-data'
+import { Ticket } from '../../../models/table-data'
 import { FullWidth } from './style'
 import columns from './columns'
 import { zendeskOrganizations, isVolunteer } from '../../../services/utils'
@@ -23,7 +23,7 @@ const Table: React.FC = () => {
     therapist,
   } = searchForm
 
-  const filterByDistance = useCallback((data: User[]) => data.map((i) => {
+  const filterByDistance = useCallback((data: Ticket[]) => data.map((i) => {
     const pointA = [Number(i.latitude), Number(i.longitude)]
 
     return {
@@ -43,7 +43,7 @@ const Table: React.FC = () => {
     return i.distance && Number(i.distance) < distance
   }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
-  const filterByCategory = useCallback((data: User[]) => data.filter((i) => {
+  const filterByCategory = useCallback((data: Ticket[]) => data.filter((i) => {
 
     if (i.organization_id === zendeskOrganizations.therapist) {
       if (!therapist) {
@@ -63,7 +63,7 @@ const Table: React.FC = () => {
     // eslint-disable-next-line
   }), [individual, lawyer, therapist])
 
-  const filterByUserCondition = useCallback((data: User[]) => data.filter((i) => {
+  const filterByUserCondition = useCallback((data: Ticket[]) => data.filter((i) => {
     if (isVolunteer(i.organization_id)) {
       switch (i.condition) {
        case 'disponivel':
