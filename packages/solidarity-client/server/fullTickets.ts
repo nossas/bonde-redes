@@ -1,4 +1,3 @@
-import parse from './parse'
 import getAllUsers from './hasura/getAllUsers'
 import getAllTickets from './hasura/getAllTickets'
 import { zendeskOrganizations } from './parse/index'
