@@ -1,0 +1,52 @@
+import React, { useEffect } from 'react'
+import ReactTable from 'react-table'
+import styled from 'styled-components';
+
+import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
+import { useStoreState, useStoreActions } from 'easy-peasy'
+
+import 'react-table/react-table.css'
+import columns from './columns'
+
+export const FullWidth = styled.div`
+  width: 100%;
+  padding: 40px;
+`
+
+const Table: React.FC = () => {
+  const tableData = useStoreState(state => state.volunteers.volunteers)
+  const getAvailableVolunteers = useStoreActions((actions: any) => actions.volunteers.getAvailableVolunteers)
+  console.log({tableData})
+
+  useEffect(() => {
+    getAvailableVolunteers()
+  }, [getAvailableVolunteers])
+
+  return tableData.length === 0 ? (
+    <FullWidth>
+      <Flexbox>
+        <Title.H4 margin={{ bottom: 30 }}>
+          Não existem voluntárias disponíveis.
+        </Title.H4>
+      </Flexbox>
+    </FullWidth>
+  ) : (
+    <FullWidth>
+      <Flexbox vertical>
+        <Title.H2 margin={{ bottom: 20 }}>Match realizado!</Title.H2>
+        <Title.H4 margin={{ bottom: 30 }}>
+          {`${tableData.length} voluntárias disponíveis encontradas.`}
+        </Title.H4>
+        <br />
+        <ReactTable
+          data={tableData}
+          columns={columns}
+          defaultPageSize={100}
+          className="-striped -highlight"
+        />
+      </Flexbox>
+    </FullWidth>
+  )
+}
+
+export default Table
