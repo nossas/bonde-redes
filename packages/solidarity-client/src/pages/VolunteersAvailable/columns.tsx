@@ -2,17 +2,17 @@ import React from 'react'
 
 const columns = [
   {
+    accessor: 'name',
+    Header: 'Nome',
+  }, {
     accessor: 'email',
     Header: 'Email',
-    width: 200,
   }, {
     accessor: 'availability',
     Header: 'Vagas Disponíveis',
-    width: 150
   }, {
     accessor: 'disponibilidade_de_atendimentos',
     Header: 'Disponibilidade Total',
-    width: 300,
   }, {
     accessor: 'atendimentos_em_andamento_calculado_',
     Header: 'Atendimentos em Andamento',
@@ -24,7 +24,7 @@ const columns = [
     Header: 'Link',
     Cell: ({ value }) => (value ? (
       <a
-        href={`https://mapadoacolhimento.zendesk.com/agent/users/${value.user_id}/requested_tickets`}
+        href={`https://mapadoacolhimento.zendesk.com/agent/users/${value}/requested_tickets`}
         target="_blank"
         rel="noopener noreferrer"
       >

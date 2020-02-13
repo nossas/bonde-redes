@@ -41,7 +41,13 @@ const Table: React.FC = () => {
         <ReactTable
           data={tableData}
           columns={columns}
-          defaultPageSize={100}
+          defaultPageSize={15}
+          defaultSorted={[
+            {
+              id: "availability",
+              desc: true
+            }
+          ]}  
           className="-striped -highlight"
         />
       </Flexbox>
