@@ -1,4 +1,6 @@
 import React from 'react'
+import { Flexbox2 as Flexbox } from 'bonde-styleguide'
+import { getVolunteerType } from '../../services/utils'
 
 const columns = [
   {
@@ -7,7 +9,15 @@ const columns = [
   }, {
     accessor: 'email',
     Header: 'Email',
-  }, {
+  },{
+    accessor: 'organization_id',
+    Header: 'Área de Atuação',
+    Cell: ({ value }) => (value ? (
+      <Flexbox middle>
+        {getVolunteerType(value)}
+      </Flexbox>
+    ) : null),
+  },{
     accessor: 'availability',
     Header: 'Vagas Disponíveis',
   }, {

@@ -10,7 +10,8 @@ const query = `query {
     disponibilidade_de_atendimentos,
     atendimentos_em_andamento_calculado_,
     email,
-    name
+    name,
+    organization_id
   }
 }`
 

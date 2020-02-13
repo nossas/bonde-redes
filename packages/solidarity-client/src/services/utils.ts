@@ -24,3 +24,12 @@ export const volunteer_category = input => {
   if (input === zendeskOrganizations.lawyer) return 'jurídico'
   if (input === zendeskOrganizations.therapist) return 'psicológico'
 }
+
+const LAWYER = zendeskOrganizations.lawyer
+const THERAPIST = zendeskOrganizations.therapist
+
+export const getVolunteerType = id => {
+  if (id === LAWYER) return 'Advogada'
+  if (id === THERAPIST) return 'Psicóloga'
+  throw new Error("Volunteer organization_id not supported in search for type")
+}
