@@ -16,7 +16,6 @@ export const FullWidth = styled.div`
 const Table: React.FC = () => {
   const tableData = useStoreState(state => state.volunteers.volunteers)
   const getAvailableVolunteers = useStoreActions((actions: any) => actions.volunteers.getAvailableVolunteers)
-  console.log({tableData})
 
   useEffect(() => {
     getAvailableVolunteers()
@@ -33,7 +32,7 @@ const Table: React.FC = () => {
   ) : (
     <FullWidth>
       <Flexbox vertical>
-        <Title.H2 margin={{ bottom: 20 }}>Match realizado!</Title.H2>
+        <Title.H2 margin={{ bottom: 20 }}>Voluntárias Encontradas!</Title.H2>
         <Title.H4 margin={{ bottom: 30 }}>
           {`${tableData.length} voluntárias disponíveis encontradas.`}
         </Title.H4>
