@@ -1,18 +1,29 @@
-import React, { useMemo, useCallback } from 'react'
+import React, { useMemo, useCallback, useEffect } from 'react'
 import ReactTable from 'react-table'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
-import { useStoreState } from 'easy-peasy'
+import { useStoreState, useStoreActions } from 'easy-peasy'
 import * as turf from '@turf/turf'
 
-import 'react-table/react-table.css'
+import request from '../../../services/request'
 import { Ticket } from '../../../models/table-data'
-import { FullWidth } from './style'
 import columns from './columns'
 import { zendeskOrganizations, isVolunteer } from '../../../services/utils'
+
+import { FullWidth } from './style'
+
+import 'react-table/react-table.css'
 
 const Table: React.FC = () => {
   const tableData = useStoreState(state => state.table.data)
   const searchForm = useStoreState(state => state.geobonde.form)
+  const setTableData = useStoreActions((actions: any) => actions.table.setTable)
+
+  useEffect(() => {
+    (async () => {
+      const response = await request.get('tickets')
+      setTableData(response.data)
+    })()
+  }, [setTableData])
 
   const {
     distance,
