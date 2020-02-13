@@ -8,8 +8,10 @@ import React, {
 import 'react-table/react-table.css'
 import ReactTable from 'react-table'
 import * as turf from '@turf/turf'
-import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
+import { Link } from 'react-router-dom'
+import { Flexbox2 as Flexbox, Title, Button } from 'bonde-styleguide'
 import { useStoreState, useStoreActions } from 'easy-peasy'
+import styled from 'styled-components'
 
 import {
   encodeText,
@@ -71,6 +73,10 @@ const Table = () => {
       setTableData(response.data)
     })()
   }, [setTableData])
+
+  const StyleFlexbox = styled(Flexbox)`
+    align-items: center;
+  `
 
   const volunteerFirstName = volunteer_name.split(' ')[0]
   const selectedCategory = volunteer_category(volunteer_organization_id)
@@ -178,14 +184,23 @@ const Table = () => {
     <Fragment>
       <FullWidth>
         <Flexbox vertical>
-          <Spacing margin="10">
-            <Title.H3>Match realizado!</Title.H3>
-          </Spacing>
-          <Spacing margin="25">
-            <Title.H5 color="#444444">
-              {`${filteredTableData.length} solicitações de MSRs próximas de ${volunteer_name}`}
-            </Title.H5>
-          </Spacing>
+          <StyleFlexbox spacing="between">
+            <div>
+              <Spacing margin="10">
+                <Title.H3>Match realizado!</Title.H3>
+              </Spacing>
+              <Spacing margin="25">
+                <Title.H5 color="#444444">
+                  {`${filteredTableData.length} solicitações de MSRs próximas de ${volunteer_name}`}
+                </Title.H5>
+              </Spacing>
+            </div>
+            <Link to="/voluntarias">  
+              <Button>
+                Ir para voluntárias
+              </Button>
+            </Link>
+          </StyleFlexbox>
           <ReactTable
             data={filteredTableData}
             columns={columns}

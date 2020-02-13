@@ -37,7 +37,7 @@ const MatchForm = () => {
   const tableData = useStoreState(state => state.volunteers.volunteers)
   const getAvailableVolunteers = useStoreActions((actions: any) => actions.volunteers.getAvailableVolunteers)
   const setForm = useStoreActions((actions: any) => actions.match.setForm)
-
+  const volunteerData = useStoreState(state => state.table.data)
   const { search } = useLocation()
 
   const {
@@ -114,7 +114,7 @@ const MatchForm = () => {
       </StyledFlexbox>
       <Flexbox middle>
         <Button
-          disabled={tableData.length < 1}
+          disabled={volunteerData.length < 1}
           minWidth="150px"
           type="submit"
         >
