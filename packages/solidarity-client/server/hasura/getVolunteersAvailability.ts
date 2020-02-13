@@ -1,9 +1,12 @@
 import axios from 'axios'
 
-const query = `query {
+const query = `query ($individual_id: bigint!){
   solidarity_users(
     where: {
-      condition: {_eq: "disponivel"}
+      condition: {_eq: "disponivel"},
+      organization_id: {_neq: $individual_id },
+      longitude: {_is_null: false},
+      latitude: {_is_null: false},
     }
   ) {
     user_id,
@@ -11,14 +14,19 @@ const query = `query {
     atendimentos_em_andamento_calculado_,
     email,
     name,
-    organization_id
+    organization_id,
+    latitude,
+    longitude
   }
 }`
 
-const getVolunteersAvailability = async () => {
+const getVolunteersAvailability = async (individual_id) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const response = await axios.post(HASURA_API_URL || '', {
     query,
+    variables: {
+      individual_id
+    }
   }, {
     headers: {
       'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const query = `query getPendingTickets($last_month: timestamp!){
+const query = `query ($last_month: timestamp!){
   solidarity_matches(
     order_by: {created_at: desc}
     where: {

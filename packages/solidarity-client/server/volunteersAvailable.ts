@@ -3,7 +3,8 @@ import getPendingTickets from './hasura/getPendingTickets'
 import { zendeskOrganizations } from './parse/index'
 
 const main = async (req, res, next) => {
-  const volunteersAvailability = await getVolunteersAvailability()
+  const INDIVIDUAL = zendeskOrganizations.individual
+  const volunteersAvailability = await getVolunteersAvailability(INDIVIDUAL.toString())
 
   const today = new Date()
   const last_month = today.getDate() - 30
