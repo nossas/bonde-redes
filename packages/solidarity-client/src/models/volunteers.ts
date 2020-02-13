@@ -5,7 +5,6 @@ const volunteersModel = {
   getAvailableVolunteers: thunk(async (actions: any, payload) => {
     try {
       const res = await request.get('volunteers')
-      console.log({res})
       actions.setVolunteers(res.data)
     }
     catch (err) {

@@ -1,5 +1,6 @@
 import React from 'react'
-import { Flexbox2 as Flexbox } from 'bonde-styleguide'
+import { Link } from 'react-router-dom'
+import { Flexbox2 as Flexbox, Button } from 'bonde-styleguide'
 import { getVolunteerType } from '../../services/utils'
 
 const columns = [
@@ -40,6 +41,22 @@ const columns = [
       >
         {value}
       </a>
+    ) : null),
+  }, {
+    accessor: 'email',
+    Header: 'Ação',
+    width: 200,
+    Cell: ({ value }) => (value ? (
+      <Flexbox middle>
+        <Link
+          to={{
+            pathname: "/match",
+            search: `email=${value}`,
+          }}
+        >
+          <Button>Pesquisar</Button>
+        </Link>
+      </Flexbox>
     ) : null),
   }
 ]

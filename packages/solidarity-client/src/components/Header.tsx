@@ -1,16 +1,14 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useLocation } from 'react-router-dom'
-import { useStoreActions } from 'easy-peasy';
 import {
   Header as BondeHeader,
   Title,
   Button,
   Flexbox
 } from 'bonde-styleguide'
-import request from '../services/request'
 
 import Form from './Form'
 import { If } from './If'
@@ -27,27 +25,10 @@ const FlexDiv = styled(Flexbox)`
   width: 300px;
 `
 
-// const GrownDiv = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   position: relative;
-//   flex-grow: 1;
-// `
-
-// const visualizationState = useStateLink(contentStateRef)
 const isMatch = (path: string) => path === '/match'
 
 const Header: React.FC = ({ children }) => {
   const { pathname: path } = useLocation()
-  const setTableData = useStoreActions((actions: any) => actions.table.setTable)
-  
-  useEffect(() => {
-    (async () => {
-      const response = await request.get()
-      setTableData(response.data)
-    })()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <Flexbox vertical>

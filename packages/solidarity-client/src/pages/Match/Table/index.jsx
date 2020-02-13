@@ -1,4 +1,10 @@
-import React, { useMemo, useCallback, Fragment, useState } from 'react'
+import React, {
+  useMemo,
+  useCallback,
+  Fragment,
+  useState,
+  useEffect
+} from 'react'
 import 'react-table/react-table.css'
 import ReactTable from 'react-table'
 import * as turf from '@turf/turf'
@@ -9,9 +15,9 @@ import {
   encodeText,
   whatsappText,
   parseNumber,
-  isVolunteer,
   volunteer_category
 } from '../../../services/utils'
+import request from '../../../services/request'
 import { FullWidth, Spacing } from './style'
 import columns from './columns'
 
@@ -19,7 +25,6 @@ import { If } from '../../../components/If'
 import Popup from '../../../components/Popups/Popup'
 
 const Table = () => {
-
   const volunteer = useStoreState(state => state.match.volunteer)
   const zendeskAgent = useStoreState(state => state.match.agent)
   const zendeskAgentName = useStoreState(state => state.match.assignee_name)
@@ -29,6 +34,7 @@ const Table = () => {
   const individual = useStoreState(state => state.individual.data)
   const error = useStoreState(state => state.error.error)
 
+  const setTableData = useStoreActions((actions) => actions.table.setTable)
   const setPopup = useStoreActions(actions => actions.popups.setPopup)
   const setError = useStoreActions(actions => actions.error.setError)
   const fowardTickets = useStoreActions(actions => actions.foward.fowardTickets)
@@ -58,6 +64,13 @@ const Table = () => {
     user_id: volunteer_user_id,
     registration_number: volunteer_registry
   } = volunteer
+
+  useEffect(() => {
+    (async () => {
+      const response = await request.get('individuals')
+      setTableData(response.data)
+    })()
+  }, [setTableData])
 
   const volunteerFirstName = volunteer_name.split(' ')[0]
   const selectedCategory = volunteer_category(volunteer_organization_id)
@@ -93,33 +106,14 @@ const Table = () => {
     return i.distance && Number(i.distance) < distance
   }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
-  const filterByCategoryAndUserType = useCallback((data) => data.filter((i) => !isVolunteer(i.organization_id) && i.tipo_de_acolhimento === selectedCategory
+  const filterByCategory = useCallback((data) => data.filter((i) => i.tipo_de_acolhimento === selectedCategory
     // eslint-disable-next-line
   ), [volunteer_organization_id])
 
-  const filterByStatus = useCallback((data) => data.filter((i) => {
-    if (i.status_acolhimento === 'solicitação_recebida') {
-      switch (i.ticket_status) {
-        case 'open':
-        case 'new': 
-          return true
-        default:
-          return false
-      }
-    } 
-
-    return false
-    // eslint-disable-next-line
-  }), [])
-
-  // const filterByEmail = useCallback((data) => data.filter((i) => i.email === 'teste2@email.com'), [])
-
   const filteredTableData = useMemo(() => {
     const data = filterByDistance(
-      filterByCategoryAndUserType(
-        filterByStatus(
-          tableData,
-        )
+      filterByCategory(
+        tableData,
       )
     )
 

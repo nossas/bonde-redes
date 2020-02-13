@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 // import PropTypes from 'prop-types'
+import { useLocation } from 'react-router-dom'
 import {
   Button,
   Flexbox2 as Flexbox,
@@ -33,16 +34,27 @@ const StyledFlexbox = styled(Flexbox)`
 `
 
 const MatchForm = () => {
-  const tableData = useStoreState(state => state.table.data)
+  const tableData = useStoreState(state => state.volunteers.volunteers)
+  const getAvailableVolunteers = useStoreActions((actions: any) => actions.volunteers.getAvailableVolunteers)
   const setForm = useStoreActions((actions: any) => actions.match.setForm)
-  
+
+  const { search } = useLocation()
+
   const {
     handleSubmit,
     register,
     errors,
     setError,
     control,
+    setValue
   } = useForm();
+  
+  useEffect(() => {
+    getAvailableVolunteers()
+    const email = search.split('=')[1]
+    if (email) setValue('email', email)
+  }, [setValue, search])
+  
 
   const send = (data, e) => {
     e.preventDefault()
