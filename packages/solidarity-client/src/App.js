@@ -36,7 +36,7 @@ const App = () => (
         <Header />
         <AppBody className="app-body">
           <Route exact path="/">
-            <Redirect to="/geobonde" />
+            <Redirect to="/voluntarias" />
           </Route>
           <Route path="/geobonde" exact>
             <Geobonde/>
