@@ -1,5 +1,7 @@
 import getAllUsers from './hasura/getAllUsers'
+import getIndividualUsers from './hasura/getIndividualUsers'
 import getAllTickets from './hasura/getAllTickets'
+import getIndividualTickets from './hasura/getIndividualTickets'
 import { zendeskOrganizations } from './parse/index'
 
 const main = async (req, res, next) => {
@@ -11,12 +13,22 @@ const main = async (req, res, next) => {
       lawyer: 'Advogada'
     })[keys[key]]
   }
-  
-  const tickets = await getAllTickets()
-  const users = await getAllUsers()
 
-  // doesnt have deleted status and is welcoming ticket
-  const isValidTicket = (ticket) => ticket.status !== 'deleted' && getSupportType(ticket.subject).length > 0
+  const INDIVIDUAL = zendeskOrganizations.individual
+  const api = req.route.path === '/api/all'
+    ? { tickets: getAllTickets, users: getAllUsers }
+    : { tickets: getIndividualTickets, users: () => getIndividualUsers(INDIVIDUAL.toString()) }
+
+  const tickets = await api.tickets()
+  const users = await api.users()
+
+  const getUserFromTicket = (ticket) => users.filter(user => user.user_id === ticket.requester_id) 
+
+  // is welcoming ticket and ticket has user (according to user hasura query)
+  const isValidTicket = (ticket) => {
+    return getSupportType(ticket.subject).length > 0 &&
+    getUserFromTicket(ticket).length > 0
+  }
   
   const getSupportType = subject => {
     const str = subject.toLowerCase()
@@ -25,8 +37,6 @@ const main = async (req, res, next) => {
     const match = removeSpecialCaracters.match(/\b(psicolgico|jurdico|psicloga|advogada)\b/g) 
     return match && match.length > 0 ? match : []
   }
-  
-  const getUserFromTicket = (ticket) => users.filter(user => user.user_id === ticket.requester_id) 
 
   const getTicketType = (type, subject) => {
     if (type === 'psicológico_e_jurídico') {
@@ -43,7 +53,7 @@ const main = async (req, res, next) => {
   const ticketsWithUser = tickets
     .filter(ticket => isValidTicket(ticket))
     .map(ticket => {
-      const user = getUserFromTicket(ticket)[0] || {}
+      const user = getUserFromTicket(ticket)[0]
       return {
         ...ticket,
         ...user,
