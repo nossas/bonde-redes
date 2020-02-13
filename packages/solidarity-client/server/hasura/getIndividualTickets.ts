@@ -2,29 +2,28 @@ import axios from 'axios'
 
 const query = `query {
   solidarity_tickets(
-    where: {
-      status: {_neq: "deleted"}
-    }
-  ) {
-    requester_id
-    status_inscricao
-    status_acolhimento
-    ticket_id
-    created_at
-    status
-    subject
-  }
+   where: {
+     _or: [
+       {status: {_eq: "open"}},
+       {status: {_eq: "new"}}
+     ],
+     status_acolhimento: {_eq: "solicitação_recebida"},
+     status: {_neq: "deleted"}
+   }
+ ) {
+   status_acolhimento
+   status
+   subject
+   ticket_id
+   requester_id
+   created_at
+ }
 }`
 
-const getAllTickets = async (
-  // organization_id
-  ) => {
+const getIndividualTickets = async () => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const response = await axios.post(HASURA_API_URL || '', {
     query,
-    // variables: {
-    //   organization_id
-    // }
   }, {
     headers: {
       'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
@@ -34,9 +33,9 @@ const getAllTickets = async (
   try {
     return response.data.data.solidarity_tickets
   } catch (e) {
-    console.log(response.data.errors)
+    console.log(response)
     return null
   }
 }
 
-export default getAllTickets
+export default getIndividualTickets
