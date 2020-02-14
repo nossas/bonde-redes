@@ -41,7 +41,7 @@ const App = () => (
           <Route path="/geobonde" exact>
             <Geobonde/>
           </Route>
-          <Route path="/geobonde/map" exact>
+          <Route path="/geobonde/mapa" exact>
             <Map />
           </Route>
           <Route exact path="/match">
