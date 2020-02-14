@@ -7,6 +7,7 @@ import individualModel from './individual'
 import errorModel from './error'
 import fowardModel from './foward'
 import volunteersModel from './volunteers'
+import mapModel from './map'
 
 export default {
   matchFormModel,
@@ -16,5 +17,6 @@ export default {
   individualModel,
   errorModel,
   fowardModel,
-  volunteersModel
+  volunteersModel,
+  mapModel
 }
