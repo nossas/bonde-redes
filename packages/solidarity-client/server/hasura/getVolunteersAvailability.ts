@@ -4,9 +4,12 @@ const query = `query ($individual_id: bigint!){
   solidarity_users(
     where: {
       condition: {_eq: "disponivel"},
-      organization_id: {_neq: $individual_id },
       longitude: {_is_null: false},
       latitude: {_is_null: false},
+      _and: [
+        {organization_id: {_neq: $individual_id }},
+        {organization_id: {_is_null: false }}
+      ]
     }
   ) {
     user_id,

@@ -54,5 +54,5 @@ export const getVolunteerType = id => {
     type: 'Psicóloga',
     registry_type: 'CRP'
   }
-  throw "Volunteer organization_id not supported in search for type"
+  throw new Error("Volunteer organization_id not supported in search for type")
 }

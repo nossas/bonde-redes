@@ -1,7 +1,13 @@
 import axios from 'axios'
 
 const query = `query {
-  solidarity_users(where: {longitude: {_is_null: false}, latitude: {_is_null: false}}) {
+  solidarity_users(
+    where: {
+      longitude: {_is_null: false}, 
+      latitude: {_is_null: false},
+      organization_id: {_is_null: false}
+    }
+  ) {
     address
     organization_id
     user_id
