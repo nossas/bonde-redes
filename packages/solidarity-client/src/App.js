@@ -14,6 +14,8 @@ import Geobonde from './pages/Geobonde/Table'
 import Map from './pages/Geobonde/Map'
 import Match from './pages/Match/Table'
 
+import { SessionProvider } from './services/session'
+
 const AppWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -31,24 +33,26 @@ const AppBody = styled.div`
 const App = () => (
   <StoreProvider store={store}>
     <Router history={history}>
-      <AppWrapper className="app">
-        <Header />
-        <AppBody className="app-body">
-          <Route exact path="/">
-            <Redirect to="/geobonde" />
-          </Route>
-          <Route path="/geobonde" exact>
-            <Geobonde/>
-          </Route>
-          <Route path="/geobonde/map" exact>
-            <Map />
-          </Route>
-          <Route exact path="/match">
-            <Match />
-          </Route>
-        </AppBody>
-        <Footer />
-      </AppWrapper>
+      <SessionProvider>
+        <AppWrapper className="app">
+          <Header />
+          <AppBody className="app-body">
+            <Route exact path="/">
+              <Redirect to="/geobonde" />
+            </Route>
+            <Route path="/geobonde" exact>
+              <Geobonde/>
+            </Route>
+            <Route path="/geobonde/map" exact>
+              <Map />
+            </Route>
+            <Route exact path="/match">
+              <Match />
+            </Route>
+          </AppBody>
+          <Footer />
+        </AppWrapper>
+      </SessionProvider>
     </Router>
   </StoreProvider>
 )

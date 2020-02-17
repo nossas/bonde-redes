@@ -33,6 +33,7 @@
     "bonde-styleguide": "0.15.3",
     "concurrently": "^5.0.1",
     "cors": "^2.8.5",
+    "cross-storage": "^1.0.0",
     "dotenv-safe": "^8.2.0",
     "easy-peasy": "^3.2.6",
     "express": "^4.17.1",
@@ -52,6 +53,7 @@
     "react-spring": "^8.0.27",
     "react-table": "6.10.3",
     "styled-components": "^4.4.1",
+    "ts-watch": "^1.0.8",
     "typescript": "~3.7.3",
     "validator": "^12.1.0"
   },
