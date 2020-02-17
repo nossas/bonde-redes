@@ -22,7 +22,7 @@ const StyledBondeHeader = styled(BondeHeader)`
 `
 
 const FlexDiv = styled(Flexbox)`
-  width: 300px;
+  width: 20%;
 `
 
 const isMatch = (path: string) => path === '/match'
@@ -48,7 +48,7 @@ const Header: React.FC = ({ children }) => {
           <If condition={path === '/geobonde'}>
             <Form />
           </If>
-          <If condition={path === '/voluntarias'}>
+          <If condition={path === '/voluntarias' || path === '/geobonde/mapa'}>
             <FlexDiv horizontal>
               <Link to='/match'>
                 <Button>Encaminhamento</Button>
@@ -56,6 +56,11 @@ const Header: React.FC = ({ children }) => {
               <Link to='/geobonde'>
                 <Button>Geobonde</Button>
               </Link>
+              <Link to="/geobonde/mapa">  
+                <Button>
+                  Mapa
+                </Button>
+            </Link>
             </FlexDiv>
           </If>
         </Flexbox>

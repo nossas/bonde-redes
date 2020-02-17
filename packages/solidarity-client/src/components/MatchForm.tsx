@@ -18,7 +18,7 @@ import Select from './Select'
 import dicioAgent from '../pages/Match/Table/dicioAgent'
 
 const FormWrapper = styled.form`
-  width: 70%;
+  width: 50%;
   display: flex;
   align-items: center;
   justify-content: space-around;

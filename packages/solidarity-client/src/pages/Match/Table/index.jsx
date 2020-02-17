@@ -197,7 +197,12 @@ const Table = () => {
             </div>
             <Link to="/voluntarias">  
               <Button>
-                Ir para voluntárias
+                Voluntárias
+              </Button>
+            </Link>
+            <Link to="/geobonde/mapa">  
+              <Button>
+                Mapa
               </Button>
             </Link>
           </StyleFlexbox>
