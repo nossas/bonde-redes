@@ -12,6 +12,10 @@ interface SessionProviderState {
   token?: string;
 }
 
+
+const SessionContext = React.createContext({ signing: true, authenticated: false });
+
+
 class SessionProvider extends React.Component {
 
   storage: SessionStorage;
@@ -52,8 +56,19 @@ class SessionProvider extends React.Component {
 
   render () {
     return !this.state.signing
-      ? this.props.children
+      ? (<SessionContext.Provider value={this.state}>{this.props.children}</SessionContext.Provider>)
       : <FullPageLoading message='Carregando dados de usuário' />
+  }
+}
+
+export const SessionHOC = (WrappedComponent: any) => class extends React.Component {
+
+  static contextType = SessionContext;
+
+  render () {
+    return (
+      <WrappedComponent {...this.props} session={this.context} />
+    )
   }
 }
 
