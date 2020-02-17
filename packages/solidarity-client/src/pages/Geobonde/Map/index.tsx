@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import MapGL, { NavigationControl, Popup } from 'react-map-gl'
+import MapGL, { Popup } from 'react-map-gl'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 
 import { If } from '../../../components/If'
@@ -75,17 +75,14 @@ const Map = () => {
             <Popup
               tipSize={5}
               anchor="top"
-              latitude={popupUser.latitude}
-              longitude={popupUser.longitude}
+              latitude={Number(popupUser.latitude)}
+              longitude={Number(popupUser.longitude)}
               closeOnClick={false}
               onClose={handlePopupClose}
             >
               <UserInfo {...popupUser} />
             </Popup>
           </If>
-          <div style={{ position: 'absolute', bottom: 15, left: 15 }}>
-            <NavigationControl />
-          </div>
         </MapGL>
       )}
     </>
