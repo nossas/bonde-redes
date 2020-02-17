@@ -49,25 +49,24 @@ const Header: React.FC = ({ children }) => {
             <Form />
           </If>
           <If condition={path === '/voluntarias' || path === '/geobonde/mapa'}>
-            <FlexDiv horizontal>
-              <Link to='/match'>
-                <Button>Encaminhamento</Button>
+            <div>
+              <FlexDiv horizontal>
+                <Link to='/match'>
+                  <Button>Encaminhamento</Button>
+                </Link>
+                <Link to='/geobonde'>
+                  <Button>Geobonde</Button>
+                </Link>
+                <Link to="/geobonde/mapa">  
+                  <Button>
+                    Mapa
+                  </Button>
               </Link>
-              <Link to='/geobonde'>
-                <Button>Geobonde</Button>
-              </Link>
-              <Link to="/geobonde/mapa">  
-                <Button>
-                  Mapa
-                </Button>
-            </Link>
-            </FlexDiv>
+              </FlexDiv>
+            </div>
           </If>
         </Flexbox>
       </StyledBondeHeader>
-      {/* <GrownDiv>
-        {children}
-      </GrownDiv> */}
     </Flexbox>
   )
 }
