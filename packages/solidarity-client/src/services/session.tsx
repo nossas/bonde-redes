@@ -1,5 +1,6 @@
 import React from 'react'
 import { CrossStorageClient } from 'cross-storage'
+import { FullPageLoading } from 'bonde-styleguide'
 
 
 class AuthAPI {
@@ -88,11 +89,10 @@ class AuthAPI {
  * Responsible to control session used on cross-storage
  **/
 
-const Loading = () => (<span>{`authenticating`}</span>)
-
 interface SessionState {
   signing: boolean;
   authenticated: boolean;
+  token?: string;
 }
 
 export class SessionProvider extends React.Component {
@@ -116,8 +116,7 @@ export class SessionProvider extends React.Component {
       .then((token: string) => {
         if (!token) throw Error('unauthorized')
 
-        console.log('token', token)
-        this.setState({ signing: false, authenticated: true })
+        this.setState({ signing: false, authenticated: true, token })
         return Promise.resolve()
       })
       .catch((err) => {
@@ -137,7 +136,7 @@ export class SessionProvider extends React.Component {
   render () {
     return !this.state.signing
       ? this.props.children
-      : <Loading />
+      : <FullPageLoading message='Carregando dados de usuário' />
   }
 }
 
