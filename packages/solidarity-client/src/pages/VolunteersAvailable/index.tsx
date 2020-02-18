@@ -46,7 +46,7 @@ const Table: React.FC = () => {
               id: "availability",
               desc: true
             }
-          ]}  
+          ]}
           className="-striped -highlight"
         />
       </Flexbox>

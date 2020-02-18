@@ -1,30 +1,10 @@
 import axios from 'axios'
 
-const query = `query {
-  solidarity_tickets(
-    where: {
-      status: {_neq: "deleted"}
-    }
-  ) {
-    requester_id
-    status_inscricao
-    status_acolhimento
-    ticket_id
-    created_at
-    status
-    subject
-  }
-}`
-
-const getAllTickets = async (
-  // organization_id
-  ) => {
+const getSolidarityTickets = async ({ query, variables = {} }) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
   const response = await axios.post(HASURA_API_URL || '', {
     query,
-    // variables: {
-    //   organization_id
-    // }
+    variables
   }, {
     headers: {
       'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
@@ -39,4 +19,4 @@ const getAllTickets = async (
   }
 }
 
-export default getAllTickets
+export default getSolidarityTickets

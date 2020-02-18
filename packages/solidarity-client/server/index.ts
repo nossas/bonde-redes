@@ -4,9 +4,11 @@ import cors from 'cors'
 import morgan from 'morgan'
 import path from 'path'
 import body_parser from 'body-parser'
-import allTicketsAndUsers from './allTicketsAndUsers'
+import allTicketsAndUsers from './users/allTicketsAndUsers'
 import forward from './forward'
 import volunteersAvailable from './volunteersAvailable'
+import locations from './locations'
+import user from './user'
 
 // Assert required enviroment variables for app
 assert(process.env.ZENDESK_API_USER !== undefined, 'Required enviroment variable ZENDESK_API_USER')
@@ -37,6 +39,9 @@ app.use((err, req, res, next) => {
 app.get('/api/all', asyncMiddleware(allTicketsAndUsers))
 app.get('/api/individuals', asyncMiddleware(allTicketsAndUsers))
 app.get('/api/volunteers', asyncMiddleware(volunteersAvailable))
+app.get('/api/locations', asyncMiddleware(locations))
+app.get('/api/user', asyncMiddleware(user))
+
 app.post('/api/forward', asyncMiddleware(forward))
 
 app.get('/*', (req, res) => {
