@@ -9,7 +9,8 @@ const {
   individualModel,
   errorModel,
   fowardModel,
-  volunteersModel
+  volunteersModel,
+  mapModel
 } = GlobalModel
 
 const storeModel = {
@@ -20,7 +21,8 @@ const storeModel = {
   individual: individualModel,
   error: errorModel,
   foward: fowardModel,
-  volunteers: volunteersModel
+  volunteers: volunteersModel,
+  map: mapModel
 };
 
 const store = createStore(storeModel);
