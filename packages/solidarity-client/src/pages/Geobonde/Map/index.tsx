@@ -19,7 +19,7 @@ interface Viewport {
 const Map = () => {
   const popupUser = useStoreState(state => state.map.popupUser)
   const tableData = useStoreState(state => state.table.data)
-  
+
   const setTableData = useStoreActions((actions: any) => actions.table.setTable)
   const setPopupUser = useStoreActions((actions: any) => actions.map.setPopupUser)
 

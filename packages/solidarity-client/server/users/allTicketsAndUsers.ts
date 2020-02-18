@@ -1,10 +1,10 @@
 
 import { zendeskOrganizations } from '../parse/index'
-import { 
-  getAllTickets, 
-  getAllUsers, 
-  getIndividualTickets, 
-  getIndividualUsers 
+import {
+  getAllTickets,
+  getAllUsers,
+  getIndividualTickets,
+  getIndividualUsers
 } from './hasura'
 import { isValidTicket, getUserFromTicket, getSupportType } from '../utils'
 
@@ -14,7 +14,7 @@ const getTicketType = (type, subject) => {
     if (match.length > 0) {
       return match[0] === 'jurdico'
         ? 'jurídico'
-        : 'psicológico'  
+        : 'psicológico'
     }
   }
   return typeof type !== 'undefined' ? type : '-'

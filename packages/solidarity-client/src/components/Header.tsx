@@ -27,7 +27,7 @@ const FlexDiv = styled(Flexbox2)`
 `;
 
 const WrapButtons = styled(Flexbox2)`
-  width: 100%; 
+  width: 100%;
 `
 
 const isMatch = (path: string) => path === "/match";
