@@ -1,19 +1,19 @@
-import React from 'react'
-import { Route, Redirect } from 'react-router'
-import { Router } from 'react-router-dom'
-import styled from 'styled-components'
-import { StoreProvider } from 'easy-peasy';
-
 import 'mapbox-gl/dist/mapbox-gl.css'
-import { Footer } from 'bonde-styleguide'
-import history from './history'
-import store from './store'
+
+import {Footer} from 'bonde-styleguide'
+import {StoreProvider} from 'easy-peasy';
+import React from 'react'
+import {Redirect, Route} from 'react-router'
+import {Router} from 'react-router-dom'
+import styled from 'styled-components'
 
 import Header from './components/Header'
-import Geobonde from './pages/Geobonde/Table'
+import history from './history'
 import Map from './pages/Geobonde/Map'
+import Geobonde from './pages/Geobonde/Table'
 import Match from './pages/Match/Table'
 import VolunteersAvailable from './pages/VolunteersAvailable'
+import store from './store'
 
 const AppWrapper = styled.div`
   display: flex;
