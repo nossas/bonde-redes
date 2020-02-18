@@ -4,8 +4,11 @@ import cors from 'cors'
 import morgan from 'morgan'
 import path from 'path'
 import body_parser from 'body-parser'
-import api from './api'
+import allTicketsAndUsers from './users/allTicketsAndUsers'
 import forward from './forward'
+import volunteersAvailable from './volunteersAvailable'
+import locations from './locations'
+import user from './user'
 
 // Assert required enviroment variables for app
 assert(process.env.ZENDESK_API_USER !== undefined, 'Required enviroment variable ZENDESK_API_USER')
@@ -33,7 +36,12 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'an error occurred' })
 })
 
-app.get('/api', asyncMiddleware(api))
+app.get('/api/all', asyncMiddleware(allTicketsAndUsers))
+app.get('/api/individuals', asyncMiddleware(allTicketsAndUsers))
+app.get('/api/volunteers', asyncMiddleware(volunteersAvailable))
+app.get('/api/locations', asyncMiddleware(locations))
+app.get('/api/user', asyncMiddleware(user))
+
 app.post('/api/forward', asyncMiddleware(forward))
 
 app.get('/*', (req, res) => {

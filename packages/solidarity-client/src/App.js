@@ -12,7 +12,10 @@ import history from "./history";
 import Map from "./pages/Geobonde/Map";
 import Geobonde from "./pages/Geobonde/Table";
 import Match from "./pages/Match/Table";
+import VolunteersAvailable from "./pages/VolunteersAvailable";
+
 import { SessionProvider } from "./services/session";
+
 import store from "./store";
 
 const AppWrapper = styled.div`
@@ -47,6 +50,9 @@ const App = () => (
             </Route>
             <Route exact path="/match ">
               <Match />
+            </Route>
+            <Route exact path="/voluntarias">
+              <VolunteersAvailable />
             </Route>
           </AppBody>
           <Footer />

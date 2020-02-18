@@ -1,87 +1,92 @@
-import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { useLocation } from 'react-router-dom'
-import { useStoreActions } from 'easy-peasy';
-
+import React from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { useLocation } from "react-router-dom";
 import {
   Header as BondeHeader,
   Title,
-  // Button,
-  Flexbox
-} from 'bonde-styleguide'
-import request from '../services/request'
+  Button,
+  Flexbox,
+  Flexbox2
+} from "bonde-styleguide";
 
-import Form from './Form'
-import { IfElse } from './If'
-import MatchForm from './MatchForm'
+import Form from "./Form";
+import { If } from "./If";
+import MatchForm from "./MatchForm";
 
 const StyledBondeHeader = styled(BondeHeader)`
   width: 100%;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   display: flex;
   padding: 22px 40px;
+`;
+
+const FlexDiv = styled(Flexbox2)`
+  width: 450px;
+`;
+
+const WrapButtons = styled(Flexbox2)`
+  width: 100%;
 `
 
-const FlexDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-
-// const GrownDiv = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   position: relative;
-//   flex-grow: 1;
-// `
-
-// const visualizationState = useStateLink(contentStateRef)
-const isMatch = (path: string) => path === '/match'
+const isMatch = (path: string) => path === "/match";
 
 const Header: React.FC = ({ children }) => {
-  const { pathname: path } = useLocation()
-  const setTableData = useStoreActions((actions: any) => actions.table.setTable)
-  
-  useEffect(() => {
-    (async () => {
-      const response = await request.get()
-      setTableData(response.data)
-    })()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const { pathname: path } = useLocation();
 
   return (
-    <FlexDiv>
+    <Flexbox vertical>
       <StyledBondeHeader>
-        <Flexbox alignItems="middle" fullSize row horizontal>
+        <Flexbox alignItems="middle" row horizontal>
           <Title.H2 color="white">
-            {isMatch(path) ? 'Match' : 'Mapa do acolhimento'}
+            {isMatch(path) ? "Match" : "Mapa do acolhimento"}
           </Title.H2>
           {/* <Button onClick={() => { toggleContentState() }}>
             Alternar para
               {' '}
               {visualizationState.get()}
             </Button> */}
-          <IfElse
-            condition={isMatch(path)}
-            True={<MatchForm />}
-            False={<Form />}
-          />
+          <If condition={path === "/match"}>
+            <MatchForm />
+          </If>
+          <If condition={path === "/geobonde"}>
+            <Form />
+          </If>
+          <If condition={path === "/voluntarias" || path === "/geobonde/mapa"}>
+            <WrapButtons justify="flex-end" horizontal>
+              <FlexDiv spacing="evenly">
+                <Link to="/match">
+                  <Button>Encaminhamento</Button>
+                </Link>
+                <Link to="/geobonde">
+                  <Button>Geobonde</Button>
+                </Link>
+                <If condition={path === "/voluntarias"}>
+                  <Link to="/geobonde/mapa">
+                    <Button>Mapa</Button>
+                  </Link>
+                </If>
+                <If condition={path === "/geobonde/mapa"}>
+                  <Link to="/voluntarias">
+                    <Button>Voluntarias</Button>
+                  </Link>
+                </If>
+              </FlexDiv>
+            </WrapButtons>
+          </If>
         </Flexbox>
       </StyledBondeHeader>
-      {/* <GrownDiv>
-        {children}
-      </GrownDiv> */}
-    </FlexDiv>
-  )
-}
+    </Flexbox>
+  );
+};
 
 Header.defaultProps = {
-  children: null,
-}
+  children: null
+};
 
 Header.propTypes = {
-  children: PropTypes.node,
-}
+  children: PropTypes.node
+};
 
-export default Header
+export default Header;

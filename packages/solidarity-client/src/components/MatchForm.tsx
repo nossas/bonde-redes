@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 // import PropTypes from 'prop-types'
+import { useLocation } from 'react-router-dom'
 import {
   Button,
   Flexbox2 as Flexbox,
@@ -17,7 +18,7 @@ import Select from './Select'
 import dicioAgent from '../pages/Match/Table/dicioAgent'
 
 const FormWrapper = styled.form`
-  width: 70%;
+  width: 50%;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -33,16 +34,28 @@ const StyledFlexbox = styled(Flexbox)`
 `
 
 const MatchForm = () => {
-  const tableData = useStoreState(state => state.table.data)
+  const tableData = useStoreState(state => state.volunteers.volunteers)
+  const getAvailableVolunteers = useStoreActions((actions: any) => actions.volunteers.getAvailableVolunteers)
   const setForm = useStoreActions((actions: any) => actions.match.setForm)
-  
+  const volunteerData = useStoreState(state => state.table.data)
+  const { search } = useLocation()
+
   const {
     handleSubmit,
     register,
     errors,
     setError,
     control,
+    setValue
   } = useForm();
+
+  useEffect(() => {
+    getAvailableVolunteers()
+    const email = search.split('=')[1]
+    if (email) setValue('email', email)
+    // eslint-disable-next-line
+  }, [setValue, search])
+
 
   const send = (data, e) => {
     e.preventDefault()
@@ -56,7 +69,7 @@ const MatchForm = () => {
     const assignee_name = getAgentName(data.agent)
 
     if (typeof user === 'undefined') return setError("email", "notFound", "Não existe uma voluntária com esse e-mail")
-    
+
     setForm({
       volunteer: user,
       agent: data.agent,
@@ -102,7 +115,7 @@ const MatchForm = () => {
       </StyledFlexbox>
       <Flexbox middle>
         <Button
-          disabled={tableData.length < 1}
+          disabled={volunteerData.length < 1}
           minWidth="150px"
           type="submit"
         >
