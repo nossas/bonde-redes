@@ -23,7 +23,7 @@ const main = async (req, res, next) => {
     query: `query {
       solidarity_tickets(
         where: {
-          requester_id: {_is_null: false}, 
+          requester_id: {_is_null: false},
           status: {_is_null: false},
         }
       ) {

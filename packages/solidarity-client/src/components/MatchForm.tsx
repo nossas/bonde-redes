@@ -48,14 +48,14 @@ const MatchForm = () => {
     control,
     setValue
   } = useForm();
-  
+
   useEffect(() => {
     getAvailableVolunteers()
     const email = search.split('=')[1]
     if (email) setValue('email', email)
     // eslint-disable-next-line
   }, [setValue, search])
-  
+
 
   const send = (data, e) => {
     e.preventDefault()
@@ -69,7 +69,7 @@ const MatchForm = () => {
     const assignee_name = getAgentName(data.agent)
 
     if (typeof user === 'undefined') return setError("email", "notFound", "Não existe uma voluntária com esse e-mail")
-    
+
     setForm({
       volunteer: user,
       agent: data.agent,
