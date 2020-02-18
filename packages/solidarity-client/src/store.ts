@@ -8,7 +8,8 @@ const {
   tableModel,
   individualModel,
   errorModel,
-  fowardModel
+  fowardModel,
+  volunteersModel
 } = GlobalModel
 
 const storeModel = {
@@ -18,7 +19,8 @@ const storeModel = {
   geobonde: geobondeForm,
   individual: individualModel,
   error: errorModel,
-  foward: fowardModel
+  foward: fowardModel,
+  volunteers: volunteersModel
 };
 
 const store = createStore(storeModel);
