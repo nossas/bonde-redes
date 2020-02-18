@@ -1,20 +1,15 @@
 import React from 'react';
-import GlobalContext from '../../../context';
-import { useStateLink } from '@hookstate/core';
+import { Ticket } from '../../../models/table-data'
 
-const UserInfo: React.FC = () => {
-  const { map: { popupInfoRef } } = GlobalContext
-  const popupInfo = useStateLink(popupInfoRef)
+const dicioUser = {
+  360269610652: "Advogada",
+  360273031591: "MSR",
+  360282119532: "Psicóloga"
+}
 
-  const {
-    name,
-    email,
-    status_inscricao,
-    data_de_inscricao_no_bonde,
-    user_id,
-    condition,
-  } = popupInfo.value
+const getUserType = (id: number) => dicioUser[id]
 
+const UserInfo: React.FC<Ticket> = ({ name, email, data_de_inscricao_no_bonde, user_id, organization_id, condition }) => {
   return (
     <div>
       <div>
@@ -22,11 +17,11 @@ const UserInfo: React.FC = () => {
         <br />
         <span>{`Email: ${email}`}</span>
         <br />
-        <span>{`Status da mulher: ${condition || '-'}`}</span>
+        <span>{`Status da mulher: ${condition}`}</span>
         <br />
-        <span>{`Status da inscrição: ${status_inscricao || '-'}`}</span>
+        <span>{`Tipo de usuária: ${getUserType(organization_id)}`}</span>
         <br />
-        <span>{`Data de inscrição no BONDE: ${data_de_inscricao_no_bonde || '-'}`}</span>
+        <span>{`Data de inscrição no BONDE: ${data_de_inscricao_no_bonde}`}</span>
         <br />
         <span>Link no Zendesk:</span>
         {' '}
