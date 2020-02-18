@@ -119,14 +119,16 @@ const Table = () => {
       data.filter(
         i => i.tipo_de_acolhimento === selectedCategory
         // eslint-disable-next-line
-  ), [volunteer_organization_id])
+      ),
+    [volunteer_organization_id]
+  );
 
   const filteredTableData = useMemo(() => {
     const data = filterByDistance(filterByCategory(tableData));
 
     return data;
     // eslint-disable-next-line
-  }, [filterByDistance, tableData])
+  }, [filterByDistance, tableData]);
 
   const submitConfirm = async requestBody => {
     const req = await fowardTickets({
