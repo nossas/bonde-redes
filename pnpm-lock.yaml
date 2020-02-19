@@ -1916,7 +1916,7 @@ packages:
       '@svgr/core': 4.3.3
       '@svgr/plugin-jsx': 4.3.3
       '@svgr/plugin-svgo': 4.3.1
-      loader-utils: 1.2.3
+      loader-utils: 1.4.0
     dev: false
     engines:
       node: '>=8'
@@ -4133,7 +4133,7 @@ packages:
     dependencies:
       '@babel/core': 7.8.4
       find-cache-dir: 2.1.0
-      loader-utils: 1.2.3
+      loader-utils: 1.4.0
       mkdirp: 0.5.1
       pify: 4.0.1
       webpack: 4.41.5_webpack@4.41.5
@@ -5307,7 +5307,7 @@ packages:
       camelcase: 5.3.1
       cssesc: 3.0.0
       icss-utils: 4.1.1
-      loader-utils: 1.2.3
+      loader-utils: 1.4.0
       normalize-path: 3.0.0
       postcss: 7.0.27
       postcss-modules-extract-imports: 2.0.0
@@ -6035,6 +6035,12 @@ packages:
       node: '>= 0.10'
     resolution:
       integrity: sha1-TapNnbAPmBmIDHn6RXrlsJof04k=
+  /emojis-list/3.0.0:
+    dev: false
+    engines:
+      node: '>= 4'
+    resolution:
+      integrity: sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==
   /encodeurl/1.0.2:
     dev: false
     engines:
@@ -6244,7 +6250,7 @@ packages:
       eslint: 6.8.0
       fs-extra: 8.1.0
       loader-fs-cache: 1.0.2
-      loader-utils: 1.2.3
+      loader-utils: 1.4.0
       object-hash: 2.0.3
       schema-utils: 2.6.4
       webpack: 4.41.5_webpack@4.41.5
@@ -6848,7 +6854,7 @@ packages:
       integrity: sha512-bCg29ictuBaKUwwArK4ouCaqDgLZcysCFLmM/Yn/FDoqndh/9vNuQfXRDvTuXKLxfD/JtZQGKFT8MGcJBK644g==
   /file-loader/4.3.0_webpack@4.41.5:
     dependencies:
-      loader-utils: 1.2.3
+      loader-utils: 1.4.0
       schema-utils: 2.6.4
       webpack: 4.41.5_webpack@4.41.5
     dev: false
@@ -7569,7 +7575,7 @@ packages:
   /html-webpack-plugin/4.0.0-beta.11_webpack@4.41.5:
     dependencies:
       html-minifier-terser: 5.0.4
-      loader-utils: 1.2.3
+      loader-utils: 1.4.0
       lodash: 4.17.15
       pretty-error: 2.1.1
       tapable: 1.1.3
@@ -9097,6 +9103,16 @@ packages:
       node: '>=4.0.0'
     resolution:
       integrity: sha512-fkpz8ejdnEMG3s37wGL07iSBDg99O9D5yflE9RGNH3hRdx9SOwYfnGYdZOUIZitN8E+E2vkq3MUMYMvPYl5ZZA==
+  /loader-utils/1.4.0:
+    dependencies:
+      big.js: 5.2.2
+      emojis-list: 3.0.0
+      json5: 1.0.1
+    dev: false
+    engines:
+      node: '>=4.0.0'
+    resolution:
+      integrity: sha512-qH0WSMBtn/oHuwjy/NucEgbx5dbxxnxup9s4PVXJUDHZBQY+s0NWA9rJf53RBnQZxfch7euUui7hpoAPvALZdA==
   /locate-path/2.0.0:
     dependencies:
       p-locate: 2.0.0
@@ -9508,7 +9524,7 @@ packages:
       integrity: sha512-2v+OeetEyliMt5VHMXsBhABoJ0/M4RCe7fatd/fBy6SMiKazUSEt3gxxypfnk2SHMkdBYvorHRoQxuGoiwbzAw==
   /mini-css-extract-plugin/0.9.0_webpack@4.41.5:
     dependencies:
-      loader-utils: 1.2.3
+      loader-utils: 1.4.0
       normalize-url: 1.9.1
       schema-utils: 1.0.0
       webpack: 4.41.5_webpack@4.41.5
@@ -10823,7 +10839,7 @@ packages:
       integrity: sha512-4pV3JJVPLd5+RueiVVB+gFOAa7GWc25XQcMp86Zexzke69mKf6Nx9LRcQywdz7yZI9n1udOxmLuAwTBypypF8Q==
   /postcss-loader/3.0.0:
     dependencies:
-      loader-utils: 1.2.3
+      loader-utils: 1.4.0
       postcss: 7.0.27
       postcss-load-config: 2.1.0
       schema-utils: 1.0.0
@@ -12484,7 +12500,7 @@ packages:
   /sass-loader/8.0.2_webpack@4.41.5:
     dependencies:
       clone-deep: 4.0.1
-      loader-utils: 1.2.3
+      loader-utils: 1.4.0
       neo-async: 2.6.1
       schema-utils: 2.6.4
       semver: 6.3.0
@@ -13231,7 +13247,7 @@ packages:
       integrity: sha512-VTyMAUfdm047mwKl+u79WIdrZxtFtn+nBxHeb844XBQ9uMNTuTHdx2hc5RiAJYqwTj3wc/xe5HLSdJSkJ+WfZw==
   /style-loader/0.23.1:
     dependencies:
-      loader-utils: 1.2.3
+      loader-utils: 1.4.0
       schema-utils: 1.0.0
     dev: false
     engines:
@@ -13892,7 +13908,7 @@ packages:
   /url-loader/2.3.0_file-loader@4.3.0+webpack@4.41.5:
     dependencies:
       file-loader: 4.3.0_webpack@4.41.5
-      loader-utils: 1.2.3
+      loader-utils: 1.4.0
       mime: 2.4.4
       schema-utils: 2.6.4
       webpack: 4.41.5_webpack@4.41.5
@@ -14176,7 +14192,7 @@ packages:
       eslint-scope: 4.0.3
       json-parse-better-errors: 1.0.2
       loader-runner: 2.4.0
-      loader-utils: 1.2.3
+      loader-utils: 1.4.0
       memory-fs: 0.4.1
       micromatch: 3.1.10
       mkdirp: 0.5.1
