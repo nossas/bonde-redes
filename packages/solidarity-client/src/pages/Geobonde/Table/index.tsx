@@ -73,14 +73,14 @@ const Table: React.FC = () => {
   const filterByUserCondition = useCallback((data: Ticket[]) => data.filter((i) => {
     if (isVolunteer(i.organization_id)) {
       switch (i.condition) {
-       case 'disponivel':
-        return true
-       case 'aprovada':
-         return true
-       case 'desabilitada':
-         return true
-       default:
-         return false
+        case 'disponivel':
+          return true
+        case 'aprovada':
+          return true
+        case 'desabilitada':
+          return true
+        default:
+          return false
       }
     } else if (!isVolunteer(i.organization_id)) return true
     return false
