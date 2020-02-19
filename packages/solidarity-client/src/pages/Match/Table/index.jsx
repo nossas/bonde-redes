@@ -19,7 +19,6 @@ import {
   parseNumber,
   volunteer_category
 } from "../../../services/utils";
-import request from "../../../services/request";
 import { FullWidth, Spacing, WrapButtons } from "./style";
 import columns from "./columns";
 
@@ -115,8 +114,8 @@ const Table = () => {
     data =>
       data.filter(
         i => i.tipo_de_acolhimento === selectedCategory
-        // eslint-disable-next-line
       ),
+    // eslint-disable-next-line
     [volunteer_organization_id]
   );
 
