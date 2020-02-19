@@ -33,7 +33,7 @@ const main = async (req, res, next) => {
       individual_id: INDIVIDUAL
     }
   })
-  
+
   const individualTickets = await getSolidarityTickets({
     query: `query {
       solidarity_tickets(
