@@ -33,9 +33,9 @@ const AppBody = styled.div`
 // `
 
 const App = () => (
-  <StoreProvider store={store}>
-    <Router history={history}>
-      <SessionProvider>
+  <SessionProvider>
+    <StoreProvider store={store}>
+      <Router history={history}>
         <AppWrapper className="app">
           <Header />
           <AppBody className="app-body">
@@ -57,9 +57,9 @@ const App = () => (
           </AppBody>
           <Footer />
         </AppWrapper>
-      </SessionProvider>
-    </Router>
-  </StoreProvider>
+      </Router>
+    </StoreProvider>
+  </SessionProvider>
 );
 
 export default App;

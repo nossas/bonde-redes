@@ -1,6 +1,15 @@
 import React from 'react'
 import { FullPageLoading } from 'bonde-styleguide'
+import { ApolloProvider } from '@apollo/react-hooks'
+import FetchUser from './FetchUser'
 import SessionStorage from './SessionStorage'
+import createGraphQLClient from './graphql-client'
+
+
+export const redirectToLogin = () => {
+  const loginUrl = process.env.REACT_APP_LOGIN_URL || 'http://admin-canary.bonde.devel:5002/auth/login'
+  window.location.href = `${loginUrl}?next=${window.location.href}`
+}
 
 /*
  * Responsible to control session used on cross-storage
@@ -10,6 +19,7 @@ interface SessionProviderState {
   signing: boolean;
   authenticated: boolean;
   token?: string;
+  refetchCount: number;
 }
 
 
@@ -23,7 +33,7 @@ class SessionProvider extends React.Component {
 
   constructor (props: any) {
     super(props)
-    this.state = { signing: true, authenticated: false }
+    this.state = { signing: true, authenticated: false, refetchCount: 0 }
     this.storage = new SessionStorage()
   }
 
@@ -43,21 +53,40 @@ class SessionProvider extends React.Component {
       .catch((err) => {
         // TODO: change url admin-canary
         if (err && err.message === 'unauthorized') {
-          const loginUrl = process.env.REACT_APP_LOGIN_URL || 'http://admin-canary.bonde.devel:5002/auth/login'
-          window.location.href = `${loginUrl}?next=${window.location.href}`
+          redirectToLogin()
           this.setState({ signing: false, authenticated: false })
         } else {
           // reload fetchSession when error not authorized
           console.log('err', err.message)
-          this.fetchSession()
+          if (this.state.refetchCount < 3) {
+            this.fetchSession()
+          }
         }
       })
   }
 
   render () {
+    const sessionProps = {
+      authenticated: this.state.authenticated,
+      signing: this.state.signing,
+      token: this.state.token,
+      logout: this.storage.logout
+    }
+
     return !this.state.signing
-      ? (<SessionContext.Provider value={this.state}>{this.props.children}</SessionContext.Provider>)
-      : <FullPageLoading message='Carregando dados de usuário' />
+      ? (
+        <ApolloProvider client={createGraphQLClient(sessionProps)}>
+          {/* Impplements provider with token recovered on cross-storage */}
+          <FetchUser>
+            {/* Check token validate and recovery user infos */}
+            {(data: any) => (
+              <SessionContext.Provider value={{...sessionProps, ...data}}>
+                {this.props.children}
+              </SessionContext.Provider>
+            )}
+          </FetchUser>
+        </ApolloProvider>
+      ) : <FullPageLoading />
   }
 }
 
