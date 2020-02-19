@@ -1,8 +1,8 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 
+import React from "react";
 import { Footer } from "bonde-styleguide";
 import { StoreProvider } from "easy-peasy";
-import React from "react";
 import { Redirect, Route } from "react-router";
 import { Router } from "react-router-dom";
 import styled from "styled-components";
@@ -40,15 +40,15 @@ const App = () => (
           <Header />
           <AppBody className="app-body">
             <Route exact path="/">
-              <Redirect to="/geobonde" />
+              <Redirect to="/match" />
             </Route>
-            <Route path="/geobonde " exact>
+            <Route exact path="/geobonde">
               <Geobonde />
             </Route>
-            <Route path="/geobonde / map " exact>
+            <Route exact path="/geobonde/mapa">
               <Map />
             </Route>
-            <Route exact path="/match ">
+            <Route exact path="/match">
               <Match />
             </Route>
             <Route exact path="/voluntarias">

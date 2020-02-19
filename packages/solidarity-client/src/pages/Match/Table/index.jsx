@@ -19,7 +19,6 @@ import {
   parseNumber,
   volunteer_category
 } from "../../../services/utils";
-import request from "../../../services/request";
 import { FullWidth, Spacing, WrapButtons } from "./style";
 import columns from "./columns";
 
@@ -41,7 +40,7 @@ const Table = () => {
   const individual = useStoreState(state => state.individual.data);
   const error = useStoreState(state => state.error.error);
 
-  const setTableData = useStoreActions(actions => actions.table.setTable);
+  const getTableData = useStoreActions(actions => actions.table.getTableData)
   const setPopup = useStoreActions(actions => actions.popups.setPopup);
   const setError = useStoreActions(actions => actions.error.setError);
   const fowardTickets = useStoreActions(
@@ -68,11 +67,8 @@ const Table = () => {
   } = volunteer;
 
   useEffect(() => {
-    (async () => {
-      const response = await request.get("individuals");
-      setTableData(response.data);
-    })();
-  }, [setTableData]);
+    getTableData('individuals')
+  }, [getTableData])
 
   const volunteerFirstName = volunteer_name.split(" ")[0];
   const selectedCategory = volunteer_category(volunteer_organization_id);
@@ -118,7 +114,7 @@ const Table = () => {
     data =>
       data.filter(
         i => i.tipo_de_acolhimento === selectedCategory
-        ),
+      ),
     // eslint-disable-next-line
     [volunteer_organization_id]
   );

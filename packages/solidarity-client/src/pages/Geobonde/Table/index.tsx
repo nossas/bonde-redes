@@ -4,7 +4,6 @@ import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import * as turf from '@turf/turf'
 
-import request from '../../../services/request'
 import { Ticket } from '../../../models/table-data'
 import columns from './columns'
 import { zendeskOrganizations, isVolunteer } from '../../../services/utils'
@@ -16,14 +15,11 @@ import 'react-table/react-table.css'
 const Table: React.FC = () => {
   const tableData = useStoreState(state => state.table.data)
   const searchForm = useStoreState(state => state.geobonde.form)
-  const setTableData = useStoreActions((actions: any) => actions.table.setTable)
+  const getTableData = useStoreActions((actions: any) => actions.table.getTableData)
 
   useEffect(() => {
-    (async () => {
-      const response = await request.get('all')
-      setTableData(response.data)
-    })()
-  }, [setTableData])
+    getTableData('all')
+  }, [getTableData])
 
   const {
     distance,
