@@ -41,7 +41,7 @@ const Table = () => {
   const individual = useStoreState(state => state.individual.data);
   const error = useStoreState(state => state.error.error);
 
-  const setTableData = useStoreActions(actions => actions.table.setTable);
+  const getTableData = useStoreActions(actions => actions.table.getTableData)
   const setPopup = useStoreActions(actions => actions.popups.setPopup);
   const setError = useStoreActions(actions => actions.error.setError);
   const fowardTickets = useStoreActions(
@@ -68,11 +68,8 @@ const Table = () => {
   } = volunteer;
 
   useEffect(() => {
-    (async () => {
-      const response = await request.get("individuals");
-      setTableData(response.data);
-    })();
-  }, [setTableData]);
+    getTableData('individuals')
+  }, [getTableData])
 
   const volunteerFirstName = volunteer_name.split(" ")[0];
   const selectedCategory = volunteer_category(volunteer_organization_id);
