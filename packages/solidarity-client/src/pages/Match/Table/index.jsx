@@ -115,10 +115,7 @@ const Table = () => {
   );
 
   const filterByCategory = useCallback(
-    data =>
-      data.filter(
-        i => i.tipo_de_acolhimento === selectedCategory
-        ),
+    data => data.filter(i => i.tipo_de_acolhimento === selectedCategory),
     // eslint-disable-next-line
     [volunteer_organization_id]
   );
