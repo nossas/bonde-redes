@@ -118,8 +118,8 @@ const Table = () => {
     data =>
       data.filter(
         i => i.tipo_de_acolhimento === selectedCategory
-        // eslint-disable-next-line
-      ),
+        ),
+    // eslint-disable-next-line
     [volunteer_organization_id]
   );
 
