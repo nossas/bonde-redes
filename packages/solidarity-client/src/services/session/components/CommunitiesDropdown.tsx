@@ -20,15 +20,17 @@ interface Community {
 
 interface CommunitiesDropdownProps {
   communities?: Community[];
-  communityId?: number;
+  community?: Community;
   onChange: any;
 }
 
-const CommunitiesDropdown = ({ communities = [], communityId, onChange }: CommunitiesDropdownProps) => {
-  const community = communities.filter(c => c.id === communityId)[0]
+const CommunitiesDropdown = ({ communities = [], community, onChange }: CommunitiesDropdownProps) => {
+  const DropdownLabel = !!community
+    ? () => <CommunityItem community={community} />
+    : () => <span>Selecione uma comunidade</span>
 
   return (
-    <Dropdown label={() => <CommunityItem community={community} />}>
+    <Dropdown label={DropdownLabel}>
       {communities.map(c => (
         <DropdownItem key={`c-dropdown-${c.id}`} onClick={() => onChange(c)}>
           <CommunityItem community={c} />

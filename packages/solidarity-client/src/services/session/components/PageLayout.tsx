@@ -1,28 +1,21 @@
-import React, { useMemo, useState } from 'react'
+import React from 'react'
 import { Route } from 'react-router'
 import styled from 'styled-components'
-import { Header, Navbar, Page, Flexbox2 as Flexbox, Footer, IconColorful } from 'bonde-styleguide'
+import { Header, Page, Flexbox2 as Flexbox, Footer } from 'bonde-styleguide'
 import { SessionHOC } from '../SessionProvider'
 import UserDropdown from './UserDropdown'
 import CommunitiesDropdown from './CommunitiesDropdown'
 
 
 const SessionHeader = SessionHOC((props: any) => {
-  // dummy communities
-  const communities = useMemo(() => [
-    { id: 8, name: 'Meu Rio', city: 'Rio de Janeiro' },
-    { id: 9, name: 'Minha Sampa', city: 'São Paulo' },
-    { id: 10, name: 'Mapa do acolhimento', city: 'São Paulo' }
-  ], [])
-
-  const { session: { user, logout, community, onChangeCommunity } } = props
+  const { session: { user, logout, communities, community, onChangeCommunity } } = props
 
   return (
     <Header>
       <Flexbox horizontal spacing='between'>
         <CommunitiesDropdown
           communities={communities}
-          communityId={community.id}
+          community={community}
           onChange={onChangeCommunity}
         />
         <UserDropdown user={user} logout={logout} />
@@ -55,8 +48,8 @@ interface PageLayoutProps {
 }
 
 const PageLayout = (props: PageLayoutProps) => {
-  console.log('PageLayout')
   const { component: Component, pageProps, componentProps, ...rest } = props
+
   return (
     <Route {...rest} render={(matchProps) => {
       return (

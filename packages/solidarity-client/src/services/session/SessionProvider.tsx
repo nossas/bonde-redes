@@ -2,6 +2,7 @@ import React from 'react'
 import { FullPageLoading } from 'bonde-styleguide'
 import { ApolloProvider } from '@apollo/react-hooks'
 import FetchUser from './FetchUser'
+import FetchCommunities from './FetchCommunities'
 import SessionStorage from './SessionStorage'
 import createGraphQLClient from './graphql-client'
 
@@ -45,7 +46,7 @@ class SessionProvider extends React.Component {
   fetchSession () {
     this.storage
       .getAsyncSession()
-      .then(({ token, community }: any) => {
+      .then(({ token, community }: any = {}) => {
         if (!token) throw Error('unauthorized')
 
         this.setState({ signing: false, authenticated: true, token, community })
@@ -78,11 +79,8 @@ class SessionProvider extends React.Component {
   }
 
   handleChangeCommunity (community: any) {
-    this.storage
+    return this.storage
       .setAsyncItem('community', community)
-      .then(() => {
-        this.setState({ community })
-      })
   }
 
   render () {
@@ -90,8 +88,6 @@ class SessionProvider extends React.Component {
       authenticated: this.state.authenticated,
       signing: this.state.signing,
       token: this.state.token,
-      community: this.state.community,
-      onChangeCommunity: this.handleChangeCommunity.bind(this),
       logout: this.logout.bind(this)
     }
 
@@ -101,14 +97,22 @@ class SessionProvider extends React.Component {
           {/* Impplements provider with token recovered on cross-storage */}
           <FetchUser>
             {/* Check token validate and recovery user infos */}
-            {(data: any) => (
-              <SessionContext.Provider value={{...sessionProps, ...data}}>
-                {this.props.children}
-              </SessionContext.Provider>
+            {(userData: any) => (
+              <FetchCommunities
+                variables={{ userId: userData.user.id }}
+                defaultCommunity={this.state.community}
+                onChange={this.handleChangeCommunity.bind(this)}
+              >
+              {(communitiesData: any) => (
+                <SessionContext.Provider value={{...sessionProps, ...userData, ...communitiesData}}>
+                  {this.props.children}
+                </SessionContext.Provider>
+              )}
+              </FetchCommunities>
             )}
           </FetchUser>
         </ApolloProvider>
-      ) : <FullPageLoading />
+      ) : <FullPageLoading message="Carregando sessão..." />
   }
 }
 
