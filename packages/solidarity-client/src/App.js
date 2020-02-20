@@ -32,6 +32,30 @@ const AppBody = styled.div`
 //   flex-shrink: 0;
 // `
 
+
+const TestPage = SessionHOC(({ session }) => {
+  const { community } = session
+  // TODO: get organizations id on communities modules
+  // default envirtoment example
+  return !! community ? (
+    <FetchUsersByGroup contextID={community.id}>
+      {(data) => {
+        return (<h1>Isso é uma pagina de teste</h1>)
+      }}
+    </FetchUsersByGroup>
+  ) : <div>{`Você deve selecionar uma comunidade`}</div>
+})
+
+const SamplePage = ({ children }) => (
+  <AppWrapper className="app">
+    <Header />
+    <AppBody className="app-body">
+      {children}
+    </AppBody>
+    <Footer />
+  </AppWrapper>
+)
+
 const App = () => (
   <StoreProvider store={store}>
     <BrowserRouter history={history}>
