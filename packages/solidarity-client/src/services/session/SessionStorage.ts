@@ -23,19 +23,24 @@ class SessionStorage {
           .then(() => {
             this.token = undefined
             this.session = {}
+            return Promise.resolve()
           })
       })
   }
 
-  getAsyncToken () {
-    return this.storage.onConnect()
-      .then(() => {
-        return this.storage.get('auth')
-      })
-      .then((authJson: string) => {
+  getAsyncSession () {
+    return this.storage
+      .onConnect()
+      .then(() => this.storage.get('auth', 'community'))
+      .then((args) => {
+        const authJson = args[0]
+        const communityJson = args[1]
         if (authJson) {
-          this.token = JSON.parse(authJson).jwtToken
-          return Promise.resolve(this.token)
+          const dataSession = {
+            token: JSON.parse(authJson).jwtToken,
+            community: communityJson ? JSON.parse(communityJson) : {}
+          }
+          return Promise.resolve(dataSession)
         }
       })
   }
@@ -45,24 +50,6 @@ class SessionStorage {
       .then(() => {
         return this.storage.set(key, JSON.stringify(value))
       })
-  }
-
-  getAsyncItem (key: string) {
-    return this.storage.onConnect()
-      .then(() => {
-        return this.storage.get(key)
-      })
-      .then((value: string) => {
-        return Promise.resolve(JSON.parse(value))
-      })
-  }
-
-  setItem (key: string, value: any) {
-    this.session[key] = value
-  }
-
-  getItem (key: string, defaultValue: any) {
-    return this.session[key] || defaultValue
   }
 }
 
