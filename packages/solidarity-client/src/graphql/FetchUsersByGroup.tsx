@@ -52,7 +52,6 @@ const FetchUsersByGroup = SessionHOC((props: any) => {
 		console.log('error', error)
 		return <p>Error</p>
 	}
-
 	return children(data)
 })
 
