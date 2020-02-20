@@ -13,7 +13,6 @@ import Map from "./pages/Geobonde/Map";
 import Geobonde from "./pages/Geobonde/Table";
 import Match from "./pages/Match/Table";
 import GroupsWrapper from "./pages/Groups"
-import { IfElse } from "./components/If"
 import FetchUsersByGroup from './graphql/FetchUsersByGroup'
 
 import { SessionProvider, SessionPageLayout, SessionHOC } from "./services/session";
@@ -30,46 +29,37 @@ const AppBody = styled.div`
   flex-grow: 1;
 `;
 
-// const FixedFooter = styled.div`
-//   flex-shrink: 0;
-// `
+const TestPage = () => (
+  <h1>Página de teste</h1>
+)
 
-const TestPage = () => {
-  // TODO: get organizations id on communities modules
-  // default envirtoment example
-  return (
-    <FetchUsersByGroup>
-      {(data) => {
-        return (<h1>Isso é uma pagina de teste</h1>)
-      }}
-    </FetchUsersByGroup>
-  )
-}
-
-const InsideApp = ({ match }) => (
-  <Switch>
-    <SessionPageLayout
-      path="/groups"
-      component={GroupsWrapper}
-    />
-    <Route
-      path="/geobonde"
-      component={Geobonde}
-    />
-    <Route
-      path="geobonde/mapa"
-      component={Map}
-    />
-    <Route
-      path="/"
-      exact
-      component={TestPage}
-    />
-    <Route
-      path="encaminhamento"
-      component={Match}
-    />
-  </Switch>
+const InsideApp = () => (
+  <AppWrapper>
+    <Header />
+    <AppBody>
+      <Route
+        path="/"
+        exact
+        component={TestPage}
+      />
+      <Route
+        path="/groups"
+        component={GroupsWrapper}
+      />
+      <Route
+        path="/geobonde"
+        component={Geobonde}
+      />
+      <Route
+        path="geobonde/mapa"
+        component={Map}
+      />
+      <Route
+        path="/encaminhamento"
+        component={Match}
+      />
+    </AppBody>
+  </AppWrapper>
 )
 
 const App = () => (
