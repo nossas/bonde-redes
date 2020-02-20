@@ -40,7 +40,7 @@ const Table = () => {
   const individual = useStoreState(state => state.individual.data);
   const error = useStoreState(state => state.error.error);
 
-  const getTableData = useStoreActions(actions => actions.table.getTableData)
+  const getTableData = useStoreActions(actions => actions.table.getTableData);
   const setPopup = useStoreActions(actions => actions.popups.setPopup);
   const setError = useStoreActions(actions => actions.error.setError);
   const fowardTickets = useStoreActions(
@@ -67,8 +67,8 @@ const Table = () => {
   } = volunteer;
 
   useEffect(() => {
-    getTableData('individuals')
-  }, [getTableData])
+    getTableData("individuals");
+  }, [getTableData]);
 
   const volunteerFirstName = volunteer_name.split(" ")[0];
   const selectedCategory = volunteer_category(volunteer_organization_id);
@@ -111,10 +111,7 @@ const Table = () => {
   );
 
   const filterByCategory = useCallback(
-    data =>
-      data.filter(
-        i => i.tipo_de_acolhimento === selectedCategory
-      ),
+    data => data.filter(i => i.tipo_de_acolhimento === selectedCategory),
     // eslint-disable-next-line
     [volunteer_organization_id]
   );
