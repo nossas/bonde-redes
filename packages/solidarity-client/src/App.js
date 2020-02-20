@@ -14,7 +14,9 @@ import Geobonde from "./pages/Geobonde/Table";
 import Match from "./pages/Match/Table";
 import GroupsWrapper from "./pages/Groups"
 
-import { SessionProvider, SessionPageLayout } from "./services/session";
+import FetchUsersByGroup from './graphql/FetchUsersByGroup'
+
+import { SessionProvider, SessionPageLayout, SessionHOC } from "./services/session";
 
 import store from "./store";
 
@@ -31,6 +33,19 @@ const AppBody = styled.div`
 // const FixedFooter = styled.div`
 //   flex-shrink: 0;
 // `
+
+const TestPage = SessionHOC(({ session }) => {
+  const { community } = session
+  // TODO: get organizations id on communities modules
+  // default envirtoment example
+  return !! community ? (
+    <FetchUsersByGroup contextID={community.id}>
+      {(data) => {
+        return (<h1>Isso é uma pagina de teste</h1>)
+      }}
+    </FetchUsersByGroup>
+  ) : <div>{`Você deve selecionar uma comunidade`}</div>
+})
 
 const SamplePage = ({ children }) => (
   <AppWrapper className="app">
