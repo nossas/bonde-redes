@@ -1,4 +1,5 @@
-import { action } from 'easy-peasy'
+import { action, thunk } from 'easy-peasy'
+import request from '../services/request'
 
 export interface Ticket {
   tipo_de_acolhimento: string
@@ -23,6 +24,22 @@ const tableModel = {
   data,
   setTable: action((state, payload) => ({
     data: payload
+  })),
+  getTableData: thunk(async (actions: any, payload) => {
+    try {
+      const res = await request.get(payload)
+      actions.setTable(res.data)
+    }
+    catch (err) {
+      console.log(err)
+      actions.setError({
+        message: err && err.message
+      })
+    }
+  }),
+  error: {},
+  setError: action((state, payload) => ({
+    error: payload
   }))
 };
 
