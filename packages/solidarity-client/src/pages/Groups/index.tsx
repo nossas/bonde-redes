@@ -8,6 +8,8 @@ import ReactTable from 'react-table'
 import columns from './columns'
 import { Wrap } from './styles'
 import 'react-table/react-table.css'
+import { SessionHOC } from "../../services/session";
+import FetchUsersByGroup from '../../graphql/FetchUsersByGroup'
 
 interface Props {
   volunteersCount: number
@@ -28,10 +30,20 @@ const GroupsMenu: React.FC<Props> = ({ volunteersCount, individualsCount }, { ge
     </Flexbox>
   </Spacing>
 
-const Groups: React.FC = ({ children })  => {
+// const TestPage = SessionHOC(({ session }) => {
+
+//   return (
+//     <FetchUsersByGroup contextID={community.id}>
+//       {(data) => {
+//         return (<h1>Isso é uma pagina de teste</h1>)
+//       }}
+//     </FetchUsersByGroup>
+//   )
+// })
+
+const Groups = () => {
   // @ts-ignore
   const { pathname } = useLocation()
-  const tableData = useStoreState(state => state.table.data)
   const count = useStoreState(state => state.table.count)
 
   const getAvailableVolunteers = useStoreActions((actions: any) => actions.table.getTableData)
@@ -43,34 +55,38 @@ const Groups: React.FC = ({ children })  => {
   const getIndividuals = () => false;
 
   return (
-    <Page>
-      <Flexbox middle>
-        <Wrap>
-          {GroupsMenu(
-            { 
-              volunteersCount: count || 0, 
-              individualsCount: count || 0 
-            }, 
-            { 
-              getVolunteers: getAvailableVolunteers, 
-              getIndividuals 
-            }
-          )}
-          <ReactTable
-            data={tableData}
-            columns={columns(pathname)}
-            defaultPageSize={10}
-            defaultSorted={[
-              {
-                id: "availability",
-                desc: true
-              }
-            ]}
-            className="-striped -highlight"
-          />
-        </Wrap>
-      </Flexbox>
-    </Page>
+    <FetchUsersByGroup>
+      {data => (
+        <Page>
+          <Flexbox middle>
+            <Wrap>
+              {GroupsMenu(
+                { 
+                  volunteersCount: count || 0, 
+                  individualsCount: count || 0 
+                }, 
+                { 
+                  getVolunteers: getAvailableVolunteers, 
+                  getIndividuals 
+                }
+              )}
+              <ReactTable
+                data={data}
+                columns={columns(pathname)}
+                defaultPageSize={10}
+                defaultSorted={[
+                  {
+                    id: "availability",
+                    desc: true
+                  }
+                ]}
+                className="-striped -highlight"
+              />
+            </Wrap>
+          </Flexbox>
+        </Page>
+      )}
+    </FetchUsersByGroup>
   )
 }
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { gql } from 'apollo-boost'
 import { useQuery } from '@apollo/react-hooks'
+import { SessionHOC } from '../services/session'
 
 const USERS_BY_GROUP = gql`
 query UsersByGroup (
@@ -28,18 +29,20 @@ query UsersByGroup (
 }
 `
 
-interface FetchUsersByGroup {
-	volunteers: string[];
-	individuals: string[];
-	contextID: number;
-}
+const FetchUsersByGroup = SessionHOC((props: any) => {
+	const { 
+		children, 
+		volunteers = [360269610652, 360282119532], 
+		individuals = [360273031591], 
+		session: { community } 
+	} = props
 
-const FetchUsersByGroup = (props: any) => {
-	const { children, volunteers, individuals, contextID } = props
+	if (!community) return <div>Selecione uma comunidade!</div>
+	
 	const variables = {
 		volunteers: { _in: volunteers },
 		individuals: { _in: individuals },
-		context: { _eq: contextID }
+		context: { _eq: community.id }
 	}
 
 	const { loading, error, data } = useQuery(USERS_BY_GROUP, { variables })
@@ -49,12 +52,8 @@ const FetchUsersByGroup = (props: any) => {
 		console.log('error', error)
 		return <p>Error</p>
 	}
-	return children(data)
-}
 
-FetchUsersByGroup.defaultProps = {
-	volunteers: ['360269610652', '360282119532'],
-	individuals: ['360273031591']
-}
+	return children(data)
+})
 
 export default FetchUsersByGroup

@@ -13,7 +13,7 @@ import Map from "./pages/Geobonde/Map";
 import Geobonde from "./pages/Geobonde/Table";
 import Match from "./pages/Match/Table";
 import GroupsWrapper from "./pages/Groups"
-
+import { IfElse } from "./components/If"
 import FetchUsersByGroup from './graphql/FetchUsersByGroup'
 
 import { SessionProvider, SessionPageLayout, SessionHOC } from "./services/session";
@@ -34,56 +34,49 @@ const AppBody = styled.div`
 //   flex-shrink: 0;
 // `
 
-const TestPage = SessionHOC(({ session }) => {
-  const { community } = session
+const TestPage = () => {
   // TODO: get organizations id on communities modules
   // default envirtoment example
-  return !! community ? (
-    <FetchUsersByGroup contextID={community.id}>
+  return (
+    <FetchUsersByGroup>
       {(data) => {
         return (<h1>Isso é uma pagina de teste</h1>)
       }}
     </FetchUsersByGroup>
-  ) : <div>{`Você deve selecionar uma comunidade`}</div>
-})
+  )
+}
 
-const SamplePage = ({ children }) => (
-  <AppWrapper className="app">
-    <Header />
-    <AppBody className="app-body">
-      {children}
-    </AppBody>
-    <Footer />
-  </AppWrapper>
+const InsideApp = ({ match }) => (
+  <Switch>
+    <SessionPageLayout
+      path="/groups"
+      component={GroupsWrapper}
+    />
+    <Route
+      path="/geobonde"
+      component={Geobonde}
+    />
+    <Route
+      path="geobonde/mapa"
+      component={Map}
+    />
+    <Route
+      path="/"
+      exact
+      component={TestPage}
+    />
+    <Route
+      path="encaminhamento"
+      component={Match}
+    />
+  </Switch>
 )
 
 const App = () => (
   <SessionProvider>
     <StoreProvider store={store}>
       <BrowserRouter history={history}>
-        <Route path="/">
-          <Redirect to="/groups" from="/" />
-          <SamplePage>
-            <Switch>
-              <SessionPageLayout
-                path="/groups"
-                component={GroupsWrapper}
-              />
-              <SessionPageLayout
-                path="/geobonde"
-                component={Geobonde}
-              />
-              <SessionPageLayout
-                path="/geobonde/mapa"
-                component={Map}
-              />
-              <SessionPageLayout
-                path="/match"
-                component={Match}
-              />
-            </Switch>
-          </SamplePage>
-        </Route>
+        <SessionPageLayout path="/" component={InsideApp} />
       </BrowserRouter>
     </StoreProvider>
   </SessionProvider>

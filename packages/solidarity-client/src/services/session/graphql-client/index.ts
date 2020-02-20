@@ -7,7 +7,7 @@ import GraphQLSession from './GraphQLSession'
 
 export default (session: any = {}) => {
 	const httpLink = createHttpLink({
-	  uri: process.env.REACT_APP_HASURA_API_URL || 'http://api-graphql.bonde.devel/v1/graphql'
+		uri: process.env.REACT_APP_HASURA_API_URL || 'http://api-graphql.bonde.devel/v1/graphql'
 	})
 	const { context: authLink, handleError } = GraphQLSession(session)
 
