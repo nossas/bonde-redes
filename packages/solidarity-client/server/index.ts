@@ -4,7 +4,8 @@ import cors from 'cors'
 import morgan from 'morgan'
 import path from 'path'
 import body_parser from 'body-parser'
-import allTicketsAndUsers from './users/allTicketsAndUsers'
+import all from './all'
+import individuals from './individuals'
 import forward from './forward'
 import volunteersAvailable from './volunteersAvailable'
 import locations from './locations'
@@ -36,8 +37,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'an error occurred' })
 })
 
-app.get('/api/all', asyncMiddleware(allTicketsAndUsers))
-app.get('/api/individuals', asyncMiddleware(allTicketsAndUsers))
+app.get('/api/all', asyncMiddleware(all))
+app.get('/api/individuals', asyncMiddleware(individuals))
 app.get('/api/volunteers', asyncMiddleware(volunteersAvailable))
 app.get('/api/locations', asyncMiddleware(locations))
 app.get('/api/user', asyncMiddleware(user))
