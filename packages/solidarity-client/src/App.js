@@ -14,7 +14,7 @@ import Geobonde from "./pages/Geobonde/Table";
 import Match from "./pages/Match/Table";
 import VolunteersAvailable from "./pages/VolunteersAvailable";
 
-import { SessionProvider } from "./services/session";
+import { SessionProvider, SessionPageLayout } from "./services/session";
 
 import store from "./store";
 
@@ -32,34 +32,62 @@ const AppBody = styled.div`
 //   flex-shrink: 0;
 // `
 
+const SamplePage = ({ children }) => (
+  <AppWrapper className="app">
+    <Header />
+    <AppBody className="app-body">
+      {children}
+    </AppBody>
+    <Footer />
+  </AppWrapper>
+)
+
 const App = () => (
-  <StoreProvider store={store}>
-    <Router history={history}>
-      <SessionProvider>
-        <AppWrapper className="app">
-          <Header />
-          <AppBody className="app-body">
-            <Route exact path="/">
-              <Redirect to="/match" />
-            </Route>
-            <Route exact path="/geobonde">
+  <SessionProvider>
+    <StoreProvider store={store}>
+      <Router history={history}>
+        <Route exact path="/">
+          <Redirect to="/match" />
+        </Route>
+        <SessionPageLayout
+          path="/geobonde"
+          exact
+          component={() => (
+            <SamplePage>
               <Geobonde />
-            </Route>
-            <Route exact path="/geobonde/mapa">
+            </SamplePage>
+          )}
+        />
+        <SessionPageLayout
+          exact
+          path="/geobonde/mapa"
+          component={() => (
+            <SamplePage>
               <Map />
-            </Route>
-            <Route exact path="/match">
+            </SamplePage>
+          )}
+        />
+        <SessionPageLayout
+          exact
+          path="/match"
+          component={() => (
+            <SamplePage>
               <Match />
-            </Route>
-            <Route exact path="/voluntarias">
+            </SamplePage>
+          )}
+        />
+        <SessionPageLayout
+          exact
+          path="/voluntarias"
+          component={() => (
+            <SamplePage>
               <VolunteersAvailable />
-            </Route>
-          </AppBody>
-          <Footer />
-        </AppWrapper>
-      </SessionProvider>
-    </Router>
-  </StoreProvider>
+            </SamplePage>
+          )}
+        />
+      </Router>
+    </StoreProvider>
+  </SessionProvider>
 );
 
 export default App;
