@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Page, Flexbox2 as Flexbox, Title, Spacing } from 'bonde-styleguide'
 import { If } from '../../components/If'
 import Volunteers from '../VolunteersAvailable'
@@ -41,51 +41,52 @@ const GroupsMenu: React.FC<Props> = ({ volunteersCount, individualsCount }, { ge
 //   )
 // })
 
-const Groups = () => {
+const Groups = ({ match }) => {
   // @ts-ignore
   const { pathname } = useLocation()
-  const count = useStoreState(state => state.table.count)
-
-  const getAvailableVolunteers = useStoreActions((actions: any) => actions.table.getTableData)
-
-  useEffect(() => {
-    getAvailableVolunteers('volunteers')
-  }, [getAvailableVolunteers])
-
-  const getIndividuals = () => false;
+  const { kind } = useParams()
 
   return (
     <FetchUsersByGroup>
-      {data => (
-        <Page>
-          <Flexbox middle>
-            <Wrap>
-              {GroupsMenu(
-                { 
-                  volunteersCount: count || 0, 
-                  individualsCount: count || 0 
-                }, 
-                { 
-                  getVolunteers: getAvailableVolunteers, 
-                  getIndividuals 
-                }
-              )}
-              <ReactTable
-                data={data}
-                columns={columns(pathname)}
-                defaultPageSize={10}
-                defaultSorted={[
-                  {
-                    id: "availability",
-                    desc: true
+      {({ volunteers, individuals }) => {
+
+        const data = kind === 'volunteers'
+          ? volunteers.data
+          : kind === 'individuals'
+          ? individuals.data
+          : []
+
+        return (
+          <Page>
+            <Flexbox middle>
+              <Wrap>
+                {GroupsMenu(
+                  { 
+                    volunteersCount: volunteers.count || 0,
+                    individualsCount: individuals.count || 0,
+                  }, 
+                  { 
+                    getVolunteers: () => {}, 
+                    getIndividuals: () => {} 
                   }
-                ]}
-                className="-striped -highlight"
-              />
-            </Wrap>
-          </Flexbox>
-        </Page>
-      )}
+                )}
+                <ReactTable
+                  data={data}
+                  columns={columns(pathname)}
+                  defaultPageSize={10}
+                  defaultSorted={[
+                    {
+                      id: "availability",
+                      desc: true
+                    }
+                  ]}
+                  className="-striped -highlight"
+                />
+              </Wrap>
+            </Flexbox>
+          </Page>
+        )
+       }}
     </FetchUsersByGroup>
   )
 }

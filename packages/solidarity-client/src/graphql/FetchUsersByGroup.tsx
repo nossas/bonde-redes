@@ -52,7 +52,16 @@ const FetchUsersByGroup = SessionHOC((props: any) => {
 		console.log('error', error)
 		return <p>Error</p>
 	}
-	return children(data)
+	return children({
+		volunteers: {
+			data: data.volunteers,
+			count: data.volunteers_count.aggregate.count
+		},
+		individuals: {
+			data: data.individuals,
+			count: data.individuals_count.aggregate.count
+		}
+	})
 })
 
 export default FetchUsersByGroup
