@@ -3,7 +3,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import React from "react";
 import { Footer } from "bonde-styleguide";
 import { StoreProvider } from "easy-peasy";
-import { Redirect, Route } from "react-router";
+import { Redirect, Route, Switch } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 import styled from "styled-components";
 
@@ -45,56 +45,31 @@ const SamplePage = ({ children }) => (
 const App = () => (
   <SessionProvider>
     <StoreProvider store={store}>
-      <Router history={history}>
-        <Route exact path="/">
-          <Redirect to="/groups" />
+      <BrowserRouter history={history}>
+        <Route path="/">
+          <Redirect to="/groups" from="/" />
+          <SamplePage>
+            <Switch>
+              <SessionPageLayout
+                path="/groups"
+                component={GroupsWrapper}
+              />
+              <SessionPageLayout
+                path="/geobonde"
+                component={Geobonde}
+              />
+              <SessionPageLayout
+                path="/geobonde/mapa"
+                component={Map}
+              />
+              <SessionPageLayout
+                path="/match"
+                component={Match}
+              />
+            </Switch>
+          </SamplePage>
         </Route>
-        <SessionPageLayout
-          path="/groups"
-          exact
-          component={() => (
-            <SamplePage>
-              <GroupsWrapper />
-            </SamplePage>
-          )}
-        />
-        <SessionPageLayout
-          path="/geobonde"
-          exact
-          component={() => (
-            <SamplePage>
-              <Geobonde />
-            </SamplePage>
-          )}
-        />
-        <SessionPageLayout
-          exact
-          path="/geobonde/mapa"
-          component={() => (
-            <SamplePage>
-              <Map />
-            </SamplePage>
-          )}
-        />
-        <SessionPageLayout
-          exact
-          path="/match"
-          component={() => (
-            <SamplePage>
-              <Match />
-            </SamplePage>
-          )}
-        />
-        <SessionPageLayout
-          exact
-          path="/voluntarias"
-          component={() => (
-            <SamplePage>
-              <VolunteersAvailable />
-            </SamplePage>
-          )}
-        />
-      </Router>
+      </BrowserRouter>
     </StoreProvider>
   </SessionProvider>
 );
