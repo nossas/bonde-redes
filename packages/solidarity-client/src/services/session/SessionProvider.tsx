@@ -19,6 +19,7 @@ interface SessionProviderState {
   signing: boolean;
   authenticated: boolean;
   token?: string;
+  community?: object;
   refetchCount: number;
 }
 
@@ -43,18 +44,18 @@ class SessionProvider extends React.Component {
 
   fetchSession () {
     this.storage
-      .getAsyncToken()
-      .then((token: string) => {
+      .getAsyncSession()
+      .then(({ token, community }: any) => {
         if (!token) throw Error('unauthorized')
 
-        this.setState({ signing: false, authenticated: true, token })
+        this.setState({ signing: false, authenticated: true, token, community })
         return Promise.resolve()
       })
       .catch((err) => {
         // TODO: change url admin-canary
         if (err && err.message === 'unauthorized') {
           redirectToLogin()
-          this.setState({ signing: false, authenticated: false })
+          this.setState({ signing: false, authenticated: false, community: undefined })
         } else {
           // reload fetchSession when error not authorized
           console.log('err', err.message)
@@ -65,12 +66,33 @@ class SessionProvider extends React.Component {
       })
   }
 
+  logout () {
+    this.storage
+      .logout()
+      .then(() => {
+        redirectToLogin()
+      })
+      .catch(err => {
+        console.log('err', err)
+      })
+  }
+
+  handleChangeCommunity (community: any) {
+    this.storage
+      .setAsyncItem('community', community)
+      .then(() => {
+        this.setState({ community })
+      })
+  }
+
   render () {
     const sessionProps = {
       authenticated: this.state.authenticated,
       signing: this.state.signing,
       token: this.state.token,
-      logout: this.storage.logout
+      community: this.state.community,
+      onChangeCommunity: this.handleChangeCommunity.bind(this),
+      logout: this.logout.bind(this)
     }
 
     return !this.state.signing
