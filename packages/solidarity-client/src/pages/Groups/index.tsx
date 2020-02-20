@@ -45,48 +45,42 @@ const Groups = ({ match }) => {
   // @ts-ignore
   const { pathname } = useLocation()
   const { kind } = useParams()
-
+  const dicio = {
+    "volunteers": ["volunteers"]["data"],
+    "individuals": ["individuals"]["data"]
+  }
   return (
     <FetchUsersByGroup>
-      {({ volunteers, individuals }) => {
-
-        const data = kind === 'volunteers'
-          ? volunteers.data
-          : kind === 'individuals'
-          ? individuals.data
-          : []
-
-        return (
-          <Page>
-            <Flexbox middle>
-              <Wrap>
-                {GroupsMenu(
-                  { 
-                    volunteersCount: volunteers.count || 0,
-                    individualsCount: individuals.count || 0,
-                  }, 
-                  { 
-                    getVolunteers: () => {}, 
-                    getIndividuals: () => {} 
+      {({ volunteers, individuals }) => 
+        <Page>
+          <Flexbox middle>
+            <Wrap>
+              {GroupsMenu(
+                { 
+                  volunteersCount: volunteers.count || 0,
+                  individualsCount: individuals.count || 0,
+                }, 
+                { 
+                  getVolunteers: () => {}, 
+                  getIndividuals: () => {} 
+                }
+              )}
+              <ReactTable
+                data={dicio[kind || "volunteers"]}
+                columns={columns(pathname)}
+                defaultPageSize={10}
+                defaultSorted={[
+                  {
+                    id: "availability",
+                    desc: true
                   }
-                )}
-                <ReactTable
-                  data={data}
-                  columns={columns(pathname)}
-                  defaultPageSize={10}
-                  defaultSorted={[
-                    {
-                      id: "availability",
-                      desc: true
-                    }
-                  ]}
-                  className="-striped -highlight"
-                />
-              </Wrap>
-            </Flexbox>
-          </Page>
-        )
-       }}
+                ]}
+                className="-striped -highlight"
+              />
+            </Wrap>
+          </Flexbox>
+        </Page>
+      }
     </FetchUsersByGroup>
   )
 }
