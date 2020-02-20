@@ -28,7 +28,7 @@ importers:
       typescript: ^3.7.3
   packages/cli-mautic:
     dependencies:
-      '@types/node': 12.12.11
+      '@types/node': 13.7.2
       '@types/prompts': 2.0.3
       '@types/signale': 1.2.1
       '@types/source-map-support': 0.5.0
@@ -38,7 +38,7 @@ importers:
       signale: 1.4.0
       source-map-support: 0.5.16
     specifiers:
-      '@types/node': ^12.12.11
+      '@types/node': 13.7.2
       '@types/prompts': ^2.0.3
       '@types/signale': ^1.2.1
       '@types/source-map-support': ^0.5.0
@@ -51,7 +51,7 @@ importers:
     dependencies:
       '@types/debug': 4.1.5
       '@types/express': 4.17.2
-      '@types/node': 12.12.11
+      '@types/node': 13.7.2
       '@types/signale': 1.2.1
       '@types/source-map-support': 0.5.0
       '@types/url-join': 4.0.0
@@ -70,7 +70,7 @@ importers:
     specifiers:
       '@types/debug': ^4.1.5
       '@types/express': ^4.17.2
-      '@types/node': ^12.12.11
+      '@types/node': 13.7.2
       '@types/signale': ^1.2.1
       '@types/source-map-support': ^0.5.0
       '@types/url-join': ^4.0.0
@@ -123,7 +123,7 @@ importers:
       apollo-utilities: 1.3.2
       axios: 0.19.0
       body-parser: 1.19.0
-      bonde-styleguide: 0.16.4-alpha.3_react-dom@16.12.0+react@16.12.0
+      bonde-styleguide: 0.16.4-alpha.4_react-dom@16.12.0+react@16.12.0
       concurrently: 5.0.1
       cors: 2.8.5
       cross-storage: 1.0.0
@@ -198,7 +198,7 @@ importers:
       apollo-utilities: ^1.3.2
       axios: ^0.19.0
       body-parser: ^1.19.0
-      bonde-styleguide: ^0.16.4-alpha.3
+      bonde-styleguide: 0.16.4-alpha.4
       concurrently: ^5.0.1
       cors: ^2.8.5
       cross-storage: ^1.0.0
@@ -254,7 +254,7 @@ importers:
       ws: 7.2.0
     devDependencies:
       '@types/jest': 24.0.23
-      '@types/node': 12.12.11
+      '@types/node': 13.7.2
       '@types/source-map-support': 0.5.0
       '@types/supertest': 2.0.8
       jest: 24.9.0
@@ -262,7 +262,7 @@ importers:
       ts-jest: 24.1.0_jest@24.9.0
     specifiers:
       '@types/jest': ^24.0.23
-      '@types/node': ^12.12.11
+      '@types/node': 13.7.2
       '@types/source-map-support': ^0.5.0
       '@types/supertest': ^2.0.8
       apollo-boost: ^0.4.4
@@ -310,7 +310,7 @@ importers:
       ws: 7.2.0
     devDependencies:
       '@types/jest': 24.0.23
-      '@types/node': 12.12.11
+      '@types/node': 13.7.2
       '@types/source-map-support': 0.5.0
       '@types/supertest': 2.0.8
       jest: 24.9.0
@@ -318,7 +318,7 @@ importers:
       ts-jest: 24.1.0_jest@24.9.0
     specifiers:
       '@types/jest': ^24.0.23
-      '@types/node': ^12.12.11
+      '@types/node': 13.7.2
       '@types/source-map-support': ^0.5.0
       '@types/supertest': ^2.0.8
       apollo-boost: ^0.4.4
@@ -346,21 +346,22 @@ importers:
       ws: ^7.2.0
   packages/webhooks-auth:
     dependencies:
-      '@types/debug': 4.1.5
-      '@types/express': 4.17.2
-      '@types/jsonwebtoken': 8.3.5
-      '@types/source-map-support': 0.5.0
       debug: 4.1.1
       dotenv: 8.2.0
       express: 4.17.1
       jsonwebtoken: 8.5.1
       source-map-support: 0.5.16
       typescript: 3.7.2
+    devDependencies:
+      '@types/debug': 4.1.5
+      '@types/express': 4.17.2
+      '@types/jsonwebtoken': 8.3.7
+      '@types/source-map-support': 0.5.1
     specifiers:
       '@types/debug': ^4.1.5
       '@types/express': ^4.17.2
-      '@types/jsonwebtoken': ^8.3.5
-      '@types/source-map-support': ^0.5.0
+      '@types/jsonwebtoken': ^8.3.7
+      '@types/source-map-support': ^0.5.1
       debug: ^4.1.1
       dotenv: ^8.2.0
       express: ^4.17.1
@@ -372,7 +373,7 @@ importers:
       '@types/debug': 4.1.5
       '@types/express': 4.17.2
       '@types/jest': 24.0.23
-      '@types/node': 12.12.11
+      '@types/node': 13.7.2
       '@types/source-map-support': 0.5.0
       '@types/supertest': 2.0.8
       axios: 0.19.0
@@ -388,7 +389,7 @@ importers:
       '@types/debug': ^4.1.5
       '@types/express': ^4.17.2
       '@types/jest': ^24.0.23
-      '@types/node': ^12.12.11
+      '@types/node': 13.7.2
       '@types/source-map-support': ^0.5.0
       '@types/supertest': ^2.0.8
       axios: ^0.19.0
@@ -405,7 +406,7 @@ importers:
       '@types/debug': 4.1.5
       '@types/express': 4.17.2
       '@types/jest': 24.0.23
-      '@types/node': 12.12.11
+      '@types/node': 13.7.2
       '@types/source-map-support': 0.5.0
       '@types/url-join': 4.0.0
       '@types/yup': 0.26.24
@@ -424,7 +425,7 @@ importers:
       '@types/debug': ^4.1.5
       '@types/express': ^4.17.2
       '@types/jest': ^24.0.23
-      '@types/node': ^12.12.11
+      '@types/node': 13.7.2
       '@types/source-map-support': ^0.5.0
       '@types/url-join': ^4.0.0
       '@types/yup': ^0.26.24
@@ -444,7 +445,7 @@ importers:
       '@types/debug': 4.1.5
       '@types/express': 4.17.2
       '@types/jest': 24.0.23
-      '@types/node': 12.12.11
+      '@types/node': 13.7.2
       '@types/source-map-support': 0.5.0
       '@types/url-join': 4.0.0
       '@types/yup': 0.26.24
@@ -463,7 +464,7 @@ importers:
       '@types/debug': ^4.1.5
       '@types/express': ^4.17.2
       '@types/jest': ^24.0.23
-      '@types/node': ^12.12.11
+      '@types/node': 13.7.2
       '@types/source-map-support': ^0.5.0
       '@types/url-join': ^4.0.0
       '@types/yup': ^0.26.24
@@ -482,7 +483,7 @@ importers:
     dependencies:
       '@types/debug': 4.1.5
       '@types/express': 4.17.2
-      '@types/node': 12.12.11
+      '@types/node': 13.7.2
       '@types/source-map-support': 0.5.0
       '@types/url-join': 4.0.0
       '@types/yup': 0.26.24
@@ -497,7 +498,7 @@ importers:
     specifiers:
       '@types/debug': ^4.1.5
       '@types/express': ^4.17.2
-      '@types/node': ^12.12.11
+      '@types/node': 13.7.2
       '@types/source-map-support': ^0.5.0
       '@types/url-join': ^4.0.0
       '@types/yup': ^0.26.24
@@ -3410,13 +3411,11 @@ packages:
     dependencies:
       '@types/connect': 3.4.32
       '@types/node': 12.12.17
-    dev: false
     resolution:
       integrity: sha512-RoX2EZjMiFMjZh9lmYrwgoP9RTpAjSHiJxdp4oidAQVO02T7HER3xj9UKue5534ULWeqVEkujhWcyvUce+d68w==
   /@types/connect/3.4.32:
     dependencies:
       '@types/node': 12.12.17
-    dev: false
     resolution:
       integrity: sha512-4r8qa0quOvh7lGD0pre62CAb1oni1OO6ecJLGCezTmhQ8Fz50Arx9RUszryR8KlgK6avuSXvviL6yWyViQABOg==
   /@types/cookiejar/2.1.1:
@@ -3429,7 +3428,6 @@ packages:
     resolution:
       integrity: sha512-invOmosX0DqbpA+cE2yoHGUlF/blyf7nB0OGYBBiH27crcVm5NmFaZkLP4Ta1hGaesckCi5lVLlydNJCxkTOSg==
   /@types/debug/4.1.5:
-    dev: false
     resolution:
       integrity: sha512-Q1y515GcOdTHgagaVFhHnIFQ38ygs/kmxdNpvpou+raI9UO3YZcHDngBSYKQklcKlvA7iuQlmIKbzvmxcOE9CQ==
   /@types/eslint-visitor-keys/1.0.0:
@@ -3443,7 +3441,6 @@ packages:
     dependencies:
       '@types/node': 12.12.17
       '@types/range-parser': 1.2.3
-    dev: false
     resolution:
       integrity: sha512-Xnub7w57uvcBqFdIGoRg1KhNOeEj0vB6ykUM7uFWyxvbdE89GFyqgmUcanAriMr4YOxNFZBAWkfcWIb4WBPt3g==
   /@types/express/4.17.2:
@@ -3451,7 +3448,6 @@ packages:
       '@types/body-parser': 1.17.1
       '@types/express-serve-static-core': 4.17.0
       '@types/serve-static': 1.13.3
-    dev: false
     resolution:
       integrity: sha512-5mHFNyavtLoJmnusB8OKJ5bshSzw+qkMIBAobLrIM48HJvunFva9mOa6aBwh64lBFyNwBbs0xiEFuj4eU/NjCA==
   /@types/geojson/7946.0.7:
@@ -3508,12 +3504,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-8+KAKzEvSUdeo+kmqnKrqgeE+LcA0tjYWFY7RPProVYwnqDjukzO+3b6dLD56rYX5TdWejnEOLJYOIeh4CXKuA==
-  /@types/jsonwebtoken/8.3.5:
+  /@types/jsonwebtoken/8.3.7:
     dependencies:
-      '@types/node': 12.12.11
-    dev: false
+      '@types/node': 12.12.17
+    dev: true
     resolution:
-      integrity: sha512-VGM1gb+LwsQ5EPevvbvdnKncajBdYqNcrvixBif1BsiDQiSF1q+j4bBTvKC6Bt9n2kqNSx+yNTY2TVJ360E7EQ==
+      integrity: sha512-B5SSifLkjB0ns7VXpOOtOUlynE78/hKcY8G8pOAhkLJZinwofIBYqz555nRj2W9iDWZqFhK5R+7NZDaRmKWAoQ==
   /@types/mapbox-gl/1.6.1:
     dependencies:
       '@types/geojson': 7946.0.7
@@ -3521,7 +3517,6 @@ packages:
     resolution:
       integrity: sha512-Gwy87I+7Th5UbxfucrWGmUeH1bV2J0t1aI7dze3yReF1XPSJ6c9grDHr9rML5lvsdAv6NU1WQyqctdbSrQrmyA==
   /@types/mime/2.0.1:
-    dev: false
     resolution:
       integrity: sha512-FwI9gX75FgVBJ7ywgnq/P7tw+/o1GUbtP0KzbtusLigAOgIgNISRK0ZPl4qertvXSIE8YbsVJueQ90cDt9YYyw==
   /@types/minimatch/3.0.3:
@@ -3544,9 +3539,11 @@ packages:
     resolution:
       integrity: sha512-O+x6uIpa6oMNTkPuHDa9MhMMehlxLAd5QcOvKRjAFsBVpeFWTOPnXbDvILvFgFFZfQ1xh1EZi1FbXxUix+zpsQ==
   /@types/node/12.12.17:
-    dev: false
     resolution:
       integrity: sha512-Is+l3mcHvs47sKy+afn2O1rV4ldZFU7W8101cNlOd+MRbjM4Onida8jSZnJdTe/0Pcf25g9BNIUsuugmE6puHA==
+  /@types/node/13.7.2:
+    resolution:
+      integrity: sha512-uvilvAQbdJvnSBFcKJ2td4016urcGvsiR+N4dHGU87ml8O2Vl6l+ErOi9w0kXSPiwJ1AYlIW+0pDXDWWMOiWbw==
   /@types/normalize-package-data/2.4.0:
     dev: false
     resolution:
@@ -3568,7 +3565,6 @@ packages:
     resolution:
       integrity: sha512-ce5d3q03Ex0sy4R14722Rmt6MT07Ua+k4FwDfdcToYJcMKNtRVQvJ6JCAPdAmAnbRb6CsX6aYb9m96NGod9uTw==
   /@types/range-parser/1.2.3:
-    dev: false
     resolution:
       integrity: sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
   /@types/react-dom/16.9.4:
@@ -3625,7 +3621,6 @@ packages:
     dependencies:
       '@types/express-serve-static-core': 4.17.0
       '@types/mime': 2.0.1
-    dev: false
     resolution:
       integrity: sha512-oprSwp094zOglVrXdlo/4bAHtKTAxX6VT8FOZlBKrmyLbNvE1zxZyJ6yikMVtHIvwP45+ZQGJn+FdXGKTozq0g==
   /@types/signale/1.2.1:
@@ -3639,6 +3634,12 @@ packages:
       '@types/node': 12.12.11
     resolution:
       integrity: sha512-OrnAz5K5dXDgMdeRRoXIjDAvkodQ9ESvVJCyzrhzUJKmCkXgmYx/KLUBcVFe5eS4FiohfcY7YPxsdkmSwJz9wA==
+  /@types/source-map-support/0.5.1:
+    dependencies:
+      '@types/node': 12.12.17
+    dev: true
+    resolution:
+      integrity: sha512-VDqnZe9D2zR19qbeRvwYyHSp7AtUtCkTaRVFQ8wzwH9TXw9kKKq/vBhfEnFEXVupO2M0lBMA9mr/XyQ6gEkUOA==
   /@types/stack-utils/1.0.1:
     resolution:
       integrity: sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==
@@ -4330,6 +4331,8 @@ packages:
       apollo-utilities: 1.3.2
       tslib: 1.10.0
     dev: false
+    peerDependencies:
+      graphql: '*'
     resolution:
       integrity: sha512-+KA685AV5ETEJfjZuviRTEImGA11uNBp/MJGnaCvkgr+BYRrGLruVKBv6WvyFod27WEB2sp7SsG8cNBKANhGLg==
   /apollo-cache/1.3.2_graphql@14.5.8:
@@ -4385,6 +4388,8 @@ packages:
       apollo-link-http-common: 0.2.15
       tslib: 1.10.0
     dev: false
+    peerDependencies:
+      graphql: '*'
     resolution:
       integrity: sha512-psNmHyuy3valGikt/XHJfe0pKJnRX19tLLs6P6EHRxg+6q6JMXNVLYPaQBkL0FkwdTCB0cbFJAGRYCBviG8TDA==
   /apollo-link-error/1.1.12_graphql@14.5.8:
@@ -4463,7 +4468,7 @@ packages:
       integrity: sha512-+iBMcYeevMm1JpYgwDEIDt/y0BB7VWyvlm/7x+TIPNLHCTCMgcEgDuW5kH86iQZWo0I7mNwQiTOz+/3ShPFmBw==
   /apollo-link/1.2.13_graphql@14.5.8:
     dependencies:
-      apollo-utilities: 1.3.2_graphql@14.5.8
+      apollo-utilities: 1.3.3_graphql@14.5.8
       graphql: 14.5.8
       ts-invariant: 0.4.4
       tslib: 1.10.0
@@ -4487,7 +4492,7 @@ packages:
   /apollo-utilities/1.3.2_graphql@14.5.8:
     dependencies:
       '@wry/equality': 0.1.9
-      fast-json-stable-stringify: 2.0.0
+      fast-json-stable-stringify: 2.1.0
       graphql: 14.5.8
       ts-invariant: 0.4.4
       tslib: 1.10.0
@@ -4500,6 +4505,18 @@ packages:
     dependencies:
       '@wry/equality': 0.1.9
       fast-json-stable-stringify: 2.1.0
+      ts-invariant: 0.4.4
+      tslib: 1.10.0
+    dev: false
+    peerDependencies:
+      graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
+    resolution:
+      integrity: sha512-F14aX2R/fKNYMvhuP2t9GD9fggID7zp5I96MF5QeKYWDWTrkRdHRp4+SVfXUVN+cXOaB/IebfvRtzPf25CM0zw==
+  /apollo-utilities/1.3.3_graphql@14.5.8:
+    dependencies:
+      '@wry/equality': 0.1.9
+      fast-json-stable-stringify: 2.1.0
+      graphql: 14.5.8
       ts-invariant: 0.4.4
       tslib: 1.10.0
     dev: false
@@ -5062,7 +5079,7 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha512-dhEPs72UPbDnAQJ9ZKMNTP6ptJaionhP5cBb541nXPlW60Jepo9RV/a4fX4XWW9CuFNK22krhrj1+rgzifNCsw==
-  /bonde-styleguide/0.16.4-alpha.3_react-dom@16.12.0+react@16.12.0:
+  /bonde-styleguide/0.16.4-alpha.4_react-dom@16.12.0+react@16.12.0:
     dependencies:
       '@babel/plugin-proposal-class-properties': 7.8.3
       '@babel/plugin-transform-runtime': 7.8.3
@@ -5076,7 +5093,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-UpejNZvNs/bfhgR60GAkAfNVhOfjDq2i8N7wdaZGhuZojRsFOTdSb1XYZN/dfMkRPQ63a2Gm3Pcec7Ig3r89Hg==
+      integrity: sha512-I6ks892LEmUW9A9V5dvI8Jh/A+HzO6mNgd9k5eFW3EDWxlM1DNCXKWgSeBbh6C+cOY8aUaAbAIIzhSFKS3M81A==
   /bonjour/3.5.0:
     dependencies:
       array-flatten: 2.1.2
