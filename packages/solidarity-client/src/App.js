@@ -1,10 +1,10 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 
+import {Footer} from "bonde-styleguide";
+import {StoreProvider} from "easy-peasy";
 import React from "react";
-import { Footer } from "bonde-styleguide";
-import { StoreProvider } from "easy-peasy";
-import { Redirect, Route } from "react-router";
-import { Router } from "react-router-dom";
+import {Redirect, Route} from "react-router";
+import {Router} from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "./components/Header";
@@ -13,9 +13,7 @@ import Map from "./pages/Geobonde/Map";
 import Geobonde from "./pages/Geobonde/Table";
 import Match from "./pages/Match/Table";
 import VolunteersAvailable from "./pages/VolunteersAvailable";
-
-import { SessionProvider, SessionPageLayout } from "./services/session";
-
+import {SessionPageLayout, SessionProvider} from "./services/session";
 import store from "./store";
 
 const AppWrapper = styled.div`
@@ -51,8 +49,8 @@ const App = () => (
         </Route>
         <SessionPageLayout
           path="/geobonde"
-          exact
-          component={() => (
+exact
+component = {() => (
             <SamplePage>
               <Geobonde />
             </SamplePage>
