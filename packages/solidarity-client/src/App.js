@@ -4,7 +4,7 @@ import React from "react";
 import { Footer } from "bonde-styleguide";
 import { StoreProvider } from "easy-peasy";
 import { Redirect, Route } from "react-router";
-import { Router } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "./components/Header";
@@ -12,7 +12,7 @@ import history from "./history";
 import Map from "./pages/Geobonde/Map";
 import Geobonde from "./pages/Geobonde/Table";
 import Match from "./pages/Match/Table";
-import VolunteersAvailable from "./pages/VolunteersAvailable";
+import GroupsWrapper from "./pages/Groups"
 
 import { SessionProvider } from "./services/session";
 
@@ -34,31 +34,29 @@ const AppBody = styled.div`
 
 const App = () => (
   <StoreProvider store={store}>
-    <Router history={history}>
+    <BrowserRouter history={history}>
       <SessionProvider>
         <AppWrapper className="app">
           <Header />
           <AppBody className="app-body">
             <Route exact path="/">
-              <Redirect to="/match" />
+              <Redirect to="/groups" />
             </Route>
+            <Route path="/groups" component={GroupsWrapper} />
             <Route exact path="/geobonde">
               <Geobonde />
             </Route>
             <Route exact path="/geobonde/mapa">
               <Map />
             </Route>
-            <Route exact path="/match">
-              <Match />
-            </Route>
             <Route exact path="/voluntarias">
-              <VolunteersAvailable />
+              <Match />
             </Route>
           </AppBody>
           <Footer />
         </AppWrapper>
       </SessionProvider>
-    </Router>
+    </BrowserRouter>
   </StoreProvider>
 );
 
