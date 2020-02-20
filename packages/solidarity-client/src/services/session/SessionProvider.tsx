@@ -1,6 +1,16 @@
 import React from 'react'
 import { FullPageLoading } from 'bonde-styleguide'
+import { ApolloProvider } from '@apollo/react-hooks'
+import FetchUser from './FetchUser'
+import FetchCommunities from './FetchCommunities'
 import SessionStorage from './SessionStorage'
+import createGraphQLClient from './graphql-client'
+
+
+export const redirectToLogin = () => {
+  const loginUrl = process.env.REACT_APP_LOGIN_URL || 'http://admin-canary.bonde.devel:5002/auth/login'
+  window.location.href = `${loginUrl}?next=${window.location.href}`
+}
 
 /*
  * Responsible to control session used on cross-storage
@@ -10,6 +20,8 @@ interface SessionProviderState {
   signing: boolean;
   authenticated: boolean;
   token?: string;
+  community?: object;
+  refetchCount: number;
 }
 
 
@@ -23,7 +35,7 @@ class SessionProvider extends React.Component {
 
   constructor (props: any) {
     super(props)
-    this.state = { signing: true, authenticated: false }
+    this.state = { signing: true, authenticated: false, refetchCount: 0 }
     this.storage = new SessionStorage()
   }
 
@@ -33,31 +45,74 @@ class SessionProvider extends React.Component {
 
   fetchSession () {
     this.storage
-      .getAsyncToken()
-      .then((token: string) => {
+      .getAsyncSession()
+      .then(({ token, community }: any = {}) => {
         if (!token) throw Error('unauthorized')
 
-        this.setState({ signing: false, authenticated: true, token })
+        this.setState({ signing: false, authenticated: true, token, community })
         return Promise.resolve()
       })
       .catch((err) => {
         // TODO: change url admin-canary
         if (err && err.message === 'unauthorized') {
-          const loginUrl = process.env.REACT_APP_LOGIN_URL || 'http://admin-canary.bonde.devel:5002/auth/login'
-          window.location.href = `${loginUrl}?next=${window.location.href}`
-          this.setState({ signing: false, authenticated: false })
+          redirectToLogin()
+          this.setState({ signing: false, authenticated: false, community: undefined })
         } else {
           // reload fetchSession when error not authorized
           console.log('err', err.message)
-          this.fetchSession()
+          if (this.state.refetchCount < 3) {
+            this.fetchSession()
+          }
         }
       })
   }
 
+  logout () {
+    this.storage
+      .logout()
+      .then(() => {
+        redirectToLogin()
+      })
+      .catch(err => {
+        console.log('err', err)
+      })
+  }
+
+  handleChangeCommunity (community: any) {
+    return this.storage
+      .setAsyncItem('community', community)
+  }
+
   render () {
+    const sessionProps = {
+      authenticated: this.state.authenticated,
+      signing: this.state.signing,
+      token: this.state.token,
+      logout: this.logout.bind(this)
+    }
+
     return !this.state.signing
-      ? (<SessionContext.Provider value={this.state}>{this.props.children}</SessionContext.Provider>)
-      : <FullPageLoading message='Carregando dados de usuário' />
+      ? (
+        <ApolloProvider client={createGraphQLClient(sessionProps)}>
+          {/* Impplements provider with token recovered on cross-storage */}
+          <FetchUser>
+            {/* Check token validate and recovery user infos */}
+            {(userData: any) => (
+              <FetchCommunities
+                variables={{ userId: userData.user.id }}
+                defaultCommunity={this.state.community}
+                onChange={this.handleChangeCommunity.bind(this)}
+              >
+              {(communitiesData: any) => (
+                <SessionContext.Provider value={{...sessionProps, ...userData, ...communitiesData}}>
+                  {this.props.children}
+                </SessionContext.Provider>
+              )}
+              </FetchCommunities>
+            )}
+          </FetchUser>
+        </ApolloProvider>
+      ) : <FullPageLoading message="Carregando sessão..." />
   }
 }
 
