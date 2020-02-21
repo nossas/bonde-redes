@@ -1,5 +1,23 @@
+import gql from 'graphql-tag'
 const throng = require('throng');
+import { client as GraphQLAPI } from './graphql'
 
+export const subscribeFormEntries = () => {
+  const formEntriesQuery = gql`
+    subscription pipeline_form_entries {
+      form_entries {
+        id,
+        fields,
+        cached_community_id,
+        activist_id,
+        widget_id,
+        created_at
+      }
+    }
+  `
+
+  return GraphQLAPI.subscribe({ query: formEntriesQuery })
+}
 /**
  * Some predefined delays (in milliseconds).
  */
@@ -35,6 +53,8 @@ export async function greeter(name: string) {
 
 throng(async (id) => {
   console.log(`Started worker ${id}`);
+
+  console.log(await subscribeFormEntries().subscribe((v) => console.log(v)));
 
   console.log(await greeter('my name'));
 
