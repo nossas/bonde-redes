@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {
   Header as BondeHeader,
   Title,
   Spacing
 } from "bonde-styleguide";
-
+import styled from 'styled-components'
 import PageTabs from './PageTabs'
 
 const Header: React.FC = () => {
@@ -26,11 +26,14 @@ const Header: React.FC = () => {
   useEffect(() => {
     const currentTab = tabs.find(i => i["to"] === path) || { name: "grupos" }
     setTab(currentTab["name"])
-  }, [path, setTab])
+  }, [path, setTab, tabs])
 
+  const StyledHeader = styled(BondeHeader)`
+    z-index: unset;
+  `
 
   return (
-    <BondeHeader>
+    <StyledHeader>
       <Spacing margin={{ bottom: 20 }}>
         <Title.H3 color="#ffffff">Redes</Title.H3>
       </Spacing>
@@ -38,7 +41,7 @@ const Header: React.FC = () => {
         tabs={tabs} 
         selectedTab={selectedTab} 
       />
-    </BondeHeader>
+    </StyledHeader>
   );
 };
 
