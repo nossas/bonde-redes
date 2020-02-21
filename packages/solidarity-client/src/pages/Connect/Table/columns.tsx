@@ -1,5 +1,5 @@
 import React from 'react'
-import Forward from '../../../components/BtnFoward'
+import BtnConnect from '../../../components/BtnConnect'
 import { Flexbox2 as Flexbox } from 'bonde-styleguide'
 
 type valueArrayString = {
@@ -39,7 +39,7 @@ const columns = [
     ) : '-'),
     width: 200
   }, {
-    accessor: 'ticket_created_at',
+    accessor: 'created_at',
     Header: 'Data de criação do ticket',
     Cell: ({ value }: valueString) => {
       if (!value) {
@@ -48,18 +48,20 @@ const columns = [
       const data = new Date(value)
       return data.toLocaleDateString('pt-BR')
     },
-  }, {
-    accessor: 'ticket_id',
-    Header: 'Link',
-    Cell: ({ value }: valueArrayString) => (value ? (
-      <a href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${value}`} target="_blank" rel="noopener noreferrer">{value}</a>
-    ) : null),
-  }, {
+  }, 
+  // {
+  //   accessor: 'ticket_id',
+  //   Header: 'Link',
+  //   Cell: ({ value }: valueArrayString) => (value ? (
+  //     <a href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${value}`} target="_blank" rel="noopener noreferrer">{value}</a>
+  //   ) : null),
+  // }, 
+  {
     accessor: 'user_id',
     Header: 'Ação',
     width: 200,
-    Cell: ({ value }: valueArrayString) => (value ? (
-      <Flexbox middle><Forward id={Number(value)}/></Flexbox>
+    Cell: ({ value }) => (value ? (
+      <Flexbox middle><BtnConnect id={value} /></Flexbox>
     ) : null),
   }
 ]

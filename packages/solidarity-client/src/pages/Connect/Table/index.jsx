@@ -8,10 +8,9 @@ import React, {
 import "react-table/react-table.css";
 import ReactTable from "react-table";
 import * as turf from "@turf/turf";
-import { Link } from "react-router-dom";
-import { Flexbox2 as Flexbox, Title, Button } from "bonde-styleguide";
+import { useHistory, useLocation } from "react-router-dom";
+import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
 import { useStoreState, useStoreActions } from "easy-peasy";
-import styled from "styled-components";
 
 import {
   encodeText,
@@ -19,42 +18,43 @@ import {
   parseNumber,
   volunteer_category
 } from "../../../services/utils";
-import { FullWidth, Spacing, WrapButtons } from "./style";
+import { Wrap, StyledButton } from "./style";
 import columns from "./columns";
 
 import { If } from "../../../components/If";
 import Popup from "../../../components/Popups/Popup";
 
-const StyledFlexbox = styled(Flexbox)`
-  align-items: center;
-  margin-bottom: 25px;
-`;
-
 const Table = () => {
-  const volunteer = useStoreState(state => state.match.volunteer);
-  const zendeskAgent = useStoreState(state => state.match.agent);
-  const zendeskAgentName = useStoreState(state => state.match.assignee_name);
+  const { search } = useLocation()
+  const { goBack } = useHistory()
 
-  const popups = useStoreState(state => state.popups.data);
-  const tableData = useStoreState(state => state.table.data);
-  const individual = useStoreState(state => state.individual.data);
-  const error = useStoreState(state => state.error.error);
-
+  const getVolunteer = useStoreActions(actions => actions.volunteer.getVolunteer);
   const getTableData = useStoreActions(actions => actions.table.getTableData)
+  
   const setPopup = useStoreActions(actions => actions.popups.setPopup);
   const setError = useStoreActions(actions => actions.error.setError);
   const fowardTickets = useStoreActions(
     actions => actions.foward.fowardTickets
   );
 
+  const tableData = useStoreState(state => state.table.data);
+  const individual = useStoreState(state => state.individual.data);
+  const volunteer = useStoreState(state => state.volunteer.data);
+
+  const popups = useStoreState(state => state.popups.data);
+  const error = useStoreState(state => state.error.error);
+
   const [success, setSuccess] = useState(false);
-  const [ticketId, setTicketId] = useState(0);
   const [isLoading, setLoader] = useState(false);
 
+  useEffect(() => {
+    const id = search.split('=')[1]
+    if (id) getVolunteer(id)
+    getTableData('individuals')
+  }, [getTableData, getVolunteer])
+
   const { confirm, wrapper, noPhoneNumber } = popups;
-
-  const { name: individual_name, ticket_id: individual_ticket_id } = individual;
-
+  const { name: individual_name, phone: individual_phone } = individual;
   const {
     latitude,
     longitude,
@@ -66,13 +66,8 @@ const Table = () => {
     registration_number: volunteer_registry
   } = volunteer;
 
-  useEffect(() => {
-    getTableData('individuals')
-  }, [getTableData])
-
   const volunteerFirstName = volunteer_name.split(" ")[0];
   const selectedCategory = volunteer_category(volunteer_organization_id);
-
   const distance = 50;
   const lat = Number(latitude);
   const lng = Number(longitude);
@@ -120,11 +115,14 @@ const Table = () => {
   );
 
   const filteredTableData = useMemo(() => {
-    const data = filterByDistance(filterByCategory(tableData));
-
-    return data;
+    const data = filterByDistance(
+      filterByCategory(
+        tableData
+      )
+    )
+    return data
     // eslint-disable-next-line
-  }, [filterByDistance, tableData]);
+  }, [tableData]);
 
   const submitConfirm = async requestBody => {
     const req = await fowardTickets({
@@ -134,7 +132,6 @@ const Table = () => {
     });
     if (req && req.status === 200) {
       setLoader(false);
-      setTicketId(req.data.ticketId);
     }
   };
 
@@ -148,15 +145,15 @@ const Table = () => {
     setPopup({ ...popups, confirm: false });
     setLoader(true);
     return submitConfirm({
-      agent: zendeskAgent,
+      // agent: zendeskAgent,
       individual_name,
-      individual_ticket_id,
+      // individual_ticket_id,
       volunteer_name,
       volunteer_user_id,
       volunteer_registry,
       volunteer_phone: Number(parseNumber(phone || 0)),
       volunteer_organization_id,
-      assignee_name: zendeskAgentName
+      // assignee_name: zendeskAgentName
     });
   };
 
@@ -170,44 +167,40 @@ const Table = () => {
       wrapper: false,
       confirm: false
     });
+    return goBack()
   };
 
   return filteredTableData.length === 0 ? (
-    <FullWidth>
-      <Flexbox>
+    <Flexbox middle>
+      <Wrap>
         <Title.H3 margin={{ bottom: 30 }}>Nenhum resultado.</Title.H3>
-      </Flexbox>
-    </FullWidth>
+      </Wrap>
+    </Flexbox>
   ) : (
     <Fragment>
-      <FullWidth>
-        <Flexbox vertical>
-          <StyledFlexbox spacing="between">
-            <div>
-              <Spacing margin="10">
+      <Flexbox vertical middle>
+        <Wrap>
+          <Flexbox vertical>
+            <Spacing margin={{ bottom: 20}}>
+              <Flexbox>
+                <StyledButton flat onClick={goBack}>{'< fazer match'}</StyledButton>
+              </Flexbox>
+              <Spacing margin={{ top: 10, bottom: 10 }}>
                 <Title.H3>Match realizado!</Title.H3>
               </Spacing>
               <Title.H5 color="#444444">
-                {`${filteredTableData.length} solicitações de MSRs próximas de ${volunteer_name}`}
+                {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
               </Title.H5>
-            </div>
-            <WrapButtons>
-              <Link to="/voluntarias">
-                <Button>Voluntárias</Button>
-              </Link>
-              <Link to="/geobonde/mapa">
-                <Button>Mapa</Button>
-              </Link>
-            </WrapButtons>
-          </StyledFlexbox>
+            </Spacing>
+          </Flexbox>
           <ReactTable
             data={filteredTableData}
             columns={columns}
             defaultPageSize={10}
             className="-striped -highlight"
           />
-        </Flexbox>
-      </FullWidth>
+        </Wrap>
+      </Flexbox>
       <If condition={wrapper}>
         <Popup
           individualName={individual_name}
@@ -219,14 +212,21 @@ const Table = () => {
           }}
           success={{
             onClose: closeAllPopups,
-            link: () =>
-              createWhatsappLink(volunteer_whatsapp, {
+            link: {
+              individual: () => createWhatsappLink(individual_phone, {
                 volunteer_name: volunteerFirstName,
                 individual_name,
-                agent: zendeskAgentName
+                agent: "Voluntária",
+                isVolunteer: false
               }),
-            isEnabled: success,
-            ticketId
+              volunteer: () => createWhatsappLink(volunteer_whatsapp, {
+                volunteer_name: volunteerFirstName,
+                individual_name,
+                agent: "Voluntária",
+                isVolunteer: true
+              }),
+            },
+            isEnabled: success
           }}
           error={{
             onClose: closeAllPopups,
