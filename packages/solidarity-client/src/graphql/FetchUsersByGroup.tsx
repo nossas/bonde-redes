@@ -4,52 +4,80 @@ import { useQuery } from '@apollo/react-hooks'
 import { SessionHOC } from '../services/session'
 
 const USERS_BY_GROUP = gql`
-query UsersByGroup (
-	$volunteers: bigint_comparison_exp!,
-	$individuals: bigint_comparison_exp!,
-	$context: Int_comparison_exp!
-) {
-  volunteers: solidarity_users(where: { organization_id: $volunteers, community_id: $context }) {
-    name
-  }
-  volunteers_count: solidarity_users_aggregate(where: { organization_id: $volunteers, community_id: $context  }) {
+query RedeGroups($context: Int_comparison_exp!) {
+  volunteers: rede_individuals(where: {
+    group: {
+      community_id: $context,
+      is_volunteer: { _eq: true }
+    }
+  }) {
+    ...individual
+  },
+  volunteers_count: rede_individuals_aggregate(where: {
+    group: {
+      community_id: $context,
+      is_volunteer: { _eq: true }
+    }
+  }) {
     aggregate {
       count
     }
-  }
-  
-  individuals: solidarity_users(where: { organization_id: $individuals, community_id: $context  }) {
-    name
-  }
-  individuals_count: solidarity_users_aggregate(where: { organization_id: $individuals, community_id: $context  }) {
+  },
+  individuals: rede_individuals(where: {
+    group: {
+      community_id: $context,
+      is_volunteer: { _eq: false }
+    }
+  }) {
+    ...individual
+  },
+  individuals_count: rede_individuals_aggregate(where: {
+    group: {
+      community_id: $context,
+      is_volunteer: { _eq: false }
+    }
+  }) {
     aggregate {
       count
     }
-  }
+  },
 }
+
+fragment individual on rede_individuals {
+	address
+	city
+	created_at
+	email
+	field_occupation
+	form_entry_id
+	id
+	latitude
+	longitude
+	name
+	phone
+	rede_group_id
+	register_occupation
+	state
+	updated_at
+	whatsapp
+}
+
 `
 
 const FetchUsersByGroup = SessionHOC((props: any) => {
-	const { 
-		children, 
-		volunteers = [360269610652, 360282119532], 
-		individuals = [360273031591], 
-		session: { community } 
-	} = props
-	
-	const variables = {
-		volunteers: { _in: volunteers },
-		individuals: { _in: individuals },
-		context: { _eq: community.id }
-	}
+	const { children, session: { community } } = props
+
+	const variables = { context: { _eq: community.id } }
 
 	const { loading, error, data } = useQuery(USERS_BY_GROUP, { variables })
 
 	if (loading) return <p>Loading...</p>
+
 	if (error) {
 		console.log('error', error)
 		return <p>Error</p>
 	}
+
 	return children({
 		volunteers: {
 			data: data.volunteers,
