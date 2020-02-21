@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import {
   Header as BondeHeader,
   Title,
@@ -11,14 +11,20 @@ import PageTabs from './PageTabs'
 const Header: React.FC = () => {
   const { pathname: path } = useLocation();
   const [selectedTab, setTab] = useState("grupos")
-  
+
   const tabs = [
-    { "name": "grupos", "to": "/groups/volunteers"},
-    { "name": "relações", "to": "/relacoes"}
+    { 
+      "name": "grupos", 
+      "to": "/groups/volunteers" || "/connect"
+    },
+    { 
+      "name": "relações", 
+      "to": "/relations"
+    }
   ]
 
   useEffect(() => {
-    const currentTab = tabs.find(i => i["to"] === path) || 'grupos'
+    const currentTab = tabs.find(i => i["to"] === path) || { name: "grupos" }
     setTab(currentTab["name"])
   }, [path, setTab])
 
