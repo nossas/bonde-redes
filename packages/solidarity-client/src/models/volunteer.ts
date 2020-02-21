@@ -5,24 +5,20 @@ interface Volunteer {
   latitude: string
   longitude: string
   email: string
-  organization_id: number
   name: string
   whatsapp: string
-  user_id: number
+  id: number
   phone: string
-  registration_number: string,
 }
 
 const data: Volunteer = {
   latitude: '0',
   longitude: '0',
   email: '',
-  organization_id: 0,
   name: '',
   whatsapp: '',
-  user_id: 0,
+  id: 0,
   phone: '',
-  registration_number: '',
 }
 
 const volunteersModel = {
