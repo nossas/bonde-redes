@@ -88,6 +88,7 @@ importers:
       yup: ^0.27.0
   packages/listener-redes:
     dependencies:
+      throng: 4.0.0
       tslib: 1.10.0
     devDependencies:
       '@types/jest': 25.1.3
@@ -114,6 +115,7 @@ importers:
       jest: ~24.9.0
       prettier: ~1.19.1
       rimraf: ~3.0.2
+      throng: ^4.0.0
       ts-jest: ~24.1.0
       tslib: ~1.10.0
       tsutils: ~3.17.0
@@ -9569,6 +9571,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-gteb/zCmfEAF/9XiUVMArZyk168=
+  /lodash.defaults/4.2.0:
+    dev: false
+    resolution:
+      integrity: sha1-0JF4cW/+pN3p5ft7N/bwgCJ0WAw=
   /lodash.includes/4.3.0:
     dev: false
     resolution:
@@ -13930,6 +13936,14 @@ packages:
   /throat/4.1.0:
     resolution:
       integrity: sha1-iQN8vJLFarGJJua6TLsgDhVnKmo=
+  /throng/4.0.0:
+    dependencies:
+      lodash.defaults: 4.2.0
+    dev: false
+    engines:
+      node: '>= 4.0.0'
+    resolution:
+      integrity: sha1-mDxroZk7WOroWZmKpof/6I34TBc=
   /through/2.3.8:
     resolution:
       integrity: sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=

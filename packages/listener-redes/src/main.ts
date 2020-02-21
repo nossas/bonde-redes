@@ -1,3 +1,5 @@
+const throng = require('throng');
+
 /**
  * Some predefined delays (in milliseconds).
  */
@@ -28,5 +30,17 @@ function delayedHello(
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export async function greeter(name: string) {
-  return await delayedHello(name, Delays.Long);
+  return await delayedHello(name, Delays.Short);
 }
+
+throng(async (id) => {
+  console.log(`Started worker ${id}`);
+
+  console.log(await greeter('my name'));
+
+  process.on('SIGTERM', function() {
+    console.log(`Worker ${id} exiting`);
+    console.log('Cleanup here');
+    process.exit();
+  });
+});
