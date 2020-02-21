@@ -15,7 +15,7 @@ import { useStoreActions, useStoreState } from 'easy-peasy'
 import { getUserData, emailValidation, getAgentName } from '../services/utils'
 
 import Select from './Select'
-import dicioAgent from '../pages/Match/Table/dicioAgent'
+import dicioAgent from '../pages/Connect/Table/dicioAgent'
 
 const FormWrapper = styled.form`
   width: 50%;

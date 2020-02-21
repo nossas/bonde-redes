@@ -3,13 +3,13 @@ import { action } from 'easy-peasy'
 interface Individual {
   email: string
   name: string
-  ticket_id: number
+  phone: string
 }
 
 const data: Individual =  ({
   email: '',
   name: '',
-  ticket_id: 0
+  phone: ''
 })
 
 const individualModel = {

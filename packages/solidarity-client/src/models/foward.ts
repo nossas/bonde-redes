@@ -8,7 +8,7 @@ interface Foward {
     volunteer_name: string
     individual_name: string
     individual_ticket_id: number
-    agent: number
+    // agent: number
     volunteer_organization_id: number
     volunteer_registry: string
     volunteer_phone: string
@@ -37,9 +37,11 @@ const fowardModel = {
       //   volunteer_user_id: 377577169651,
       //   assignee_name: "Ana"
       // }
-      const response = await request.post(data)
+      // const response = await request.post(data)
       setSuccess(true)
-      return response
+      return {
+        status: 200
+      }
     }
     catch (err) {
       console.log(err)

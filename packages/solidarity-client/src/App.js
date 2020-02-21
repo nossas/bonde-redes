@@ -1,19 +1,22 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import React from "react";
-import { Footer } from "bonde-styleguide";
 import { StoreProvider } from "easy-peasy";
-import { Redirect, Route, Switch } from "react-router";
-import { BrowserRouter } from "react-router-dom";
+import { 
+  // Redirect, 
+  Route, 
+  Switch 
+} from "react-router";
+import { Router } from "react-router-dom";
 import styled from "styled-components";
 
 import Header from "./components/Header";
 import history from "./history";
 import Map from "./pages/Geobonde/Map";
 import Geobonde from "./pages/Geobonde/Table";
-import Match from "./pages/Match/Table";
+import Match from "./pages/Connect/Table";
 import GroupsWrapper from "./pages/Groups"
-import FetchUsersByGroup from './graphql/FetchUsersByGroup'
+// import FetchUsersByGroup from './graphql/FetchUsersByGroup'
 
 import { SessionProvider, SessionPageLayout, SessionHOC } from "./services/session";
 
@@ -37,27 +40,29 @@ const InsideApp = () => (
   <AppWrapper>
     <Header />
     <AppBody>
-      <Route
-        path="/"
-        exact
-        component={TestPage}
-      />
-      <Route
-        path="/groups"
-        component={GroupsWrapper}
-      />
-      <Route
-        path="/geobonde"
-        component={Geobonde}
-      />
-      <Route
-        path="geobonde/mapa"
-        component={Map}
-      />
-      <Route
-        path="/encaminhamento"
-        component={Match}
-      />
+      <Switch>
+        <Route
+          path="/"
+          exact
+          component={TestPage}
+        />
+        <Route
+          path="/groups"
+          component={GroupsWrapper}
+        />
+        <Route
+          path="/geobonde"
+          component={Geobonde}
+        />
+        <Route
+          path="geobonde/mapa"
+          component={Map}
+        />
+        <Route
+          path="/connect"
+          component={Match}
+        />
+      </Switch>
     </AppBody>
   </AppWrapper>
 )
@@ -65,9 +70,9 @@ const InsideApp = () => (
 const App = () => (
   <SessionProvider>
     <StoreProvider store={store}>
-      <BrowserRouter history={history}>
+      <Router history={history}>
         <SessionPageLayout path="/" component={InsideApp} />
-      </BrowserRouter>
+      </Router>
     </StoreProvider>
   </SessionProvider>
 );

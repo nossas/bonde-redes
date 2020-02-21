@@ -1,5 +1,5 @@
 import { action } from 'easy-peasy';
-import dicioAgent from '../pages/Match/Table/dicioAgent'
+// import dicioAgent from '../pages/Connect/Table/dicioAgent'
 
 interface Volunteer {
   latitude: string
@@ -25,13 +25,13 @@ const volunteer: Volunteer = {
   registration_number: ''
 }
 
-type agentTypes = keyof typeof dicioAgent | 'default'
-const agent: agentTypes = 'default'
+// type agentTypes = keyof typeof dicioAgent | 'default'
+// const agent: agentTypes = 'default'
 const assignee_name: string = ''
 
 const matchFormModel = {
   volunteer,
-  agent,
+  // agent,
   assignee_name,
   setForm: action((state, payload) => ({
     ...payload
