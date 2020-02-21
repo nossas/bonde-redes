@@ -1,5 +1,5 @@
 import React from 'react'
-import BtnConnect from '../../../components/BtnConnect'
+import BtnConnect from '../../components/BtnConnect'
 import { Flexbox2 as Flexbox } from 'bonde-styleguide'
 
 type valueArrayString = {

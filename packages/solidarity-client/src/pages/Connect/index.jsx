@@ -17,12 +17,12 @@ import {
   whatsappText,
   parseNumber,
   volunteer_category
-} from "../../../services/utils";
+} from "../../services/utils";
 import { Wrap, StyledButton } from "./style";
 import columns from "./columns";
 
-import { If } from "../../../components/If";
-import Popup from "../../../components/Popups/Popup";
+import { If } from "../../components/If";
+import Popup from "../../components/Popups/Popup";
 
 const Table = () => {
   const { search } = useLocation()
@@ -51,7 +51,7 @@ const Table = () => {
     const id = search.split('=')[1]
     if (id) getVolunteer(id)
     getTableData('individuals')
-  }, [getTableData, getVolunteer])
+  }, [getTableData, getVolunteer, search])
 
   const { confirm, wrapper, noPhoneNumber } = popups;
   const { name: individual_name, phone: individual_phone } = individual;
