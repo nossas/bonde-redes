@@ -3,12 +3,11 @@ import React, {
   useCallback,
   Fragment,
   useState,
-  useEffect
 } from "react";
 import "react-table/react-table.css";
 import ReactTable from "react-table";
 import * as turf from "@turf/turf";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
 import { useStoreState, useStoreActions } from "easy-peasy";
 
@@ -16,7 +15,6 @@ import {
   encodeText,
   whatsappText,
   parseNumber,
-  volunteer_category
 } from "../../services/utils";
 import { Wrap, StyledButton } from "./style";
 import columns from "./columns";
@@ -25,12 +23,8 @@ import { If } from "../../components/If";
 import Popup from "../../components/Popups/Popup";
 
 const Table = () => {
-  const { search } = useLocation()
   const { goBack } = useHistory()
 
-  const getVolunteer = useStoreActions(actions => actions.volunteer.getVolunteer);
-  const getTableData = useStoreActions(actions => actions.table.getTableData)
-  
   const setPopup = useStoreActions(actions => actions.popups.setPopup);
   const setError = useStoreActions(actions => actions.error.setError);
   const fowardTickets = useStoreActions(
@@ -47,27 +41,19 @@ const Table = () => {
   const [success, setSuccess] = useState(false);
   const [isLoading, setLoader] = useState(false);
 
-  useEffect(() => {
-    const id = search.split('=')[1]
-    if (id) getVolunteer(id)
-    getTableData('individuals')
-  }, [getTableData, getVolunteer, search])
-
   const { confirm, wrapper, noPhoneNumber } = popups;
-  const { name: individual_name, phone: individual_phone } = individual;
+  const { name: individual_name, phone: individual_phone, id: individual_user_id } = individual;
   const {
     latitude,
     longitude,
     name: volunteer_name,
     whatsapp: volunteer_whatsapp,
-    organization_id: volunteer_organization_id,
     phone,
-    user_id: volunteer_user_id,
-    registration_number: volunteer_registry
+    id: volunteer_user_id,
   } = volunteer;
 
   const volunteerFirstName = volunteer_name.split(" ")[0];
-  const selectedCategory = volunteer_category(volunteer_organization_id);
+  // const selectedCategory = volunteer_category(volunteer_organization_id);
   const distance = 50;
   const lat = Number(latitude);
   const lng = Number(longitude);
@@ -105,20 +91,18 @@ const Table = () => {
     [distance, lat, lng]
   );
 
-  const filterByCategory = useCallback(
-    data =>
-      data.filter(
-        i => i.tipo_de_acolhimento === selectedCategory
-      ),
-    // eslint-disable-next-line
-    [volunteer_organization_id]
-  );
+  // const filterByCategory = useCallback(
+  //   data =>
+  //     data.filter(
+  //       i => i.tipo_de_acolhimento === selectedCategory
+  //     ),
+  //   // eslint-disable-next-line
+  //   [volunteer_organization_id]
+  // );
 
   const filteredTableData = useMemo(() => {
     const data = filterByDistance(
-      filterByCategory(
-        tableData
-      )
+      tableData.individual
     )
     return data
     // eslint-disable-next-line
@@ -145,15 +129,11 @@ const Table = () => {
     setPopup({ ...popups, confirm: false });
     setLoader(true);
     return submitConfirm({
-      // agent: zendeskAgent,
       individual_name,
-      // individual_ticket_id,
+      individual_user_id,
       volunteer_name,
       volunteer_user_id,
-      volunteer_registry,
       volunteer_phone: Number(parseNumber(phone || 0)),
-      volunteer_organization_id,
-      // assignee_name: zendeskAgentName
     });
   };
 

@@ -7,12 +7,9 @@ interface Foward {
   data: {
     volunteer_name: string
     individual_name: string
-    individual_ticket_id: number
-    // agent: number
-    volunteer_organization_id: number
-    volunteer_registry: string
     volunteer_phone: string
     volunteer_user_id: number
+    individual_user_id: number
   }
 }
 

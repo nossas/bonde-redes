@@ -4,12 +4,14 @@ interface Individual {
   email: string
   name: string
   phone: string
+  id: number
 }
 
 const data: Individual =  ({
   email: '',
   name: '',
-  phone: ''
+  phone: '',
+  id: 0
 })
 
 const individualModel = {

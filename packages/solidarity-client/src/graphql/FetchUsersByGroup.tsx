@@ -61,7 +61,6 @@ fragment individual on rede_individuals {
 	updated_at
 	whatsapp
 }
-
 `
 
 const FetchUsersByGroup = SessionHOC((props: any) => {

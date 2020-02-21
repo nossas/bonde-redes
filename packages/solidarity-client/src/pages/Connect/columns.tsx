@@ -2,10 +2,6 @@ import React from 'react'
 import BtnConnect from '../../components/BtnConnect'
 import { Flexbox2 as Flexbox } from 'bonde-styleguide'
 
-type valueArrayString = {
-  value: string[]
-}
-
 type valueString = {
   value: string
 }
@@ -24,21 +20,24 @@ const columns = [
     accessor: 'distance',
     Header: 'Distância (km)',
     width: 150
-  }, {
+  }, 
+  {
     accessor: 'address',
     Header: 'Endereço',
     width: 300,
-  }, {
-    accessor: 'priority',
-    Header: 'Prioridade',
-  }, {
-    accessor: 'tipo_de_acolhimento',
-    Header: 'Tipo de acolhimento',
-    Cell: ({ value }: valueArrayString) => (value ? (
-      <span>{value}</span>
-    ) : '-'),
-    width: 200
-  }, {
+  }, 
+  // {
+  //   accessor: 'priority',
+  //   Header: 'Prioridade',
+  // }, {
+  //   accessor: 'tipo_de_acolhimento',
+  //   Header: 'Tipo de acolhimento',
+  //   Cell: ({ value }: valueArrayString) => (value ? (
+  //     <span>{value}</span>
+  //   ) : '-'),
+  //   width: 200
+  // }, 
+  {
     accessor: 'created_at',
     Header: 'Data de criação do ticket',
     Cell: ({ value }: valueString) => {
@@ -57,7 +56,7 @@ const columns = [
   //   ) : null),
   // }, 
   {
-    accessor: 'user_id',
+    accessor: 'id',
     Header: 'Ação',
     width: 200,
     Cell: ({ value }) => (value ? (

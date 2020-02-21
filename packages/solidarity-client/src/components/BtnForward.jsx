@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { Button } from 'bonde-styleguide'
 import { useStoreState, useStoreActions } from 'easy-peasy';
-
+import { useHistory } from 'react-router-dom'
 import { getUserData } from '../services/utils'
 
 const BtnWarning = styled(Button)`
@@ -11,39 +11,33 @@ const BtnWarning = styled(Button)`
   color: ${props => props.disabled ? '#fff' : '#EE0090'}
 `
 
-const Connect = ({ id }) => {
-  const setIndividual = useStoreActions(actions => actions.individual.setIndividual)
-  const setPopup = useStoreActions(actions => actions.popups.setPopup)
+const BtnForward = ({ id }) => {
+  const setVolunteer = useStoreActions(actions => actions.volunteer.setVolunteer)
   const tableData = useStoreState(state => state.table.data)
-  const volunteer = useStoreState(state => state.volunteer.data)
-
+  const history = useHistory()
   const onClick = () => {
     // TODO: Tratar caso em que a usuária não tem user_id
     const user = getUserData({
       user: id,
-      data: tableData.individual,
+      data: tableData.volunteers,
       filterBy: "id"
     })
-    setIndividual(user)
-    setPopup({
-      confirm: true,
-      wrapper:  true
-    })
+    setVolunteer(user)
+    history.push("/connect")
   }
 
   return (
     <BtnWarning
       light
       onClick={onClick}
-      disabled={volunteer.email === ''}
     >
-      Encaminhar
+      fazer match
     </BtnWarning>
   )
 }
 
-Connect.propTypes = {
+BtnForward.propTypes = {
   id: PropTypes.number.isRequired
 }
 
-export default Connect
+export default BtnForward

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useLocation, Link, useHistory } from "react-router-dom";
 import { Page, Flexbox2 as Flexbox, Title, Spacing } from 'bonde-styleguide'
 import ReactTable from 'react-table'
+import { useStoreActions } from 'easy-peasy'
 
 import 'react-table/react-table.css'
 import columns from './columns'
@@ -36,6 +37,7 @@ const Groups = () => {
   const { pathname } = useLocation()
   const kind = pathname.split('/')[2] 
   const history = useHistory()
+  const setTable = useStoreActions((actions: any) => actions.table.setTable)
 
   useEffect(() => {
     history.push("/groups/volunteers")
@@ -49,6 +51,10 @@ const Groups = () => {
         volunteers: volunteers.data,
         individuals: individuals.data
       }
+      setTable({
+        individuals: individuals.data,
+        volunteers: volunteers.data
+      })
       return (
         <Page>
           <Flexbox middle>
