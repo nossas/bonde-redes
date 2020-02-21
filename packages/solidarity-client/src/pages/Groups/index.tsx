@@ -1,5 +1,5 @@
-import React from 'react'
-import { useLocation, Link } from "react-router-dom";
+import React, { useEffect } from 'react'
+import { useLocation, Link, useHistory } from "react-router-dom";
 import { Page, Flexbox2 as Flexbox, Title, Spacing } from 'bonde-styleguide'
 import ReactTable from 'react-table'
 
@@ -35,6 +35,12 @@ const Groups = () => {
   // @ts-ignore
   const { pathname } = useLocation()
   const kind = pathname.split('/')[2] 
+  const history = useHistory()
+
+  useEffect(() => {
+    history.push("/groups/volunteers")
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <FetchUsersByGroup>

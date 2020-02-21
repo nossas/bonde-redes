@@ -3,7 +3,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import React from "react";
 import { StoreProvider } from "easy-peasy";
 import { 
-  // Redirect, 
+  Redirect, 
   Route, 
   Switch 
 } from "react-router";
@@ -14,12 +14,12 @@ import Header from "./components/Header";
 import history from "./history";
 import Map from "./pages/Geobonde/Map";
 import Geobonde from "./pages/Geobonde/Table";
-import Match from "./pages/Connect/Table";
+import Match from "./pages/Connect";
 import GroupsWrapper from "./pages/Groups"
 import Relations from "./pages/Relations"
 // import FetchUsersByGroup from './graphql/FetchUsersByGroup'
 
-import { SessionProvider, SessionPageLayout, SessionHOC } from "./services/session";
+import { SessionProvider, SessionPageLayout } from "./services/session";
 
 import store from "./store";
 
@@ -33,20 +33,17 @@ const AppBody = styled.div`
   flex-grow: 1;
 `;
 
-const TestPage = () => (
-  <h1>Página de teste</h1>
-)
-
 const InsideApp = () => (
   <AppWrapper>
     <Header />
     <AppBody>
       <Switch>
         <Route
-          path="/"
           exact
-          component={TestPage}
-        />
+          path="/"
+        >
+          <Redirect to="/groups" />
+        </Route>
         <Route
           path="/groups"
           component={GroupsWrapper}
