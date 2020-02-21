@@ -1,5 +1,5 @@
 import { thunk, action } from 'easy-peasy'
-import request from '../services/request'
+// import request from '../services/request'
 
 interface Foward {
   setError: Function
