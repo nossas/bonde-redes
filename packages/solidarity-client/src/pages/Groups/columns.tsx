@@ -55,7 +55,7 @@ export const volunteersColumns = [
       <Flexbox middle>     
         <Link 
           to={{
-            pathname: "/groups/individuals",
+            pathname: "/connect",
             search: `?id=${value}`
           }}
         >
