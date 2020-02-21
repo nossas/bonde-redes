@@ -15,8 +15,8 @@ import history from "./history";
 import Map from "./pages/Geobonde/Map";
 import Geobonde from "./pages/Geobonde/Table";
 import Match from "./pages/Connect";
-import GroupsWrapper from "./pages/Groups"
-import Relations from "./pages/Relations"
+import GroupsWrapper from "./pages/Groups";
+import Relations from "./pages/Relations";
 // import FetchUsersByGroup from './graphql/FetchUsersByGroup'
 
 import { SessionProvider, SessionPageLayout } from "./services/session";
@@ -35,13 +35,10 @@ const AppBody = styled.div`
 
 const InsideApp = () => (
   <AppWrapper>
-    <Header />
+    <Header zIndex={0} />
     <AppBody>
       <Switch>
-        <Route
-          exact
-          path="/"
-        >
+        <Route exact path="/">
           <Redirect to="/groups" />
         </Route>
         <Route

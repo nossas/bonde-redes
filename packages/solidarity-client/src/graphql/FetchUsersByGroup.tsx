@@ -36,8 +36,6 @@ const FetchUsersByGroup = SessionHOC((props: any) => {
 		individuals = [360273031591], 
 		session: { community } 
 	} = props
-
-	if (!community) return <div>Selecione uma comunidade!</div>
 	
 	const variables = {
 		volunteers: { _in: volunteers },
@@ -62,6 +60,6 @@ const FetchUsersByGroup = SessionHOC((props: any) => {
 			count: data.individuals_count.aggregate.count
 		}
 	})
-})
+}, { required: true })
 
 export default FetchUsersByGroup

@@ -5,10 +5,9 @@ import {
   Title,
   Spacing
 } from "bonde-styleguide";
-import styled from 'styled-components'
 import PageTabs from './PageTabs'
 
-const Header: React.FC = () => {
+const Header: React.FC = ({ zIndex }: any) => {
   const { pathname: path } = useLocation();
   const [selectedTab, setTab] = useState("grupos")
 
@@ -28,12 +27,8 @@ const Header: React.FC = () => {
     setTab(currentTab["name"])
   }, [path, setTab, tabs])
 
-  const StyledHeader = styled(BondeHeader)`
-    z-index: unset;
-  `
-
   return (
-    <StyledHeader>
+    <BondeHeader zIndex={zIndex}>
       <Spacing margin={{ bottom: 20 }}>
         <Title.H3 color="#ffffff">Redes</Title.H3>
       </Spacing>
@@ -41,7 +36,7 @@ const Header: React.FC = () => {
         tabs={tabs} 
         selectedTab={selectedTab} 
       />
-    </StyledHeader>
+    </BondeHeader>
   );
 };
 
