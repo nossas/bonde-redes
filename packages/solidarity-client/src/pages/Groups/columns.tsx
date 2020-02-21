@@ -59,7 +59,51 @@ export const volunteersColumns = [
   }
 ]
 
-const individualsColumns = []
+export const individualsColumns = [
+  {
+    accessor: 'name',
+    Header: 'Nome',
+  }, {
+    accessor: 'email',
+    Header: 'Email',
+  },
+  {
+    accessor: 'address',
+    Header: 'Endereço',
+  }, 
+  // {
+  //   accessor: 'group',
+  //   Header: 'Área de Atuação',
+  //   Cell: ({ value }) => (value ? (
+  //     <Flexbox middle>
+  //       {value.name}
+  //     </Flexbox>
+  //   ) : null),
+  // },{
+  //   accessor: 'availability',
+  //   Header: 'Vagas Disponíveis',
+  // }, {
+  //   accessor: 'disponibilidade_de_atendimentos',
+  //   Header: 'Disponibilidade Total',
+  // }, {
+  //   accessor: 'atendimentos_em_andamento_calculado_',
+  //   Header: 'Atendimentos em Andamento',
+  // }, {
+  //   accessor: 'pending',
+  //   Header: 'Encaminhamentos recebidos nos últimos 30 dias',
+  // }, 
+  {
+    accessor: 'created_at',
+    Header: 'Data de criação do ticket',
+    Cell: ({ value }) => {
+      if (!value) {
+        return '-'
+      }
+      const data = new Date(value)
+      return data.toLocaleDateString('pt-BR')
+    },
+  }
+]
 
 const dicio = {
   "/groups/volunteers": volunteersColumns,
