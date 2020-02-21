@@ -193,6 +193,32 @@ pipeline:
       status: success
       event: tag
 
+  publish-stag-listener-redes:
+    image: plugins/docker
+    repo: nossas/bonde-listener-redes
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/listener-redes/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
+
+  publish-prod-listener-redes:
+    image: plugins/docker
+    repo: nossas/bonde-listener-redes
+    group: publishing
+    secrets: [ docker_username, docker_password ]
+    dockerfile: packages/listener-redes/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
+
   deploy-stag-webhooks-registry:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
