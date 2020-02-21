@@ -17,7 +17,7 @@ interface Props {
 }
 
 const GroupsMenu: React.FC<Props> = ({ volunteersCount, individualsCount }, { getVolunteers, getIndividuals }) => 
-  <Spacing margin={{ top: 20, bottom: 20 }}>
+  <Spacing margin={{ bottom: 20 }}>
     <Flexbox horizontal>
       <Spacing margin={{ right: 20 }}>
         <Title.H5 color="#EE0099" onClick={getVolunteers}>
@@ -30,58 +30,55 @@ const GroupsMenu: React.FC<Props> = ({ volunteersCount, individualsCount }, { ge
     </Flexbox>
   </Spacing>
 
-// const TestPage = SessionHOC(({ session }) => {
-
-//   return (
-//     <FetchUsersByGroup contextID={community.id}>
-//       {(data) => {
-//         return (<h1>Isso é uma pagina de teste</h1>)
-//       }}
-//     </FetchUsersByGroup>
-//   )
-// })
-
 const Groups = ({ match }) => {
+  const tableData = useStoreState(state => state.table.data)
+  const count = useStoreState(state => state.table.count)
+  const getAvailableVolunteers = useStoreActions((actions: any) => actions.table.getTableData)
   // @ts-ignore
   const { pathname } = useLocation()
-  const { kind } = useParams()
+  const kind = pathname.split('/')[2] 
   const dicio = {
-    "volunteers": ["volunteers"]["data"],
-    "individuals": ["individuals"]["data"]
+    "volunteers": kind["data"],
+    "individuals": kind["data"]
   }
+  useEffect(() => {
+    getAvailableVolunteers("volunteers")
+  }, [getAvailableVolunteers])
+
+  const data = {
+    volunteers: tableData,
+    individuals: []
+  }
+
   return (
-    <FetchUsersByGroup>
-      {({ volunteers, individuals }) => 
-        <Page>
-          <Flexbox middle>
-            <Wrap>
-              {GroupsMenu(
-                { 
-                  volunteersCount: volunteers.count || 0,
-                  individualsCount: individuals.count || 0,
-                }, 
-                { 
-                  getVolunteers: () => {}, 
-                  getIndividuals: () => {} 
-                }
-              )}
-              <ReactTable
-                data={dicio[kind || "volunteers"]}
-                columns={columns(pathname)}
-                defaultPageSize={10}
-                defaultSorted={[
-                  {
-                    id: "availability",
-                    desc: true
-                  }
-                ]}
-                className="-striped -highlight"
-              />
-            </Wrap>
-          </Flexbox>
-        </Page>
-      }
-    </FetchUsersByGroup>
+    <Page>
+      <Flexbox middle>
+        <Wrap>
+          {GroupsMenu(
+            { 
+              volunteersCount: count || 0,
+              individualsCount: 0,
+            }, 
+            { 
+              getVolunteers: () => {}, 
+              getIndividuals: () => {} 
+            }
+          )}
+          <ReactTable
+            data={data[kind]}
+            columns={columns(pathname)}
+            defaultPageSize={10}
+            defaultSorted={[
+              {
+                id: "availability",
+                desc: true
+              }
+            ]}
+            className="-striped -highlight"
+          />
+        </Wrap>
+      </Flexbox>
+    </Page>
   )
 }
 

@@ -43,18 +43,18 @@ export const volunteersColumns = [
       </a>
     ) : null),
   }, {
-    accessor: 'email',
+    accessor: 'user_id',
     Header: 'Ação',
     width: 200,
     Cell: ({ value }) => (value ? (
       <Flexbox middle>
-        <Link
+        <Link 
           to={{
-            pathname: "/match",
-            search: `email=${value}`,
+            pathname: "/connect",
+            search: `id=${value}`,
           }}
         >
-          <Button>Fazer Match</Button>
+          <Button>fazer match</Button>
         </Link>
       </Flexbox>
     ) : null),

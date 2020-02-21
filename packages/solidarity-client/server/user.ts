@@ -8,14 +8,16 @@ const main = async (req, res, next) => {
           user_id: {_eq: $id},
         }
       ) {
-        user_id,
-        email,
-        name,
-        organization_id,
-        latitude,
-        longitude,
-        data_de_inscricao_no_bonde,
-        condition,
+        user_id
+        email
+        name
+        organization_id
+        latitude
+        longitude
+        data_de_inscricao_no_bonde
+        condition
+        whatsapp
+        phone
       }
     }`,
     variables: {
