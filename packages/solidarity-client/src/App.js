@@ -16,6 +16,7 @@ import Map from "./pages/Geobonde/Map";
 import Geobonde from "./pages/Geobonde/Table";
 import Match from "./pages/Connect/Table";
 import GroupsWrapper from "./pages/Groups"
+import Relations from "./pages/Relations"
 // import FetchUsersByGroup from './graphql/FetchUsersByGroup'
 
 import { SessionProvider, SessionPageLayout, SessionHOC } from "./services/session";
@@ -61,6 +62,10 @@ const InsideApp = () => (
         <Route
           path="/connect"
           component={Match}
+        />
+        <Route
+          path="/relations"
+          component={Relations}
         />
       </Switch>
     </AppBody>
