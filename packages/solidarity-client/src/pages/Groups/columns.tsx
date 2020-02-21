@@ -1,6 +1,6 @@
 import React from 'react'
-import { Flexbox2 as Flexbox } from 'bonde-styleguide'
-import BtnForward from '../../components/BtnForward'
+import { Flexbox2 as Flexbox, Button } from 'bonde-styleguide'
+import { Link } from 'react-router-dom'
 
 export const volunteersColumns = [
   {
@@ -53,7 +53,14 @@ export const volunteersColumns = [
     width: 200,
     Cell: ({ value }) => (value ? (
       <Flexbox middle>     
-        <BtnForward id={value} />
+        <Link 
+          to={{
+            pathname: "/groups/individuals",
+            search: `?id=${value}`
+          }}
+        >
+          <Button>fazer match</Button>
+        </Link>
       </Flexbox>
     ) : null),
   }

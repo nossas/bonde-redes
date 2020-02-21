@@ -1,5 +1,4 @@
 import React, {
-  useMemo,
   useCallback,
   Fragment,
   useState,
@@ -7,7 +6,7 @@ import React, {
 import "react-table/react-table.css";
 import ReactTable from "react-table";
 import * as turf from "@turf/turf";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
 import { useStoreState, useStoreActions } from "easy-peasy";
 
@@ -15,23 +14,27 @@ import {
   encodeText,
   whatsappText,
   parseNumber,
+  getUserData
 } from "../../services/utils";
 import { Wrap, StyledButton } from "./style";
 import columns from "./columns";
+import FetchUsersByGroup from '../../graphql/FetchUsersByGroup'
 
 import { If } from "../../components/If";
 import Popup from "../../components/Popups/Popup";
 
 const Table = () => {
   const { goBack } = useHistory()
+  let query = useQuery();
 
+  const setTable = useStoreActions((actions) => actions.table.setTable)
+  const setVolunteer = useStoreActions(actions => actions.volunteer.setVolunteer)
   const setPopup = useStoreActions(actions => actions.popups.setPopup);
   const setError = useStoreActions(actions => actions.error.setError);
   const fowardTickets = useStoreActions(
     actions => actions.foward.fowardTickets
   );
 
-  const tableData = useStoreState(state => state.table.data);
   const individual = useStoreState(state => state.individual.data);
   const volunteer = useStoreState(state => state.volunteer.data);
 
@@ -64,6 +67,10 @@ const Table = () => {
     const urlencodedtext = encodeText(whatsappText(textVariables));
     return `https://api.whatsapp.com/send?phone=55${whatsappphonenumber}&text=${urlencodedtext}`;
   };
+
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
 
   const filterByDistance = useCallback(
     data =>
@@ -99,14 +106,6 @@ const Table = () => {
   //   // eslint-disable-next-line
   //   [volunteer_organization_id]
   // );
-
-  const filteredTableData = useMemo(() => {
-    const data = filterByDistance(
-      tableData.individual
-    )
-    return data
-    // eslint-disable-next-line
-  }, [tableData]);
 
   const submitConfirm = async requestBody => {
     const req = await fowardTickets({
@@ -149,83 +148,101 @@ const Table = () => {
     });
     return goBack()
   };
+  return (
+    <FetchUsersByGroup>
+      {({ individuals, volunteers }) => {
+        const user = getUserData({
+          user: query.get("id"),
+          data: volunteers.data,
+          filterBy: "id"
+        })
 
-  return filteredTableData.length === 0 ? (
-    <Flexbox middle>
-      <Wrap>
-        <Title.H3 margin={{ bottom: 30 }}>Nenhum resultado.</Title.H3>
-      </Wrap>
-    </Flexbox>
-  ) : (
-    <Fragment>
-      <Flexbox vertical middle>
-        <Wrap>
-          <Flexbox vertical>
-            <Spacing margin={{ bottom: 20}}>
-              <Flexbox>
-                <StyledButton flat onClick={goBack}>{'< fazer match'}</StyledButton>
-              </Flexbox>
-              <Spacing margin={{ top: 10, bottom: 10 }}>
-                <Title.H3>Match realizado!</Title.H3>
-              </Spacing>
-              <Title.H5 color="#444444">
-                {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
-              </Title.H5>
-            </Spacing>
+        setVolunteer(user)
+        setTable(individuals.data)
+
+        const filteredTableData = filterByDistance(
+          individuals.data  
+        )
+
+        return individuals.data.length === 0 ? (
+          <Flexbox middle>
+            <Wrap>
+              <Title.H3 margin={{ bottom: 30 }}>Nenhum resultado.</Title.H3>
+            </Wrap>
           </Flexbox>
-          <ReactTable
-            data={filteredTableData}
-            columns={columns}
-            defaultPageSize={10}
-            className="-striped -highlight"
-          />
-        </Wrap>
-      </Flexbox>
-      <If condition={wrapper}>
-        <Popup
-          individualName={individual_name}
-          volunteerName={volunteer_name}
-          confirm={{
-            onClose: closeAllPopups,
-            onSubmit: onConfirm,
-            isEnabled: confirm
-          }}
-          success={{
-            onClose: closeAllPopups,
-            link: {
-              individual: () => createWhatsappLink(individual_phone, {
-                volunteer_name: volunteerFirstName,
-                individual_name,
-                agent: "Voluntária",
-                isVolunteer: false
-              }),
-              volunteer: () => createWhatsappLink(volunteer_whatsapp, {
-                volunteer_name: volunteerFirstName,
-                individual_name,
-                agent: "Voluntária",
-                isVolunteer: true
-              }),
-            },
-            isEnabled: success
-          }}
-          error={{
-            onClose: closeAllPopups,
-            onSubmit: onConfirm,
-            isEnabled: error.status,
-            message: error.message
-          }}
-          warning={{
-            isEnabled: noPhoneNumber,
-            id: volunteer_user_id,
-            name: volunteer_name
-          }}
-          isOpen={wrapper}
-          onClose={closeAllPopups}
-          isLoading={isLoading}
-        />
-      </If>
-    </Fragment>
-  );
+        ) : (
+          <Fragment>
+            <Flexbox vertical middle>
+              <Wrap>
+                <Flexbox vertical>
+                  <Spacing margin={{ bottom: 20}}>
+                    <Flexbox>
+                      <StyledButton flat onClick={goBack}>{'< fazer match'}</StyledButton>
+                    </Flexbox>
+                    <Spacing margin={{ top: 10, bottom: 10 }}>
+                      <Title.H3>Match realizado!</Title.H3>
+                    </Spacing>
+                    <Title.H5 color="#444444">
+                      {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
+                    </Title.H5>
+                  </Spacing>
+                </Flexbox>
+                <ReactTable
+                  data={filteredTableData}
+                  columns={columns}
+                  defaultPageSize={10}
+                  className="-striped -highlight"
+                />
+              </Wrap>
+            </Flexbox>
+            <If condition={wrapper}>
+              <Popup
+                individualName={individual_name}
+                volunteerName={volunteer_name}
+                confirm={{
+                  onClose: closeAllPopups,
+                  onSubmit: onConfirm,
+                  isEnabled: confirm
+                }}
+                success={{
+                  onClose: closeAllPopups,
+                  link: {
+                    individual: () => createWhatsappLink(individual_phone, {
+                      volunteer_name: volunteerFirstName,
+                      individual_name,
+                      agent: "Voluntária",
+                      isVolunteer: false
+                    }),
+                    volunteer: () => createWhatsappLink(volunteer_whatsapp, {
+                      volunteer_name: volunteerFirstName,
+                      individual_name,
+                      agent: "Voluntária",
+                      isVolunteer: true
+                    }),
+                  },
+                  isEnabled: success
+                }}
+                error={{
+                  onClose: closeAllPopups,
+                  onSubmit: onConfirm,
+                  isEnabled: error.status,
+                  message: error.message
+                }}
+                warning={{
+                  isEnabled: noPhoneNumber,
+                  id: volunteer_user_id,
+                  name: volunteer_name
+                }}
+                isOpen={wrapper}
+                onClose={closeAllPopups}
+                isLoading={isLoading}
+              />
+            </If>
+          </Fragment>
+        );
+      }}
+    </FetchUsersByGroup>
+  )
 };
 
 export default Table;
