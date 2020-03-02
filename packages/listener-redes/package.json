@@ -24,6 +24,7 @@
     "clean": "rimraf coverage build tmp",
     "build": "tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
+    "dev": "tsc-watch --onSuccess \"node ./dist/src/main.js\"",
     "start": "node build/src/main.js",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
@@ -42,7 +43,9 @@
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "node-fetch": "^2.6.0",
+    "subscriptions-transport-ws": "^0.9.16",
     "throng": "^4.0.0",
+    "tsc-watch": "^4.2.3",
     "tslib": "~1.10.0",
     "ws": "^7.2.1"
   }
