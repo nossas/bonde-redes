@@ -21,7 +21,7 @@ const Connect = ({ id }) => {
     // TODO: Tratar caso em que a usuária não tem user_id
     const user = getUserData({
       user: id,
-      data: tableData.individual,
+      data: tableData,
       filterBy: "id"
     })
     setIndividual(user)
@@ -35,7 +35,7 @@ const Connect = ({ id }) => {
     <BtnWarning
       light
       onClick={onClick}
-      disabled={volunteer.email === ''}
+      disabled={volunteer && volunteer.email === ''}
     >
       Encaminhar
     </BtnWarning>
