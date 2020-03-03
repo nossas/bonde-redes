@@ -1,2 +1,3 @@
-export { default as subscription } from './subscription'
-export { default as fetchRedesSettings } from './fetchRedesSettings'
+export { default as subscriptionFormEntries } from './subscriptionFormEntries'
+export { default as fetchRedesGroups } from './fetchRedesGroups'
+export { default as updateFormEntries } from './updateFormEntries'

@@ -1,13 +1,14 @@
 import gql from 'graphql-tag'
 import { client as GraphQLAPI } from '../../graphql'
+// import updateFormEntries from './updateFormEntries'
 // import { SettingsResponse } from './types'
 // import getLastSyncDatetime from './getLastSyncDatetime'
 // import fetchFormEntries from './fetchFormEntries'
 
 const FORM_ENTRIES_SUBSCRIPTION = gql`
-	subscription pipeline_form_entries ($widgets: [Int!], $last: Int!) {
+	subscription pipeline_form_entries ($widgets: [Int!]) {
 	  form_entries(
-	    where: { widget_id: { _in: $widgets }, id: { _gt: $last } },
+	    where: { widget_id: { _in: $widgets }, rede_syncronized: { _eq: false } },
 	    order_by: { id: asc }
 	  ) {
       id
@@ -22,14 +23,15 @@ const FORM_ENTRIES_SUBSCRIPTION = gql`
 
 const next = async (response: any) => {
 	const { data: { form_entries: entries } } = response
-	entries.forEach((formEntry: any, index: number) => {
-		console.log(`formEntry[${index}]`, formEntry)
-		/*const lastSyncDatetime = await getLastSyncDatetime(config.community_id)
-		Object.values(config.settings).forEach(async (widgetId: number) => {
-			const data = await fetchFormEntries({ widgetId, lastSyncDatetime })
-			console.log('data', data)
-		})*/
+	const syncronizedForms = []
+
+	entries.forEach((formEntry: any) => {
+		console.log(`TODO: sync form`, formEntry)
+		syncronizedForms.push(formEntry.id)
 	})
+
+	// Update all syncronized forms
+	// await updateFormEntries(syncronizedForms)
 }
 
 const error = (err: any) => {
@@ -42,7 +44,7 @@ export default async (widgets: number[]): Promise<any> => {
 		const observable = GraphQLAPI
 			.subscribe({
 				query: FORM_ENTRIES_SUBSCRIPTION,
-				variables: { widgets, last: 0 },
+				variables: { widgets },
 				fetchPolicy: 'network-only'
 			})
 			.subscribe({ next, error })

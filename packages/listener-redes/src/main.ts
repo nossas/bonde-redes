@@ -1,5 +1,5 @@
 import * as throng from 'throng'
-import { fetchRedesSettings, subscription } from './features/settings'
+import { fetchRedesGroups, subscriptionFormEntries } from './features/settings'
 
 
 throng({
@@ -8,12 +8,10 @@ throng({
     console.log(`Started worker ${id}`)
 
     try {
-      const data = await fetchRedesSettings()
-      const widgets = []
-      data.forEach(rede => widgets.push(...rede.widgets))
+      const groups = await fetchRedesGroups()
+      const widgets = groups.map(g => g.widget_id)
 
-      console.log('Widgets to watch:', widgets)
-      await subscription(widgets)
+      await subscriptionFormEntries(widgets)
     } catch (err) {
       console.error('throng err: '.red, err)
     }
