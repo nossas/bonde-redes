@@ -18,7 +18,7 @@ import {
   Box
 } from './styles'
 
-const Popup = ({ confirm, success, error, warning, isOpen, onClose, volunteerName, individualName, isLoading }) => {
+const Popup = ({ confirm, success, error, warning, isOpen, onClose, volunteerName, individualName, isLoading, onSubmit }) => {
   return (
     <StyledModal
       opened={isOpen}
@@ -30,13 +30,13 @@ const Popup = ({ confirm, success, error, warning, isOpen, onClose, volunteerNam
           <Loading />
         </If>
         <If condition={confirm.isEnabled}>
-          {Confirm({ ...confirm, volunteerName, individualName })}
+          {Confirm({ ...confirm, volunteerName, individualName, onClose, onSubmit })}
         </If>
         <If condition={success.isEnabled}>
-          {Success({ ...success, volunteerName, individualName })}
+          {Success({ ...success, volunteerName, individualName, onClose })}
         </If>
         <If condition={error.isEnabled}>
-          {Error({ ...error, volunteerName, individualName })}
+          {Error({ ...error, volunteerName, individualName, onClose, onSubmit })}
         </If>
         <If condition={warning.isEnabled}>
           {Warning({ ...warning, onClose })}
