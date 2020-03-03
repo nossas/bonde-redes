@@ -63,6 +63,7 @@ export default function SessionProvider({ children }) {
 
   useEffect(() => {
     if(!token) return fetchSession()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token])
 
   const logout = () => storage

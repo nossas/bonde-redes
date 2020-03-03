@@ -2,6 +2,7 @@ import React, {
   useCallback,
   Fragment,
   useState,
+  useEffect
 } from "react";
 import "react-table/react-table.css";
 import ReactTable from "react-table";
@@ -9,6 +10,7 @@ import * as turf from "@turf/turf";
 import { useHistory, useLocation } from "react-router-dom";
 import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
 import { useStoreState, useStoreActions } from "easy-peasy";
+import { useMutation } from '@apollo/react-hooks'
 
 import {
   encodeText,
@@ -19,29 +21,28 @@ import {
 import { Wrap, StyledButton } from "./style";
 import columns from "./columns";
 import FetchUsersByGroup from '../../graphql/FetchUsersByGroup'
+import CREATE_RELATIONSHIP from '../../graphql/CreateRelationship'
 
 import { If } from "../../components/If";
 import Popup from "../../components/Popups/Popup";
 
 const Table = () => {
+  const [createConnection, { data, loading, error }] = useMutation(CREATE_RELATIONSHIP);
+
   const { goBack } = useHistory()
-  let query = useQuery();
+  const { search } = useLocation()
 
   const setTable = useStoreActions((actions) => actions.table.setTable)
   const setVolunteer = useStoreActions(actions => actions.volunteer.setVolunteer)
   const setPopup = useStoreActions(actions => actions.popups.setPopup);
-  const setError = useStoreActions(actions => actions.error.setError);
-  const fowardTickets = useStoreActions(
-    actions => actions.foward.fowardTickets
-  );
 
   const individual = useStoreState(state => state.individual.data);
   const volunteer = useStoreState(state => state.volunteer.data);
 
   const popups = useStoreState(state => state.popups.data);
-  const error = useStoreState(state => state.error.error);
 
   const [success, setSuccess] = useState(false);
+  const [fail, setError] = useState(false);
   const [isLoading, setLoader] = useState(false);
 
   const { confirm, wrapper, noPhoneNumber } = popups;
@@ -51,26 +52,29 @@ const Table = () => {
     longitude,
     name: volunteer_name,
     whatsapp: volunteer_whatsapp,
-    phone,
+    // phone,
     id: volunteer_user_id,
   } = volunteer;
 
-  const volunteerFirstName = volunteer_name.split(" ")[0];
-  // const selectedCategory = volunteer_category(volunteer_organization_id);
   const distance = 50;
   const lat = Number(latitude);
   const lng = Number(longitude);
 
+  const volunteerFirstName = volunteer_name.split(" ")[0];
   const createWhatsappLink = (number, textVariables) => {
     if (!number) return "";
     const whatsappphonenumber = parseNumber(number);
     const urlencodedtext = encodeText(whatsappText(textVariables));
     return `https://api.whatsapp.com/send?phone=55${whatsappphonenumber}&text=${urlencodedtext}`;
   };
+  const getQuery = (search) => Number((search).split('=')[1])
 
-  function useQuery() {
-    return new URLSearchParams(useLocation().search);
-  }
+  useEffect(() => {
+    setLoader(loading)
+    setError(!!(error && error.message))
+    if (data) setSuccess(true)
+  }, [setLoader, loading, error, setError, data])
+
 
   const filterByDistance = useCallback(
     data =>
@@ -107,17 +111,6 @@ const Table = () => {
   //   [volunteer_organization_id]
   // );
 
-  const submitConfirm = async requestBody => {
-    const req = await fowardTickets({
-      setError,
-      setSuccess,
-      data: requestBody
-    });
-    if (req && req.status === 200) {
-      setLoader(false);
-    }
-  };
-
   const onConfirm = () => {
     if (!volunteer_whatsapp)
       return setPopup({
@@ -126,44 +119,36 @@ const Table = () => {
         confirm: false
       });
     setPopup({ ...popups, confirm: false });
-    setLoader(true);
-    return submitConfirm({
-      individual_name,
-      individual_user_id,
-      volunteer_name,
-      volunteer_user_id,
-      volunteer_phone: Number(parseNumber(phone || 0)),
-    });
+    return createConnection({ 
+      variables: {
+        recipientId: individual_user_id,
+        volunteerId: volunteer_user_id
+      }
+    })
   };
 
   const closeAllPopups = () => {
-    setError({
-      status: false,
-      message: ""
-    });
     setSuccess(false);
     setPopup({
       wrapper: false,
       confirm: false
     });
     return goBack()
-  };
+  }
+
   return (
     <FetchUsersByGroup>
       {({ individuals, volunteers }) => {
-        const user = getUserData({
-          user: query.get("id"),
-          data: volunteers.data,
-          filterBy: "id"
-        })
-
-        setVolunteer(user)
-        setTable(individuals.data)
-
         const filteredTableData = filterByDistance(
           individuals.data  
         )
-
+        setTable(filteredTableData)
+        const user = getUserData({
+          user: getQuery(search),
+          data: volunteers.data,
+          filterBy: "id"
+        })
+        setVolunteer(user)
         return individuals.data.length === 0 ? (
           <Flexbox middle>
             <Wrap>
@@ -199,13 +184,12 @@ const Table = () => {
               <Popup
                 individualName={individual_name}
                 volunteerName={volunteer_name}
-                confirm={{
-                  onClose: closeAllPopups,
-                  onSubmit: onConfirm,
-                  isEnabled: confirm
-                }}
+                onSubmit={onConfirm}
+                isOpen={wrapper}
+                onClose={closeAllPopups}
+                isLoading={isLoading}
+                confirm={{ isEnabled: confirm }}
                 success={{
-                  onClose: closeAllPopups,
                   link: {
                     individual: () => createWhatsappLink(individual_phone, {
                       volunteer_name: volunteerFirstName,
@@ -223,19 +207,14 @@ const Table = () => {
                   isEnabled: success
                 }}
                 error={{
-                  onClose: closeAllPopups,
-                  onSubmit: onConfirm,
-                  isEnabled: error.status,
-                  message: error.message
+                  isEnabled: fail,
+                  message: error && error.message
                 }}
                 warning={{
                   isEnabled: noPhoneNumber,
                   id: volunteer_user_id,
                   name: volunteer_name
                 }}
-                isOpen={wrapper}
-                onClose={closeAllPopups}
-                isLoading={isLoading}
               />
             </If>
           </Fragment>

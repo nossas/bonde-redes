@@ -1,7 +1,7 @@
 import { action, thunk, computed } from 'easy-peasy'
 import request from '../services/request'
 
-export interface Ticket {
+export type Ticket = {
   tipo_de_acolhimento: string
   status_inscricao: string
   status_acolhimento: string
