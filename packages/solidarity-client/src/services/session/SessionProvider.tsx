@@ -1,119 +1,108 @@
-import React from 'react'
+import React, { createContext, useState, useEffect } from 'react'
 import { FullPageLoading } from 'bonde-styleguide'
 import { ApolloProvider } from '@apollo/react-hooks'
-import FetchUser from './FetchUser'
-import FetchCommunities from './FetchCommunities'
 import SessionStorage from './SessionStorage'
 import createGraphQLClient from './graphql-client'
-
+import FetchUser from './FetchUser'
+import FetchCommunities from './FetchCommunities'
 
 export const redirectToLogin = () => {
   const loginUrl = process.env.REACT_APP_LOGIN_URL || 'http://admin-canary.bonde.devel:5002/auth/login'
   window.location.href = `${loginUrl}?next=${window.location.href}`
 }
 
-/*
+/**
  * Responsible to control session used on cross-storage
- **/
+**/
 
-interface SessionProviderState {
-  signing: boolean;
-  authenticated: boolean;
-  token?: string;
-  community?: object;
-  refetchCount: number;
+type Context = {
+  signing: boolean
+  authenticated: boolean
+  community?: object
+  Provider
+  Consumer
 }
 
+const SessionContext = createContext({ signing: true, authenticated: false } as Context);
 
-const SessionContext = React.createContext({ signing: true, authenticated: false });
+export default function SessionProvider({ children }) {
+  const [defaultCommunity, setDefaultCommunity] = useState(undefined)
+  const [token, setToken] = useState(undefined)
+  const [session, setSession] = useState({
+    signing: true, 
+    authenticated: false, 
+    refetchCount: 0
+  })
 
+  const storage = new SessionStorage()
 
-class SessionProvider extends React.Component {
-
-  storage: SessionStorage;
-  state: SessionProviderState;
-
-  constructor (props: any) {
-    super(props)
-    this.state = { signing: true, authenticated: false, refetchCount: 0 }
-    this.storage = new SessionStorage()
-  }
-
-  componentDidMount () {
-    this.fetchSession()
-  }
-
-  fetchSession () {
-    this.storage
+  const fetchSession = () => {
+    storage
       .getAsyncSession()
       .then(({ token, community }: any = {}) => {
         if (!token) throw Error('unauthorized')
 
-        this.setState({ signing: false, authenticated: true, token, community })
+        setSession({ ...session, signing: false, authenticated: true })
+        setToken(token)
+        setDefaultCommunity(community)
         return Promise.resolve()
       })
       .catch((err) => {
         // TODO: change url admin-canary
         if (err && err.message === 'unauthorized') {
           redirectToLogin()
-          this.setState({ signing: false, authenticated: false, community: undefined })
+          setSession({ ...session, signing: false })
         } else {
           // reload fetchSession when error not authorized
           console.log('err', err.message)
-          if (this.state.refetchCount < 3) {
-            this.fetchSession()
-          }
+          setSession({ ...session, refetchCount: session.refetchCount++ })
+          if (session.refetchCount < 3) fetchSession()
         }
       })
   }
 
-  logout () {
-    this.storage
-      .logout()
-      .then(() => {
-        redirectToLogin()
-      })
-      .catch(err => {
-        console.log('err', err)
-      })
-  }
+  useEffect(() => {
+    if(!token) return fetchSession()
+  }, [token])
 
-  handleChangeCommunity (community: any) {
-    return this.storage
-      .setAsyncItem('community', community)
-  }
+  const logout = () => storage
+    .logout()
+    .then(() => redirectToLogin())
+    .catch(err => console.log('err', err)) // TODO: Tratar erros
 
-  render () {
+  const setCommunityOnStorage = (community: any) => storage.setAsyncItem('community', community)
+
     const sessionProps = {
-      authenticated: this.state.authenticated,
-      signing: this.state.signing,
-      token: this.state.token,
-      logout: this.logout.bind(this)
+      authenticated: session.authenticated,
+      signing: session.signing,
+      defaultCommunity,
+      token,
+      logout
     }
 
-    return !this.state.signing
-      ? (
-        <ApolloProvider client={createGraphQLClient(sessionProps)}>
+  return session.signing
+    ? <FullPageLoading message="Carregando sessão..." />
+    : (
+      <ApolloProvider client={createGraphQLClient(sessionProps)}>
           {/* Impplements provider with token recovered on cross-storage */}
           <FetchUser>
             {/* Check token validate and recovery user infos */}
-            {(userData: any) => (
-              <FetchCommunities
-                variables={{ userId: userData.user.id }}
-                defaultCommunity={this.state.community}
-                onChange={this.handleChangeCommunity.bind(this)}
+            {(user: any) => (
+              <FetchCommunities 
+                variables={{ userId: user.user.id }}
+                defaultCommunity={defaultCommunity}
+                onChange={setCommunityOnStorage}
               >
-              {(communitiesData: any) => (
-                <SessionContext.Provider value={{...sessionProps, ...userData, ...communitiesData}}>
-                  {this.props.children}
+              {(communities: any) => (
+                <SessionContext.Provider value={{...sessionProps, ...user, ...communities}}>
+                  {children}
                 </SessionContext.Provider>
               )}
               </FetchCommunities>
             )}
           </FetchUser>
         </ApolloProvider>
-      ) : <FullPageLoading message="Carregando sessão..." />
-  }
+    )
 }
 
 export const SessionHOC = (WrappedComponent: any) => class extends React.Component {
@@ -126,5 +115,3 @@ export const SessionHOC = (WrappedComponent: any) => class extends React.Compone
     )
   }
 }
-
-export default SessionProvider
