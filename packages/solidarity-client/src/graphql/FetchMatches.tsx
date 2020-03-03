@@ -25,10 +25,6 @@ query RedeRelationships ($context: Int_comparison_exp!) {
       id
       name
     }
-    agent {
-      id
-      first_name
-    }
   }
 }`
 
@@ -44,7 +40,7 @@ const FetchMatches = SessionHOC((props: any) => {
     console.log('error', error)
     return <p>Error</p>
   }
-  return children(data)
+  return children(data.rede_relationships)
 }, { required: true })
 
 export default FetchMatches
