@@ -1,5 +1,5 @@
 import { thunk, action } from 'easy-peasy'
-import request from '../services/request'
+// import request from '../services/request'
 
 interface Foward {
   setError: Function
@@ -7,12 +7,9 @@ interface Foward {
   data: {
     volunteer_name: string
     individual_name: string
-    individual_ticket_id: number
-    agent: number
-    volunteer_organization_id: number
-    volunteer_registry: string
     volunteer_phone: string
     volunteer_user_id: number
+    individual_user_id: number
   }
 }
 
@@ -37,9 +34,11 @@ const fowardModel = {
       //   volunteer_user_id: 377577169651,
       //   assignee_name: "Ana"
       // }
-      const response = await request.post(data)
+      // const response = await request.post(data)
       setSuccess(true)
-      return response
+      return {
+        status: 200
+      }
     }
     catch (err) {
       console.log(err)

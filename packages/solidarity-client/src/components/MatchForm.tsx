@@ -12,10 +12,13 @@ import styled from 'styled-components'
 import { useForm, Controller } from 'react-hook-form'
 import { useStoreActions, useStoreState } from 'easy-peasy'
 
-import { getUserData, emailValidation, getAgentName } from '../services/utils'
+import { 
+  getUserData, 
+  emailValidation, 
+} from '../services/utils'
 
 import Select from './Select'
-import dicioAgent from '../pages/Match/Table/dicioAgent'
+// import dicioAgent from '../pages/Connect/Table/dicioAgent'
 
 const FormWrapper = styled.form`
   width: 50%;
@@ -66,14 +69,14 @@ const MatchForm = () => {
       data: tableData,
       filterBy: "email"
     })
-    const assignee_name = getAgentName(data.agent)
+    // const assignee_name = getAgentName(data.agent)
 
     if (typeof user === 'undefined') return setError("email", "notFound", "Não existe uma voluntária com esse e-mail")
 
     setForm({
       volunteer: user,
       agent: data.agent,
-      assignee_name
+      // assignee_name
     })
   }
 
@@ -102,7 +105,7 @@ const MatchForm = () => {
         <Text color="#ffffff">{errors.email && errors.email['message']}</Text>
       </StyledFlexbox>
       <StyledFlexbox vertical>
-        <Select
+        {/* <Select
           label="Agente"
           dicio={dicioAgent}
           defaultValue="Escolha uma voluntária"
@@ -110,7 +113,7 @@ const MatchForm = () => {
           register={register({
             validate: value => value !== 'default' || 'Selecione uma agente',
           })}
-        />
+        /> */}
         <Text color="#ffffff">{errors.agent && errors.agent['message']}</Text>
       </StyledFlexbox>
       <Flexbox middle>

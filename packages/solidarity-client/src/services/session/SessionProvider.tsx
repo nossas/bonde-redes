@@ -105,12 +105,14 @@ export default function SessionProvider({ children }) {
     )
 }
 
-export const SessionHOC = (WrappedComponent: any) => class extends React.Component {
+export const SessionHOC = (WrappedComponent: any, opts?: any) => class extends React.Component {
 
   static contextType = SessionContext;
 
   render () {
-    return (
+    return opts && opts.required && !this.context.community ? (
+      <div>Você deve selecionar uma comunidade</div>
+    ) : (
       <WrappedComponent {...this.props} session={this.context} />
     )
   }

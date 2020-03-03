@@ -1,92 +1,43 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Header as BondeHeader,
   Title,
-  Button,
-  Flexbox,
-  Flexbox2
+  Spacing
 } from "bonde-styleguide";
+import PageTabs from './PageTabs'
 
-import Form from "./Form";
-import { If } from "./If";
-import MatchForm from "./MatchForm";
-
-const StyledBondeHeader = styled(BondeHeader)`
-  width: 100%;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  display: flex;
-  padding: 22px 40px;
-`;
-
-const FlexDiv = styled(Flexbox2)`
-  width: 450px;
-`;
-
-const WrapButtons = styled(Flexbox2)`
-  width: 100%;
-`
-
-const isMatch = (path: string) => path === "/match";
-
-const Header: React.FC = ({ children }) => {
+const Header: React.FC = ({ zIndex }: any) => {
   const { pathname: path } = useLocation();
+  const [selectedTab, setTab] = useState("grupos")
+
+  const tabs = [
+    { 
+      "name": "grupos", 
+      "to": "/groups/volunteers" || "/connect"
+    },
+    { 
+      "name": "relações", 
+      "to": "/relations"
+    }
+  ]
+
+  useEffect(() => {
+    const currentTab = tabs.find(i => i["to"] === path) || { name: "grupos" }
+    setTab(currentTab["name"])
+  }, [path, setTab, tabs])
 
   return (
-    <Flexbox vertical>
-      <StyledBondeHeader>
-        <Flexbox alignItems="middle" row horizontal>
-          <Title.H2 color="white">
-            {isMatch(path) ? "Match" : "Mapa do acolhimento"}
-          </Title.H2>
-          {/* <Button onClick={() => { toggleContentState() }}>
-            Alternar para
-              {' '}
-              {visualizationState.get()}
-            </Button> */}
-          <If condition={path === "/match"}>
-            <MatchForm />
-          </If>
-          <If condition={path === "/geobonde"}>
-            <Form />
-          </If>
-          <If condition={path === "/voluntarias" || path === "/geobonde/mapa"}>
-            <WrapButtons justify="flex-end" horizontal>
-              <FlexDiv spacing="evenly">
-                <Link to="/match">
-                  <Button>Encaminhamento</Button>
-                </Link>
-                <Link to="/geobonde">
-                  <Button>Geobonde</Button>
-                </Link>
-                <If condition={path === "/voluntarias"}>
-                  <Link to="/geobonde/mapa">
-                    <Button>Mapa</Button>
-                  </Link>
-                </If>
-                <If condition={path === "/geobonde/mapa"}>
-                  <Link to="/voluntarias">
-                    <Button>Voluntarias</Button>
-                  </Link>
-                </If>
-              </FlexDiv>
-            </WrapButtons>
-          </If>
-        </Flexbox>
-      </StyledBondeHeader>
-    </Flexbox>
+    <BondeHeader zIndex={zIndex}>
+      <Spacing margin={{ bottom: 20 }}>
+        <Title.H3 color="#ffffff">Redes</Title.H3>
+      </Spacing>
+      <PageTabs 
+        tabs={tabs} 
+        selectedTab={selectedTab} 
+      />
+    </BondeHeader>
   );
-};
-
-Header.defaultProps = {
-  children: null
-};
-
-Header.propTypes = {
-  children: PropTypes.node
 };
 
 export default Header;

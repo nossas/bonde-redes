@@ -14,11 +14,11 @@ export const FullWidth = styled.div`
 `
 
 const Table: React.FC = () => {
-  const tableData = useStoreState(state => state.volunteers.volunteers)
-  const getAvailableVolunteers = useStoreActions((actions: any) => actions.volunteers.getAvailableVolunteers)
+  const tableData = useStoreState(state => state.table.tableData)
+  const getAvailableVolunteers = useStoreActions((actions: any) => actions.table.getTableData)
 
   useEffect(() => {
-    getAvailableVolunteers()
+    getAvailableVolunteers('volunteers')
   }, [getAvailableVolunteers])
 
   return tableData.length === 0 ? (
