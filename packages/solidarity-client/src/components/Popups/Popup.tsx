@@ -60,7 +60,7 @@ const Warning = ({ name, id, onClose }) => (
         rel="noopener noreferrer"
       >
         {name}
-      </Link> 
+      </Link>
       {' '}não possui número de Whastapp
     </Text>
     <StyledLink onClick={onClose}>fazer nova busca</StyledLink>

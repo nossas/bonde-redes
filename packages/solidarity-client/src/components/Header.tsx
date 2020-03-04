@@ -12,12 +12,12 @@ const Header: React.FC = ({ zIndex }: any) => {
   const [selectedTab, setTab] = useState("grupos")
 
   const tabs = [
-    { 
-      "name": "grupos", 
+    {
+      "name": "grupos",
       "to": "/groups/volunteers" || "/connect"
     },
-    { 
-      "name": "relações", 
+    {
+      "name": "relações",
       "to": "/relations"
     }
   ]
@@ -32,9 +32,9 @@ const Header: React.FC = ({ zIndex }: any) => {
       <Spacing margin={{ bottom: 20 }}>
         <Title.H3 color="#ffffff">Redes</Title.H3>
       </Spacing>
-      <PageTabs 
-        tabs={tabs} 
-        selectedTab={selectedTab} 
+      <PageTabs
+        tabs={tabs}
+        selectedTab={selectedTab}
       />
     </BondeHeader>
   );

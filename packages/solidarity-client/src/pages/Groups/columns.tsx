@@ -14,7 +14,7 @@ export const volunteersColumns = [
     accessor: 'address',
     Header: 'Endereço',
     width: 300,
-  }, 
+  },
   // {
   //   accessor: 'group',
   //   Header: 'Área de Atuação',
@@ -35,7 +35,7 @@ export const volunteersColumns = [
   // }, {
   //   accessor: 'pending',
   //   Header: 'Encaminhamentos recebidos nos últimos 30 dias',
-  // }, 
+  // },
   {
     accessor: 'created_at',
     Header: 'Data de criação do ticket',
@@ -46,14 +46,14 @@ export const volunteersColumns = [
       const data = new Date(value)
       return data.toLocaleDateString('pt-BR')
     },
-  }, 
+  },
   {
     accessor: 'id',
     Header: 'Ação',
     width: 200,
     Cell: ({ value }) => (value ? (
-      <Flexbox middle>     
-        <Link 
+      <Flexbox middle>
+        <Link
           to={{
             pathname: "/connect",
             search: `?id=${value}`
@@ -77,7 +77,7 @@ export const individualsColumns = [
   {
     accessor: 'address',
     Header: 'Endereço',
-  }, 
+  },
   // {
   //   accessor: 'group',
   //   Header: 'Área de Atuação',
@@ -98,7 +98,7 @@ export const individualsColumns = [
   // }, {
   //   accessor: 'pending',
   //   Header: 'Encaminhamentos recebidos nos últimos 30 dias',
-  // }, 
+  // },
   {
     accessor: 'created_at',
     Header: 'Data de criação do ticket',

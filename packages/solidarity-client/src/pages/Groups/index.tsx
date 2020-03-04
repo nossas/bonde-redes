@@ -14,7 +14,7 @@ interface Props {
   individualsCount: number
 }
 
-const GroupsMenu: React.FC<Props> = ({ volunteersCount, individualsCount }) => 
+const GroupsMenu: React.FC<Props> = ({ volunteersCount, individualsCount }) =>
   <Spacing margin={{ bottom: 20 }}>
     <Flexbox horizontal>
       <Spacing margin={{ right: 20 }}>
@@ -35,7 +35,7 @@ const GroupsMenu: React.FC<Props> = ({ volunteersCount, individualsCount }) =>
 const Groups = () => {
   // @ts-ignore
   const { pathname } = useLocation()
-  const kind = pathname.split('/')[2] 
+  const kind = pathname.split('/')[2]
   const history = useHistory()
   const setTable = useStoreActions((actions: any) => actions.table.setTable)
 
@@ -60,7 +60,7 @@ const Groups = () => {
           <Flexbox middle>
             <Wrap>
               {GroupsMenu(
-                { 
+                {
                   volunteersCount: volunteers.count || 0,
                   individualsCount: individuals.count || 0,
                 }

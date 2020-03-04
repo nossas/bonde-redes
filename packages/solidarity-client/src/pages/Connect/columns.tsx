@@ -20,12 +20,12 @@ const columns = [
     accessor: 'distance',
     Header: 'Distância (km)',
     width: 150
-  }, 
+  },
   {
     accessor: 'address',
     Header: 'Endereço',
     width: 300,
-  }, 
+  },
   // {
   //   accessor: 'priority',
   //   Header: 'Prioridade',
@@ -36,7 +36,7 @@ const columns = [
   //     <span>{value}</span>
   //   ) : '-'),
   //   width: 200
-  // }, 
+  // },
   {
     accessor: 'created_at',
     Header: 'Data de criação do ticket',
@@ -47,14 +47,14 @@ const columns = [
       const data = new Date(value)
       return data.toLocaleDateString('pt-BR')
     },
-  }, 
+  },
   // {
   //   accessor: 'ticket_id',
   //   Header: 'Link',
   //   Cell: ({ value }: valueArrayString) => (value ? (
   //     <a href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${value}`} target="_blank" rel="noopener noreferrer">{value}</a>
   //   ) : null),
-  // }, 
+  // },
   {
     accessor: 'id',
     Header: 'Ação',
