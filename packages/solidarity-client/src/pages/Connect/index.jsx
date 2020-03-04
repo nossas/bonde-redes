@@ -1,8 +1,4 @@
-import React, {
-  useCallback,
-  Fragment,
-  useState,
-} from "react";
+import React, { useCallback, Fragment, useState } from "react";
 import "react-table/react-table.css";
 import ReactTable from "react-table";
 import * as turf from "@turf/turf";
@@ -18,17 +14,19 @@ import {
 } from "../../services/utils";
 import { Wrap, StyledButton } from "./style";
 import columns from "./columns";
-import FetchUsersByGroup from '../../graphql/FetchUsersByGroup'
+import FetchUsersByGroup from "../../graphql/FetchUsersByGroup";
 
 import { If } from "../../components/If";
 import Popup from "../../components/Popups/Popup";
 
 const Table = () => {
-  const { goBack } = useHistory()
+  const { goBack } = useHistory();
   let query = useQuery();
 
-  const setTable = useStoreActions((actions) => actions.table.setTable)
-  const setVolunteer = useStoreActions(actions => actions.volunteer.setVolunteer)
+  const setTable = useStoreActions(actions => actions.table.setTable);
+  const setVolunteer = useStoreActions(
+    actions => actions.volunteer.setVolunteer
+  );
   const setPopup = useStoreActions(actions => actions.popups.setPopup);
   const setError = useStoreActions(actions => actions.error.setError);
   const fowardTickets = useStoreActions(
@@ -45,14 +43,18 @@ const Table = () => {
   const [isLoading, setLoader] = useState(false);
 
   const { confirm, wrapper, noPhoneNumber } = popups;
-  const { name: individual_name, phone: individual_phone, id: individual_user_id } = individual;
+  const {
+    name: individual_name,
+    phone: individual_phone,
+    id: individual_user_id
+  } = individual;
   const {
     latitude,
     longitude,
     name: volunteer_name,
     whatsapp: volunteer_whatsapp,
     phone,
-    id: volunteer_user_id,
+    id: volunteer_user_id
   } = volunteer;
 
   const volunteerFirstName = volunteer_name.split(" ")[0];
@@ -132,7 +134,7 @@ const Table = () => {
       individual_user_id,
       volunteer_name,
       volunteer_user_id,
-      volunteer_phone: Number(parseNumber(phone || 0)),
+      volunteer_phone: Number(parseNumber(phone || 0))
     });
   };
 
@@ -146,7 +148,7 @@ const Table = () => {
       wrapper: false,
       confirm: false
     });
-    return goBack()
+    return goBack();
   };
   return (
     <FetchUsersByGroup>
@@ -155,14 +157,12 @@ const Table = () => {
           user: query.get("id"),
           data: volunteers.data,
           filterBy: "id"
-        })
+        });
 
-        setVolunteer(user)
-        setTable(individuals.data)
+        setVolunteer(user);
+        setTable(individuals.data);
 
-        const filteredTableData = filterByDistance(
-          individuals.data  
-        )
+        const filteredTableData = filterByDistance(individuals.data);
 
         return individuals.data.length === 0 ? (
           <Flexbox middle>
@@ -175,9 +175,11 @@ const Table = () => {
             <Flexbox vertical middle>
               <Wrap>
                 <Flexbox vertical>
-                  <Spacing margin={{ bottom: 20}}>
+                  <Spacing margin={{ bottom: 20 }}>
                     <Flexbox>
-                      <StyledButton flat onClick={goBack}>{'< fazer match'}</StyledButton>
+                      <StyledButton flat onClick={goBack}>
+                        {"< fazer match"}
+                      </StyledButton>
                     </Flexbox>
                     <Spacing margin={{ top: 10, bottom: 10 }}>
                       <Title.H3>Match realizado!</Title.H3>
@@ -207,18 +209,20 @@ const Table = () => {
                 success={{
                   onClose: closeAllPopups,
                   link: {
-                    individual: () => createWhatsappLink(individual_phone, {
-                      volunteer_name: volunteerFirstName,
-                      individual_name,
-                      agent: "Voluntária",
-                      isVolunteer: false
-                    }),
-                    volunteer: () => createWhatsappLink(volunteer_whatsapp, {
-                      volunteer_name: volunteerFirstName,
-                      individual_name,
-                      agent: "Voluntária",
-                      isVolunteer: true
-                    }),
+                    individual: () =>
+                      createWhatsappLink(individual_phone, {
+                        volunteer_name: volunteerFirstName,
+                        individual_name,
+                        agent: "Voluntária",
+                        isVolunteer: false
+                      }),
+                    volunteer: () =>
+                      createWhatsappLink(volunteer_whatsapp, {
+                        volunteer_name: volunteerFirstName,
+                        individual_name,
+                        agent: "Voluntária",
+                        isVolunteer: true
+                      })
                   },
                   isEnabled: success
                 }}
@@ -242,7 +246,7 @@ const Table = () => {
         );
       }}
     </FetchUsersByGroup>
-  )
+  );
 };
 
 export default Table;
