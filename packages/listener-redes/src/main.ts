@@ -16,7 +16,7 @@ throng({
         metadata: g.metadata
       }))
 
-      console.log('Call subscriptions to form_entries...', widgets)
+      console.log('Call subscriptions to form_entries...', widgets.map((w: any) => w.id))
       await subscriptionFormEntries(widgets)
     } catch (err) {
       console.error('throng err: '.red, err)
