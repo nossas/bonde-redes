@@ -34,13 +34,13 @@ let cache = []
 const handleNext = (widgets: Widget[]) => async (response: any) => {
 	console.log(`${new Date()}: \nReceiving data on subscription GraphQL API...`)
 	const { data: { form_entries: entries } } = response
-	
+
 	entries.forEach((formEntry: any) => {
 		if (cache.filter((c: any) => c.id !== formEntry.id)) {
 			cache.push(formEntry)
 		}
 	})
-	
+
 	const syncronizedForms = []
 	const individuals = []
 	if (cache.length > 0) {
