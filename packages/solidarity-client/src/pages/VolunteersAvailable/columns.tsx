@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Flexbox2 as Flexbox, Button } from 'bonde-styleguide'
-import { getVolunteerType } from '../../services/utils'
+// import { getVolunteerType } from '../../services/utils'
 
 const columns = [
   {
@@ -10,15 +10,17 @@ const columns = [
   }, {
     accessor: 'email',
     Header: 'Email',
-  },{
-    accessor: 'organization_id',
-    Header: 'Área de Atuação',
-    Cell: ({ value }) => (value ? (
-      <Flexbox middle>
-        {getVolunteerType(value)}
-      </Flexbox>
-    ) : null),
-  },{
+  },
+  // {
+  //   accessor: 'organization_id',
+  //   Header: 'Área de Atuação',
+  //   Cell: ({ value }) => (value ? (
+  //     <Flexbox middle>
+  //       {getVolunteerType(value)}
+  //     </Flexbox>
+  //   ) : null),
+  // },
+  {
     accessor: 'availability',
     Header: 'Vagas Disponíveis',
   }, {

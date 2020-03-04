@@ -3,19 +3,22 @@ import ReactTable from 'react-table'
 import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import * as turf from '@turf/turf'
-
+import useAppLogic from '../../../app-logic'
 import { Ticket } from '../../../models/table-data'
 import columns from './columns'
-import { zendeskOrganizations, isVolunteer } from '../../../services/utils'
+// import { zendeskOrganizations, isVolunteer } from '../../../services/utils'
 
 import { FullWidth } from './style'
 
 import 'react-table/react-table.css'
 
 const Table: React.FC = () => {
-  const tableData = useStoreState(state => state.table.data)
   const searchForm = useStoreState(state => state.geobonde.form)
   const getTableData = useStoreActions((actions: any) => actions.table.getTableData)
+
+  const {
+    tableData
+  } = useAppLogic()
 
   useEffect(() => {
     getTableData('all')
@@ -25,9 +28,9 @@ const Table: React.FC = () => {
     distance,
     lat,
     lng,
-    individual,
-    lawyer,
-    therapist,
+    // individual,
+    // lawyer,
+    // therapist
   } = searchForm
 
   const filterByDistance = useCallback((data: Ticket[]) => data.map((i) => {
@@ -50,53 +53,47 @@ const Table: React.FC = () => {
     return i.distance && Number(i.distance) < distance
   }).sort((a, b) => Number(a.distance) - Number(b.distance)), [distance, lat, lng])
 
-  const filterByCategory = useCallback((data: Ticket[]) => data.filter((i) => {
+  // const filterByCategory = useCallback((data: Ticket[]) => data.filter((i) => {
 
-    if (i.organization_id === zendeskOrganizations.therapist) {
-      if (!therapist) {
-        return false
-      }
-    } else if (i.organization_id === zendeskOrganizations.lawyer) {
-      if (!lawyer) {
-        return false
-      }
-    } else if (i.organization_id === zendeskOrganizations.individual) {
-      if (!individual) {
-        return false
-      }
-    }
+  //   if (i.organization_id === zendeskOrganizations.therapist) {
+  //     if (!therapist) {
+  //       return false
+  //     }
+  //   } else if (i.organization_id === zendeskOrganizations.lawyer) {
+  //     if (!lawyer) {
+  //       return false
+  //     }
+  //   } else if (i.organization_id === zendeskOrganizations.individual) {
+  //     if (!individual) {
+  //       return false
+  //     }
+  //   }
 
-    return true
-    // eslint-disable-next-line
-  }), [individual, lawyer, therapist])
+  //   return true
+  //   // eslint-disable-next-line
+  // }), [individual, lawyer, therapist])
 
-  const filterByUserCondition = useCallback((data: Ticket[]) => data.filter((i) => {
-    if (isVolunteer(i.organization_id)) {
-      switch (i.condition) {
-        case 'disponivel':
-          return true
-        case 'aprovada':
-          return true
-        case 'desabilitada':
-          return true
-        default:
-          return false
-      }
-    } else if (!isVolunteer(i.organization_id)) return true
-    return false
-  }), [])
+  // const filterByUserCondition = useCallback((data: Ticket[]) => data.filter((i) => {
+  //   if (isVolunteer(i.organization_id)) {
+  //     switch (i.condition) {
+  //       case 'disponivel':
+  //         return true
+  //       case 'aprovada':
+  //         return true
+  //       case 'desabilitada':
+  //         return true
+  //       default:
+  //         return false
+  //     }
+  //   } else if (!isVolunteer(i.organization_id)) return true
+  //   return false
+  // }), [])
 
   const filteredTableData = useMemo(() => {
-    const data = filterByCategory(
-      filterByDistance(
-        filterByUserCondition(
-          tableData,
-        )
-      ),
-    )
+    const data = filterByDistance(tableData)
 
     return data
-  }, [filterByCategory, filterByDistance, filterByUserCondition, tableData])
+  }, [filterByDistance, tableData])
 
   return filteredTableData.length === 0 ? (
     <FullWidth>
