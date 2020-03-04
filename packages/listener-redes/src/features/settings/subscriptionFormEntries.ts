@@ -29,34 +29,53 @@ interface MetaField {
 	name: string
 }
 
+let cache = []
+
 const handleNext = (widgets: Widget[]) => async (response: any) => {
+	console.log(`${new Date()}: \nReceiving data on subscription GraphQL API...`)
 	const { data: { form_entries: entries } } = response
-	const syncronizedForms = []
-	const individuals = []
-
+	
 	entries.forEach((formEntry: any) => {
-		const fields = JSON.parse(formEntry.fields)
-		const widget = widgets.filter((w: any) => w.id === formEntry.widget_id)[0]
-		if (widget) {
-			const instance = {}
-			widget.metadata['form_mapping'].forEach((field: MetaField) => {
-				instance[field.name] = (fields.filter((f: any) => f.uid === field.uid)[0] || {}).value
-			})
-
-			// fields of integration
-			instance['rede_group_id'] = widget.group_id
-			instance['form_entry_id'] = formEntry.id
-
-			// store instances
-			individuals.push(instance)
-			syncronizedForms.push(formEntry.id)
+		if (cache.filter((c: any) => c.id !== formEntry.id)) {
+			cache.push(formEntry)
 		}
 	})
+	
+	const syncronizedForms = []
+	const individuals = []
+	if (cache.length > 0) {
+		cache.forEach((formEntry: any) => {
+			const fields = JSON.parse(formEntry.fields)
+			const widget = widgets.filter((w: any) => w.id === formEntry.widget_id)[0]
+			if (widget) {
+				const instance = {}
+				widget.metadata['form_mapping'].forEach((field: MetaField) => {
+					instance[field.name] = (fields.filter((f: any) => f.uid === field.uid)[0] || {}).value
+				})
 
-	// Batch insert individuals
-	await insertRedeIndividuals(individuals)
-	// Batch update syncronized forms
-	await updateFormEntries(syncronizedForms)
+				// fields of integration
+				instance['rede_group_id'] = widget.group_id
+				instance['form_entry_id'] = formEntry.id
+
+				// store instances
+				individuals.push(instance)
+				syncronizedForms.push(formEntry.id)
+			}
+		})
+
+		// console.log('individuals', individuals)
+		// Batch insert individuals
+		console.log('Inserting the new individuals on GraphQL API...')
+		await insertRedeIndividuals(individuals)
+		// Batch update syncronized forms
+		console.log('Updating form_entries syncronized on GraphQL API...')
+		await updateFormEntries(syncronizedForms)
+
+		cache = []
+		console.log('Integration is done.')
+	} else {
+		console.log('No items for integration.')
+	}
 }
 
 const error = (err: any) => {
