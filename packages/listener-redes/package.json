@@ -25,7 +25,7 @@
     "build": "tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
     "dev": "tsc-watch --onSuccess \"node ./dist/src/main.js\"",
-    "start": "node build/src/main.js",
+    "start": "node dist/src/main.js",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
