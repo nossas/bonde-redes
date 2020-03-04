@@ -22,8 +22,8 @@ export default ({ children }) => {
   if (loading) return <FullPageLoading message='Carregando usuário...' />
 
   if (error || !data.currentUser) {
-  	console.log('error', { error, data })
-  	redirectToLogin()
+		console.log('error', { error, data })
+		redirectToLogin()
   }
 
  	return children({ user: data.currentUser })

@@ -6,7 +6,7 @@ import geobondeForm from './geobonde-form'
 import individualModel from './individual'
 import errorModel from './error'
 import fowardModel from './foward'
-import volunteersModel from './volunteers'
+import volunteerModel from './volunteer'
 import mapModel from './map'
 
 export default {
@@ -17,6 +17,6 @@ export default {
   individualModel,
   errorModel,
   fowardModel,
-  volunteersModel,
+  volunteerModel,
   mapModel
 }

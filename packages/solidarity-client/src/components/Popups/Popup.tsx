@@ -5,7 +5,8 @@ import {
   Text,
   Button,
   Link,
-  Loading
+  Loading,
+  Spacing
 } from 'bonde-styleguide'
 
 import { If } from '../If'
@@ -17,7 +18,7 @@ import {
   Box
 } from './styles'
 
-const Popup = ({ confirm, success, error, warning, isOpen, onClose, volunteerName, individualName, isLoading }) => {
+const Popup = ({ confirm, success, error, warning, isOpen, onClose, volunteerName, individualName, isLoading, onSubmit }) => {
   return (
     <StyledModal
       opened={isOpen}
@@ -29,13 +30,13 @@ const Popup = ({ confirm, success, error, warning, isOpen, onClose, volunteerNam
           <Loading />
         </If>
         <If condition={confirm.isEnabled}>
-          {Confirm({ ...confirm, volunteerName, individualName })}
+          {Confirm({ ...confirm, volunteerName, individualName, onClose, onSubmit })}
         </If>
         <If condition={success.isEnabled}>
-          {Success({ ...success, volunteerName, individualName })}
+          {Success({ ...success, volunteerName, individualName, onClose })}
         </If>
         <If condition={error.isEnabled}>
-          {Error({ ...error, volunteerName, individualName })}
+          {Error({ ...error, volunteerName, individualName, onClose, onSubmit })}
         </If>
         <If condition={warning.isEnabled}>
           {Warning({ ...warning, onClose })}
@@ -49,7 +50,7 @@ const Warning = ({ name, id, onClose }) => (
   <>
     <Title.H2>Ops!</Title.H2>
     <Text align="center">
-      Telefone Inválido ):
+      {'Telefone Inválido ):'}
     </Text>
     <Text align="center">
       A voluntária{' '}
@@ -59,7 +60,7 @@ const Warning = ({ name, id, onClose }) => (
         rel="noopener noreferrer"
       >
         {name}
-      </Link> 
+      </Link>
       {' '}não possui número de Whastapp
     </Text>
     <StyledLink onClick={onClose}>fazer nova busca</StyledLink>
@@ -77,27 +78,31 @@ const Confirm = ({ individualName, volunteerName, onClose, onSubmit }) => (
   </>
 )
 
-const Success = ({ individualName, volunteerName, onClose, link, ticketId }) => (
+const Success = ({ individualName, volunteerName, onClose, link }) => (
   <>
     <Title.H2 align="center">Encaminhamento Realizado</Title.H2>
     <Text align="center">
       EBA! {individualName} foi encaminhada para {volunteerName}.
     </Text>
-    <Link
-      href={`https://mapadoacolhimento.zendesk.com/agent/tickets/${ticketId}`}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Acesse o ticket do match
-    </Link>
-    <a
-      href={link()}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <Button>enviar whats para voluntária</Button>
-    </a>
-    <StyledLink onClick={onClose}>fazer nova busca</StyledLink>
+    <Spacing margin={{ top: 20, bottom: 20 }}>
+      <a
+        href={link.volunteer()}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Button>enviar whats para voluntária</Button>
+      </a>
+    </Spacing>
+    <Spacing margin={{ bottom: 20 }}>
+      <a
+        href={link.individual()}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Button>enviar whats para psr</Button>
+      </a>
+    </Spacing>
+    <StyledLink onClick={onClose}>voltar à lista de voluntárias</StyledLink>
   </>
 )
 

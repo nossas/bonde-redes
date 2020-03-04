@@ -1,7 +1,7 @@
-import { action, thunk } from 'easy-peasy'
+import { action, thunk, computed } from 'easy-peasy'
 import request from '../services/request'
 
-export interface Ticket {
+export type Ticket = {
   tipo_de_acolhimento: string
   status_inscricao: string
   status_acolhimento: string
@@ -37,6 +37,7 @@ const tableModel = {
       })
     }
   }),
+  count: computed((state: any) => state.data.length),
   error: {},
   setError: action((state, payload) => ({
     error: payload

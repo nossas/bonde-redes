@@ -30,6 +30,9 @@ const Main = styled.main`
   flex-flow: column  nowrap;
   height: 100%;
 `
+const StyledFooter = styled(Footer)`
+  position: relative;
+`
 
 const SessionPage = ({ children, ...props }: any) => (
   <Main>
@@ -37,7 +40,7 @@ const SessionPage = ({ children, ...props }: any) => (
     <Page {...props}>
       {children}
     </Page>
-    <Footer fixed />
+    <StyledFooter fixed />
   </Main>
 )
 

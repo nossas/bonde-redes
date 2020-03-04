@@ -1,10 +1,10 @@
-import dicioAgent from '../pages/Match/Table/dicioAgent'
 
 export const getUserData = ({ user, data, filterBy }) => data.filter((i) => user === i[filterBy])[0]
 
 export const encodeText = input => encodeURIComponent(input)
 
-export const whatsappText = ({ volunteer_name, individual_name, agent }) => {
+export const whatsappText = ({ volunteer_name, individual_name, agent, isVolunteer }) => {
+  if (isVolunteer) return `*${volunteer_name}, DEU MATCH* 🤝🏽 O seu número de atendimento acaba de ser enviado para a ${individual_name}! Esperamos que  ela entre em contato com você. Infelizmente, sabemos o quão difícil é dar esse passo e pode ser que ela não a procure. Ela possui 30 dias para entrar em contato, caso isso não aconteça dentro desse período, liberaremos a vaga para outra mulher. \n\n*Não se esqueça de nos avisar quando começar a atendê-la. Lembre que os atendimentos devem ser integralmente gratuitos.* \n\n Para te auxiliar, acesse a nossa cartilha com informações fundamentais sobre o acolhimento a mulheres em situação de violência. Acabamos de enviá-la por e-mail. \n\n Qualquer dúvida ou dificuldade, por favor nos comunique. \n Obrigada! É muito bom saber que podemos contar com você 💜\n Um abraço, \n ${agent} do Mapa do Acolhimento.`
   return `*${volunteer_name}, DEU MATCH* 🤝🏽 O seu número de atendimento acaba de ser enviado para a ${individual_name}! Esperamos que  ela entre em contato com você. Infelizmente, sabemos o quão difícil é dar esse passo e pode ser que ela não a procure. Ela possui 30 dias para entrar em contato, caso isso não aconteça dentro desse período, liberaremos a vaga para outra mulher. \n\n*Não se esqueça de nos avisar quando começar a atendê-la. Lembre que os atendimentos devem ser integralmente gratuitos.* \n\n Para te auxiliar, acesse a nossa cartilha com informações fundamentais sobre o acolhimento a mulheres em situação de violência. Acabamos de enviá-la por e-mail. \n\n Qualquer dúvida ou dificuldade, por favor nos comunique. \n Obrigada! É muito bom saber que podemos contar com você 💜\n Um abraço, \n ${agent} do Mapa do Acolhimento.`
 }
 
@@ -18,7 +18,7 @@ export const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORG
 
 export const isVolunteer = (organization_id: number) => [zendeskOrganizations['therapist'], zendeskOrganizations['lawyer']].includes(organization_id)
 
-export const getAgentName = (agent: number) => dicioAgent[agent]
+// export const getAgentName = (agent: number) => dicioAgent[agent]
 
 export const volunteer_category = input => {
   if (input === zendeskOrganizations.lawyer) return 'jurídico'
@@ -30,6 +30,6 @@ const THERAPIST = zendeskOrganizations.therapist
 
 export const getVolunteerType = id => {
   if (id === LAWYER) return 'Advogada'
-  if (id === THERAPIST) return 'Psicóloga'
-  throw new Error("Volunteer organization_id not supported in search for type")
+  else if (id === THERAPIST) return 'Psicóloga'
+  return 'Voluntária inválida'
 }
