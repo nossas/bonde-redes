@@ -1,16 +1,11 @@
-import React, {
-  useCallback,
-  Fragment,
-  useState,
-  useEffect
-} from "react";
+import React, { useCallback, Fragment, useState, useEffect } from "react";
 import "react-table/react-table.css";
 import ReactTable from "react-table";
 import * as turf from "@turf/turf";
 import { useHistory, useLocation } from "react-router-dom";
 import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
 import { useStoreState, useStoreActions } from "easy-peasy";
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from "@apollo/react-hooks";
 
 import {
   encodeText,
@@ -20,20 +15,24 @@ import {
 } from "../../services/utils";
 import { Wrap, StyledButton } from "./style";
 import columns from "./columns";
-import FetchUsersByGroup from '../../graphql/FetchUsersByGroup'
-import CREATE_RELATIONSHIP from '../../graphql/CreateRelationship'
+import FetchUsersByGroup from "../../graphql/FetchUsersByGroup";
+import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
 
 import { If } from "../../components/If";
 import Popup from "../../components/Popups/Popup";
 
 const Table = () => {
-  const [createConnection, { data, loading, error }] = useMutation(CREATE_RELATIONSHIP);
+  const [createConnection, { data, loading, error }] = useMutation(
+    CREATE_RELATIONSHIP
+  );
 
-  const { goBack } = useHistory()
-  const { search } = useLocation()
+  const { goBack } = useHistory();
+  const { search } = useLocation();
 
-  const setTable = useStoreActions((actions) => actions.table.setTable)
-  const setVolunteer = useStoreActions(actions => actions.volunteer.setVolunteer)
+  const setTable = useStoreActions(actions => actions.table.setTable);
+  const setVolunteer = useStoreActions(
+    actions => actions.volunteer.setVolunteer
+  );
   const setPopup = useStoreActions(actions => actions.popups.setPopup);
 
   const individual = useStoreState(state => state.individual.data);
@@ -46,14 +45,18 @@ const Table = () => {
   const [isLoading, setLoader] = useState(false);
 
   const { confirm, wrapper, noPhoneNumber } = popups;
-  const { name: individual_name, phone: individual_phone, id: individual_user_id } = individual;
+  const {
+    name: individual_name,
+    phone: individual_phone,
+    id: individual_user_id
+  } = individual;
   const {
     latitude,
     longitude,
     name: volunteer_name,
     whatsapp: volunteer_whatsapp,
     // phone,
-    id: volunteer_user_id,
+    id: volunteer_user_id
   } = volunteer;
 
   const distance = 50;
@@ -67,14 +70,13 @@ const Table = () => {
     const urlencodedtext = encodeText(whatsappText(textVariables));
     return `https://api.whatsapp.com/send?phone=55${whatsappphonenumber}&text=${urlencodedtext}`;
   };
-  const getQuery = (search) => Number((search).split('=')[1])
+  const getQuery = search => Number(search.split("=")[1]);
 
   useEffect(() => {
-    setLoader(loading)
-    setError(!!(error && error.message))
-    if (data) setSuccess(true)
-  }, [setLoader, loading, error, setError, data])
-
+    setLoader(loading);
+    setError(!!(error && error.message));
+    if (data) setSuccess(true);
+  }, [setLoader, loading, error, setError, data]);
 
   const filterByDistance = useCallback(
     data =>
@@ -119,12 +121,12 @@ const Table = () => {
         confirm: false
       });
     setPopup({ ...popups, confirm: false });
-    return createConnection({ 
+    return createConnection({
       variables: {
         recipientId: individual_user_id,
         volunteerId: volunteer_user_id
       }
-    })
+    });
   };
 
   const closeAllPopups = () => {
@@ -133,22 +135,20 @@ const Table = () => {
       wrapper: false,
       confirm: false
     });
-    return goBack()
-  }
+    return goBack();
+  };
 
   return (
     <FetchUsersByGroup>
       {({ individuals, volunteers }) => {
-        const filteredTableData = filterByDistance(
-          individuals.data  
-        )
-        setTable(filteredTableData)
+        const filteredTableData = filterByDistance(individuals.data);
+        setTable(filteredTableData);
         const user = getUserData({
           user: getQuery(search),
           data: volunteers.data,
           filterBy: "id"
-        })
-        setVolunteer(user)
+        });
+        setVolunteer(user);
         return individuals.data.length === 0 ? (
           <Flexbox middle>
             <Wrap>
@@ -160,9 +160,11 @@ const Table = () => {
             <Flexbox vertical middle>
               <Wrap>
                 <Flexbox vertical>
-                  <Spacing margin={{ bottom: 20}}>
+                  <Spacing margin={{ bottom: 20 }}>
                     <Flexbox>
-                      <StyledButton flat onClick={goBack}>{'< fazer match'}</StyledButton>
+                      <StyledButton flat onClick={goBack}>
+                        {"< fazer match"}
+                      </StyledButton>
                     </Flexbox>
                     <Spacing margin={{ top: 10, bottom: 10 }}>
                       <Title.H3>Match realizado!</Title.H3>
@@ -191,18 +193,20 @@ const Table = () => {
                 confirm={{ isEnabled: confirm }}
                 success={{
                   link: {
-                    individual: () => createWhatsappLink(individual_phone, {
-                      volunteer_name: volunteerFirstName,
-                      individual_name,
-                      agent: "Voluntária",
-                      isVolunteer: false
-                    }),
-                    volunteer: () => createWhatsappLink(volunteer_whatsapp, {
-                      volunteer_name: volunteerFirstName,
-                      individual_name,
-                      agent: "Voluntária",
-                      isVolunteer: true
-                    }),
+                    individual: () =>
+                      createWhatsappLink(individual_phone, {
+                        volunteer_name: volunteerFirstName,
+                        individual_name,
+                        agent: "Voluntária",
+                        isVolunteer: false
+                      }),
+                    volunteer: () =>
+                      createWhatsappLink(volunteer_whatsapp, {
+                        volunteer_name: volunteerFirstName,
+                        individual_name,
+                        agent: "Voluntária",
+                        isVolunteer: true
+                      })
                   },
                   isEnabled: success
                 }}
@@ -221,7 +225,7 @@ const Table = () => {
         );
       }}
     </FetchUsersByGroup>
-  )
+  );
 };
 
 export default Table;
