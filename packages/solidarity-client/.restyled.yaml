@@ -22,6 +22,7 @@ exclude:
   - "**/node_modules/**/*"
   - "**/vendor/**/*"
   - ".github/workflows/**/*" # https://github.com/restyled-io/restyler/issues/73
+  - "pnpm-lock.yaml"
 
 # Push the style fixes directly to the original PR
 #
