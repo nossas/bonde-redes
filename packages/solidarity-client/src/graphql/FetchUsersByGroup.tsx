@@ -53,7 +53,8 @@ fragment individual on rede_individuals {
 	id
 	latitude
 	longitude
-	name
+	first_name
+  last_name
 	phone
 	rede_group_id
 	register_occupation

@@ -4,9 +4,13 @@ import { Link } from 'react-router-dom'
 
 export const volunteersColumns = [
   {
-    accessor: 'name',
+    accessor: 'first_name',
     Header: 'Nome',
   }, {
+    accessor: 'last_name',
+    Header: 'Sobrenome',
+  },
+  {
     accessor: 'email',
     Header: 'Email',
   },
@@ -68,9 +72,13 @@ export const volunteersColumns = [
 
 export const individualsColumns = [
   {
-    accessor: 'name',
+    accessor: 'first_name',
     Header: 'Nome',
   }, {
+    accessor: 'last_name',
+    Header: 'Sobrenome',
+  },
+  {
     accessor: 'email',
     Header: 'Email',
   },
