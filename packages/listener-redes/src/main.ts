@@ -8,6 +8,7 @@ throng({
     console.log(`Started worker ${id}`)
 
     try {
+      console.log('Fetching redes groups...')
       const groups = await fetchRedesGroups()
       const widgets = groups.map((g: any) => ({
         id: g.widget_id,
@@ -15,6 +16,7 @@ throng({
         metadata: g.metadata
       }))
 
+      console.log('Call subscriptions to form_entries...', widgets.map((w: any) => w.id))
       await subscriptionFormEntries(widgets)
     } catch (err) {
       console.error('throng err: '.red, err)
