@@ -29,8 +29,8 @@ export default function SessionProvider({ children }) {
   const [defaultCommunity, setDefaultCommunity] = useState(undefined)
   const [token, setToken] = useState(undefined)
   const [session, setSession] = useState({
-    signing: true, 
-    authenticated: false, 
+    signing: true,
+    authenticated: false,
     refetchCount: 0
   })
 
@@ -89,7 +89,7 @@ export default function SessionProvider({ children }) {
           <FetchUser>
             {/* Check token validate and recovery user infos */}
             {(user: any) => (
-              <FetchCommunities 
+              <FetchCommunities
                 variables={{ userId: user.user.id }}
                 defaultCommunity={defaultCommunity}
                 onChange={setCommunityOnStorage}

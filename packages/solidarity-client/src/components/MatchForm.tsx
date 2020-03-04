@@ -12,9 +12,9 @@ import styled from 'styled-components'
 import { useForm, Controller } from 'react-hook-form'
 import { useStoreActions, useStoreState } from 'easy-peasy'
 
-import { 
-  getUserData, 
-  emailValidation, 
+import {
+  getUserData,
+  emailValidation,
 } from '../services/utils'
 
 import Select from './Select'

@@ -30,7 +30,7 @@ mutation createRelationship(
         id
         name
       }
-      volunteer_id 
+      volunteer_id
     }
   }
 }
