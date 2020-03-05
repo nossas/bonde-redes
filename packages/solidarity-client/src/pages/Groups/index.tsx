@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react'
 import { useLocation, useHistory } from "react-router-dom";
-import { History } from 'history'
 import { 
   Page, 
   Flexbox2 as Flexbox, 
-  Title, 
+  // Title, 
   Spacing, 
   Dropdown, 
-  DropdownHeader, 
+  // DropdownHeader, 
   DropdownItem, 
-  Icon 
+  // Icon 
 } from 'bonde-styleguide'
 import ReactTable from 'react-table'
 import { useStoreActions } from 'easy-peasy'

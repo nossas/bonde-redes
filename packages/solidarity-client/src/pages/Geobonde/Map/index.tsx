@@ -3,7 +3,7 @@ import MapGL, { Popup } from 'react-map-gl'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 
 import { If } from '../../../components/If'
-import request from '../../../services/request'
+// import request from '../../../services/request'
 
 import UserInfo from './user-info'
 import Pins from './Pins'
@@ -33,24 +33,24 @@ const Map = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await request.get('locations')
-      setTableData(response.data)
+      // const response = await request.get('locations')
+      // setTableData(response.data)
     })()
   }, [setTableData])
 
   const handleViewportChange = (e) => setViewport(e)
 
   const handleCityPinClick = async (id) => {
-    const res = await request.get('user', { id })
-    if (res && res.data.length > 0) {
-      const { latitude, longitude } = res.data[0]
-      return setPopupUser({
-        ...res.data[0],
-        latitude: Number(latitude),
-        longitude: Number(longitude),
-        isOpen: true
-      })
-    }
+    // const res = await request.get('user', { id })
+    // if (res && res.data.length > 0) {
+    //   const { latitude, longitude } = res.data[0]
+    //   return setPopupUser({
+    //     ...res.data[0],
+    //     latitude: Number(latitude),
+    //     longitude: Number(longitude),
+    //     isOpen: true
+    //   })
+    // }
   }
 
   const handlePopupClose = () => setPopupUser({

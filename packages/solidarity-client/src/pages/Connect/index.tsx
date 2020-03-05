@@ -9,7 +9,6 @@ import ReactTable from "react-table";
 import * as turf from "@turf/turf";
 import { useHistory, useLocation } from "react-router-dom";
 import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
-import { useStoreActions } from "easy-peasy";
 import { useMutation } from '@apollo/react-hooks'
 
 import { Wrap, StyledButton } from "./style";

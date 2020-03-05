@@ -41,7 +41,7 @@
   "scripts": {
     "dev": "react-scripts start",
     "build": "react-scripts build",
-    "start": "serve -s build",
+    "start": "react-scripts start",
     "test": "react-scripts test",
     "coverage": "npm run test -- --watchAll=false --coverage",
     "eject": "react-scripts eject",
