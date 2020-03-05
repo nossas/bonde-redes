@@ -17,9 +17,9 @@ mutation insert_rede_individuals ($individuals: [rede_individuals_insert_input!]
       email
       phone
       whatsapp
-      
+
       extras
-      
+
       zipcode
       address
       city
