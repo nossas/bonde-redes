@@ -71,7 +71,7 @@ const Groups = () => {
               </Spacing>
               <ReactTable
                 data={data[kind]}
-                columns={columns}
+                columns={columns(pathname)}
                 defaultPageSize={10}
                 defaultSorted={[
                   {

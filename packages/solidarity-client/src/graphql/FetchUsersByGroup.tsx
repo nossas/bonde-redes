@@ -44,27 +44,33 @@ query RedeGroups($context: Int_comparison_exp!) {
 }
 
 fragment individual on rede_individuals {
-  address
-  agreement
-  availability
-  city
-  created_at
+	id
+	first_name
+  last_name
   email
-  first_name
-  form_entry_id
+	whatsapp
+	phone
+	
+  zipcode
+  address
+	city
+	coordinates
+	state
+  
+  status
+  availability
+
+  extras
+	
+	form_entry_id
   group {
+    id
     community_id
     is_volunteer
   }
-  id
-  last_name
-  phone
-  rede_group_id
-  state
-  status
-  updated_at
-  whatsapp
-  zipcode
+	
+  created_at
+	updated_at
 }
 `
 

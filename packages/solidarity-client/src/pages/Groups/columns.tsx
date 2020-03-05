@@ -2,12 +2,15 @@ import React from 'react'
 import { Flexbox2 as Flexbox, Button } from 'bonde-styleguide'
 import { Link } from 'react-router-dom'
 
-const columns = [
-  {
+const volunteersColumns = [  {
     accessor: 'first_name',
     Header: 'Nome',
     width: 100
   }, {
+    accessor: 'last_name',
+    Header: 'Sobrenome',
+  },
+  {
     accessor: 'email',
     Header: 'Email',
     width: 200
@@ -46,18 +49,22 @@ const columns = [
   }
 ]
 
-// export const individualsColumns = [
-//   {
-//     accessor: 'name',
-//     Header: 'Nome',
-//   }, {
-//     accessor: 'email',
-//     Header: 'Email',
-//   },
-//   {
-//     accessor: 'address',
-//     Header: 'Endereço',
-//   },
+const individualsColumns = [
+  {
+    accessor: 'first_name',
+    Header: 'Nome',
+  }, {
+    accessor: 'last_name',
+    Header: 'Sobrenome',
+  },
+  {
+    accessor: 'email',
+    Header: 'Email',
+  },
+  {
+    accessor: 'address',
+    Header: 'Endereço',
+  },
   // {
   //   accessor: 'group',
   //   Header: 'Área de Atuação',
@@ -79,22 +86,22 @@ const columns = [
   //   accessor: 'pending',
   //   Header: 'Encaminhamentos recebidos nos últimos 30 dias',
   // },
-//   {
-//     accessor: 'created_at',
-//     Header: 'Data de criação do ticket',
-//     Cell: ({ value }) => {
-//       if (!value) {
-//         return '-'
-//       }
-//       const data = new Date(value)
-//       return data.toLocaleDateString('pt-BR')
-//     },
-//   }
-// ]
+  {
+    accessor: 'created_at',
+    Header: 'Data de criação do ticket',
+    Cell: ({ value }) => {
+      if (!value) {
+        return '-'
+      }
+      const data = new Date(value)
+      return data.toLocaleDateString('pt-BR')
+    },
+  }
+]
 
-// const dicio = {
-//   "/groups/volunteers": volunteersColumns,
-//   "/groups/individuals": individualsColumns
-// }
+const dicio = {
+  "/groups/volunteers": volunteersColumns,
+  "/groups/individuals": individualsColumns
+}
 
-export default columns
+export default function columns(location) { return dicio[location] }

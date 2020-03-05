@@ -4,12 +4,16 @@ export default gql`
 mutation createRelationship(
   $recipientId: Int!
   $volunteerId: Int!
+  $agent: users_insert_input!
 ){
   insert_rede_relationships(objects:
     {
       recipient_id: $recipientId
       volunteer_id: $volunteerId
       status: "pending"
+      agent: {
+        data: $agent
+      }
     }
   ) {
     returning {

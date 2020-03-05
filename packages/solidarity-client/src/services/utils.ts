@@ -13,5 +13,3 @@ export const emailValidation = () => (
 )
 
 export const getQuery = (search) => Number((search).split('=')[1])
-
-export const volunteerFirstName = ({ name }) => (name).split(" ")[0];

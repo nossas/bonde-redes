@@ -44,15 +44,14 @@ const Table = () => {
     getUserData,
     lat,
     lng,
-    distance
+    distance,
+    setTable,
+    setVolunteer,
+    setPopup
   } = useAppLogic()
 
   const { goBack } = useHistory()
   const { search } = useLocation()
-
-  const setTable = useStoreActions((actions: any) => actions.table.setTable)
-  const setVolunteer = useStoreActions((actions: any) => actions.volunteer.setVolunteer)
-  const setPopup = useStoreActions((actions: any) => actions.popups.setPopup);
 
   const [success, setSuccess] = useState(false);
   const [fail, setError] = useState(false);
@@ -135,15 +134,18 @@ const Table = () => {
   return (
     <FetchUsersByGroup>
       {({ individuals, volunteers }) => {
+        console.log({volunteer})
         const filteredTableData = filterByDistance(
           individuals.data  
         )
-        setTable(filteredTableData)
+        setTable(individuals.data)
+        // Busca na url qual id da voluntária
         const user = getUserData({
           user: getQuery(search),
           data: volunteers.data,
           filterBy: "id"
         })
+        // Seta a voluntária
         setVolunteer(user)
         return individuals.data.length === 0 ? (
           <Flexbox middle>
