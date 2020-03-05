@@ -112,7 +112,7 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
         confirm: false
       });
     setPopup({ ...popups, confirm: false });
-    return createConnection({ 
+    return createConnection({
       variables: {
         recipientId: individual_user_id,
         volunteerId: volunteer_user_id,
@@ -135,7 +135,7 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
       {({ individuals, volunteers }) => {
         console.log({volunteer})
         const filteredTableData = filterByDistance(
-          individuals.data  
+          individuals.data
         )
         setTable(individuals.data)
         // Busca na url qual id da voluntária

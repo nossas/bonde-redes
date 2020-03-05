@@ -50,25 +50,25 @@ fragment individual on rede_individuals {
   email
 	whatsapp
 	phone
-	
+
   zipcode
   address
 	city
 	coordinates
 	state
-  
+
   status
   availability
 
   extras
-	
+
 	form_entry_id
   group {
     id
     community_id
     is_volunteer
   }
-	
+
   created_at
 	updated_at
 }

@@ -12,7 +12,7 @@ export default function filters({ volunteersCount, individualsCount, history }):
           option: `PSR's (${individualsCount})`
         }
       ]
-    },  
+    },
     {
       name: 'Status',
       items: [

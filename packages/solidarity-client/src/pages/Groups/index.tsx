@@ -16,10 +16,10 @@ import filters from './filters'
 import { Wrap, Grid } from './styles'
 import FetchUsersByGroup from '../../graphql/FetchUsersByGroup'
 
-const Filters = ({ filters }): any => 
-  filters.map(({ items, name }): any => 
+const Filters = ({ filters }): any =>
+  filters.map(({ items, name }): any =>
     <Dropdown label={name} inverted>
-      {items.map(({ onClick, option }): any => 
+      {items.map(({ onClick, option }): any =>
         <DropdownItem onClick={onClick}>
           {option}
         </DropdownItem>
@@ -56,11 +56,11 @@ const Groups = () => {
             <Wrap>
               <Spacing margin={{ bottom: 20 }}>
                 <Grid>
-                  <Filters 
-                    filters={filters({ 
-                      volunteersCount: volunteers.count || 0, 
-                      individualsCount: individuals.count || 0, 
-                      history 
+                  <Filters
+                    filters={filters({
+                      volunteersCount: volunteers.count || 0,
+                      individualsCount: individuals.count || 0,
+                      history
                     })}
                   />
                 </Grid>
