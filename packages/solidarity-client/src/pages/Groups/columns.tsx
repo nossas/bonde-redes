@@ -31,7 +31,8 @@ const volunteersColumns = [  {
     width: 150
   }, {
     accessor: 'zipcode',
-    Header: 'CEP'
+    Header: 'CEP',
+    width: 100
   }, {
     accessor: 'whatsapp',
     Header: 'Whatsapp'
@@ -73,8 +74,9 @@ const individualsColumns = [
     Header: 'Email',
   },
   {
-    accessor: 'address',
-    Header: 'Endereço',
+    accessor: 'zipcode',
+    Header: 'CEP',
+    width: 100
   },
   // {
   //   accessor: 'group',
