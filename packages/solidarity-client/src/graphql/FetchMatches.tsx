@@ -17,6 +17,7 @@ query RedeRelationships ($context: Int_comparison_exp!) {
     comments
     metadata
     updated_at
+    created_at
     recipient {
       id
       first_name

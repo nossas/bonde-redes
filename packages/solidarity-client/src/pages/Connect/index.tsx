@@ -3,12 +3,12 @@ import React, {
   Fragment,
   useState,
   useEffect
-} from 'react'
-import 'react-table/react-table.css'
-import ReactTable from 'react-table'
-import * as turf from '@turf/turf'
-import { useHistory, useLocation } from 'react-router-dom'
-import { Flexbox2 as Flexbox, Title, Spacing } from 'bonde-styleguide'
+} from "react";
+import "react-table/react-table.css";
+import ReactTable from "react-table";
+import * as turf from "@turf/turf";
+import { useHistory, useLocation } from "react-router-dom";
+import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
 import { useMutation } from '@apollo/react-hooks'
 
 import { Wrap, StyledButton } from './style'
