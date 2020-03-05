@@ -16,9 +16,8 @@ import columns from './columns'
 import FetchUsersByGroup from '../../graphql/FetchUsersByGroup'
 import CREATE_RELATIONSHIP from '../../graphql/CreateRelationship'
 import useAppLogic from '../../app-logic'
-import {
-  getQuery
-} from '../../services/utils'
+import { getQuery } from '../../services/utils'
+import { SessionHOC } from '../../services/session/SessionProvider'
 
 import { If } from '../../components/If'
 import Popup from '../../components/Popups/Popup'
@@ -29,7 +28,7 @@ interface Popups {
   noPhoneNumber: boolean
 }
 
-const Table = () => {
+const Table = SessionHOC(({ session: { user: agent } }: any) => {
   const [createConnection, { data, loading, error }] = useMutation(CREATE_RELATIONSHIP);
   const {
     individual,
@@ -57,9 +56,9 @@ const Table = () => {
   const [isLoading, setLoader] = useState(false);;
 
   const { confirm, wrapper, noPhoneNumber } = popups;
-  const { name: individual_name, id: individual_user_id } = individual;
+  const { first_name: individual_name, id: individual_user_id } = individual;
   const {
-    name: volunteer_name,
+    first_name: volunteer_name,
     whatsapp: volunteer_whatsapp,
     id: volunteer_user_id,
   } = volunteer;
@@ -116,7 +115,8 @@ const Table = () => {
     return createConnection({ 
       variables: {
         recipientId: individual_user_id,
-        volunteerId: volunteer_user_id
+        volunteerId: volunteer_user_id,
+        agent: agent.id
       }
     })
   };
@@ -209,6 +209,6 @@ const Table = () => {
       }}
     </FetchUsersByGroup>
   )
-};
+})
 
 export default Table;
