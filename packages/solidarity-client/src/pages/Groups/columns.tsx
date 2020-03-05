@@ -1,6 +1,14 @@
 import React from 'react'
-import { Flexbox2 as Flexbox, Button } from 'bonde-styleguide'
+import { Flexbox2 as Flexbox, Button, Text } from 'bonde-styleguide'
 import { Link } from 'react-router-dom'
+
+const TextHeader = ({ value }) => (
+  <Text fontSize={13} fontWeight={600}>{value.toUpperCase()}</Text>
+)
+
+const TextCol = ({ value }) => (
+  <Text color='#000'>{value}</Text>
+)
 
 const volunteersColumns = [  {
     accessor: 'first_name',
@@ -8,7 +16,7 @@ const volunteersColumns = [  {
     width: 100
   }, {
     accessor: 'last_name',
-    Header: 'Sobrenome',
+    Header: 'Sobrenome'
   },
   {
     accessor: 'email',
@@ -16,20 +24,20 @@ const volunteersColumns = [  {
     width: 200
   }, {
     accessor: 'status',
-    Header: 'Status',
+    Header: 'Status'
   }, {
     accessor: 'availability',
     Header: 'Disponibilidade',
+    width: 150
   }, {
-    accessor: 'address',
-    Header: 'Endereço',
-    width: 300,
+    accessor: 'zipcode',
+    Header: 'CEP'
   }, {
     accessor: 'whatsapp',
-    Header: 'Whatsapp',
+    Header: 'Whatsapp'
   }, {
     accessor: 'phone',
-    Header: 'Telefone',
+    Header: 'Telefone'
   }, {
     accessor: 'id',
     Header: 'Ação',
@@ -42,12 +50,15 @@ const volunteersColumns = [  {
             search: `?id=${value}`
           }}
         >
-          <Button>fazer match</Button>
+          <Button light>FAZER MATCH</Button>
         </Link>
       </Flexbox>
     ) : null),
   }
-]
+].map((col: any) => !!col.Cell
+  ? {...col, Header: () => <TextHeader value={col.Header} />}
+  : {...col, Header: () => <TextHeader value={col.Header} />, Cell: TextCol}
+)
 
 const individualsColumns = [
   {
@@ -97,7 +108,10 @@ const individualsColumns = [
       return data.toLocaleDateString('pt-BR')
     },
   }
-]
+].map((col: any) => !!col.Cell
+  ? {...col, Header: () => <TextHeader value={col.Header} />}
+  : {...col, Header: () => <TextHeader value={col.Header} />, Cell: TextCol}
+)
 
 const dicio = {
   "/groups/volunteers": volunteersColumns,

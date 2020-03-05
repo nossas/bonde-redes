@@ -7,11 +7,19 @@ export const Wrap = styled.div`
   margin: 20px 0;
 
   .ReactTable {
-  	border: none;
+  	border: 1px solid #c7c7c7;
 
-  	.rt-th, .rt-tr {
-  		padding: 16px 5px;
-  	}
+  	.rt-thead {
+      .rt-th, .rt-td {
+        padding: 5px 5px;
+      }
+    }
+    .rt-tbody {
+      .rt-th, .rt-td {
+  		  padding: 10px 5px;
+        margin: auto;
+  	  }
+    }
   }
 `
 

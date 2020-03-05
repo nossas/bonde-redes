@@ -8,9 +8,7 @@ import styled from "styled-components";
 
 import Header from "./components/Header";
 import history from "./history";
-import Connect from "./pages/Connect";
-import Map from "./pages/Geobonde/Map";
-import Geobonde from "./pages/Geobonde/Table";
+import Match from "./pages/Connect";
 import GroupsWrapper from "./pages/Groups";
 import Relations from "./pages/Relations";
 // import FetchUsersByGroup from './graphql/FetchUsersByGroup'
@@ -37,10 +35,8 @@ const InsideApp = () => (
           <Redirect to="/groups" />
         </Route>
         <Route path="/groups" component={GroupsWrapper} />
-        <Route path="/geobonde" component={Geobonde} />
-        <Route path="geobonde/mapa" component={Map} />
-        <Route path="/connect" component={Connect} />
-        <Route path="/relations" component={Relations} />
+        <Route path="/connect " component={Match} />
+        <Route path="/relations " component={Relations} />
       </Switch>
     </AppBody>
   </AppWrapper>
