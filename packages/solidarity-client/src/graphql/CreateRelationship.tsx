@@ -4,16 +4,14 @@ export default gql`
 mutation createRelationship(
   $recipientId: Int!
   $volunteerId: Int!
-  $agent: users_insert_input!
+  $agent: Int!
 ){
   insert_rede_relationships(objects:
     {
       recipient_id: $recipientId
       volunteer_id: $volunteerId
       status: "pending"
-      agent: {
-        data: $agent
-      }
+      user_id: $agent
     }
   ) {
     returning {
@@ -25,14 +23,18 @@ mutation createRelationship(
       priority
       recipient {
         id
-        name
+        first_name
       }
       recipient_id
       status
       updated_at
       volunteer {
         id
-        name
+        first_name
+      }
+      agent {
+        id
+        first_name
       }
       volunteer_id
     }
