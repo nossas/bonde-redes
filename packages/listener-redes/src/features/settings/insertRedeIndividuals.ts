@@ -17,10 +17,10 @@ mutation insert_rede_individuals ($individuals: [rede_individuals_insert_input!]
       email
       phone
       whatsapp
-      
+
       field_occupation
       register_occupation
-      
+
       zipcode
       address
       city
