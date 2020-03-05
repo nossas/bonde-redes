@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Button } from "bonde-styleguide";
 import { useStoreActions } from "easy-peasy";
-import useAppLogic from '../app-logic'
+import useAppLogic from "../app-logic";
 
 const BtnWarning = styled(Button)`
   border-color: ${props => (props.disabled ? "unset" : "#EE0090")}
@@ -16,11 +16,7 @@ const Connect = ({ id }) => {
   );
   const setPopup = useStoreActions(actions => actions.popups.setPopup);
 
-  const {
-    volunteer,
-    getUserData,
-    tableData,
-  } = useAppLogic()
+  const { volunteer, getUserData, tableData } = useAppLogic();
 
   const onClick = () => {
     // TODO: Tratar caso em que a usuária não tem user_id
