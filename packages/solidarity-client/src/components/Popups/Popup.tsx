@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import {
   Title,
   Text,
@@ -18,7 +17,35 @@ import {
   Box
 } from './styles'
 
-const Popup = ({ confirm, success, error, warning, isOpen, onClose, volunteerName, individualName, isLoading, onSubmit }) => {
+type Props = {
+  confirm: {
+    isEnabled: boolean
+  }
+  success: {
+    link: {
+      individual: () => string | false
+      volunteer: () => string | false
+    }
+    isEnabled: boolean
+  }
+  error: {
+    isEnabled: boolean
+    message: string
+  }
+  warning: {
+    isEnabled: true
+    id: number
+    name: string
+  }
+  isOpen: boolean
+  onClose: Function
+  volunteerName: string
+  individualName: string
+  isLoading: boolean
+  onSubmit: Function
+}
+
+const Popup: React.FC<Props> = ({ confirm, success, error, warning, isOpen, onClose, volunteerName, individualName, isLoading, onSubmit }) => {
   return (
     <StyledModal
       opened={isOpen}
@@ -120,30 +147,6 @@ const Error = ({ individualName, volunteerName, onClose, onSubmit, message }) =>
     <StyledLink onClick={onClose}>voltar para o match</StyledLink>
   </ErrorWrapper>
 )
-
-Popup.propTypes = {
-  confirm: PropTypes.shape({
-    onClose: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired,
-    isEnabled: PropTypes.bool.isRequired
-  }),
-  success: PropTypes.shape({
-    onClose: PropTypes.func.isRequired,
-    link: PropTypes.func.isRequired,
-    isEnabled: PropTypes.bool.isRequired,
-    ticketId: PropTypes.number.isRequired
-  }),
-  error: PropTypes.shape({
-    onClose: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired,
-    isEnabled: PropTypes.bool.isRequired,
-    message: PropTypes.string.isRequired
-  }),
-  isOpen: PropTypes.bool.isRequired,
-  volunteerName: PropTypes.string.isRequired,
-  individualName: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
-}
 
 Popup.defaultProps = {
   isOpen: false

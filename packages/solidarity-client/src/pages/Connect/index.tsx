@@ -1,82 +1,76 @@
-import React, { useCallback, Fragment, useState, useEffect } from "react";
+import React, {
+  useCallback,
+  Fragment,
+  useState,
+  useEffect
+} from "react";
 import "react-table/react-table.css";
 import ReactTable from "react-table";
 import * as turf from "@turf/turf";
 import { useHistory, useLocation } from "react-router-dom";
 import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
-import { useStoreState, useStoreActions } from "easy-peasy";
-import { useMutation } from "@apollo/react-hooks";
+import { useStoreActions } from "easy-peasy";
+import { useMutation } from '@apollo/react-hooks'
 
-import {
-  encodeText,
-  whatsappText,
-  parseNumber,
-  getUserData
-} from "../../services/utils";
 import { Wrap, StyledButton } from "./style";
 import columns from "./columns";
-import FetchUsersByGroup from "../../graphql/FetchUsersByGroup";
-import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
+import FetchUsersByGroup from '../../graphql/FetchUsersByGroup'
+import CREATE_RELATIONSHIP from '../../graphql/CreateRelationship'
+import useAppLogic from '../../app-logic'
+import {
+  getQuery
+} from '../../services/utils'
 
 import { If } from "../../components/If";
 import Popup from "../../components/Popups/Popup";
 
+interface Popups {
+  confirm: boolean
+  wrapper: boolean
+  noPhoneNumber: boolean
+}
+
 const Table = () => {
-  const [createConnection, { data, loading, error }] = useMutation(
-    CREATE_RELATIONSHIP
-  );
+  const [createConnection, { data, loading, error }] = useMutation(CREATE_RELATIONSHIP);
+  const {
+    individual,
+    volunteer,
+    popups,
+    createWhatsappLink,
+    parsedIndividualNumber,
+    urlencodedIndividualText,
+    parsedVolunteerNumber,
+    urlencodedVolunteerText,
+    getUserData,
+    lat,
+    lng,
+    distance
+  } = useAppLogic()
 
-  const { goBack } = useHistory();
-  const { search } = useLocation();
+  const { goBack } = useHistory()
+  const { search } = useLocation()
 
-  const setTable = useStoreActions(actions => actions.table.setTable);
-  const setVolunteer = useStoreActions(
-    actions => actions.volunteer.setVolunteer
-  );
-  const setPopup = useStoreActions(actions => actions.popups.setPopup);
-
-  const individual = useStoreState(state => state.individual.data);
-  const volunteer = useStoreState(state => state.volunteer.data);
-
-  const popups = useStoreState(state => state.popups.data);
+  const setTable = useStoreActions((actions: any) => actions.table.setTable)
+  const setVolunteer = useStoreActions((actions: any) => actions.volunteer.setVolunteer)
+  const setPopup = useStoreActions((actions: any) => actions.popups.setPopup);
 
   const [success, setSuccess] = useState(false);
   const [fail, setError] = useState(false);
-  const [isLoading, setLoader] = useState(false);
+  const [isLoading, setLoader] = useState(false);;
 
   const { confirm, wrapper, noPhoneNumber } = popups;
+  const { name: individual_name, id: individual_user_id } = individual;
   const {
-    name: individual_name,
-    phone: individual_phone,
-    id: individual_user_id
-  } = individual;
-  const {
-    latitude,
-    longitude,
     name: volunteer_name,
     whatsapp: volunteer_whatsapp,
-    // phone,
-    id: volunteer_user_id
+    id: volunteer_user_id,
   } = volunteer;
 
-  const distance = 50;
-  const lat = Number(latitude);
-  const lng = Number(longitude);
-
-  const volunteerFirstName = volunteer_name.split(" ")[0];
-  const createWhatsappLink = (number, textVariables) => {
-    if (!number) return "";
-    const whatsappphonenumber = parseNumber(number);
-    const urlencodedtext = encodeText(whatsappText(textVariables));
-    return `https://api.whatsapp.com/send?phone=55${whatsappphonenumber}&text=${urlencodedtext}`;
-  };
-  const getQuery = search => Number(search.split("=")[1]);
-
   useEffect(() => {
-    setLoader(loading);
-    setError(!!(error && error.message));
-    if (data) setSuccess(true);
-  }, [setLoader, loading, error, setError, data]);
+    setLoader(loading)
+    setError(!!(error && error.message))
+    if (data) setSuccess(true)
+  }, [setLoader, loading, error, setError, data])
 
   const filterByDistance = useCallback(
     data =>
@@ -121,12 +115,12 @@ const Table = () => {
         confirm: false
       });
     setPopup({ ...popups, confirm: false });
-    return createConnection({
+    return createConnection({ 
       variables: {
         recipientId: individual_user_id,
         volunteerId: volunteer_user_id
       }
-    });
+    })
   };
 
   const closeAllPopups = () => {
@@ -135,20 +129,22 @@ const Table = () => {
       wrapper: false,
       confirm: false
     });
-    return goBack();
-  };
+    return goBack()
+  }
 
   return (
     <FetchUsersByGroup>
       {({ individuals, volunteers }) => {
-        const filteredTableData = filterByDistance(individuals.data);
-        setTable(filteredTableData);
+        const filteredTableData = filterByDistance(
+          individuals.data  
+        )
+        setTable(filteredTableData)
         const user = getUserData({
           user: getQuery(search),
           data: volunteers.data,
           filterBy: "id"
-        });
-        setVolunteer(user);
+        })
+        setVolunteer(user)
         return individuals.data.length === 0 ? (
           <Flexbox middle>
             <Wrap>
@@ -160,11 +156,9 @@ const Table = () => {
             <Flexbox vertical middle>
               <Wrap>
                 <Flexbox vertical>
-                  <Spacing margin={{ bottom: 20 }}>
+                  <Spacing margin={{ bottom: 20}}>
                     <Flexbox>
-                      <StyledButton flat onClick={goBack}>
-                        {"< fazer match"}
-                      </StyledButton>
+                      <StyledButton flat onClick={goBack}>{'< fazer match'}</StyledButton>
                     </Flexbox>
                     <Spacing margin={{ top: 10, bottom: 10 }}>
                       <Title.H3>Match realizado!</Title.H3>
@@ -193,26 +187,14 @@ const Table = () => {
                 confirm={{ isEnabled: confirm }}
                 success={{
                   link: {
-                    individual: () =>
-                      createWhatsappLink(individual_phone, {
-                        volunteer_name: volunteerFirstName,
-                        individual_name,
-                        agent: "Voluntária",
-                        isVolunteer: false
-                      }),
-                    volunteer: () =>
-                      createWhatsappLink(volunteer_whatsapp, {
-                        volunteer_name: volunteerFirstName,
-                        individual_name,
-                        agent: "Voluntária",
-                        isVolunteer: true
-                      })
+                    individual: () => createWhatsappLink(parsedIndividualNumber, urlencodedIndividualText),
+                    volunteer: () => createWhatsappLink(parsedVolunteerNumber, urlencodedVolunteerText)
                   },
                   isEnabled: success
                 }}
                 error={{
                   isEnabled: fail,
-                  message: error && error.message
+                  message: (error && error.message) || ''
                 }}
                 warning={{
                   isEnabled: noPhoneNumber,
@@ -225,7 +207,7 @@ const Table = () => {
         );
       }}
     </FetchUsersByGroup>
-  );
+  )
 };
 
 export default Table;

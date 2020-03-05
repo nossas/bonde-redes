@@ -1,6 +1,4 @@
 
-export const getUserData = ({ user, data, filterBy }) => data.filter((i) => user === i[filterBy])[0]
-
 export const encodeText = input => encodeURIComponent(input)
 
 export const whatsappText = ({ volunteer_name, individual_name, agent, isVolunteer }) => {
@@ -14,22 +12,6 @@ export const emailValidation = () => (
   /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
 )
 
-export const zendeskOrganizations = JSON.parse(process.env.REACT_APP_ZENDESK_ORGANIZATIONS || '{}')
+export const getQuery = (search) => Number((search).split('=')[1])
 
-export const isVolunteer = (organization_id: number) => [zendeskOrganizations['therapist'], zendeskOrganizations['lawyer']].includes(organization_id)
-
-// export const getAgentName = (agent: number) => dicioAgent[agent]
-
-export const volunteer_category = input => {
-  if (input === zendeskOrganizations.lawyer) return 'jurídico'
-  if (input === zendeskOrganizations.therapist) return 'psicológico'
-}
-
-const LAWYER = zendeskOrganizations.lawyer
-const THERAPIST = zendeskOrganizations.therapist
-
-export const getVolunteerType = id => {
-  if (id === LAWYER) return 'Advogada'
-  else if (id === THERAPIST) return 'Psicóloga'
-  return 'Voluntária inválida'
-}
+export const volunteerFirstName = ({ name }) => (name).split(" ")[0];

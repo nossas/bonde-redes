@@ -63,7 +63,11 @@ fragment individual on rede_individuals {
   extras
 	
 	form_entry_id
-  rede_group_id
+  group {
+    id
+    community_id
+    is_volunteer
+  }
 	
   created_at
 	updated_at

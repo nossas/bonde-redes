@@ -12,11 +12,8 @@ import styled from 'styled-components'
 import { useForm, Controller } from 'react-hook-form'
 import { useStoreActions, useStoreState } from 'easy-peasy'
 
-import {
-  getUserData,
-  emailValidation,
-} from '../services/utils'
-
+import { emailValidation } from '../services/utils'
+import useAppLogic from '../app-logic'
 import Select from './Select'
 // import dicioAgent from '../pages/Connect/Table/dicioAgent'
 
@@ -37,11 +34,14 @@ const StyledFlexbox = styled(Flexbox)`
 `
 
 const MatchForm = () => {
-  const tableData = useStoreState(state => state.volunteers.volunteers)
+  const { search } = useLocation()
   const getAvailableVolunteers = useStoreActions((actions: any) => actions.volunteers.getAvailableVolunteers)
   const setForm = useStoreActions((actions: any) => actions.match.setForm)
-  const volunteerData = useStoreState(state => state.table.data)
-  const { search } = useLocation()
+
+  const {
+    getUserData,
+    tableData
+  } = useAppLogic()
 
   const {
     handleSubmit,
@@ -118,7 +118,7 @@ const MatchForm = () => {
       </StyledFlexbox>
       <Flexbox middle>
         <Button
-          disabled={volunteerData.length < 1}
+          disabled={tableData.length < 1}
           minWidth="150px"
           type="submit"
         >
