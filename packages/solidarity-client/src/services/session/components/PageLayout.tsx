@@ -44,13 +44,14 @@ const SessionPage = ({ children, ...props }: any) => (
   </Main>
 )
 
-// interface PageLayoutProps {
-//   component: any;
-//   componentProps: object;
-//   pageProps: object;
-// }
+interface PageLayoutProps {
+  path: string;
+  component: any;
+  componentProps?: object;
+  pageProps?: object;
+}
 
-const PageLayout = (props: any) => {
+const PageLayout: React.FC<PageLayoutProps>  = (props) => {
   const { component: Component, pageProps, componentProps, ...rest } = props
 
   return (

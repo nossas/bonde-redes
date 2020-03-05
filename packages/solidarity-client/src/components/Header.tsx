@@ -7,7 +7,11 @@ import {
 } from "bonde-styleguide";
 import PageTabs from './PageTabs'
 
-const Header: React.FC<{zIndex: number}> = ({ zIndex }) => {
+interface HeaderProps {
+  zIndex: number
+}
+
+const Header: React.FC<HeaderProps> = ({ zIndex }) => {
   const { pathname: path } = useLocation();
   const [selectedTab, setTab] = useState("pessoas")
 
