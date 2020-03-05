@@ -8,7 +8,7 @@ type valueString = {
 
 const columns = [
   {
-    accessor: 'name',
+    accessor: 'first_name',
     Header: 'Nome',
     width: 200,
   },

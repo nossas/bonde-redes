@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 export const volunteersColumns = [
   {
-    accessor: 'name',
+    accessor: 'first_name',
     Header: 'Nome',
   }, {
     accessor: 'email',
