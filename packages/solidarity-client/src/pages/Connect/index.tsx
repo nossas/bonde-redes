@@ -3,17 +3,16 @@ import React, {
   Fragment,
   useState,
   useEffect
-} from "react";
-import "react-table/react-table.css";
-import ReactTable from "react-table";
-import * as turf from "@turf/turf";
-import { useHistory, useLocation } from "react-router-dom";
-import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
-import { useStoreActions } from "easy-peasy";
+} from 'react'
+import 'react-table/react-table.css'
+import ReactTable from 'react-table'
+import * as turf from '@turf/turf'
+import { useHistory, useLocation } from 'react-router-dom'
+import { Flexbox2 as Flexbox, Title, Spacing } from 'bonde-styleguide'
 import { useMutation } from '@apollo/react-hooks'
 
-import { Wrap, StyledButton } from "./style";
-import columns from "./columns";
+import { Wrap, StyledButton } from './style'
+import columns from './columns'
 import FetchUsersByGroup from '../../graphql/FetchUsersByGroup'
 import CREATE_RELATIONSHIP from '../../graphql/CreateRelationship'
 import useAppLogic from '../../app-logic'
@@ -21,8 +20,8 @@ import {
   getQuery
 } from '../../services/utils'
 
-import { If } from "../../components/If";
-import Popup from "../../components/Popups/Popup";
+import { If } from '../../components/If'
+import Popup from '../../components/Popups/Popup'
 
 interface Popups {
   confirm: boolean

@@ -24,12 +24,6 @@ const AppWrapper = styled.div`
 const AppBody = styled.div`
   min-height: 100vh;
   flex-grow: 1;
-
-  .ReactTable {
-    .rt-th, .rt-td {
-      padding: 16px 5px;
-    }
-  }
 `;
 
 const InsideApp = () => (
