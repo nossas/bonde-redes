@@ -6,3 +6,8 @@ export const Wrap = styled.div`
   }
   margin: 20px 0;
 `
+
+export const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 100px 100px 100px;
+`

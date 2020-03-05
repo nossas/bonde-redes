@@ -9,11 +9,11 @@ import PageTabs from './PageTabs'
 
 const Header: React.FC = ({ zIndex }: any) => {
   const { pathname: path } = useLocation();
-  const [selectedTab, setTab] = useState("grupos")
+  const [selectedTab, setTab] = useState("pessoas")
 
   const tabs = [
     {
-      "name": "grupos",
+      "name": "pessoas",
       "to": "/groups/volunteers" || "/connect"
     },
     {
@@ -23,7 +23,7 @@ const Header: React.FC = ({ zIndex }: any) => {
   ]
 
   useEffect(() => {
-    const currentTab = tabs.find(i => i["to"] === path) || { name: "grupos" }
+    const currentTab = tabs.find(i => i["to"] === path) || { name: "pessoas" }
     setTab(currentTab["name"])
   }, [path, setTab, tabs])
 

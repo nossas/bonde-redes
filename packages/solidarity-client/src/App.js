@@ -8,7 +8,7 @@ import styled from "styled-components";
 
 import Header from "./components/Header";
 import history from "./history";
-import Match from "./pages/Connect";
+import Connect from "./pages/Connect";
 import Map from "./pages/Geobonde/Map";
 import Geobonde from "./pages/Geobonde/Table";
 import GroupsWrapper from "./pages/Groups";
@@ -39,7 +39,7 @@ const InsideApp = () => (
         <Route path="/groups" component={GroupsWrapper} />
         <Route path="/geobonde" component={Geobonde} />
         <Route path="geobonde/mapa" component={Map} />
-        <Route path="/connect" component={Match} />
+        <Route path="/connect" component={Connect} />
         <Route path="/relations" component={Relations} />
       </Switch>
     </AppBody>
