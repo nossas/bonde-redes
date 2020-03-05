@@ -50,7 +50,17 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
 			if (widget) {
 				const instance = {}
 				widget.metadata['form_mapping'].forEach((field: MetaField) => {
-					instance[field.name] = (fields.filter((f: any) => f.uid === field.uid)[0] || {}).value
+					const acessors = field.name.split('.')
+					if (acessors.length === 1) {
+						instance[acessors[0]] = (fields.filter((f: any) => f.uid === field.uid)[0] || {}).value
+					} else {
+						// extra fields
+						const rootField = acessors[0]
+						const childField = acessors[1]
+						const value = { [childField]: (fields.filter((f: any) => f.uid === field.uid)[0] || {}).value }
+
+						instance[rootField] = Object.assign({}, instance[rootField], value)
+					}
 				})
 
 				// fields of integration
