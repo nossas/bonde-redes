@@ -19,11 +19,15 @@ query RedeRelationships ($context: Int_comparison_exp!) {
     updated_at
     recipient {
       id
-      name
+      first_name
     }
     volunteer {
       id
-      name
+      first_name
+    }
+    agent {
+      id
+      first_name
     }
   }
 }`
