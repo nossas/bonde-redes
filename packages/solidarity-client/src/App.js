@@ -37,10 +37,10 @@ const InsideApp = () => (
           <Redirect to="/groups" />
         </Route>
         <Route path="/groups" component={GroupsWrapper} />
-        <Route path="/geobonde " component={Geobonde} />
-        <Route path="geobonde/mapa " component={Map} />
-        <Route path="/connect " component={Match} />
-        <Route path="/relations " component={Relations} />
+        <Route path="/geobonde" component={Geobonde} />
+        <Route path="geobonde/mapa" component={Map} />
+        <Route path="/connect" component={Match} />
+        <Route path="/relations" component={Relations} />
       </Switch>
     </AppBody>
   </AppWrapper>
