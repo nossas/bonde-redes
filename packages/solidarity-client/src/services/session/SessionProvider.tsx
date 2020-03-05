@@ -106,6 +106,8 @@ export default function SessionProvider({ children }) {
     )
 }
 
+
+
 export const SessionHOC = (WrappedComponent: any, opts?: any) => class extends React.Component {
 
   static contextType = SessionContext;

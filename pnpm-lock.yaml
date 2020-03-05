@@ -171,6 +171,7 @@ importers:
       mapbox-gl: 1.8.1_mapbox-gl@1.8.1
       morgan: 1.9.1
       prop-types: 15.7.2
+      query-string: 6.11.1
       react: 16.13.0
       react-autosuggest: 9.4.3_react@16.13.0
       react-dom: 16.13.0_react@16.13.0
@@ -269,6 +270,7 @@ importers:
       morgan: ^1.9.1
       prettier: ^1.19.1
       prop-types: ^15.7.2
+      query-string: ^6.11.1
       react: ^16.12.0
       react-autosuggest: ^9.4.3
       react-dom: ^16.12.0
@@ -4266,8 +4268,6 @@ packages:
       apollo-link-http-common: 0.2.15
       tslib: 1.11.1
     dev: false
-    peerDependencies:
-      graphql: '*'
     resolution:
       integrity: sha512-psNmHyuy3valGikt/XHJfe0pKJnRX19tLLs6P6EHRxg+6q6JMXNVLYPaQBkL0FkwdTCB0cbFJAGRYCBviG8TDA==
   /apollo-link-error/1.1.12_graphql@14.6.0:
@@ -12081,6 +12081,16 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-u7aTucqRXCMlFbIosaArYJBD2+s=
+  /query-string/6.11.1:
+    dependencies:
+      decode-uri-component: 0.2.0
+      split-on-first: 1.1.0
+      strict-uri-encode: 2.0.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-1ZvJOUl8ifkkBxu2ByVM/8GijMIPx+cef7u3yroO3Ogm4DOdZcF5dcrWTIlSHe3Pg/mtlt6/eFjObDfJureZZA==
   /querystring-es3/0.2.1:
     dev: false
     engines:
@@ -13498,6 +13508,12 @@ packages:
       node: '>=6.0.0'
     resolution:
       integrity: sha512-HeZS3PBdMA+sZSu0qwpCxl3DeALD5ASx8pAX0jZdKXSpPWbQ6SYGnlg3BBmYLx5LtiZrmkAZfErCm2oECBcioA==
+  /split-on-first/1.1.0:
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-43ZssAJaMusuKWL8sKUBQXHWOpq8d6CfN/u1p4gUzfJkM05C8rxTmYrkIPTXapZpORA6LkkzcUulJ8FqA7Uudw==
   /split-string/3.1.0:
     dependencies:
       extend-shallow: 3.0.2
@@ -13637,6 +13653,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-J5siXfHVgrH1TmWt3UNS4Y+qBxM=
+  /strict-uri-encode/2.0.0:
+    dev: false
+    engines:
+      node: '>=4'
+    resolution:
+      integrity: sha1-ucczDHBChi9rFC3CdLvMWGbONUY=
   /string-argv/0.1.2:
     engines:
       node: '>=0.6.19'

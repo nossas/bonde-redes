@@ -2,15 +2,30 @@ import React from 'react'
 import { gql } from 'apollo-boost'
 import { useQuery } from '@apollo/react-hooks'
 import { SessionHOC } from '../services/session'
+import FilterQuery from './FilterQuery'
 
 const USERS_BY_GROUP = gql`
-query RedeGroups($context: Int_comparison_exp!) {
-  volunteers: rede_individuals(where: {
-    group: {
-      community_id: $context,
-      is_volunteer: { _eq: true }
-    }
-  }) {
+query RedeGroups(
+  $context: Int_comparison_exp!,
+  $rows: Int!,
+  $offset: Int!,
+  $order_by: [rede_individuals_order_by!],
+  $status: String_comparison_exp
+  $availability: String_comparison_exp
+) {
+  volunteers: rede_individuals(
+    where: {
+      group: {
+        community_id: $context,
+        is_volunteer: { _eq: true }
+      },
+      status: $status,
+      availability: $availability
+    },
+    limit: $rows,
+    offset: $offset,
+    order_by: $order_by
+  ) {
     ...individual
   },
   volunteers_count: rede_individuals_aggregate(where: {
@@ -23,20 +38,29 @@ query RedeGroups($context: Int_comparison_exp!) {
       count
     }
   },
-  individuals: rede_individuals(where: {
-    group: {
-      community_id: $context,
-      is_volunteer: { _eq: false }
-    }
-  }) {
+  individuals: rede_individuals(
+    where: {
+      group: {
+        community_id: $context,
+        is_volunteer: { _eq: false }
+      },
+      status: $status,
+      availability: $availability
+    },
+    limit: $rows,
+    offset: $offset,
+    order_by: $order_by
+  ) {
     ...individual
   },
-  individuals_count: rede_individuals_aggregate(where: {
-    group: {
-      community_id: $context,
-      is_volunteer: { _eq: false }
+  individuals_count: rede_individuals_aggregate(
+    where: {
+      group: {
+        community_id: $context,
+        is_volunteer: { _eq: false }
+      }
     }
-  }) {
+  ) {
     aggregate {
       count
     }
@@ -44,60 +68,69 @@ query RedeGroups($context: Int_comparison_exp!) {
 }
 
 fragment individual on rede_individuals {
-	id
-	first_name
+  id
+  first_name
   last_name
   email
-	whatsapp
-	phone
-	
+  whatsapp
+  phone
+  
   zipcode
   address
-	city
-	coordinates
-	state
+  city
+  coordinates
+  state
   
   status
   availability
 
   extras
-	
-	form_entry_id
+  
+  form_entry_id
   group {
     id
     community_id
     is_volunteer
   }
-	
+  
   created_at
-	updated_at
+  updated_at
 }
 `
 
-const FetchUsersByGroup = SessionHOC((props: any) => {
-	const { children, session: { community } } = props
+const FetchUsersByGroup = SessionHOC((props: any) => (
+  <FilterQuery>
+  {({ filters, changeFilters }) => {
+  	const { children, session: { community } } = props
 
-	const variables = { context: { _eq: community.id } }
+  	const variables = {
+      context: { _eq: community.id },
+      ...(filters || {})
+    }
 
-	const { loading, error, data } = useQuery(USERS_BY_GROUP, { variables })
+  	const { loading, error, data } = useQuery(USERS_BY_GROUP, { variables })
 
-	if (loading) return <p>Loading...</p>
+  	if (loading) return <p>Loading...</p>
 
-	if (error) {
-		console.log('error', error)
-		return <p>Error</p>
-	}
+  	if (error) {
+  		console.log('error', error)
+  		return <p>Error</p>
+  	}
 
-	return children({
-		volunteers: {
-			data: data.volunteers,
-			count: data.volunteers_count.aggregate.count
-		},
-		individuals: {
-			data: data.individuals,
-			count: data.individuals_count.aggregate.count
-		}
-	})
-}, { required: true })
+  	return children({
+  		volunteers: {
+  			data: data.volunteers,
+  			count: data.volunteers_count.aggregate.count
+  		},
+  		individuals: {
+  			data: data.individuals,
+  			count: data.individuals_count.aggregate.count
+  		},
+      filters,
+      changeFilters
+  	})
+  }}
+  </FilterQuery>
+), { required: true })
 
 export default FetchUsersByGroup
