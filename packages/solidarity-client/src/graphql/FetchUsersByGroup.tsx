@@ -45,10 +45,11 @@ query RedeGroups($context: Int_comparison_exp!) {
 
 fragment individual on rede_individuals {
   address
+  agreement
+  availability
   city
   created_at
   email
-  field_occupation
   first_name
   form_entry_id
   group {
@@ -57,15 +58,13 @@ fragment individual on rede_individuals {
   }
   id
   last_name
-  latitude
-  longitude
   phone
   rede_group_id
-  register_occupation
   state
+  status
   updated_at
   whatsapp
-  __typename
+  zipcode
 }
 `
 
