@@ -67,7 +67,7 @@ const Groups = () => {
               )}
               <ReactTable
                 data={data[kind]}
-                columns={columns(pathname)}
+                columns={columns}
                 defaultPageSize={10}
                 defaultSorted={[
                   {
