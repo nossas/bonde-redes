@@ -12,22 +12,26 @@ mutation insert_rede_individuals ($individuals: [rede_individuals_insert_input!]
   ) {
     returning {
       id
-      address
-      city
-      email
-      field_occupation
-      latitude
-      longitude
       first_name
       last_name
+      email
       phone
-      rede_group_id
+      whatsapp
+      
+      field_occupation
       register_occupation
+      
+      zipcode
+      address
+      city
       state
+      coordinates
+
+      form_entry_id
+      rede_group_id
+
       created_at
       updated_at
-      whatsapp
-      form_entry_id
     }
   }
 }
