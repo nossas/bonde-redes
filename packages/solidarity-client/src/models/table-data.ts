@@ -1,5 +1,4 @@
-import { action, thunk, computed } from 'easy-peasy'
-import request from '../services/request'
+import { action, computed } from 'easy-peasy'
 
 export type Ticket = {
   tipo_de_acolhimento: string
@@ -18,25 +17,13 @@ export type Ticket = {
   organization_id: number
 }
 
-const data: Ticket[] = ([])
+// const data: Ticket[] = ([])
 
 const tableModel = {
-  data,
+  data: ([]),
   setTable: action((state, payload) => ({
     data: payload
   })),
-  getTableData: thunk(async (actions: any, payload) => {
-    try {
-      const res = await request.get(payload)
-      actions.setTable(res.data)
-    }
-    catch (err) {
-      console.log(err)
-      actions.setError({
-        message: err && err.message
-      })
-    }
-  }),
   count: computed((state: any) => state.data.length),
   error: {},
   setError: action((state, payload) => ({
