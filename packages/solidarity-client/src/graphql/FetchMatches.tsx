@@ -30,6 +30,7 @@ query RedeRelationships ($context: Int_comparison_exp!) {
       id
       first_name
     }
+    id
   }
 }`
 

@@ -1,6 +1,7 @@
 import React from 'react'
-import SelectStatus from '../../components/SelectStatus'
+import SelectUpdateStatus from '../../components/SelectUpdateStatus'
 import { Text } from 'bonde-styleguide'
+import UPDATE_RELATIONSHIP_MUTATION from '../../graphql/UpdateRelationship'
 
 const status = [
   'encaminhamento_realizado',
@@ -45,10 +46,14 @@ const columns = [
   }, {
     accessor: 'status',
     Header: 'Status',
-    Cell: ({ value }) => (value ? (
-      <SelectStatus
+    Cell: ({ value, row }): any => (value ? (
+      <SelectUpdateStatus
+        name='status'
+        row={row}
         options={status}
         selected={value}
+        query={UPDATE_RELATIONSHIP_MUTATION}
+        type="relationship"
       />
     ) : null),
     width: 250

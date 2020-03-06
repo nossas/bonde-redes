@@ -3,10 +3,10 @@ import {
   Flexbox2 as Flexbox, 
   Text,
 } from 'bonde-styleguide'
-import styled from 'styled-components'
-import SelectUpdateIndividual from '../../graphql/SelectUpdateIndividual'
+import SelectUpdateStatus from '../../components/SelectUpdateStatus'
 import history from '../../history'
 import { BtnInverted } from './styles'
+import UPDATE_INDIVIDUAL_MUTATION from '../../graphql/UpdateIndividual'
 
 const TextHeader = ({ value }) => (
   <Text fontSize={13} fontWeight={600}>{value.toUpperCase()}</Text>
@@ -46,24 +46,28 @@ const volunteersColumns = [
   }, {
     accessor: 'status',
     Header: 'Status',
-    Cell: ({ value, row }) => (value ? (
-      <SelectUpdateIndividual
+    Cell: ({ value, row }): any => (value ? (
+      <SelectUpdateStatus
         name='status'
         row={row}
         options={status}
         selected={value}
+        type="individual"
+        query={UPDATE_INDIVIDUAL_MUTATION}
       />
     ) : null),
     width: 150
   }, {
     accessor: 'availability',
     Header: 'Disponibilidade',
-    Cell: ({ value, row }) => (value ? (
-      <SelectUpdateIndividual
+    Cell: ({ value, row }): any => (value ? (
+      <SelectUpdateStatus
         name='availability'
         row={row}
         options={availability}
         selected={value}
+        type="individual"
+        query={UPDATE_INDIVIDUAL_MUTATION}
       />
     ) : null),
     width: 150
@@ -71,7 +75,7 @@ const volunteersColumns = [
     accessor: 'extra',
     Header: 'Número de Registro',
     Cell: ({ value }) => (value ? (
-      <span>{value.register_ocupation}</span> 
+      <span>{value.register_occupation}</span> 
     ) : '-'),
     width: 170
   }, {
@@ -126,6 +130,20 @@ const individualsColumns = [
   }, {
     accessor: 'email',
     Header: 'Email',
+  }, {
+    accessor: 'status',
+    Header: 'Status',
+    Cell: ({ value, row }): any => (value ? (
+      <SelectUpdateStatus
+        name='status'
+        row={row}
+        options={status}
+        selected={value}
+        type="individual"
+        query={UPDATE_INDIVIDUAL_MUTATION}
+      />
+    ) : null),
+    width: 150
   }, {
     accessor: 'address',
     Header: 'Endereço',
