@@ -84,133 +84,7 @@ importers:
       source-map-support: ^0.5.16
       url-join: ^4.0.1
       yup: ^0.27.0
-  packages/listener-redes:
-    dependencies:
-      apollo-cache-inmemory: 1.6.5_graphql@14.6.0
-      apollo-client: 2.6.8_graphql@14.6.0
-      apollo-link: 1.2.13_graphql@14.6.0
-      apollo-link-http: 1.5.16_graphql@14.6.0
-      apollo-link-ws: 1.0.19_f500735e70c5d39eb51bbe9e58db64c2
-      apollo-utilities: 1.3.3_graphql@14.6.0
-      colors: 1.4.0
-      dotenv: 8.2.0
-      fp-ts: 2.5.1
-      graphql: 14.6.0
-      graphql-tag: 2.10.3_graphql@14.6.0
-      node-fetch: 2.6.0
-      subscriptions-transport-ws: 0.9.16_graphql@14.6.0
-      throng: 4.0.0
-      tsc-watch: 4.2.3_typescript@3.7.5
-      tslib: 1.10.0
-      ws: 7.2.1
-    devDependencies:
-      '@types/jest': 25.1.3
-      '@types/node': 12.12.28
-      '@typescript-eslint/eslint-plugin': 2.19.2_3e3f891f1aa9f45d3bcb4ff18cecf61d
-      '@typescript-eslint/parser': 2.19.2_eslint@6.8.0+typescript@3.7.5
-      eslint: 6.8.0
-      eslint-config-prettier: 6.10.0_eslint@6.8.0
-      eslint-plugin-jest: 23.7.0_eslint@6.8.0+typescript@3.7.5
-      jest: 24.9.0
-      prettier: 1.19.1
-      rimraf: 3.0.2
-      ts-jest: 24.1.0_jest@24.9.0
-      tsutils: 3.17.1_typescript@3.7.5
-      typescript: 3.7.5
-    specifiers:
-      '@types/jest': ~25.1.0
-      '@types/node': ~12.12.27
-      '@typescript-eslint/eslint-plugin': ~2.19.2
-      '@typescript-eslint/parser': ~2.19.2
-      apollo-cache-inmemory: ^1.6.5
-      apollo-client: ^2.6.8
-      apollo-link: ^1.2.13
-      apollo-link-http: ^1.5.16
-      apollo-link-ws: ^1.0.19
-      apollo-utilities: ^1.3.3
-      colors: ^1.4.0
-      dotenv: ^8.2.0
-      eslint: ~6.8.0
-      eslint-config-prettier: ~6.10.0
-      eslint-plugin-jest: ~23.7.0
-      fp-ts: ^2.5.1
-      graphql: ^14.6.0
-      graphql-tag: ^2.10.3
-      jest: ~24.9.0
-      node-fetch: ^2.6.0
-      prettier: ~1.19.1
-      rimraf: ~3.0.2
-      subscriptions-transport-ws: ^0.9.16
-      throng: ^4.0.0
-      ts-jest: ~24.1.0
-      tsc-watch: ^4.2.3
-      tslib: ~1.10.0
-      tsutils: ~3.17.0
-      typescript: ~3.7.5
-      ws: ^7.2.1
-  packages/listener-redes-geolocation:
-    dependencies:
-      apollo-cache-inmemory: 1.6.5
-      apollo-client: 2.6.8
-      apollo-link: 1.2.13
-      apollo-link-http: 1.5.16
-      apollo-link-ws: 1.0.19
-      apollo-utilities: 1.3.3
-      axios: 0.19.2
-      debug: 4.1.1
-      dotenv: 8.2.0
-      gql: 1.1.2
-      graphql-tag: 2.10.3
-      node-fetch: 2.6.0
-      throng: 4.0.0
-      tslib: 1.10.0
-      winston: 3.2.1
-      ws: 7.2.1
-    devDependencies:
-      '@types/jest': 25.1.3
-      '@types/node': 12.12.28
-      '@typescript-eslint/eslint-plugin': 2.19.2_3fd98fd1bfe8fad366099f98e47953c6
-      '@typescript-eslint/parser': 2.19.2_eslint@6.8.0+typescript@3.8.2
-      eslint: 6.8.0
-      eslint-config-prettier: 6.10.0_eslint@6.8.0
-      eslint-plugin-jest: 23.7.0_eslint@6.8.0+typescript@3.8.2
-      jest: 25.1.0
-      prettier: 1.19.1
-      rimraf: 3.0.2
-      ts-jest: 25.2.1_jest@25.1.0
-      tsutils: 3.17.1_typescript@3.8.2
-      typescript: 3.8.2
-    specifiers:
-      '@types/jest': ~25.1.2
-      '@types/node': ~12.12.27
-      '@typescript-eslint/eslint-plugin': ~2.19.2
-      '@typescript-eslint/parser': ~2.19.2
-      apollo-cache-inmemory: ^1.6.5
-      apollo-client: ^2.6.8
-      apollo-link: ^1.2.13
-      apollo-link-http: ^1.5.16
-      apollo-link-ws: ^1.0.19
-      apollo-utilities: ^1.3.3
-      axios: ^0.19.2
-      debug: ^4.1.1
-      dotenv: ^8.2.0
-      eslint: ~6.8.0
-      eslint-config-prettier: ~6.10.0
-      eslint-plugin-jest: ~23.7.0
-      gql: ^1.1.2
-      graphql-tag: ^2.10.3
-      jest: ~25.1.0
-      node-fetch: ^2.6.0
-      prettier: ~1.19.1
-      rimraf: ~3.0.2
-      throng: ^4.0.0
-      ts-jest: ~25.2.0
-      tslib: ~1.10.0
-      tsutils: ~3.17.0
-      typescript: ~3.8.2
-      winston: ^3.2.1
-      ws: ^7.2.1
-  packages/solidarity-client:
+  packages/client-redes:
     dependencies:
       '@apollo/react-hooks': 3.1.3_5e49a1a07738280740551aa97cd7e1de
       '@google/maps': 1.1.0
@@ -346,6 +220,132 @@ importers:
       styled-components: ^4.4.1
       typescript: ~3.7.3
       validator: ^12.1.0
+  packages/listener-redes:
+    dependencies:
+      apollo-cache-inmemory: 1.6.5_graphql@14.6.0
+      apollo-client: 2.6.8_graphql@14.6.0
+      apollo-link: 1.2.13_graphql@14.6.0
+      apollo-link-http: 1.5.16_graphql@14.6.0
+      apollo-link-ws: 1.0.19_f500735e70c5d39eb51bbe9e58db64c2
+      apollo-utilities: 1.3.3_graphql@14.6.0
+      colors: 1.4.0
+      dotenv: 8.2.0
+      fp-ts: 2.5.1
+      graphql: 14.6.0
+      graphql-tag: 2.10.3_graphql@14.6.0
+      node-fetch: 2.6.0
+      subscriptions-transport-ws: 0.9.16_graphql@14.6.0
+      throng: 4.0.0
+      tsc-watch: 4.2.3_typescript@3.7.5
+      tslib: 1.10.0
+      ws: 7.2.1
+    devDependencies:
+      '@types/jest': 25.1.3
+      '@types/node': 12.12.28
+      '@typescript-eslint/eslint-plugin': 2.19.2_3e3f891f1aa9f45d3bcb4ff18cecf61d
+      '@typescript-eslint/parser': 2.19.2_eslint@6.8.0+typescript@3.7.5
+      eslint: 6.8.0
+      eslint-config-prettier: 6.10.0_eslint@6.8.0
+      eslint-plugin-jest: 23.7.0_eslint@6.8.0+typescript@3.7.5
+      jest: 24.9.0
+      prettier: 1.19.1
+      rimraf: 3.0.2
+      ts-jest: 24.1.0_jest@24.9.0
+      tsutils: 3.17.1_typescript@3.7.5
+      typescript: 3.7.5
+    specifiers:
+      '@types/jest': ~25.1.0
+      '@types/node': ~12.12.27
+      '@typescript-eslint/eslint-plugin': ~2.19.2
+      '@typescript-eslint/parser': ~2.19.2
+      apollo-cache-inmemory: ^1.6.5
+      apollo-client: ^2.6.8
+      apollo-link: ^1.2.13
+      apollo-link-http: ^1.5.16
+      apollo-link-ws: ^1.0.19
+      apollo-utilities: ^1.3.3
+      colors: ^1.4.0
+      dotenv: ^8.2.0
+      eslint: ~6.8.0
+      eslint-config-prettier: ~6.10.0
+      eslint-plugin-jest: ~23.7.0
+      fp-ts: ^2.5.1
+      graphql: ^14.6.0
+      graphql-tag: ^2.10.3
+      jest: ~24.9.0
+      node-fetch: ^2.6.0
+      prettier: ~1.19.1
+      rimraf: ~3.0.2
+      subscriptions-transport-ws: ^0.9.16
+      throng: ^4.0.0
+      ts-jest: ~24.1.0
+      tsc-watch: ^4.2.3
+      tslib: ~1.10.0
+      tsutils: ~3.17.0
+      typescript: ~3.7.5
+      ws: ^7.2.1
+  packages/listener-redes-geolocation:
+    dependencies:
+      apollo-cache-inmemory: 1.6.5
+      apollo-client: 2.6.8
+      apollo-link: 1.2.13
+      apollo-link-http: 1.5.16
+      apollo-link-ws: 1.0.19
+      apollo-utilities: 1.3.3
+      axios: 0.19.2
+      debug: 4.1.1
+      dotenv: 8.2.0
+      gql: 1.1.2
+      graphql-tag: 2.10.3
+      node-fetch: 2.6.0
+      throng: 4.0.0
+      tslib: 1.10.0
+      winston: 3.2.1
+      ws: 7.2.1
+    devDependencies:
+      '@types/jest': 25.1.3
+      '@types/node': 12.12.28
+      '@typescript-eslint/eslint-plugin': 2.19.2_3fd98fd1bfe8fad366099f98e47953c6
+      '@typescript-eslint/parser': 2.19.2_eslint@6.8.0+typescript@3.8.2
+      eslint: 6.8.0
+      eslint-config-prettier: 6.10.0_eslint@6.8.0
+      eslint-plugin-jest: 23.7.0_eslint@6.8.0+typescript@3.8.2
+      jest: 25.1.0
+      prettier: 1.19.1
+      rimraf: 3.0.2
+      ts-jest: 25.2.1_jest@25.1.0
+      tsutils: 3.17.1_typescript@3.8.2
+      typescript: 3.8.2
+    specifiers:
+      '@types/jest': ~25.1.2
+      '@types/node': ~12.12.27
+      '@typescript-eslint/eslint-plugin': ~2.19.2
+      '@typescript-eslint/parser': ~2.19.2
+      apollo-cache-inmemory: ^1.6.5
+      apollo-client: ^2.6.8
+      apollo-link: ^1.2.13
+      apollo-link-http: ^1.5.16
+      apollo-link-ws: ^1.0.19
+      apollo-utilities: ^1.3.3
+      axios: ^0.19.2
+      debug: ^4.1.1
+      dotenv: ^8.2.0
+      eslint: ~6.8.0
+      eslint-config-prettier: ~6.10.0
+      eslint-plugin-jest: ~23.7.0
+      gql: ^1.1.2
+      graphql-tag: ^2.10.3
+      jest: ~25.1.0
+      node-fetch: ^2.6.0
+      prettier: ~1.19.1
+      rimraf: ~3.0.2
+      throng: ^4.0.0
+      ts-jest: ~25.2.0
+      tslib: ~1.10.0
+      tsutils: ~3.17.0
+      typescript: ~3.8.2
+      winston: ^3.2.1
+      ws: ^7.2.1
   packages/webhook-activists:
     dependencies:
       apollo-boost: 0.4.7_graphql@14.6.0
@@ -692,7 +692,7 @@ packages:
       gensync: 1.0.0-beta.1
       json5: 2.1.1
       lodash: 4.17.15
-      resolve: 1.15.0
+      resolve: 1.15.1
       semver: 5.7.1
       source-map: 0.5.7
     engines:
@@ -2361,7 +2361,7 @@ packages:
   /@turf/area/5.1.5:
     dependencies:
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-79iZv9Jgzb0VQbKjwVX4pdLu+h0=
@@ -2382,7 +2382,7 @@ packages:
   /@turf/bbox/5.1.5:
     dependencies:
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-MFHfUUrUxQ9KT5uKLRX9i2hA7aM=
@@ -2439,7 +2439,7 @@ packages:
       '@turf/boolean-point-in-polygon': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/line-intersect': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       '@turf/polygon-to-line': 5.1.5
     dev: false
     resolution:
@@ -2459,7 +2459,7 @@ packages:
       '@turf/invariant': 5.1.5
       '@turf/line-intersect': 5.1.5
       '@turf/line-overlap': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       geojson-equality: 0.1.6
     dev: false
     resolution:
@@ -2502,7 +2502,7 @@ packages:
       '@turf/bbox': 5.1.5
       '@turf/center': 5.1.5
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       '@turf/projection': 5.1.5
       d3-geo: 1.7.1
       turf-jsts: 1.2.3
@@ -2513,7 +2513,7 @@ packages:
     dependencies:
       '@turf/bbox': 5.1.5
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-jI6YdTkeXwnw5uePXWYbiLIQigo=
@@ -2523,7 +2523,7 @@ packages:
       '@turf/centroid': 5.1.5
       '@turf/distance': 5.1.5
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-u0Yb/noqSGAdikcnaFcYcjoUqHI=
@@ -2533,7 +2533,7 @@ packages:
       '@turf/convex': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-TTvXnYhJjbq4Mk1PafAyL2Uguco=
@@ -2547,7 +2547,7 @@ packages:
   /@turf/centroid/5.1.5:
     dependencies:
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-d4radCFjNQIa2P0OemWoNJ1Tx2k=
@@ -2583,7 +2583,7 @@ packages:
       '@turf/distance': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       density-clustering: 1.3.0
     dev: false
     resolution:
@@ -2593,7 +2593,7 @@ packages:
       '@turf/clone': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       skmeans: 0.9.7
     dev: false
     resolution:
@@ -2601,7 +2601,7 @@ packages:
   /@turf/clusters/5.1.5:
     dependencies:
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-ZzpeXxsZycq6vFfJCO6t1oIiTdQ=
@@ -2617,7 +2617,7 @@ packages:
   /@turf/combine/5.1.5:
     dependencies:
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-uxS976VVBDVxlfwaEkzX1TqMiQU=
@@ -2627,7 +2627,7 @@ packages:
       '@turf/distance': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       '@turf/tin': 5.1.5
       topojson-client: 3.1.0
       topojson-server: 3.0.1
@@ -2637,7 +2637,7 @@ packages:
   /@turf/convex/5.1.5:
     dependencies:
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       concaveman: 1.1.1
     dev: false
     resolution:
@@ -2654,7 +2654,7 @@ packages:
       '@turf/area': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       turf-jsts: 1.2.3
     dev: false
     resolution:
@@ -2666,7 +2666,7 @@ packages:
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
       '@turf/line-intersect': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       '@turf/union': 5.1.5
       geojson-rbush: 2.1.0
       get-closest: 0.0.4
@@ -2707,14 +2707,14 @@ packages:
   /@turf/explode/5.1.5:
     dependencies:
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-sSsvd0AEobSPYrqVsgocZVo94Rg=
   /@turf/flatten/5.1.5:
     dependencies:
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-2iknBnEz7WFpsLnWB7khVoiqE1g=
@@ -2722,7 +2722,7 @@ packages:
     dependencies:
       '@turf/clone': 5.1.5
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-Q29kOnIvDKU7n85jjkaT2zYIpoo=
@@ -2759,7 +2759,7 @@ packages:
       '@turf/helpers': 5.1.5
       '@turf/hex-grid': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       '@turf/point-grid': 5.1.5
       '@turf/square-grid': 5.1.5
       '@turf/triangle-grid': 5.1.5
@@ -2796,7 +2796,7 @@ packages:
       '@turf/explode': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-a0TO9YTVUaMTBBh68jtKFYLj8I0=
@@ -2805,7 +2805,7 @@ packages:
       '@turf/bbox': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-irTn9Cuz38VGFOW/FVln9+VdLeE=
@@ -2819,7 +2819,7 @@ packages:
     dependencies:
       '@turf/distance': 5.1.5
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-86X4ZMK5lqi7RxeUU1ofrxLuvvs=
@@ -2836,7 +2836,7 @@ packages:
       '@turf/helpers': 5.1.5
       '@turf/length': 5.1.5
       '@turf/line-slice-along': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-kQqFwFwG2dD5w4l3oF4IGNUIXEI=
@@ -2845,7 +2845,7 @@ packages:
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
       '@turf/line-segment': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       geojson-rbush: 2.1.0
     dev: false
     resolution:
@@ -2854,7 +2854,7 @@ packages:
     dependencies:
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-KrWy8In4yRPiMdmUN4553KkLWh4=
@@ -2864,7 +2864,7 @@ packages:
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
       '@turf/line-segment': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       '@turf/nearest-point-on-line': 5.1.5
       geojson-rbush: 2.1.0
     dev: false
@@ -2874,7 +2874,7 @@ packages:
     dependencies:
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-Mgeq7lRqskw9jcPMY/kcdwuAE+U=
@@ -2902,7 +2902,7 @@ packages:
       '@turf/invariant': 5.1.5
       '@turf/line-intersect': 5.1.5
       '@turf/line-segment': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       '@turf/nearest-point-on-line': 5.1.5
       '@turf/square': 5.1.5
       '@turf/truncate': 5.1.5
@@ -2922,7 +2922,7 @@ packages:
     dependencies:
       '@turf/bbox': 5.1.5
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       '@turf/union': 5.1.5
       rbush: 2.0.2
     dev: false
@@ -2963,7 +2963,7 @@ packages:
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
       '@turf/line-intersect': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-VgauKX8VlHUkvqUaKp71HsG/nDY=
@@ -2982,7 +2982,7 @@ packages:
       '@turf/clone': 5.1.5
       '@turf/distance': 5.1.5
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-EgUN5Bw5hEMiTHl43g9iE5ANNPs=
@@ -3029,7 +3029,7 @@ packages:
     dependencies:
       '@turf/boolean-point-in-polygon': 5.1.5
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-K4VaXfOq2lfC7oIKB1SrlJKKIzc=
@@ -3053,7 +3053,7 @@ packages:
       '@turf/envelope': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-BJP6EYefOdELmtAs5qI+lC0IqjI=
@@ -3061,7 +3061,7 @@ packages:
     dependencies:
       '@turf/clone': 5.1.5
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-JFF+7rLzaBa6n3EueubWo2jt91c=
@@ -3085,7 +3085,7 @@ packages:
       '@turf/clone': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-nqPbSmi3PB/R3RH1djGxQ8/vock=
@@ -3136,7 +3136,7 @@ packages:
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
       '@turf/line-arc': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-rCu5TBPt1gNPb9wrZwCBNdIPXgc=
@@ -3149,7 +3149,7 @@ packages:
       '@turf/distance': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       '@turf/transform-scale': 5.1.5
     dev: false
     resolution:
@@ -3159,7 +3159,7 @@ packages:
       '@turf/clean-coords': 5.1.5
       '@turf/clone': 5.1.5
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-Csjyei60IYGD7dmZjDJ1q+QIuSY=
@@ -3187,7 +3187,7 @@ packages:
       '@turf/ellipse': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       '@turf/points-within-polygon': 5.1.5
     dev: false
     resolution:
@@ -3197,7 +3197,7 @@ packages:
       '@turf/boolean-point-in-polygon': 5.1.5
       '@turf/clone': 5.1.5
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-0e4aUIjs/UoUEQGcmCOczypJfSA=
@@ -3220,7 +3220,7 @@ packages:
       '@turf/clone': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       '@turf/rhumb-bearing': 5.1.5
       '@turf/rhumb-destination': 5.1.5
       '@turf/rhumb-distance': 5.1.5
@@ -3235,7 +3235,7 @@ packages:
       '@turf/clone': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       '@turf/rhumb-bearing': 5.1.5
       '@turf/rhumb-destination': 5.1.5
       '@turf/rhumb-distance': 5.1.5
@@ -3247,7 +3247,7 @@ packages:
       '@turf/clone': 5.1.5
       '@turf/helpers': 5.1.5
       '@turf/invariant': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       '@turf/rhumb-destination': 5.1.5
     dev: false
     resolution:
@@ -3264,7 +3264,7 @@ packages:
   /@turf/truncate/5.1.5:
     dependencies:
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
     dev: false
     resolution:
       integrity: sha1-nu37Oxi6gfLJjT6tCUMcyhiErYk=
@@ -3385,7 +3385,7 @@ packages:
       '@turf/area': 5.1.5
       '@turf/boolean-point-in-polygon': 5.1.5
       '@turf/helpers': 5.1.5
-      '@turf/meta': 5.1.6
+      '@turf/meta': 5.2.0
       rbush: 2.0.2
     dev: false
     resolution:
@@ -3561,10 +3561,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-g73GJYJDXgf0jqg+P9S8h2acWbDXNkoCX8DLtJVu7Fkn788pzQ/oJsrdJz/2JejRf/SjfZaAhsw+3nd1D5EWGg==
-  /@types/node/12.12.29:
-    dev: false
-    resolution:
-      integrity: sha512-yo8Qz0ygADGFptISDj3pOC9wXfln/5pQaN/ysDIzOaAWXt73cNHmtEC8zSO2Y+kse/txmwIAJzkYZ5fooaS5DQ==
   /@types/node/13.7.2:
     resolution:
       integrity: sha512-uvilvAQbdJvnSBFcKJ2td4016urcGvsiR+N4dHGU87ml8O2Vl6l+ErOi9w0kXSPiwJ1AYlIW+0pDXDWWMOiWbw==
@@ -4150,7 +4146,7 @@ packages:
       integrity: sha512-w0U0pD4EhlnvRyeJzBqaVSJAo9w/ce7/WPogeXLzGkO6hzhr4GnQIZ4W4uUt5b9ooAaXPtnXlj0gzsXEOUNYMg==
   /@wry/context/0.4.4:
     dependencies:
-      '@types/node': 12.12.29
+      '@types/node': 13.7.2
       tslib: 1.11.0
     dev: false
     resolution:
@@ -4411,7 +4407,7 @@ packages:
       apollo-utilities: 1.3.3
       optimism: 0.10.3
       ts-invariant: 0.4.4
-      tslib: 1.10.0
+      tslib: 1.11.0
     dev: false
     peerDependencies:
       graphql: 0.11.7 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4424,7 +4420,7 @@ packages:
       graphql: 14.6.0
       optimism: 0.10.3
       ts-invariant: 0.4.4
-      tslib: 1.10.0
+      tslib: 1.11.0
     dev: false
     peerDependencies:
       graphql: 0.11.7 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4433,7 +4429,7 @@ packages:
   /apollo-cache/1.3.4:
     dependencies:
       apollo-utilities: 1.3.3
-      tslib: 1.10.0
+      tslib: 1.11.0
     dev: false
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4443,7 +4439,7 @@ packages:
     dependencies:
       apollo-utilities: 1.3.3_graphql@14.6.0
       graphql: 14.6.0
-      tslib: 1.10.0
+      tslib: 1.11.0
     dev: false
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4457,7 +4453,7 @@ packages:
       apollo-utilities: 1.3.3
       symbol-observable: 1.2.0
       ts-invariant: 0.4.4
-      tslib: 1.10.0
+      tslib: 1.11.0
       zen-observable: 0.8.15
     dev: false
     peerDependencies:
@@ -4473,7 +4469,7 @@ packages:
       graphql: 14.6.0
       symbol-observable: 1.2.0
       ts-invariant: 0.4.4
-      tslib: 1.10.0
+      tslib: 1.11.0
       zen-observable: 0.8.15
     dev: false
     peerDependencies:
@@ -4511,7 +4507,7 @@ packages:
     dependencies:
       apollo-link: 1.2.13
       ts-invariant: 0.4.4
-      tslib: 1.10.0
+      tslib: 1.11.0
     dev: false
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4522,7 +4518,7 @@ packages:
       apollo-link: 1.2.13_graphql@14.6.0
       graphql: 14.6.0
       ts-invariant: 0.4.4
-      tslib: 1.10.0
+      tslib: 1.11.0
     dev: false
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4532,7 +4528,7 @@ packages:
     dependencies:
       apollo-link: 1.2.13
       apollo-link-http-common: 0.2.15
-      tslib: 1.10.0
+      tslib: 1.11.0
     dev: false
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4543,7 +4539,7 @@ packages:
       apollo-link: 1.2.13_graphql@14.6.0
       apollo-link-http-common: 0.2.15_graphql@14.6.0
       graphql: 14.6.0
-      tslib: 1.10.0
+      tslib: 1.11.0
     dev: false
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4574,7 +4570,7 @@ packages:
     dependencies:
       apollo-utilities: 1.3.3
       ts-invariant: 0.4.4
-      tslib: 1.10.0
+      tslib: 1.11.0
       zen-observable-ts: 0.8.20
     dev: false
     peerDependencies:
@@ -4586,7 +4582,7 @@ packages:
       apollo-utilities: 1.3.3_graphql@14.6.0
       graphql: 14.6.0
       ts-invariant: 0.4.4
-      tslib: 1.10.0
+      tslib: 1.11.0
       zen-observable-ts: 0.8.20
     dev: false
     peerDependencies:
@@ -4598,7 +4594,7 @@ packages:
       '@wry/equality': 0.1.9
       fast-json-stable-stringify: 2.1.0
       ts-invariant: 0.4.4
-      tslib: 1.10.0
+      tslib: 1.11.0
     dev: false
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4610,7 +4606,7 @@ packages:
       fast-json-stable-stringify: 2.1.0
       graphql: 14.6.0
       ts-invariant: 0.4.4
-      tslib: 1.10.0
+      tslib: 1.11.0
     dev: false
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -7146,7 +7142,7 @@ packages:
       minimatch: 3.0.4
       object.values: 1.1.1
       read-pkg-up: 2.0.0
-      resolve: 1.15.0
+      resolve: 1.15.1
     dev: false
     engines:
       node: '>=4'
@@ -7285,7 +7281,7 @@ packages:
       object.fromentries: 2.0.2
       object.values: 1.1.1
       prop-types: 15.7.2
-      resolve: 1.15.0
+      resolve: 1.15.1
     dev: false
     engines:
       node: '>=4'
@@ -8082,8 +8078,8 @@ packages:
       integrity: sha1-oXE3TvBD5dR5eZWEC65GSOB1LXI=
   /geojson-rbush/2.1.0:
     dependencies:
-      '@turf/helpers': 5.1.5
-      '@turf/meta': 5.2.0
+      '@turf/helpers': 6.1.4
+      '@turf/meta': 6.0.2
       rbush: 3.0.1
     dev: false
     resolution:
@@ -13783,6 +13779,7 @@ packages:
   /resolve/1.15.0:
     dependencies:
       path-parse: 1.0.6
+    dev: false
     resolution:
       integrity: sha512-+hTmAldEGE80U2wJJDC1lebb5jWqvTYAfm3YZ1ckk1gBr0MnCqUKlwK1e+anaFljIl+F5tR5IoZcm4ZDA1zMQw==
   /resolve/1.15.1:

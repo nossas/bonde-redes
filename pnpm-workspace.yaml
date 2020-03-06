@@ -9,6 +9,6 @@ packages:
   - "packages/webhooks-zendesk"
   - "packages/webhook-mail"
   - "packages/webhook-activists"
-  - "packages/solidarity-client"
+  - "packages/client-redes"
   - "packages/listener-redes"
   - "packages/listener-redes-geolocation"
