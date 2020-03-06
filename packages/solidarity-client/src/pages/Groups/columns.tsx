@@ -16,6 +16,14 @@ const TextCol = ({ value }) => (
   <Text color='#000'>{value}</Text>
 )
 
+const DateText = ({ value }) => {
+  if (!value) {
+    return '-'
+  }
+  const data = new Date(value)
+  return data.toLocaleDateString('pt-BR')
+}
+
 const BtnInverted = styled(Button)`
   border: ${props => (props.disabled ? "none" : "1px solid #EE0090")}
   color: ${props => (props.disabled ? "#fff" : "#EE0090")}
@@ -102,6 +110,10 @@ const volunteersColumns = [
     accessor: 'phone',
     Header: 'Telefone'
   }, {
+    accessor: 'created_at',
+    Header: 'Data de inscrição',
+    Cell: DateText
+  }, {
     accessor: 'id',
     Header: 'Ação',
     width: 200,
@@ -149,14 +161,8 @@ const individualsColumns = [
     Header: 'Telefone'
   }, {
     accessor: 'created_at',
-    Header: 'Data de criação',
-    Cell: ({ value }) => {
-      if (!value) {
-        return '-'
-      }
-      const data = new Date(value)
-      return data.toLocaleDateString('pt-BR')
-    },
+    Header: 'Data de inscrição',
+    Cell: DateText
   }
 ].map((col: any) => !!col.Cell
   ? {...col, Header: () => <TextHeader value={col.Header} />}

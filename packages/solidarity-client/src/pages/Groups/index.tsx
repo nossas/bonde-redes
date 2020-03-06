@@ -81,6 +81,7 @@ const Groups = () => {
               </Spacing>
               <ReactTable
                 manual
+                sortable={false}
                 data={data[kind]}
                 columns={columns(location.pathname)}
                 pageSize={filtersValues.rows}
