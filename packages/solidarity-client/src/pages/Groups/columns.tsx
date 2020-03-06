@@ -6,6 +6,7 @@ import {
 } from 'bonde-styleguide'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import SelectUpdateIndividual from '../../graphql/SelectUpdateIndividual'
 
 const TextHeader = ({ value }) => (
   <Text fontSize={13} fontWeight={600}>{value.toUpperCase()}</Text>
@@ -22,37 +23,6 @@ const BtnInverted = styled(Button)`
 
 BtnInverted.defaultProps = {
   light: true
-}
-
-const Select = styled.select`
-  text-transform: capitalize;
-  padding: 5px 0 2px 5px;
-  width: 100%;
-  border-bottom: 1px solid #ee0099;
-  &:active, &:hover {
-    box-shadow: 0 0 4px rgb(204, 204, 204);
-  }
-  &:hover {
-    box-shadow: 0 0 4px rgb(204, 204, 204)
-  }
-`
-const Option = styled.option`
-  text-transform: capitalize;
-`
-// onClick, fazer uma mutation para atualizar esse valor da query
-// fazer magica com o cache para o valor mudar na mesma hora, sem precisar de reloading
-const SelectStatus = ({ options, onChange, selected }) => {
-  return (
-    <Text color="#000">
-      <Select onChange={onChange} value={selected}>
-        {options
-          .map(i => 
-            <Option value={i}>{i}</Option>
-          )
-        }
-      </Select>
-    </Text>
-  )
 }
 
 const status = [
@@ -85,20 +55,22 @@ const volunteersColumns = [  {
   }, {
     accessor: 'status',
     Header: 'Status',
-    Cell: ({ value }) => (value ? (
-      <SelectStatus
+    Cell: ({ value, row }) => (value ? (
+      <SelectUpdateIndividual
+        name='status'
+        row={row}
         options={status}
-        onChange={(e) => alert(`Você alterou o status para ${e.target.value}`)}
         selected={value}
       />
     ) : null),
   }, {
     accessor: 'availability',
     Header: 'Disponibilidade',
-    Cell: ({ value }) => (value ? (
-      <SelectStatus
+    Cell: ({ value, row }) => (value ? (
+      <SelectUpdateIndividual
+        name='availability'
+        row={row}
         options={availability}
-        onChange={(e) => alert(`Você alterou o status para ${e.target.value}`)}
         selected={value}
       />
     ) : null),
@@ -122,7 +94,10 @@ const volunteersColumns = [  {
         (value ? (
           <Flexbox middle>
             <BtnInverted 
-              disabled={row._original.availability === 'indisponível'}
+              disabled={
+                row._original.availability !== 'disponível' ||
+                row._original.status !== 'aprovada'
+              }
             >
               <Link
                 to={{
@@ -161,27 +136,6 @@ const individualsColumns = [
     Header: 'CEP',
     width: 100
   },
-  // {
-  //   accessor: 'group',
-  //   Header: 'Área de Atuação',
-  //   Cell: ({ value }) => (value ? (
-  //     <Flexbox middle>
-  //       {value.name}
-  //     </Flexbox>
-  //   ) : null),
-  // },{
-  //   accessor: 'availability',
-  //   Header: 'Vagas Disponíveis',
-  // }, {
-  //   accessor: 'disponibilidade_de_atendimentos',
-  //   Header: 'Disponibilidade Total',
-  // }, {
-  //   accessor: 'atendimentos_em_andamento_calculado_',
-  //   Header: 'Atendimentos em Andamento',
-  // }, {
-  //   accessor: 'pending',
-  //   Header: 'Encaminhamentos recebidos nos últimos 30 dias',
-  // },
   {
     accessor: 'created_at',
     Header: 'Data de criação do ticket',
