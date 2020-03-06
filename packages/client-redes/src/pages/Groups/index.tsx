@@ -38,8 +38,8 @@ const Filters = ({ filters }): any => {
 
 const Groups = () => {
   // @ts-ignore
-  const location = useLocation()
-  const kind = location.pathname.split('/')[2]
+  const { pathname } = useLocation()
+  const kind = pathname.split('/')[2]
   const history = useHistory()
   const setTable = useStoreActions((actions: any) => actions.table.setTable)
 
@@ -83,7 +83,7 @@ const Groups = () => {
                 manual
                 sortable={false}
                 data={data[kind]}
-                columns={columns(location.pathname)}
+                columns={columns(pathname)}
                 pageSize={filtersValues.rows}
                 page={page}
                 pages={pages}

@@ -13,10 +13,9 @@ import { useMutation } from '@apollo/react-hooks'
 
 import { Wrap, StyledButton } from './style'
 import columns from './columns'
-import FetchUsersByGroup from '../../graphql/FetchUsersByGroup'
+import FetchIndividuals from '../../graphql/FetchIndividuals'
 import CREATE_RELATIONSHIP from '../../graphql/CreateRelationship'
 import useAppLogic from '../../app-logic'
-import { getQuery } from '../../services/utils'
 import { SessionHOC } from '../../services/session/SessionProvider'
 
 import { If } from '../../components/If'
@@ -33,24 +32,25 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
     urlencodedIndividualText,
     parsedVolunteerNumber,
     urlencodedVolunteerText,
-    getUserData,
     lat,
     lng,
     distance,
-    setTable,
     setVolunteer,
     setPopup
   } = useAppLogic()
 
   const { goBack } = useHistory()
-  const { search } = useLocation()
+  const { state: linkState } = useLocation()
 
   const [success, setSuccess] = useState(false);
   const [fail, setError] = useState(false);
   const [isLoading, setLoader] = useState(false);;
 
   const { confirm, wrapper, noPhoneNumber } = popups;
-  const { first_name: individual_name, id: individual_user_id } = individual;
+  const { 
+    first_name: individual_name, 
+    id: individual_user_id
+  } = individual;
   const {
     first_name: volunteer_name,
     whatsapp: volunteer_whatsapp,
@@ -63,6 +63,7 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
     if (data) setSuccess(true)
   }, [setLoader, loading, error, setError, data])
 
+  // TODO: Arrumar as variaveis de acordo com a nova key `coordinate`
   const filterByDistance = useCallback(
     data =>
       data
@@ -88,15 +89,6 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
         .sort((a, b) => Number(a.distance) - Number(b.distance)),
     [distance, lat, lng]
   );
-
-  // const filterByCategory = useCallback(
-  //   data =>
-  //     data.filter(
-  //       i => i.tipo_de_acolhimento === selectedCategory
-  //     ),
-  //   // eslint-disable-next-line
-  //   [volunteer_organization_id]
-  // );
 
   const onConfirm = () => {
     if (!volunteer_whatsapp)
@@ -125,22 +117,14 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
   }
 
   return (
-    <FetchUsersByGroup>
-      {({ individuals, volunteers }) => {
-        console.log({volunteer})
+    <FetchIndividuals>
+      {({ data }) => {
         const filteredTableData = filterByDistance(
-          individuals.data  
+          data  
         )
-        setTable(individuals.data)
-        // Busca na url qual id da voluntária
-        const user = getUserData({
-          user: getQuery(search),
-          data: volunteers.data,
-          filterBy: "id"
-        })
         // Seta a voluntária
-        setVolunteer(user)
-        return individuals.data.length === 0 ? (
+        setVolunteer(linkState && linkState.volunteer)
+        return data.length === 0 ? (
           <Flexbox middle>
             <Wrap>
               <Title.H3 margin={{ bottom: 30 }}>Nenhum resultado.</Title.H3>
@@ -201,7 +185,7 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
           </Fragment>
         );
       }}
-    </FetchUsersByGroup>
+    </FetchIndividuals>
   )
 })
 

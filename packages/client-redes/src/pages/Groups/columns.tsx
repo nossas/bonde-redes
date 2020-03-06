@@ -25,7 +25,7 @@ const DateText = ({ value }) => {
 }
 
 const ExtraCol = (accessor: string) => ({ value }) => (value ? (
-  <span>{value['accessor']}</span>
+  <span>{value[accessor]}</span>
 ) : '-')
 
 const status = [
@@ -122,7 +122,11 @@ const volunteersColumns = [
               row._original.availability !== 'disponível' ||
               row._original.status !== 'aprovada'
             }
-            onClick={() => history.push(`/connect?id=${value}`)}
+            onClick={() => history.push({
+              pathname: '/connect',
+              search: `?id=${value}`,
+              state: { volunteer: row._original }
+            })}
           >
             FAZER MATCH
           </BtnInverted>

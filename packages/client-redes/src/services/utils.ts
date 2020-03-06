@@ -11,5 +11,3 @@ export const parseNumber = input => input.replace(/\D/g, '')
 export const emailValidation = () => (
   /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
 )
-
-export const getQuery = (search) => Number((search).split('=')[1])
