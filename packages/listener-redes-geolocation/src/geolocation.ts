@@ -35,7 +35,7 @@ interface GoogleMapsAddressComponent {
 
 export const convertCepToAddressWithGoogleApi = async (individualAddress: Record<string, string>): Promise<Individual | boolean | { error: GMAPS_ERRORS }> => {
   if (!process.env.GOOGLE_MAPS_API_KEY) {
-    throw new Error('Please specify the `JWT_TOKEN` or `HASURA_SECRET` environment variable.')
+    throw new Error('Please specify the `GOOGLE_MAPS_API_KEY` environment variable.')
   }
 
   const { GOOGLE_MAPS_API_KEY } = process.env
