@@ -22,12 +22,6 @@ import { SessionHOC } from '../../services/session/SessionProvider'
 import { If } from '../../components/If'
 import Popup from '../../components/Popups/Popup'
 
-interface Popups {
-  confirm: boolean
-  wrapper: boolean
-  noPhoneNumber: boolean
-}
-
 const Table = SessionHOC(({ session: { user: agent } }: any) => {
   const [createConnection, { data, loading, error }] = useMutation(CREATE_RELATIONSHIP);
   const {

@@ -1,48 +1,23 @@
 import React from 'react'
 import { 
   Flexbox2 as Flexbox, 
-  Button, 
   Text,
 } from 'bonde-styleguide'
-import styled from 'styled-components'
 import history from '../../history'
+import { BtnInverted, Select, Option } from './styles'
 
 const TextHeader = ({ value }) => (
   <Text fontSize={13} fontWeight={600}>{value.toUpperCase()}</Text>
 )
-
 const TextCol = ({ value }) => (
   <Text color='#000'>{value}</Text>
 )
 
-const BtnInverted = styled(Button)`
-  border-color: ${props => (props.disabled ? "unset" : "#EE0090")}
-  color: ${props => (props.disabled ? "#fff" : "#EE0090")}
-`;
-
-BtnInverted.defaultProps = {
-  light: true
-}
-
-const Select = styled.select`
-  text-transform: capitalize;
-  padding: 5px 0 2px 5px;
-  width: 100%;
-  border-bottom: 1px solid #ee0099;
-  &:active, &:hover {
-    box-shadow: 0 0 4px rgb(204, 204, 204);
-  }
-  &:hover {
-    box-shadow: 0 0 4px rgb(204, 204, 204)
-  }
-`
-const Option = styled.option`
-  text-transform: capitalize;
-`
-const SelectStatus = ({ options, onChange, selected }) => {
+// TODO: import this component
+const SelectStatus = ({ options, selected }) => {
   return (
     <Text color="#000">
-      <Select onChange={onChange} value={selected}>
+      <Select onChange={() => alert("bla")} value={selected}>
         {options.map(i => <Option value={i}>{i}</Option>)}
       </Select>
     </Text>
@@ -83,30 +58,34 @@ const volunteersColumns = [
     Cell: ({ value }) => (value ? (
       <SelectStatus
         options={status}
-        onChange={(e) => alert(`Você alterou o status para ${e.target.value}`)}
         selected={value}
       />
     ) : null),
+    width: 150
   }, {
     accessor: 'availability',
     Header: 'Disponibilidade',
     Cell: ({ value }) => (value ? (
       <SelectStatus
         options={availability}
-        onChange={(e) => alert(`Você alterou o status para ${e.target.value}`)}
         selected={value}
       />
     ) : null),
+    width: 150
   }, {
     accessor: 'extra',
     Header: 'Número de Registro',
     Cell: ({ value }) => (value ? (
       <span>{value.register_ocupation}</span> 
     ) : '-'),
+    width: 170
   }, {
     accessor: 'address',
     Header: 'Endereço',
-    width: 100
+    width: 300,
+    Cell: ({ value }) => (value ? (
+      <span>{value === 'ZERO_RESULTS' ? 'CEP Inválido' : value}</span> 
+    ) : '-'),
   }, {
     accessor: 'zipcode',
     Header: 'CEP',
