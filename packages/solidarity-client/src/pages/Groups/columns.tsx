@@ -96,6 +96,16 @@ const volunteersColumns = [
     accessor: 'phone',
     Header: 'Telefone'
   }, {
+    accessor: 'created_at',
+    Header: 'Data de criação',
+    Cell: ({ value }) => {
+      if (!value) {
+        return '-'
+      }
+      const data = new Date(value)
+      return data.toLocaleDateString('pt-BR')
+    },
+  }, {
     accessor: 'id',
     Header: 'Ação',
     width: 200,
@@ -165,7 +175,7 @@ const individualsColumns = [
       const data = new Date(value)
       return data.toLocaleDateString('pt-BR')
     },
-  }
+  },
 ].map((col: any) => !!col.Cell
   ? {...col, Header: () => <TextHeader value={col.Header} />}
   : {...col, Header: () => <TextHeader value={col.Header} />, Cell: TextCol}

@@ -13,7 +13,7 @@ const FilterQuery = ({ children }) => {
 		offset: page * rows,
 		status: !!status ? { _eq: status } : undefined,
 		availability: !!availability ? { _eq: availability } : undefined,
-		order_by: { created_at: 'asc' }
+		order_by: { created_at: 'desc' }
 	}
 
 	const changeFilters = ({ page, rows, status, availability }) => {
