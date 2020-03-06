@@ -1,5 +1,10 @@
 import React from 'react'
-import { Flexbox2 as Flexbox, Button, Text } from 'bonde-styleguide'
+import { 
+  Flexbox2 as Flexbox, 
+  Button, 
+  Text,
+} from 'bonde-styleguide'
+import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 const TextHeader = ({ value }) => (
@@ -9,6 +14,61 @@ const TextHeader = ({ value }) => (
 const TextCol = ({ value }) => (
   <Text color='#000'>{value}</Text>
 )
+
+const BtnInverted = styled(Button)`
+  border-color: ${props => (props.disabled ? "unset" : "#EE0090")}
+  color: ${props => (props.disabled ? "#fff" : "#EE0090")}
+`;
+
+BtnInverted.defaultProps = {
+  light: true
+}
+
+const Select = styled.select`
+  text-transform: capitalize;
+  padding: 5px 0 2px 5px;
+  width: 100%;
+  border-bottom: 1px solid #ee0099;
+  &:active, &:hover {
+    box-shadow: 0 0 4px rgb(204, 204, 204);
+  }
+  &:hover {
+    box-shadow: 0 0 4px rgb(204, 204, 204)
+  }
+`
+const Option = styled.option`
+  text-transform: capitalize;
+`
+// onClick, fazer uma mutation para atualizar esse valor da query
+// fazer magica com o cache para o valor mudar na mesma hora, sem precisar de reloading
+const SelectStatus = ({ options, onChange, selected }) => {
+  return (
+    <Text color="#000">
+      <Select onChange={onChange} value={selected}>
+        {options
+          .map(i => 
+            <Option value={i}>{i}</Option>
+          )
+        }
+      </Select>
+    </Text>
+  )
+}
+
+const status = [
+  'inscrita',
+  'reprovada',
+  'aprovada'
+]
+
+const availability = [
+  'disponível',
+  'indisponível',
+  'anti-ética',
+  'férias',
+  'licença',
+  'descadastrada', 
+]
 
 const volunteersColumns = [  {
     accessor: 'first_name',
@@ -24,11 +84,24 @@ const volunteersColumns = [  {
     width: 200
   }, {
     accessor: 'status',
-    Header: 'Status'
+    Header: 'Status',
+    Cell: ({ value }) => (value ? (
+      <SelectStatus
+        options={status}
+        onChange={(e) => alert(`Você alterou o status para ${e.target.value}`)}
+        selected={value}
+      />
+    ) : null),
   }, {
     accessor: 'availability',
     Header: 'Disponibilidade',
-    width: 150
+    Cell: ({ value }) => (value ? (
+      <SelectStatus
+        options={availability}
+        onChange={(e) => alert(`Você alterou o status para ${e.target.value}`)}
+        selected={value}
+      />
+    ) : null),
   }, {
     accessor: 'zipcode',
     Header: 'CEP',
@@ -43,18 +116,28 @@ const volunteersColumns = [  {
     accessor: 'id',
     Header: 'Ação',
     width: 200,
-    Cell: ({ value }) => (value ? (
-      <Flexbox middle>
-        <Link
-          to={{
-            pathname: "/connect",
-            search: `?id=${value}`
-          }}
-        >
-          <Button light>FAZER MATCH</Button>
-        </Link>
-      </Flexbox>
-    ) : null),
+    Cell: ({ value, row }) => {
+      console.log({row})
+      return (
+        (value ? (
+          <Flexbox middle>
+            <BtnInverted 
+              disabled={row._original.availability === 'indisponível'}
+            >
+              <Link
+                to={{
+                  pathname: "/connect",
+                  search: `?id=${value}`
+                }}
+              >
+                FAZER MATCH
+              </Link>
+            </BtnInverted>
+          </Flexbox>
+        ) : null)
+      )
+    }
+    ,
   }
 ].map((col: any) => !!col.Cell
   ? {...col, Header: () => <TextHeader value={col.Header} />}
