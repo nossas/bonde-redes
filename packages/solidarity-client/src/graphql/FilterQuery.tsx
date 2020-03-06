@@ -16,13 +16,13 @@ const FilterQuery = ({ children }) => {
 	}
 
 	const changeFilters = ({ page, rows, status, availability }) => {
-		if (page) setPage(page)
+		if (page !== undefined) setPage(page)
 		if (rows) setRows(rows)
 		if (status) setStatus(status === 'all' ? undefined : status)
 		if (availability) setAvailability(availability === 'all' ? undefined : availability)
 	}
 
-	return children({ filters: filtered, changeFilters })
+	return children({ filters: filtered, changeFilters, page })
 }
 
 export default FilterQuery

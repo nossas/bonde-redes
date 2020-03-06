@@ -100,7 +100,7 @@ fragment individual on rede_individuals {
 
 const FetchUsersByGroup = SessionHOC((props: any) => (
   <FilterQuery>
-  {({ filters, changeFilters }) => {
+  {({ filters, changeFilters, page }) => {
   	const { children, session: { community } } = props
 
   	const variables = {
@@ -127,6 +127,7 @@ const FetchUsersByGroup = SessionHOC((props: any) => (
   			count: data.individuals_count.aggregate.count
   		},
       filters,
+      page,
       changeFilters
   	})
   }}

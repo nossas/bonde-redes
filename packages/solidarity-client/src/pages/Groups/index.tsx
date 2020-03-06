@@ -50,7 +50,7 @@ const Groups = () => {
 
   return (
     <FetchUsersByGroup>
-      {({ volunteers, individuals, filters: filtersValues, changeFilters }) => {
+      {({ volunteers, individuals, filters: filtersValues, changeFilters, page }) => {
       const data = {
         volunteers: volunteers.data,
         individuals: individuals.data
@@ -59,6 +59,10 @@ const Groups = () => {
         individuals: individuals.data,
         volunteers: volunteers.data
       })
+
+      const pages = kind === 'volunteers'
+        ? Math.ceil(volunteers.count / filtersValues.rows)
+        : Math.ceil(individuals.count / filtersValues.rows)
 
       return (
         <Page>
@@ -76,11 +80,19 @@ const Groups = () => {
                 />
               </Spacing>
               <ReactTable
+                manual
                 data={data[kind]}
                 columns={columns(location.pathname)}
-                page={0}
                 pageSize={filtersValues.rows}
+                page={page}
+                pages={pages}
+                onPageChange={(page) => changeFilters({ page })}
                 onPageSizeChange={(rows) => changeFilters({ rows })}
+                previousText="Anterior"
+                nextText="Próximo"
+                pageText="Página"
+                ofText="de"
+                rowsText="linhas"
                 // Accessibility Labels
                 className="-striped -highlight"
               />
