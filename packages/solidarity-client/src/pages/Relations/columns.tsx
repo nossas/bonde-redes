@@ -15,7 +15,7 @@ const columns = [
     ) : '-')
   }, {
     accessor: 'created_at',
-    Header: 'Data de criação do ticket',
+    Header: 'Data de criação',
     Cell: ({ value }) => {
       if (!value) {
         return '-'
@@ -32,6 +32,13 @@ const columns = [
   }, {
     accessor: 'updated_at',
     Header: 'Última atualização',
+    Cell: ({ value }) => {
+      if (!value) {
+        return '-'
+      }
+      const data = new Date(value)
+      return data.toLocaleDateString('pt-BR')
+    },
   }, {
     accessor: 'agent',
     Header: 'Feito por',

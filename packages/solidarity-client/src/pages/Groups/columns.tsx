@@ -39,17 +39,11 @@ const Select = styled.select`
 const Option = styled.option`
   text-transform: capitalize;
 `
-// onClick, fazer uma mutation para atualizar esse valor da query
-// fazer magica com o cache para o valor mudar na mesma hora, sem precisar de reloading
 const SelectStatus = ({ options, onChange, selected }) => {
   return (
     <Text color="#000">
       <Select onChange={onChange} value={selected}>
-        {options
-          .map(i => 
-            <Option value={i}>{i}</Option>
-          )
-        }
+        {options.map(i => <Option value={i}>{i}</Option>)}
       </Select>
     </Text>
   )
@@ -179,7 +173,7 @@ const individualsColumns = [
   // },
   {
     accessor: 'created_at',
-    Header: 'Data de criação do ticket',
+    Header: 'Data de criação',
     Cell: ({ value }) => {
       if (!value) {
         return '-'

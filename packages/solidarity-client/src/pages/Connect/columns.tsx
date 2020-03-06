@@ -29,7 +29,7 @@ const columns = [
   },
   {
     accessor: 'created_at',
-    Header: 'Data de criação do ticket',
+    Header: 'Data de criação',
     Cell: ({ value }: valueString) => {
       if (!value) {
         return '-'
