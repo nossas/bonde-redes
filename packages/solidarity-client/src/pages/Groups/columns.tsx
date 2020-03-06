@@ -98,6 +98,16 @@ const volunteersColumns = [
       />
     ) : null),
   }, {
+    accessor: 'extra',
+    Header: 'Número de Registro',
+    Cell: ({ value }) => (value ? (
+      <span>{value.register_ocupation}</span> 
+    ) : '-'),
+  }, {
+    accessor: 'address',
+    Header: 'Endereço',
+    width: 100
+  }, {
     accessor: 'zipcode',
     Header: 'CEP',
     width: 100
@@ -140,38 +150,21 @@ const individualsColumns = [
   }, {
     accessor: 'last_name',
     Header: 'Sobrenome',
-  },
-  {
+  }, {
     accessor: 'email',
     Header: 'Email',
-  },
-  {
+  }, {
+    accessor: 'address',
+    Header: 'Endereço',
+    width: 100
+  }, {
     accessor: 'zipcode',
     Header: 'CEP',
     width: 100
-  },
-  // {
-  //   accessor: 'group',
-  //   Header: 'Área de Atuação',
-  //   Cell: ({ value }) => (value ? (
-  //     <Flexbox middle>
-  //       {value.name}
-  //     </Flexbox>
-  //   ) : null),
-  // },{
-  //   accessor: 'availability',
-  //   Header: 'Vagas Disponíveis',
-  // }, {
-  //   accessor: 'disponibilidade_de_atendimentos',
-  //   Header: 'Disponibilidade Total',
-  // }, {
-  //   accessor: 'atendimentos_em_andamento_calculado_',
-  //   Header: 'Atendimentos em Andamento',
-  // }, {
-  //   accessor: 'pending',
-  //   Header: 'Encaminhamentos recebidos nos últimos 30 dias',
-  // },
-  {
+  },{
+    accessor: 'phone',
+    Header: 'Telefone'
+  }, {
     accessor: 'created_at',
     Header: 'Data de criação',
     Cell: ({ value }) => {
