@@ -9,7 +9,7 @@ pipeline:
       - export REACT_APP_GOOGLE_CLIENT_KEY=$STAG_GOOGLE_CLIENT
       - yarn global add pnpm
       - pnpm i
-      - pnpm m run build --filter=client-redes --filter=listener-redes --filter=listener-redes-geolocation
+      - pnpm m run build
     secrets: [ stag_google_client, stag_zendesk_token, stag_zendesk_user ]
     when:
       event: [push]
@@ -24,7 +24,7 @@ pipeline:
       - export REACT_APP_GOOGLE_CLIENT_KEY=$STAG_GOOGLE_CLIENT
       - yarn global add pnpm
       - pnpm i
-      - pnpm m run build --filter=client-redes --filter=listener-redes --filter=listener-redes-geolocation
+      - pnpm m run build
     secrets: [ stag_google_client, stag_zendesk_token, stag_zendesk_user ]
     when:
       event: [tag]
@@ -56,7 +56,7 @@ pipeline:
   deploy-stag-solidarity-client:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
-    service: webservers/solidarity-client
+    service: webservers/client-redes
     group: deploying
     docker_image: nossas/bonde-redes:${DRONE_BRANCH/\//-}
     timeout: 360
@@ -70,7 +70,7 @@ pipeline:
   deploy-prod-solidarity-client:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
-    service: webservers/match-voluntarias
+    service: webservers/client-redes
     docker_image: "nossas/bonde-redes:${DRONE_TAG##v}"
     timeout: 360
     group: deploying
