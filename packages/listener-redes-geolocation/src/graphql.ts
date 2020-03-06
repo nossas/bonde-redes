@@ -1,3 +1,4 @@
+import 'colors'
 import { ApolloClient } from 'apollo-client'
 import { ApolloLink, concat, split } from 'apollo-link'
 import { createHttpLink } from 'apollo-link-http'
@@ -5,8 +6,10 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import fetch from 'node-fetch'
+const ws = require('ws')
+const dotenv = require('dotenv')
 
-import ws from 'ws'
+dotenv.config()
 
 if (!process.env.JWT_TOKEN && !process.env.HASURA_SECRET) {
   throw new Error('Please specify the `JWT_TOKEN` or `HASURA_SECRET` environment variable.')
@@ -55,5 +58,3 @@ export const client = new ApolloClient({
   cache,
   link: concat(authMiddleware, link)
 })
-
-export default client
