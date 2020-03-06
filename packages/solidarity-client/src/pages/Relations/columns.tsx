@@ -1,4 +1,20 @@
 import React from 'react'
+import SelectStatus from '../../components/SelectStatus'
+import { Text } from 'bonde-styleguide'
+
+const status = [
+  'encaminhamento_realizado',
+  'atendimento_iniciado',
+  'atendimento_concluído',
+  'atendimento_interrompido'
+]
+
+const TextHeader = ({ value }) => (
+  <Text fontSize={13} fontWeight={600}>{value.toUpperCase()}</Text>
+)
+const TextCol = ({ value }) => (
+  <Text color='#000'>{value}</Text>
+)
 
 const columns = [
   {
@@ -26,9 +42,16 @@ const columns = [
   }, {
     accessor: 'relation',
     Header: 'Relação',
-  },{
+  }, {
     accessor: 'status',
     Header: 'Status',
+    Cell: ({ value }) => (value ? (
+      <SelectStatus
+        options={status}
+        selected={value}
+      />
+    ) : null),
+    width: 250
   }, {
     accessor: 'updated_at',
     Header: 'Última atualização',
@@ -46,6 +69,9 @@ const columns = [
       <span>{value.first_name}</span>
     ) : '-'),
   },
-]
+].map((col: any) => !!col.Cell
+? {...col, Header: () => <TextHeader value={col.Header} />}
+: {...col, Header: () => <TextHeader value={col.Header} />, Cell: TextCol}
+)
 
 export default columns
