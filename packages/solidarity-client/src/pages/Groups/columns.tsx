@@ -3,8 +3,10 @@ import {
   Flexbox2 as Flexbox, 
   Text,
 } from 'bonde-styleguide'
+import styled from 'styled-components'
+import SelectUpdateIndividual from '../../graphql/SelectUpdateIndividual'
 import history from '../../history'
-import { BtnInverted, Select, Option } from './styles'
+import { BtnInverted } from './styles'
 
 const TextHeader = ({ value }) => (
   <Text fontSize={13} fontWeight={600}>{value.toUpperCase()}</Text>
@@ -12,17 +14,6 @@ const TextHeader = ({ value }) => (
 const TextCol = ({ value }) => (
   <Text color='#000'>{value}</Text>
 )
-
-// TODO: import this component
-const SelectStatus = ({ options, selected }) => {
-  return (
-    <Text color="#000">
-      <Select onChange={() => alert("bla")} value={selected}>
-        {options.map(i => <Option value={i}>{i}</Option>)}
-      </Select>
-    </Text>
-  )
-}
 
 const status = [
   'inscrita',
@@ -55,8 +46,10 @@ const volunteersColumns = [
   }, {
     accessor: 'status',
     Header: 'Status',
-    Cell: ({ value }) => (value ? (
-      <SelectStatus
+    Cell: ({ value, row }) => (value ? (
+      <SelectUpdateIndividual
+        name='status'
+        row={row}
         options={status}
         selected={value}
       />
@@ -65,8 +58,10 @@ const volunteersColumns = [
   }, {
     accessor: 'availability',
     Header: 'Disponibilidade',
-    Cell: ({ value }) => (value ? (
-      <SelectStatus
+    Cell: ({ value, row }) => (value ? (
+      <SelectUpdateIndividual
+        name='availability'
+        row={row}
         options={availability}
         selected={value}
       />
@@ -100,22 +95,21 @@ const volunteersColumns = [
     accessor: 'id',
     Header: 'Ação',
     width: 200,
-    Cell: ({ value, row }) => {
-      console.log({row})
-      return (
-        (value ? (
-          <Flexbox middle>
-            <BtnInverted 
-              disabled={row._original.availability === 'indisponível'}
-              onClick={() => history.push(`/connect?id=${value}`)}
-            >
-              FAZER MATCH
-            </BtnInverted>
-          </Flexbox>
-        ) : null)
-      )
-    }
-    ,
+    Cell: ({ value, row }) => (
+      value ? (
+        <Flexbox middle>
+          <BtnInverted 
+            disabled={
+              row._original.availability !== 'disponível' ||
+              row._original.status !== 'aprovada'
+            }
+            onClick={() => history.push(`/connect?id=${value}`)}
+          >
+            FAZER MATCH
+          </BtnInverted>
+        </Flexbox>
+      ) : null
+    ),
   }
 ].map((col: any) => !!col.Cell
   ? {...col, Header: () => <TextHeader value={col.Header} />}
@@ -140,7 +134,7 @@ const individualsColumns = [
     accessor: 'zipcode',
     Header: 'CEP',
     width: 100
-  },{
+  }, {
     accessor: 'phone',
     Header: 'Telefone'
   }, {

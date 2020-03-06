@@ -25,26 +25,16 @@ export const Wrap = styled.div`
 `
 
 export const BtnInverted = styled(Button)`
-  border-color: ${props => (props.disabled ? "unset" : "#EE0090")}
+  border: ${props => (props.disabled ? "none" : "1px solid #EE0090")}
   color: ${props => (props.disabled ? "#fff" : "#EE0090")}
+  ${props => props.disabled && `
+    &:hover, &:active {
+      border: none;
+      color: #fff;
+    }
+  `}
 `;
 
 BtnInverted.defaultProps = {
   light: true
 }
-
-export const Select = styled.select`
-  text-transform: capitalize;
-  padding: 5px 0 2px 5px;
-  width: 100%;
-  border-bottom: 1px solid #ee0099;
-  &:active, &:hover {
-    box-shadow: 0 0 4px rgb(204, 204, 204);
-  }
-  &:hover {
-    box-shadow: 0 0 4px rgb(204, 204, 204)
-  }
-`
-export const Option = styled.option`
-  text-transform: capitalize;
-`
