@@ -58,7 +58,22 @@ export const convertCepToAddressWithGoogleApi = async (individual: Individual): 
     }
   }
 
-  if (data.status === 'OK') {
+  if (data.status === 'ZERO_RESULTS') {
+    logger.log('error', `google maps return with zero result (id, zipcode): ${individual.id}, ${individual.zipcode}`)
+
+    const i: Individual = {
+      id: individual.id,
+      coordinates: {
+        latitude: 'ZERO_RESULTS',
+        longitude: 'ZERO_RESULTS',
+      },
+      address: `Cep Incorreto - ${individual.zipcode}`,
+      state: 'ZERO_RESULTS',
+      city: 'ZERO_RESULTS',
+    }
+
+    return i;
+  } else if (data.status === 'OK') {
     const {
       results: [{
         geometry: {
@@ -72,7 +87,6 @@ export const convertCepToAddressWithGoogleApi = async (individual: Individual): 
     let state: string | undefined
     let city: string | undefined
     // let country: string | undefined
-    // let tagInvalidCep = false
 
     addressComponents.forEach((
       {
@@ -94,7 +108,6 @@ export const convertCepToAddressWithGoogleApi = async (individual: Individual): 
     // if (country !== 'BR') {
     //   state = undefined
     //   city = undefined
-    //   tagInvalidCep = true
     // }
 
     const i: Individual = {
@@ -109,7 +122,6 @@ export const convertCepToAddressWithGoogleApi = async (individual: Individual): 
     }
 
     return i;
-    // tagInvalidCep,
   }
 
   return {
