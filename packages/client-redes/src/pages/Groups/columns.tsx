@@ -11,9 +11,22 @@ import UPDATE_INDIVIDUAL_MUTATION from '../../graphql/UpdateIndividual'
 const TextHeader = ({ value }) => (
   <Text fontSize={13} fontWeight={600}>{value.toUpperCase()}</Text>
 )
+
 const TextCol = ({ value }) => (
   <Text color='#000'>{value}</Text>
 )
+
+const DateText = ({ value }) => {
+  if (!value) {
+    return '-'
+  }
+  const data = new Date(value)
+  return data.toLocaleDateString('pt-BR')
+}
+
+const ExtraCol = (accessor: string) => ({ value }) => (value ? (
+  <span>{value['accessor']}</span>
+) : '-')
 
 const status = [
   'inscrita',
@@ -74,9 +87,7 @@ const volunteersColumns = [
   }, {
     accessor: 'extras',
     Header: 'Número de Registro',
-    Cell: ({ value }) => (value ? (
-      <span>{value.register_occupation}</span> 
-    ) : '-'),
+    Cell: ExtraCol('register_occupation'),
     width: 170
   }, {
     accessor: 'address',
@@ -98,13 +109,7 @@ const volunteersColumns = [
   }, {
     accessor: 'created_at',
     Header: 'Data de criação',
-    Cell: ({ value }) => {
-      if (!value) {
-        return '-'
-      }
-      const data = new Date(value)
-      return data.toLocaleDateString('pt-BR')
-    },
+    Cell: DateText,
   }, {
     accessor: 'id',
     Header: 'Ação',
@@ -138,6 +143,10 @@ const individualsColumns = [
     accessor: 'last_name',
     Header: 'Sobrenome',
   }, {
+    accessor: 'extras',
+    Header: 'Data de nascimento',
+    Cell: ExtraCol('birth_date')
+  }, {
     accessor: 'email',
     Header: 'Email',
   }, {
@@ -168,13 +177,7 @@ const individualsColumns = [
   }, {
     accessor: 'created_at',
     Header: 'Data de criação',
-    Cell: ({ value }) => {
-      if (!value) {
-        return '-'
-      }
-      const data = new Date(value)
-      return data.toLocaleDateString('pt-BR')
-    },
+    Cell: DateText,
   },
 ].map((col: any) => !!col.Cell
   ? {...col, Header: () => <TextHeader value={col.Header} />}
