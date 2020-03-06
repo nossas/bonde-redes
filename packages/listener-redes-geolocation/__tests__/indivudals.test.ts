@@ -1,6 +1,6 @@
-import { convertCepToAddressWithGoogleApi } from '../src/geolocation';
+import { geolocation } from '../src/individuals';
 
-describe('convertCepToAddressWithGoogleApi function', () => {
+describe('geolocation function', () => {
 
   // beforeAll(async () => {
   //   const p: Promise<string> = convertCepToAddressWithGoogleApi();
@@ -10,7 +10,13 @@ describe('convertCepToAddressWithGoogleApi function', () => {
   // Assert if setTimeout was called properly
   it('google maps api key present', async () => {
 
-    expect(await convertCepToAddressWithGoogleApi({'zipcode':'04140040', 'id': '1'})).toEqual({
+    expect(await geolocation({
+      "data": {
+        rede_individuals: [
+          {}
+        ],
+      }
+    })).toEqual({
       "error": 1
     })
   });

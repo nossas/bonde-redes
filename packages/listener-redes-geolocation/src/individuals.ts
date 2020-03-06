@@ -1,27 +1,21 @@
 import gql from 'graphql-tag'
 import { client as GraphQLAPI } from './graphql'
-import { geolocation } from './geolocation'
+import { convertCepToAddressWithGoogleApi, GMAPS_ERRORS } from './geolocation'
 import { logger } from './logger'
 
-const REDES_INDIVIDUALS_SUBSCRIPTION = gql`
-	subscription pipeline_redes_individuals ($widgets: [Int!]) {
-	  form_entries(
-	    where: { widget_id: { _in: $widgets }, rede_syncronized: { _eq: false } },
-	    order_by: { id: asc }
-	  ) {
-      id
-      fields
-      cached_community_id
-      activist_id
-      widget_id
-      created_at
-	  }
-	}
-`
-
 const error = (err: Error): void => {
-	logger.error('Receiving error on subscription GraphQL API: ', err)
+  logger.error('Receiving error on subscription GraphQL API: ', err)
 }
+
+const REDES_INDIVIDUALS_SUBSCRIPTION = gql`
+	subscription pipeline_redes_individuals_geolocation {
+    rede_individuals(order_by: {created_at: desc}, where: {address: {_is_null: true}}) {
+      id,
+      zipcode,
+      created_at
+    }
+  }
+`
 
 export const subscriptionRedesIndividuals = async (): Promise<ZenObservable.Subscription> => {
   try {
@@ -31,7 +25,7 @@ export const subscriptionRedesIndividuals = async (): Promise<ZenObservable.Subs
         // variables: { },
         fetchPolicy: 'network-only'
       })
-      .subscribe({ next: geolocation(), error })
+      .subscribe({ next: geolocation, error })
 
     return observable
   } catch (err) {
@@ -40,9 +34,27 @@ export const subscriptionRedesIndividuals = async (): Promise<ZenObservable.Subs
   }
 }
 
-const FORM_ENTRIES_MUTATION = gql`
-mutation update_form_entries ($forms: [Int!]) {
-  update_form_entries(_set: { rede_syncronized: true }, where: { id: { _in: $forms } }) {
+interface GeoLocationResponse {
+  data: {
+    rede_individuals: Record<string, string>[]
+  }
+}
+
+export const geolocation = async (response: GeoLocationResponse) => {
+  const { data: { rede_individuals: entries } } = response
+
+	entries.forEach(async (redeIndividuals: Record<string, string>) => {
+    const individual = await convertCepToAddressWithGoogleApi(redeIndividuals)
+
+    return mutationUpdateCoordinates(individual)
+	})
+
+  return entries
+};
+
+const REDE_INDIVIDUAL_GEOLOCATION_MUTATION = gql`
+mutation update_rede_individuals($id: Int!, $address: String!, $state: String!, $city: String!, $coordinates: jsonb!) {
+  update_rede_individuals(_prepend: {coordinates: $coordinates}, _set: {address: $address, state: $state, city: $city}, where: {id: {_eq: $id}}) {
     returning {
       id
       updated_at
@@ -51,11 +63,35 @@ mutation update_form_entries ($forms: [Int!]) {
 }
 `
 
-export const mutationUpdateCoordinates = async (forms: number[]): Promise<Record<string, string>> => {
-	const { data: { update_form_entries: { returning: formEntries } } } = await GraphQLAPI.mutate({
-		mutation: FORM_ENTRIES_MUTATION,
-    variables: { forms }
+type IndividualCoordinates = {
+  latitude: String;
+  longitude: String;
+}
+
+export type Individual = {
+  id?: Number;
+  address: String;
+  state: String;
+  city: String;
+  coordinates: IndividualCoordinates
+}
+
+// {
+//   "id": 22,
+//   "address": "aaaaaaa",
+//   "state": "ssssss",
+//   "city": "cccccc",
+//   "coordinates": {
+//     "latitude": "-43,4444",
+//     "longitude": "-23,3333"
+//   }
+// }
+
+export const mutationUpdateCoordinates = async (individual: Individual | boolean | { error: GMAPS_ERRORS }): Promise<Record<string, string>> => {
+	const { data: { update_rede_individuals: { returning: updatedIndividual } } } = await GraphQLAPI.mutate({
+		mutation: REDE_INDIVIDUAL_GEOLOCATION_MUTATION,
+    variables: { individual }
 	})
 
-	return formEntries
+	return updatedIndividual
 }
