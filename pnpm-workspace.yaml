@@ -11,3 +11,4 @@ packages:
   - "packages/webhook-activists"
   - "packages/solidarity-client"
   - "packages/listener-redes"
+  - "packages/listener-redes-geolocation"
