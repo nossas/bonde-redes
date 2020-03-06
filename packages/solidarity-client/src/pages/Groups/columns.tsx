@@ -5,8 +5,8 @@ import {
   Text,
 } from 'bonde-styleguide'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
 import SelectUpdateIndividual from '../../graphql/SelectUpdateIndividual'
+import history from '../../history'
 
 const TextHeader = ({ value }) => (
   <Text fontSize={13} fontWeight={600}>{value.toUpperCase()}</Text>
@@ -17,8 +17,14 @@ const TextCol = ({ value }) => (
 )
 
 const BtnInverted = styled(Button)`
-  border-color: ${props => (props.disabled ? "unset" : "#EE0090")}
+  border: ${props => (props.disabled ? "none" : "1px solid #EE0090")}
   color: ${props => (props.disabled ? "#fff" : "#EE0090")}
+  ${props => props.disabled && `
+    &:hover, &:active {
+      border: none;
+      color: #fff;
+    }
+  `}
 `;
 
 BtnInverted.defaultProps = {
@@ -40,7 +46,8 @@ const availability = [
   'descadastrada', 
 ]
 
-const volunteersColumns = [  {
+const volunteersColumns = [  
+  {
     accessor: 'first_name',
     Header: 'Nome',
     width: 100
@@ -75,6 +82,16 @@ const volunteersColumns = [  {
       />
     ) : null),
   }, {
+    accessor: 'extra',
+    Header: 'Número de Registro',
+    Cell: ({ value }) => (value ? (
+      <span>{value.register_ocupation}</span> 
+    ) : '-'),
+  }, {
+    accessor: 'address',
+    Header: 'Endereço',
+    width: 100
+  }, {
     accessor: 'zipcode',
     Header: 'CEP',
     width: 100
@@ -88,31 +105,21 @@ const volunteersColumns = [  {
     accessor: 'id',
     Header: 'Ação',
     width: 200,
-    Cell: ({ value, row }) => {
-      console.log({row})
-      return (
-        (value ? (
-          <Flexbox middle>
-            <BtnInverted 
-              disabled={
-                row._original.availability !== 'disponível' ||
-                row._original.status !== 'aprovada'
-              }
-            >
-              <Link
-                to={{
-                  pathname: "/connect",
-                  search: `?id=${value}`
-                }}
-              >
-                FAZER MATCH
-              </Link>
-            </BtnInverted>
-          </Flexbox>
-        ) : null)
-      )
-    }
-    ,
+    Cell: ({ value, row }) => (
+      value ? (
+        <Flexbox middle>
+          <BtnInverted 
+            disabled={
+              row._original.availability !== 'disponível' ||
+              row._original.status !== 'aprovada'
+            }
+            onClick={() => history.push(`/connect?id=${value}`)}
+          >
+            FAZER MATCH
+          </BtnInverted>
+        </Flexbox>
+      ) : null
+    ),
   }
 ].map((col: any) => !!col.Cell
   ? {...col, Header: () => <TextHeader value={col.Header} />}
@@ -126,19 +133,23 @@ const individualsColumns = [
   }, {
     accessor: 'last_name',
     Header: 'Sobrenome',
-  },
-  {
+  }, {
     accessor: 'email',
     Header: 'Email',
-  },
-  {
+  }, {
+    accessor: 'address',
+    Header: 'Endereço',
+    width: 100
+  }, {
     accessor: 'zipcode',
     Header: 'CEP',
     width: 100
-  },
-  {
+  }, {
+    accessor: 'phone',
+    Header: 'Telefone'
+  }, {
     accessor: 'created_at',
-    Header: 'Data de criação do ticket',
+    Header: 'Data de criação',
     Cell: ({ value }) => {
       if (!value) {
         return '-'
