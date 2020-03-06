@@ -14,9 +14,7 @@ describe('geolocation function', async () => {
 
     expect(await geolocation({
       "data": {
-        rede_individuals: [
-          {}
-        ],
+        rede_individuals: [],
       }
     })).toEqual({
       "error": 1

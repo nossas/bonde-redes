@@ -34,22 +34,38 @@ export const subscriptionRedesIndividuals = async (): Promise<ZenObservable.Subs
   }
 }
 
-interface GeoLocationResponse {
+interface IndividualCoordinates {
+  latitude: String
+  longitude: String
+}
+
+export interface Individual {
+  id: Number
+  zipcode?: String
+  address?: String
+  state?: String
+  city?: String
+  coordinates?: IndividualCoordinates
+  created_at?: String
+}
+
+
+interface SubscribeIndividualsResponse {
   data: {
-    rede_individuals: Record<string, string>[]
+    rede_individuals: Individual[]
   }
 }
 
-export const geolocation = async (response: GeoLocationResponse) => {
-  const { data: { rede_individuals: entries } } = response
+export const geolocation = async (response: SubscribeIndividualsResponse) => {
+  const { data: { rede_individuals: individuals } } = response
 
-	entries.forEach(async (redeIndividuals: Record<string, string>) => {
-    const individual = await convertCepToAddressWithGoogleApi(redeIndividuals)
+	individuals.forEach(async (individual: Individual) => {
+    const individualWithGeolocation = await convertCepToAddressWithGoogleApi(individual)
 
-    return mutationUpdateCoordinates(individual)
+    return mutationUpdateCoordinates(individualWithGeolocation)
 	})
 
-  return entries
+  return individuals
 };
 
 const REDE_INDIVIDUAL_GEOLOCATION_MUTATION = gql`
@@ -63,34 +79,10 @@ mutation update_rede_individuals($id: Int!, $address: String!, $state: String!, 
 }
 `
 
-type IndividualCoordinates = {
-  latitude: String;
-  longitude: String;
-}
-
-export type Individual = {
-  id?: Number;
-  address: String;
-  state: String;
-  city: String;
-  coordinates: IndividualCoordinates
-}
-
-// {
-//   "id": 22,
-//   "address": "aaaaaaa",
-//   "state": "ssssss",
-//   "city": "cccccc",
-//   "coordinates": {
-//     "latitude": "-43,4444",
-//     "longitude": "-23,3333"
-//   }
-// }
-
 export const mutationUpdateCoordinates = async (individual: Individual | boolean | { error: GMAPS_ERRORS }): Promise<Record<string, string>> => {
-	const { data: { update_rede_individuals: { returning: updatedIndividual } } } = await GraphQLAPI.mutate({
+  const { data: { update_rede_individuals: { returning: updatedIndividual } } } = await GraphQLAPI.mutate({
 		mutation: REDE_INDIVIDUAL_GEOLOCATION_MUTATION,
-    variables: { individual }
+    variables: individual
 	})
 
 	return updatedIndividual

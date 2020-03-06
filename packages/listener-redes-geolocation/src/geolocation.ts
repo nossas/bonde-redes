@@ -33,13 +33,13 @@ interface GoogleMapsAddressComponent {
   type: String[];
 }
 
-export const convertCepToAddressWithGoogleApi = async (individualAddress: Record<string, string>): Promise<Individual | boolean | { error: GMAPS_ERRORS }> => {
+export const convertCepToAddressWithGoogleApi = async (individual: Individual): Promise<Individual | boolean | { error: GMAPS_ERRORS }> => {
   if (!process.env.GOOGLE_MAPS_API_KEY) {
     throw new Error('Please specify the `GOOGLE_MAPS_API_KEY` environment variable.')
   }
 
   const { GOOGLE_MAPS_API_KEY } = process.env
-  const cep = individualAddress.zipcode
+  const cep = individual.zipcode
   let data
   try {
     logger.log('info', `requesting google with cep ${cep}...`)
@@ -98,13 +98,14 @@ export const convertCepToAddressWithGoogleApi = async (individualAddress: Record
     // }
 
     const i: Individual = {
+      id: individual.id,
       coordinates: {
         latitude: lat,
         longitude: lng,
       },
       address,
       state,
-      city,
+      city
     }
 
     return i;

@@ -1,4 +1,3 @@
-import 'colors'
 import { ApolloClient } from 'apollo-client'
 import { ApolloLink, concat, split } from 'apollo-link'
 import { createHttpLink } from 'apollo-link-http'
