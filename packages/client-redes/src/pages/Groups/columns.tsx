@@ -72,7 +72,7 @@ const volunteersColumns = [
     ) : null),
     width: 150
   }, {
-    accessor: 'extra',
+    accessor: 'extras',
     Header: 'Número de Registro',
     Cell: ({ value }) => (value ? (
       <span>{value.register_occupation}</span> 
