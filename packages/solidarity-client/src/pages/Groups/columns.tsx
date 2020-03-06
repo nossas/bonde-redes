@@ -5,7 +5,7 @@ import {
   Text,
 } from 'bonde-styleguide'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import history from '../../history'
 
 const TextHeader = ({ value }) => (
   <Text fontSize={13} fontWeight={600}>{value.toUpperCase()}</Text>
@@ -70,7 +70,8 @@ const availability = [
   'descadastrada', 
 ]
 
-const volunteersColumns = [  {
+const volunteersColumns = [  
+  {
     accessor: 'first_name',
     Header: 'Nome',
     width: 100
@@ -123,15 +124,9 @@ const volunteersColumns = [  {
           <Flexbox middle>
             <BtnInverted 
               disabled={row._original.availability === 'indisponível'}
+              onClick={() => history.push(`/connect?id=${value}`)}
             >
-              <Link
-                to={{
-                  pathname: "/connect",
-                  search: `?id=${value}`
-                }}
-              >
-                FAZER MATCH
-              </Link>
+              FAZER MATCH
             </BtnInverted>
           </Flexbox>
         ) : null)
