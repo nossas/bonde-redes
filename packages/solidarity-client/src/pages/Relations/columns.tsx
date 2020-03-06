@@ -12,7 +12,7 @@ const columns = [
     Header: 'PSR',
     Cell: ({ value }) => (value ? (
       <span>{value.first_name}</span>
-    ) : '-'),
+    ) : '-')
   }, {
     accessor: 'created_at',
     Header: 'Data de criação do ticket',
@@ -24,17 +24,14 @@ const columns = [
       return data.toLocaleDateString('pt-BR')
     },
   }, {
-    accessor: '',
+    accessor: 'relation',
     Header: 'Relação',
-    width: 150
-  }, {
+  },{
     accessor: 'status',
     Header: 'Status',
-    width: 150
   }, {
-    accessor: 'update_at',
+    accessor: 'updated_at',
     Header: 'Última atualização',
-    width: 300,
   }, {
     accessor: 'agent',
     Header: 'Feito por',
