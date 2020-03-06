@@ -35,8 +35,8 @@ const InsideApp = () => (
           <Redirect to="/groups" />
         </Route>
         <Route path="/groups" component={GroupsWrapper} />
-        <Route path="/connect " component={Match} />
-        <Route path="/relations " component={Relations} />
+        <Route path="/connect" component={Match} />
+        <Route path="/relations" component={Relations} />
       </Switch>
     </AppBody>
   </AppWrapper>
