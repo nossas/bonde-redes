@@ -1,6 +1,7 @@
 {
   "name": "listener-redes",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "private": true,
   "description": "Listener Redes",
   "engines": {
     "node": ">= 12.13 <13"
