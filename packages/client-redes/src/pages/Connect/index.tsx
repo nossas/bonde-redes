@@ -120,7 +120,7 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
     <FetchIndividuals>
       {({ data }) => {
         const filteredTableData = filterByDistance(
-          data  
+          data
         )
         // Seta a voluntária
         setVolunteer(linkState && linkState.volunteer)

@@ -14,12 +14,16 @@ export default function useAppLogic() {
   const setTable = useStoreActions((actions: any) => actions.table.setTable)
   const setVolunteer = useStoreActions((actions: any) => actions.volunteer.setVolunteer)
   const setPopup = useStoreActions((actions: any) => actions.popups.setPopup);
+  const setIndividual = useStoreActions(
+    (actions: any) => actions.individual.setIndividual
+  );
 
   const createWhatsappLink = (number, textVariables) => {
     if (!number) return false
     return `https://api.whatsapp.com/send?phone=55${number}&text=${textVariables}`;
   };
 
+  // TODO: Disable this func, its not used in the main redes app logic
   const getUserData = ({ user, data, filterBy }) => data.filter((i) => user === i[filterBy])[0]
 
   const parsedIndividualNumber = parseNumber(individual.phone);
@@ -58,6 +62,7 @@ export default function useAppLogic() {
     getUserData,
     setTable,
     setVolunteer,
-    setPopup
+    setPopup,
+    setIndividual
   }
 }

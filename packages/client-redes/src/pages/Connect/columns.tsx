@@ -41,8 +41,8 @@ const columns = [
     accessor: 'id',
     Header: 'Ação',
     width: 200,
-    Cell: ({ value }) => (value ? (
-      <Flexbox middle><BtnConnect id={value} /></Flexbox>
+    Cell: ({ value, row }) => (value ? (
+      <Flexbox middle><BtnConnect individual={row._original} /></Flexbox>
     ) : null),
   }
 ]
