@@ -154,7 +154,7 @@ const Table = () => {
       volunteer_name,
       volunteer_user_id,
       volunteer_registry,
-      volunteer_phone: Number(parseNumber(phone || 0)),
+      volunteer_phone: Number(parseNumber(phone || "0")),
       volunteer_organization_id,
       assignee_name: zendeskAgentName
     });

@@ -1,5 +1,8 @@
 import { thunk, action } from 'easy-peasy'
 import request from '../services/request'
+import { Ticket } from './table-data'
+
+const volunteers: Ticket[] = ([])
 
 const volunteersModel = {
   getAvailableVolunteers: thunk(async (actions: any, payload) => {
@@ -15,7 +18,7 @@ const volunteersModel = {
       })
     }
   }),
-  volunteers: [],
+  volunteers,
   setVolunteers: action((state, payload) => ({
     volunteers: payload
   })),

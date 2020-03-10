@@ -25,6 +25,9 @@ const main = async (req, res, next) => {
         organization_id
         latitude
         longitude
+        whatsapp
+        phone
+        registration_number
       }
     }`,
     variables: {
