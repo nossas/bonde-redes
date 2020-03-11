@@ -3,6 +3,8 @@ import { gql } from 'apollo-boost'
 import { useQuery } from '@apollo/react-hooks'
 import { SessionHOC } from '../services/session'
 import FilterQuery from './FilterQuery'
+import { Individual } from './FetchIndividuals'
+import { Filters } from './FilterQuery'
 
 const USERS_BY_GROUP = gql`
 query RedeGroups(
@@ -98,6 +100,28 @@ fragment individual on rede_individuals {
 }
 `
 
+interface GroupsData {
+  individuals: Individual[]
+  individuals_count: {
+    aggregate: {
+      count: number
+    }
+  }
+  volunteers: Individual[]
+  volunteers_count: {
+    aggregate: {
+      count: number
+    }
+  }
+}
+
+interface GroupsVars {
+  context: {
+    _eq: number
+  }
+  filters: Filters
+}
+
 const FetchUsersByGroup = SessionHOC((props: any) => (
   <FilterQuery>
   {({ filters, changeFilters, page }) => {
@@ -108,7 +132,7 @@ const FetchUsersByGroup = SessionHOC((props: any) => (
       ...(filters || {})
     }
 
-  	const { loading, error, data } = useQuery(USERS_BY_GROUP, { variables })
+  	const { loading, error, data } = useQuery<GroupsData, GroupsVars>(USERS_BY_GROUP, { variables })
 
   	if (loading) return <p>Loading...</p>
 
@@ -116,20 +140,19 @@ const FetchUsersByGroup = SessionHOC((props: any) => (
   		console.log('error', error)
   		return <p>Error</p>
   	}
-
-  	return children({
-  		volunteers: {
-  			data: data.volunteers,
-  			count: data.volunteers_count.aggregate.count
-  		},
-  		individuals: {
-  			data: data.individuals,
-  			count: data.individuals_count.aggregate.count
-  		},
+    return data && children({
+      volunteers: {
+        data: data.volunteers,
+        count: data.volunteers_count.aggregate.count
+      },
+      individuals: {
+        data: data.individuals,
+        count: data.individuals_count.aggregate.count
+      },
       filters,
       page,
       changeFilters
-  	})
+    })
   }}
   </FilterQuery>
 ), { required: true })

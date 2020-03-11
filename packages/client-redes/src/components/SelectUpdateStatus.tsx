@@ -20,7 +20,20 @@ const Option = styled.option`
   text-transform: capitalize;
 `
 
-export default ({ name, row, options, selected, query, type }) => {
+interface Params {
+  name: string
+  row: {
+    _original: {
+      id: number
+    }
+  }
+  options: Array<string>
+  selected: string
+  query: any
+  type: string
+}
+
+export default ({ name, row, options, selected, query, type }: Params) => {
   const [update] = useMutation(query)
 
   const handleOnChange = ({ target: { value } }) => {
@@ -35,7 +48,7 @@ export default ({ name, row, options, selected, query, type }) => {
     <Text color="#000">
       <Select onChange={handleOnChange} value={selected}>
         {options
-          .map(i => 
+          .map((i: string) => 
             <Option value={i}>{i.replace("_", ": ")}</Option>
           )
         }

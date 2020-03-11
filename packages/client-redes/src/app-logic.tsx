@@ -28,16 +28,16 @@ export default function useAppLogic() {
 
   const parsedIndividualNumber = parseNumber(individual.phone);
   const urlencodedIndividualText = encodeText(whatsappText({
-    volunteer_name: "Viviane",
-    individual_name: "Camila",
+    volunteer_name: volunteer.name,
+    individual_name: individual.name,
     agent: "Voluntária",
     isVolunteer: false
   }));
 
   const parsedVolunteerNumber = parseNumber(volunteer.whatsapp);
   const urlencodedVolunteerText = encodeText(whatsappText({
-    volunteer_name: "Viviane",
-    individual_name: "Camila",
+    volunteer_name: volunteer.name,
+    individual_name: individual.name,
     agent: "Voluntária",
     isVolunteer: true
   }));
