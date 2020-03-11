@@ -16,23 +16,20 @@ mutation updateRelationship(
 }
 
 fragment relationship on rede_relationships {
-  status
-  is_archived
-  comments
-  metadata
-  updated_at
-  created_at
-  recipient {
-    id
-    first_name
-  }
   volunteer {
-    id
     first_name
+    id
   }
-  agent {
-    id
+  recipient {
     first_name
+    id
+  }
+  created_at
+  status
+  updated_at
+  agent {
+    first_name
+    id
   }
   id
 }

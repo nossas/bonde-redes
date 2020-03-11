@@ -11,30 +11,6 @@ export const Wrap = styled.div`
   width: 90%;
   margin: 40px;
 `
-// type Relationship = {
-//   __typename: string
-//   agent: {
-//     __typename: string
-//     first_name: string
-//     id: number
-//   }
-//   comments?: Array<{}>
-//   created_at:  string
-//   is_archived: false
-//   metadata?: Array<{}>
-//   recipient: {​
-//     __typename: string
-//     first_name: string
-//     id: number
-//   }​​
-//   status: string
-//   updated_at:  string
-//   volunteer: {
-//     __typename: string
-//     first_name: string
-//     id: number
-//   }
-// }
 
 const Table: React.FC = () => {
   return (
