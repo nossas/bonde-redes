@@ -42,18 +42,11 @@ export default function useAppLogic() {
     isVolunteer: true
   }));
 
-  const distance = 50;
-  const lat = Number(volunteer.latitude);
-  const lng = Number(volunteer.longitude);
-
   return {
     individual,
     volunteer,
     tableData,
     popups,
-    lat,
-    lng,
-    distance,
     createWhatsappLink,
     parsedIndividualNumber,
     urlencodedIndividualText,

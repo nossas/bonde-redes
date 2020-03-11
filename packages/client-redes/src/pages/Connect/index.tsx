@@ -15,14 +15,15 @@ import { Wrap, StyledButton } from './style'
 import columns from './columns'
 import FetchIndividuals from '../../graphql/FetchIndividuals'
 import CREATE_RELATIONSHIP from '../../graphql/CreateRelationship'
+import UPDATE_INDIVIDUAL from '../../graphql/UpdateIndividual'
 import useAppLogic from '../../app-logic'
 import { SessionHOC } from '../../services/session/SessionProvider'
 
-import { If } from '../../components/If'
 import Popup from '../../components/Popups/Popup'
 
 const Table = SessionHOC(({ session: { user: agent } }: any) => {
   const [createConnection, { data, loading, error }] = useMutation(CREATE_RELATIONSHIP);
+  const [updateIndividual, { error: individual_error }] = useMutation(UPDATE_INDIVIDUAL);
   const {
     individual,
     volunteer,
@@ -32,9 +33,6 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
     urlencodedIndividualText,
     parsedVolunteerNumber,
     urlencodedVolunteerText,
-    lat,
-    lng,
-    distance,
     setVolunteer,
     setPopup
   } = useAppLogic()
@@ -49,20 +47,24 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
   const { confirm, wrapper, noPhoneNumber } = popups;
   const { 
     first_name: individual_name, 
-    id: individual_user_id
+    id: individual_id
   } = individual;
   const {
     first_name: volunteer_name,
     whatsapp: volunteer_whatsapp,
-    id: volunteer_user_id,
+    id: volunteer_id,
   } = volunteer;
 
   useEffect(() => {
     setLoader(loading)
     setError(!!(error && error.message))
+    setError(!!(individual_error && individual_error.message))
     if (data) setSuccess(true)
-  }, [setLoader, loading, error, setError, data])
+  }, [setLoader, loading, error, setError, data, individual_error])
 
+  const distance = 50;
+  const lat = Number(volunteer.latitude);
+  const lng = Number(volunteer.longitude);
   // TODO: Arrumar as variaveis de acordo com a nova key `coordinate`
   const filterByDistance = useCallback(
     data =>
@@ -90,21 +92,30 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
     [distance, lat, lng]
   );
 
-  const onConfirm = () => {
+  const onConfirm = ({ individual_id, volunteer_id, agent_id, popups, volunteer_whatsapp }) => {
     if (!volunteer_whatsapp)
       return setPopup({
         ...popups,
         noPhoneNumber: true,
         confirm: false
       });
+
     setPopup({ ...popups, confirm: false });
-    return createConnection({ 
+    return createConnection({
       variables: {
-        recipientId: individual_user_id,
-        volunteerId: volunteer_user_id,
-        agent: agent.id
+        recipientId: individual_id,
+        volunteerId: volunteer_id,
+        agentId: agent_id
       }
     })
+    .then(() => updateIndividual({
+      variables: {
+        id: volunteer_id,
+        individual: {
+          availability: "indisponível"
+        }
+      }
+    }))
   };
 
   const closeAllPopups = () => {
@@ -155,11 +166,17 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
                 />
               </Wrap>
             </Flexbox>
-            <If condition={wrapper}>
+            {wrapper && (
               <Popup
                 individualName={individual_name}
                 volunteerName={volunteer_name}
-                onSubmit={onConfirm}
+                onSubmit={onConfirm({
+                  individual_id, 
+                  volunteer_id, 
+                  agent_id: agent.id, 
+                  popups,
+                  volunteer_whatsapp
+                })}
                 isOpen={wrapper}
                 onClose={closeAllPopups}
                 isLoading={isLoading}
@@ -173,15 +190,15 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
                 }}
                 error={{
                   isEnabled: fail,
-                  message: (error && error.message) || ''
+                  message: (error && error.message) || (individual_error && individual_error.message) || ''
                 }}
                 warning={{
                   isEnabled: noPhoneNumber,
-                  id: volunteer_user_id,
+                  id: volunteer_id,
                   name: volunteer_name
                 }}
               />
-            </If>
+            )}
           </Fragment>
         );
       }}
