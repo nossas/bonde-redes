@@ -34,7 +34,7 @@ query RedeRelationships ($context: Int_comparison_exp!) {
   }
 }`
 
-type Relationship = {
+export type Relationship = {
   volunteer: {
     first_name: string
     id: number

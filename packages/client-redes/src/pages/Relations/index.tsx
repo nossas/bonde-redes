@@ -6,6 +6,7 @@ import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
 
 import 'react-table/react-table.css'
 import columns from './columns'
+import { Relationship } from '../../graphql/FetchMatches'
 
 export const Wrap = styled.div`
   width: 90%;
@@ -15,7 +16,7 @@ export const Wrap = styled.div`
 const Table: React.FC = () => {
   return (
     <FetchMatches>
-      {(data) => {
+      {(data: Relationship[]) => {
         return data.length === 0 ? (
           <Flexbox middle>
             <Wrap>
