@@ -15,7 +15,6 @@ import { Wrap, StyledButton } from './style'
 import columns from './columns'
 import FetchIndividuals from '../../graphql/FetchIndividuals'
 import CREATE_RELATIONSHIP from '../../graphql/CreateRelationship'
-import UPDATE_INDIVIDUAL from '../../graphql/UpdateIndividual'
 import useAppLogic from '../../app-logic'
 import { SessionHOC } from '../../services/session/SessionProvider'
 
@@ -23,7 +22,7 @@ import Popup from '../../components/Popups/Popup'
 
 const Table = SessionHOC(({ session: { user: agent } }: any) => {
   const [createConnection, { data, loading, error }] = useMutation(CREATE_RELATIONSHIP);
-  const [updateIndividual, { error: individual_error }] = useMutation(UPDATE_INDIVIDUAL);
+
   const {
     individual,
     volunteer,
@@ -58,13 +57,13 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
   useEffect(() => {
     setLoader(loading)
     setError(!!(error && error.message))
-    setError(!!(individual_error && individual_error.message))
     if (data) setSuccess(true)
-  }, [setLoader, loading, error, setError, data, individual_error])
+  }, [setLoader, loading, error, setError, data])
 
   const distance = 50;
   const lat = Number(volunteer.latitude);
   const lng = Number(volunteer.longitude);
+
   // TODO: Arrumar as variaveis de acordo com a nova key `coordinate`
   const filterByDistance = useCallback(
     data =>
@@ -108,14 +107,6 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
         agentId: agent_id
       }
     })
-    .then(() => updateIndividual({
-      variables: {
-        id: volunteer_id,
-        individual: {
-          availability: "indisponível"
-        }
-      }
-    }))
   };
 
   const closeAllPopups = () => {
@@ -190,7 +181,7 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
                 }}
                 error={{
                   isEnabled: fail,
-                  message: (error && error.message) || (individual_error && individual_error.message) || ''
+                  message: (error && error.message) || ''
                 }}
                 warning={{
                   isEnabled: noPhoneNumber,

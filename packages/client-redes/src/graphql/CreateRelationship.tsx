@@ -6,8 +6,8 @@ mutation createRelationship(
   $volunteerId: Int!
   $agentId: Int!
 ){
-  insert_rede_relationships(objects:
-    {
+  insert_rede_relationships(
+    objects: {
       recipient_id: $recipientId
       volunteer_id: $volunteerId
       status: "pendente"
@@ -23,6 +23,19 @@ mutation createRelationship(
         id
       }
       volunteer_id
+    }
+  }
+
+  update_rede_individuals(
+    _set: {
+      availability: "indisponível"
+    },
+    where: { id: { _eq: $volunteerId } }
+  ) {
+    returning {
+      id
+      email
+      availability
     }
   }
 }
