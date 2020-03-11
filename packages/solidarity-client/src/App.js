@@ -40,7 +40,7 @@ const App = () => (
           <Header />
           <AppBody className="app-body">
             <Route exact path="/">
-              <Redirect to="/match" />
+              <Redirect to="/voluntarias" />
             </Route>
             <Route exact path="/geobonde">
               <Geobonde />

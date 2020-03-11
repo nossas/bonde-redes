@@ -1,7 +1,7 @@
 import { action, thunk } from 'easy-peasy'
 import request from '../services/request'
 
-export interface Ticket {
+export type Ticket = {
   tipo_de_acolhimento: string
   status_inscricao: string
   status_acolhimento: string
@@ -16,6 +16,9 @@ export interface Ticket {
   user_id: number
   condition: string
   organization_id: number
+  whatsapp: string
+  registration_number: string
+  phone: string
 }
 
 const data: Ticket[] = ([])
