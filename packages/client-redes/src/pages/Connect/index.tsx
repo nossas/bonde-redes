@@ -17,8 +17,17 @@ import FetchIndividuals from '../../graphql/FetchIndividuals'
 import CREATE_RELATIONSHIP from '../../graphql/CreateRelationship'
 import useAppLogic from '../../app-logic'
 import { SessionHOC } from '../../services/session/SessionProvider'
+import { Individual } from '../../graphql/FetchIndividuals'
 
 import Popup from '../../components/Popups/Popup'
+
+type onConfirm = {
+  individual_id: number
+  volunteer_id: number
+  agent_id: number
+  popups: Object
+  volunteer_whatsapp: string
+}
 
 const Table = SessionHOC(({ session: { user: agent } }: any) => {
   const [createConnection, { data, loading, error }] = useMutation(CREATE_RELATIONSHIP);
@@ -91,7 +100,7 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
     [distance, lat, lng]
   );
 
-  const onConfirm = ({ individual_id, volunteer_id, agent_id, popups, volunteer_whatsapp }) => {
+  const onConfirm = ({ individual_id, volunteer_id, agent_id, popups, volunteer_whatsapp }: onConfirm) => {
     if (!volunteer_whatsapp)
       return setPopup({
         ...popups,
@@ -120,7 +129,7 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
 
   return (
     <FetchIndividuals>
-      {({ data }) => {
+      {({ data }: { data: Individual[]}) => {
         const filteredTableData = filterByDistance(
           data
         )

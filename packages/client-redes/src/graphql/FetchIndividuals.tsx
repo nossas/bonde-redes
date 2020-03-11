@@ -63,6 +63,43 @@ fragment individual on rede_individuals {
 }
 `
 
+export type Individual = {
+  id: number
+  first_name: string
+  last_name: string
+  email: string
+  whatsapp: string
+  phone: string
+  zipcode: string
+  address: string
+  city: string
+  coordinates: Object
+  state: string
+  status: string
+  availability: string
+  extras: Object
+  form_entry_id: number
+  group: {
+    id: number
+    community_id: number
+    is_volunteer: boolean
+  }
+  created_at: string
+  updated_at: string
+}
+
+type IndividualVars = {
+  context: {
+    _eq: number
+  }
+  filters: Object
+  is_volunteer: boolean
+}
+
+interface IndividualData {
+  rede_individuals: Individual[]
+}
+
 const FetchIndividuals = SessionHOC((props: any) => (
   <FilterQuery>
     {({ filters, changeFilters, page }) => {
@@ -74,7 +111,7 @@ const FetchIndividuals = SessionHOC((props: any) => (
         is_volunteer: false // TODO: deixar isso dinâmico!!
       }
 
-      const { loading, error, data } = useQuery(USERS, { variables })
+      const { loading, error, data } = useQuery<IndividualData, IndividualVars>(USERS, { variables })
 
       if (loading) return <p>Loading...</p>
 
@@ -83,9 +120,8 @@ const FetchIndividuals = SessionHOC((props: any) => (
         return <p>Error</p>
       }
 
-
       return children({
-        data: data.rede_individuals,
+        data: data && data.rede_individuals,
         filters,
         page,
         changeFilters

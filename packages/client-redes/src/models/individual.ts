@@ -1,15 +1,15 @@
 import { action } from 'easy-peasy'
 
-interface Individual {
+type Individual = {
   email: string
-  name: string
+  first_name: string
   phone: string
   id: number
 }
 
-const data: Individual =  ({
+const data: Individual = ({
   email: '',
-  name: '',
+  first_name: '',
   phone: '',
   id: 0
 })
