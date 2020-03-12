@@ -46,7 +46,7 @@
     "test": "react-scripts test",
     "coverage": "npm run test -- --watchAll=false --coverage",
     "eject": "react-scripts eject",
-    "lint": "eslint . --fix"
+    "lint": "eslint src/. --ext .ts,.tsx"
   },
   "browserslist": {
     "production": [
@@ -81,16 +81,6 @@
     "@types/react-table": "^6.8.5",
     "@types/styled-components": "^4.4.1",
     "@types/testing-library__react": "^9.1.2",
-    "@types/url-join": "^4.0.0",
-    "@typescript-eslint/eslint-plugin": "^2.20.0",
-    "@typescript-eslint/parser": "^2.20.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.0",
-    "eslint-plugin-jest": "^23.7.0",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-react": "^7.18.3",
-    "eslint-plugin-react-hooks": "^2.4.0",
-    "prettier": "^1.19.1"
+    "@types/url-join": "^4.0.0"
   }
 }

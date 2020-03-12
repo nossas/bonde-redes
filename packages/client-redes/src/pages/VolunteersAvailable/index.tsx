@@ -1,25 +1,27 @@
-import React, { useEffect } from 'react'
-import ReactTable from 'react-table'
-import styled from 'styled-components';
+import React, { useEffect } from "react";
+import ReactTable from "react-table";
+import styled from "styled-components";
 
-import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
-import { useStoreState, useStoreActions } from 'easy-peasy'
+import { Flexbox2 as Flexbox, Title } from "bonde-styleguide";
+import { useStoreState, useStoreActions } from "easy-peasy";
 
-import 'react-table/react-table.css'
-import columns from './columns'
+import "react-table/react-table.css";
+import columns from "./columns";
 
 export const FullWidth = styled.div`
   width: 100%;
   padding: 40px;
-`
+`;
 
 const Table: React.FC = () => {
-  const tableData = useStoreState(state => state.table.tableData)
-  const getAvailableVolunteers = useStoreActions((actions: any) => actions.table.getTableData)
+  const tableData = useStoreState(state => state.table.tableData);
+  const getAvailableVolunteers = useStoreActions(
+    (actions: any) => actions.table.getTableData
+  );
 
   useEffect(() => {
-    getAvailableVolunteers('volunteers')
-  }, [getAvailableVolunteers])
+    getAvailableVolunteers("volunteers");
+  }, [getAvailableVolunteers]);
 
   return tableData.length === 0 ? (
     <FullWidth>
@@ -51,7 +53,7 @@ const Table: React.FC = () => {
         />
       </Flexbox>
     </FullWidth>
-  )
-}
+  );
+};
 
-export default Table
+export default Table;

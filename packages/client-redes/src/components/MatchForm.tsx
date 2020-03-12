@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from "react";
 // import PropTypes from 'prop-types'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from "react-router-dom";
 import {
   Button,
   Flexbox2 as Flexbox,
   FormField,
   Input,
   Text
-} from 'bonde-styleguide'
-import styled from 'styled-components'
-import { useForm, Controller } from 'react-hook-form'
-import { useStoreActions, useStoreState } from 'easy-peasy'
+} from "bonde-styleguide";
+import styled from "styled-components";
+import { useForm, Controller } from "react-hook-form";
+import { useStoreActions, useStoreState } from "easy-peasy";
 
-import { emailValidation } from '../services/utils'
-import useAppLogic from '../app-logic'
-import Select from './Select'
+import { emailValidation } from "../services/utils";
+import useAppLogic from "../app-logic";
+import Select from "./Select";
 // import dicioAgent from '../pages/Connect/Table/dicioAgent'
 
 const FormWrapper = styled.form`
@@ -22,26 +22,25 @@ const FormWrapper = styled.form`
   display: flex;
   align-items: center;
   justify-content: space-around;
-`
+`;
 const StyledField = styled(FormField)`
   padding: 0;
   color: rgba(255, 255, 255, 1);
   position: relative;
   top: 16px;
-`
+`;
 const StyledFlexbox = styled(Flexbox)`
   width: unset;
-`
+`;
 
 const MatchForm = () => {
-  const { search } = useLocation()
-  const getAvailableVolunteers = useStoreActions((actions: any) => actions.volunteers.getAvailableVolunteers)
-  const setForm = useStoreActions((actions: any) => actions.match.setForm)
+  const { search } = useLocation();
+  const getAvailableVolunteers = useStoreActions(
+    (actions: any) => actions.volunteers.getAvailableVolunteers
+  );
+  const setForm = useStoreActions((actions: any) => actions.match.setForm);
 
-  const {
-    getUserData,
-    tableData
-  } = useAppLogic()
+  const { getUserData, tableData } = useAppLogic();
 
   const {
     handleSubmit,
@@ -53,32 +52,36 @@ const MatchForm = () => {
   } = useForm();
 
   useEffect(() => {
-    getAvailableVolunteers()
-    const email = search.split('=')[1]
-    if (email) setValue('email', email)
+    getAvailableVolunteers();
+    const email = search.split("=")[1];
+    if (email) setValue("email", email);
     // eslint-disable-next-line
   }, [setValue, search])
 
-
   const send = (data, e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // buscando dados voluntaria atraves do email
     const user = getUserData({
       user: data.email,
       data: tableData,
       filterBy: "email"
-    })
+    });
     // const assignee_name = getAgentName(data.agent)
 
-    if (typeof user === 'undefined') return setError("email", "notFound", "Não existe uma voluntária com esse e-mail")
+    if (typeof user === "undefined")
+      return setError(
+        "email",
+        "notFound",
+        "Não existe uma voluntária com esse e-mail"
+      );
 
     setForm({
       volunteer: user,
-      agent: data.agent,
+      agent: data.agent
       // assignee_name
-    })
-  }
+    });
+  };
 
   return (
     <FormWrapper onSubmit={handleSubmit(send)}>
@@ -98,11 +101,11 @@ const MatchForm = () => {
             required: "Esse campo é obrigatório",
             pattern: {
               value: emailValidation(),
-              message: 'Insira um endereço de e-mail válido'
+              message: "Insira um endereço de e-mail válido"
             }
           }}
         />
-        <Text color="#ffffff">{errors.email && errors.email['message']}</Text>
+        <Text color="#ffffff">{errors.email && errors.email["message"]}</Text>
       </StyledFlexbox>
       <StyledFlexbox vertical>
         {/* <Select
@@ -114,19 +117,15 @@ const MatchForm = () => {
             validate: value => value !== 'default' || 'Selecione uma agente',
           })}
         /> */}
-        <Text color="#ffffff">{errors.agent && errors.agent['message']}</Text>
+        <Text color="#ffffff">{errors.agent && errors.agent["message"]}</Text>
       </StyledFlexbox>
       <Flexbox middle>
-        <Button
-          disabled={tableData.length < 1}
-          minWidth="150px"
-          type="submit"
-        >
+        <Button disabled={tableData.length < 1} minWidth="150px" type="submit">
           Buscar
         </Button>
       </Flexbox>
     </FormWrapper>
-  )
-}
+  );
+};
 
-export default MatchForm
+export default MatchForm;
