@@ -37,14 +37,16 @@ const main = async (req, res, next) => {
   })
 
   const today = new Date()
-  const last_month = today.getDate() - 30
-  const timestamp = new Date(new Date().setDate(last_month))
+  // get last month and format
+  const last_month = new Date().setDate((today.getDate() - 30)) 
+  // format last_month timestamp
+  const timestamp = new Date(last_month).toISOString()
   const pendingTickets = await getSolidarityMatches({
     query: `query ($last_month: timestamp!){
       solidarity_matches(
         order_by: {created_at: desc}
         where: {
-          created_at: {_gte: $last_month},
+          created_at: {_lte: $last_month},
           status: {_eq: "encaminhamento__realizado"}
         }
       ) {
