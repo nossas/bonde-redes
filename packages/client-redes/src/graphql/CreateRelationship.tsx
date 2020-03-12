@@ -22,7 +22,6 @@ export default gql`
         agent {
           id
         }
-        volunteer_id
       }
     }
 

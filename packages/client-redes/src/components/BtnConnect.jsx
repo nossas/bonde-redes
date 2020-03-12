@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Button } from "bonde-styleguide";
-import { useStoreActions } from "easy-peasy";
 import useAppLogic from '../app-logic'
 
 const BtnWarning = styled(Button)`
@@ -10,26 +9,16 @@ const BtnWarning = styled(Button)`
   color: ${props => (props.disabled ? "#fff" : "#EE0090")}
 `;
 
-const Connect = ({ id }) => {
-  const setIndividual = useStoreActions(
-    actions => actions.individual.setIndividual
-  );
-  const setPopup = useStoreActions(actions => actions.popups.setPopup);
-
+const Connect = ({ individual }) => {
   const {
     volunteer,
-    getUserData,
-    tableData,
+    setIndividual,
+    setPopup
   } = useAppLogic()
 
-  const onClick = () => {
+  const onClick = (data) => {
     // TODO: Tratar caso em que a usuária não tem user_id
-    const user = getUserData({
-      user: id,
-      data: tableData,
-      filterBy: "id"
-    });
-    setIndividual(user);
+    setIndividual(data);
     setPopup({
       confirm: true,
       wrapper: true
@@ -39,7 +28,7 @@ const Connect = ({ id }) => {
   return (
     <BtnWarning
       light
-      onClick={onClick}
+      onClick={() => onClick(individual)}
       disabled={volunteer && volunteer.email === ""}
     >
       Encaminhar
@@ -48,7 +37,7 @@ const Connect = ({ id }) => {
 };
 
 Connect.propTypes = {
-  id: PropTypes.number.isRequired
+  individual: PropTypes.object.isRequired
 };
 
 export default Connect;

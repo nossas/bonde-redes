@@ -1,6 +1,7 @@
 {
   "name": "listener-redes-geolocation",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "private": true,
   "description": "",
   "engines": {
     "node": ">= 12.13 <13"

@@ -12,6 +12,9 @@ export default function useAppLogic() {
     (actions: any) => actions.volunteer.setVolunteer
   );
   const setPopup = useStoreActions((actions: any) => actions.popups.setPopup);
+  const setIndividual = useStoreActions(
+    (actions: any) => actions.individual.setIndividual
+  );
 
   const createWhatsappLink = (number, textVariables) => {
     if (!number) return false;
@@ -42,18 +45,11 @@ export default function useAppLogic() {
     })
   );
 
-  const distance = 50;
-  const lat = Number(volunteer.latitude);
-  const lng = Number(volunteer.longitude);
-
   return {
     individual,
     volunteer,
     tableData,
     popups,
-    lat,
-    lng,
-    distance,
     createWhatsappLink,
     parsedIndividualNumber,
     urlencodedIndividualText,

@@ -1,10 +1,10 @@
-import React from "react";
-import { gql } from "apollo-boost";
-import { useQuery } from "@apollo/react-hooks";
-import { SessionHOC } from "../services/session";
-import FilterQuery from "./FilterQuery";
-import { Individual } from "./FetchIndividuals";
-import { Filters } from "./FilterQuery";
+import React from 'react'
+import { gql } from 'apollo-boost'
+import { useQuery } from '@apollo/react-hooks'
+import { SessionHOC } from '../services/session'
+import FilterQuery from './FilterQuery'
+import { Individual } from './FetchIndividuals'
+import { Filters } from './FilterQuery'
 
 const USERS_BY_GROUP = gql`
   query RedeGroups(
@@ -101,12 +101,32 @@ interface GroupsData {
   };
 }
 
+interface GroupsData {
+  individuals: Individual[]
+  individuals_count: {
+    aggregate: {
+      count: number
+    }
+  }
+  volunteers: Individual[]
+  volunteers_count: {
+    aggregate: {
+      count: number
+    }
+  }
+}
+
 interface GroupsVars {
   context: {
-    _eq: number;
-  };
-  filters: Filters;
+    _eq: number
+  }
+  filters: Filters
 }
+
+const FetchUsersByGroup = SessionHOC((props: any) => (
+  <FilterQuery>
+  {({ filters, changeFilters, page }) => {
+  	const { children, session: { community } } = props
 
 const FetchUsersByGroup = SessionHOC(
   (props: any) => (
@@ -117,42 +137,32 @@ const FetchUsersByGroup = SessionHOC(
           session: { community }
         } = props;
 
-        const variables = {
-          context: { _eq: community.id },
-          ...(filters || {})
-        };
+  	const { loading, error, data } = useQuery<GroupsData, GroupsVars>(USERS_BY_GROUP, { variables })
 
         const { loading, error, data } = useQuery<GroupsData, GroupsVars>(
           USERS_BY_GROUP,
           { variables }
         );
 
-        if (loading) return <p>Loading...</p>;
-
-        if (error) {
-          console.log("error", error);
-          return <p>Error</p>;
-        }
-        return (
-          data &&
-          children({
-            volunteers: {
-              data: data.volunteers,
-              count: data.volunteers_count.aggregate.count
-            },
-            individuals: {
-              data: data.individuals,
-              count: data.individuals_count.aggregate.count
-            },
-            filters,
-            page,
-            changeFilters
-          })
-        );
-      }}
-    </FilterQuery>
-  ),
-  { required: true }
-);
+  	if (error) {
+  		console.log('error', error)
+  		return <p>Error</p>
+  	}
+    return data && children({
+      volunteers: {
+        data: data.volunteers,
+        count: data.volunteers_count.aggregate.count
+      },
+      individuals: {
+        data: data.individuals,
+        count: data.individuals_count.aggregate.count
+      },
+      filters,
+      page,
+      changeFilters
+    })
+  }}
+  </FilterQuery>
+), { required: true })
 
 export default FetchUsersByGroup;

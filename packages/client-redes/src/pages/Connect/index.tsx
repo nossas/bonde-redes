@@ -24,6 +24,14 @@ type onConfirm = {
   volunteer_whatsapp: string;
 };
 
+type onConfirm = {
+  individual_id: number;
+  volunteer_id: number;
+  agent_id: number;
+  popups: Record<string, any>;
+  volunteer_whatsapp: string;
+};
+
 const Table = SessionHOC(({ session: { user: agent } }: any) => {
   const [createConnection, { data, loading, error }] = useMutation(
     CREATE_RELATIONSHIP
@@ -38,9 +46,6 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
     urlencodedIndividualText,
     parsedVolunteerNumber,
     urlencodedVolunteerText,
-    lat,
-    lng,
-    distance,
     setVolunteer,
     setPopup
   } = useAppLogic();
@@ -65,6 +70,10 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
     setError(!!(error && error.message));
     if (data) setSuccess(true);
   }, [setLoader, loading, error, setError, data]);
+
+  const distance = 50;
+  const lat = Number(volunteer.latitude);
+  const lng = Number(volunteer.longitude);
 
   // TODO: Arrumar as variaveis de acordo com a nova key `coordinate`
   const filterByDistance = useCallback(
@@ -106,12 +115,13 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
         noPhoneNumber: true,
         confirm: false
       });
+
     setPopup({ ...popups, confirm: false });
     return createConnection({
       variables: {
-        recipientId: individual_user_id,
-        volunteerId: volunteer_user_id,
-        agent: agent.id
+        recipientId: individual_id,
+        volunteerId: volunteer_id,
+        agentId: agent_id
       }
     });
   };
@@ -164,7 +174,7 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
                 />
               </Wrap>
             </Flexbox>
-            <If condition={wrapper}>
+            {wrapper && (
               <Popup
                 individualName={individual_name}
                 volunteerName={volunteer_name}
@@ -200,11 +210,11 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
                 }}
                 warning={{
                   isEnabled: noPhoneNumber,
-                  id: volunteer_user_id,
+                  id: volunteer_id,
                   name: volunteer_name
                 }}
               />
-            </If>
+            )}
           </Fragment>
         );
       }}

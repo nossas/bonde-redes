@@ -67,7 +67,9 @@ const FetchMatches = SessionHOC(
       session: { community }
     } = props;
 
-    const variables = { context: { _eq: community.id } };
+    interface RelationshipData {
+      rede_relationships: Relationship[];
+    }
 
     const { loading, error, data } = useQuery<
       RelationshipData,

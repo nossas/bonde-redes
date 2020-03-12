@@ -105,6 +105,23 @@ const FetchIndividuals = SessionHOC(
           session: { community }
         } = props;
 
+        type IndividualVars = {
+          context: {
+            _eq: number;
+          };
+          filters: Record<string, any>;
+          is_volunteer: boolean;
+        };
+
+        interface IndividualData {
+          rede_individuals: Individual[];
+        }
+
+        const { loading, error, data } = useQuery<
+          IndividualData,
+          IndividualVars
+        >(USERS, { variables });
+
         const variables = {
           context: { _eq: community.id },
           ...(filters || {}),
@@ -117,11 +134,6 @@ const FetchIndividuals = SessionHOC(
         >(USERS, { variables });
 
         if (loading) return <p>Loading...</p>;
-
-        if (error) {
-          console.log("error", error);
-          return <p>Error</p>;
-        }
 
         return children({
           data: data && data.rede_individuals,
