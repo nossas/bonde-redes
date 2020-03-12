@@ -28,6 +28,7 @@ const main = async (req, res, next) => {
         whatsapp
         phone
         registration_number
+        id
       }
     }`,
     variables: {
@@ -49,6 +50,7 @@ const main = async (req, res, next) => {
       ) {
         volunteers_user_id,
         volunteers_ticket_id
+        id
       }
     }`,
     variables: {

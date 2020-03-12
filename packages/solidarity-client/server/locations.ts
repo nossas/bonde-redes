@@ -15,6 +15,7 @@ const main = async (req, res, next) => {
         latitude
         longitude
         organization_id
+        id
       }
     }`
   })
@@ -30,6 +31,7 @@ const main = async (req, res, next) => {
         requester_id
         status
         subject
+        id
       }
     }`
   })

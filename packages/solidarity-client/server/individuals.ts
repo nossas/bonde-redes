@@ -27,6 +27,7 @@ const main = async (req, res, next) => {
         data_de_inscricao_no_bonde
         tipo_de_acolhimento
         address
+        id
       }
     }`,
     variables: {
@@ -52,6 +53,7 @@ const main = async (req, res, next) => {
         ticket_id
         requester_id
         created_at
+        id
       }
     }`
   })
