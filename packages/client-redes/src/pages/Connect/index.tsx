@@ -24,198 +24,198 @@ type onConfirm = {
   volunteer_whatsapp: string;
 };
 
-const Table = SessionHOC(
-  ({ session: { user: agent } }): React.ReactNode => {
-    const [createConnection, { data, loading, error }] = useMutation(
-      CREATE_RELATIONSHIP
-    );
+const Table = SessionHOC(({ session: { user: agent } }) => {
+  const [createConnection, { data, loading, error }] = useMutation(
+    CREATE_RELATIONSHIP
+  );
 
-    const {
-      individual,
-      volunteer,
-      popups,
-      createWhatsappLink,
-      parsedIndividualNumber,
-      urlencodedIndividualText,
-      parsedVolunteerNumber,
-      urlencodedVolunteerText,
-      setVolunteer,
-      setPopup
-    } = useAppLogic();
+  const {
+    individual,
+    volunteer,
+    popups,
+    createWhatsappLink,
+    parsedIndividualNumber,
+    urlencodedIndividualText,
+    parsedVolunteerNumber,
+    urlencodedVolunteerText,
+    setVolunteer,
+    setPopup
+  } = useAppLogic();
 
-    const { goBack, push } = useHistory();
-    const { state: linkState } = useLocation();
+  const { goBack, push } = useHistory();
+  const { state: linkState } = useLocation();
 
-    const [success, setSuccess] = useState(false);
-    const [fail, setError] = useState(false);
-    const [isLoading, setLoader] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [fail, setError] = useState(false);
+  const [isLoading, setLoader] = useState(false);
 
-    const { confirm, wrapper, noPhoneNumber } = popups;
-    const { first_name: individual_name, id: individual_id } = individual;
-    const {
-      first_name: volunteer_name,
-      whatsapp: volunteer_whatsapp,
-      id: volunteer_id
-    } = volunteer;
+  const { confirm, wrapper, noPhoneNumber } = popups;
+  const { first_name: individual_name, id: individual_id } = individual;
+  const {
+    first_name: volunteer_name,
+    whatsapp: volunteer_whatsapp,
+    id: volunteer_id
+  } = volunteer;
 
-    useEffect(() => {
-      setLoader(loading);
-      setError(!!(error && error.message));
-      if (data) setSuccess(true);
-      // retorna para a home caso não exista nenhuma voluntária no linkState
-      if (!linkState.volunteer) push("/");
-    }, [setLoader, loading, error, setError, data, linkState, push]);
+  useEffect(() => {
+    setLoader(loading);
+    setError(!!(error && error.message));
+    if (data) setSuccess(true);
+    // retorna para a home caso não exista nenhuma voluntária no linkState
+    if (!linkState.volunteer) return push("/");
+  }, [setLoader, loading, error, setError, data, linkState, push]);
 
-    const distance = 50;
-    const lat = Number(volunteer.latitude);
-    const lng = Number(volunteer.longitude);
+  const distance = 50;
+  const lat = Number(volunteer.latitude);
+  const lng = Number(volunteer.longitude);
 
-    // TODO: Arrumar as variaveis de acordo com a nova key `coordinate`
-    const filterByDistance = useCallback(
-      data =>
-        data
-          .map(i => {
-            const pointA = [Number(i.latitude), Number(i.longitude)];
+  // TODO: Arrumar as variaveis de acordo com a nova key `coordinate`
+  const filterByDistance = useCallback(
+    data =>
+      data
+        .map(i => {
+          const pointA = [Number(i.latitude), Number(i.longitude)];
 
-            return {
-              ...i,
-              distance:
-                !Number.isNaN(pointA[0]) &&
-                !Number.isNaN(pointA[1]) &&
-                lat &&
-                lng &&
-                Number(turf.distance([lat, lng], pointA)).toFixed(2)
-            };
-          })
-          .filter(i => {
-            if (!lat || !lng) {
-              return true;
-            }
-            return i.distance && Number(i.distance) < distance;
-          })
-          .sort((a, b) => Number(a.distance) - Number(b.distance)),
-      [distance, lat, lng]
-    );
+          return {
+            ...i,
+            distance:
+              !Number.isNaN(pointA[0]) &&
+              !Number.isNaN(pointA[1]) &&
+              lat &&
+              lng &&
+              Number(turf.distance([lat, lng], pointA)).toFixed(2)
+          };
+        })
+        .filter(i => {
+          if (!lat || !lng) {
+            return true;
+          }
+          return i.distance && Number(i.distance) < distance;
+        })
+        .sort((a, b) => Number(a.distance) - Number(b.distance)),
+    [distance, lat, lng]
+  );
 
-    const onConfirm = ({
-      individual_id,
-      volunteer_id,
-      agent_id,
-      popups,
-      volunteer_whatsapp
-    }: onConfirm): Promise<unknown> => {
-      if (!volunteer_whatsapp)
-        return setPopup({
-          ...popups,
-          noPhoneNumber: true,
-          confirm: false
-        });
-
-      setPopup({ ...popups, confirm: false });
-      return createConnection({
-        variables: {
-          recipientId: individual_id,
-          volunteerId: volunteer_id,
-          agentId: agent_id
-        }
-      });
-    };
-
-    const closeAllPopups = (): void => {
-      setSuccess(false);
-      setPopup({
-        wrapper: false,
+  const onConfirm = ({
+    individual_id,
+    volunteer_id,
+    agent_id,
+    popups,
+    volunteer_whatsapp
+  }: onConfirm) => {
+    if (!volunteer_whatsapp)
+      return setPopup({
+        ...popups,
+        noPhoneNumber: true,
         confirm: false
       });
-      return goBack();
-    };
 
-    return (
-      <FetchIndividuals>
-        {({ data }: { data: Individual[] }): React.ReactNode => {
-          const filteredTableData = filterByDistance(data);
-          // Seta a voluntária
-          setVolunteer(linkState && linkState.volunteer);
-          return data.length === 0 ? (
-            <Flexbox middle>
+    setPopup({ ...popups, confirm: false });
+    return createConnection({
+      variables: {
+        recipientId: individual_id,
+        volunteerId: volunteer_id,
+        agentId: agent_id
+      }
+    });
+  };
+
+  const closeAllPopups = (): void => {
+    setSuccess(false);
+    setPopup({
+      wrapper: false,
+      confirm: false
+    });
+    return goBack();
+  };
+
+  return (
+    <FetchIndividuals>
+      {({ data }: { data: Individual[] }) => {
+        const filteredTableData = filterByDistance(data);
+        // Seta a voluntária
+        setVolunteer(linkState && linkState.volunteer);
+        return data.length === 0 ? (
+          <Flexbox middle>
+            <Wrap>
+              <Title.H3 margin={{ bottom: 30 }}>Nenhum resultado.</Title.H3>
+            </Wrap>
+          </Flexbox>
+        ) : (
+          <Fragment>
+            <Flexbox vertical middle>
               <Wrap>
-                <Title.H3 margin={{ bottom: 30 }}>Nenhum resultado.</Title.H3>
+                <Flexbox vertical>
+                  <Spacing margin={{ bottom: 20 }}>
+                    <Flexbox>
+                      <StyledButton flat onClick={goBack}>
+                        {"< fazer match"}
+                      </StyledButton>
+                    </Flexbox>
+                    <Spacing margin={{ top: 10, bottom: 10 }}>
+                      <Title.H3>Match realizado!</Title.H3>
+                    </Spacing>
+                    <Title.H5 color="#444444">
+                      {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
+                    </Title.H5>
+                  </Spacing>
+                </Flexbox>
+                <ReactTable
+                  data={filteredTableData}
+                  columns={columns}
+                  defaultPageSize={10}
+                  className="-striped -highlight"
+                />
               </Wrap>
             </Flexbox>
-          ) : (
-            <Fragment>
-              <Flexbox vertical middle>
-                <Wrap>
-                  <Flexbox vertical>
-                    <Spacing margin={{ bottom: 20 }}>
-                      <Flexbox>
-                        <StyledButton flat onClick={goBack}>
-                          {"< fazer match"}
-                        </StyledButton>
-                      </Flexbox>
-                      <Spacing margin={{ top: 10, bottom: 10 }}>
-                        <Title.H3>Match realizado!</Title.H3>
-                      </Spacing>
-                      <Title.H5 color="#444444">
-                        {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
-                      </Title.H5>
-                    </Spacing>
-                  </Flexbox>
-                  <ReactTable
-                    data={filteredTableData}
-                    columns={columns}
-                    defaultPageSize={10}
-                    className="-striped -highlight"
-                  />
-                </Wrap>
-              </Flexbox>
-              {wrapper ? (
-                <Popup
-                  individualName={individual_name}
-                  volunteerName={volunteer_name}
-                  onSubmit={onConfirm({
+            {wrapper ? (
+              <Popup
+                individualName={individual_name}
+                volunteerName={volunteer_name}
+                onSubmit={() =>
+                  onConfirm({
                     individual_id,
                     volunteer_id,
                     agent_id: agent.id,
                     popups,
                     volunteer_whatsapp
-                  })}
-                  isOpen={wrapper}
-                  onClose={closeAllPopups}
-                  isLoading={isLoading}
-                  confirm={{ isEnabled: confirm }}
-                  success={{
-                    link: {
-                      individual: (): string | undefined =>
-                        createWhatsappLink(
-                          parsedIndividualNumber,
-                          urlencodedIndividualText
-                        ),
-                      volunteer: (): string | undefined =>
-                        createWhatsappLink(
-                          parsedVolunteerNumber,
-                          urlencodedVolunteerText
-                        )
-                    },
-                    isEnabled: success
-                  }}
-                  error={{
-                    isEnabled: fail,
-                    message: (error && error.message) || ""
-                  }}
-                  warning={{
-                    isEnabled: noPhoneNumber,
-                    id: volunteer_id,
-                    name: volunteer_name
-                  }}
-                />
-              ) : null}
-            </Fragment>
-          );
-        }}
-      </FetchIndividuals>
-    );
-  }
-);
+                  })
+                }
+                isOpen={wrapper}
+                onClose={closeAllPopups}
+                isLoading={isLoading}
+                confirm={{ isEnabled: confirm }}
+                success={{
+                  link: {
+                    individual: (): string | undefined =>
+                      createWhatsappLink(
+                        parsedIndividualNumber,
+                        urlencodedIndividualText
+                      ),
+                    volunteer: (): string | undefined =>
+                      createWhatsappLink(
+                        parsedVolunteerNumber,
+                        urlencodedVolunteerText
+                      )
+                  },
+                  isEnabled: success
+                }}
+                error={{
+                  isEnabled: fail,
+                  message: (error && error.message) || ""
+                }}
+                warning={{
+                  isEnabled: noPhoneNumber,
+                  id: volunteer_id,
+                  name: volunteer_name
+                }}
+              />
+            ) : null}
+          </Fragment>
+        );
+      }}
+    </FetchIndividuals>
+  );
+});
 
 export default Table;
