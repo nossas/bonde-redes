@@ -1,50 +1,52 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useState, useEffect } from "react";
 import { FullPageLoading } from "bonde-styleguide";
 import { ApolloProvider } from "@apollo/react-hooks";
 import SessionStorage from "./SessionStorage";
-import createGraphQLClient from "./graphql-client";
-import FetchUser from "./FetchUser";
-import FetchCommunities from "./FetchCommunities";
-
-export const redirectToLogin = () => {
-  const loginUrl =
-    process.env.REACT_APP_LOGIN_URL ||
-    "http://admin-canary.bonde.devel:5002/auth/login";
-  window.location.href = `${loginUrl}?next=${window.location.href}`;
-};
+import createGraphQLClient, { SessionProps } from "./graphql-client";
+import FetchUser, { User } from "./FetchUser";
+import FetchCommunities, { Community } from "./FetchCommunities";
+import { redirectToLogin } from "../utils";
 
 /**
  * Responsible to control session used on cross-storage
  **/
 
-type Context = {
+type ContextProps = {
   signing: boolean;
   authenticated: boolean;
-  community?: object;
+  community?: Community;
   Provider;
   Consumer;
+  value: {
+    sessionProps: SessionProps;
+    user: User;
+    communities: Community[];
+  };
 };
 
-const SessionContext = createContext({
+const SessionContext = createContext<Partial<ContextProps>>({
   signing: true,
   authenticated: false
-} as Context);
+});
 
 export default function SessionProvider({ children }) {
-  const [defaultCommunity, setDefaultCommunity] = useState(undefined);
-  const [token, setToken] = useState(undefined);
+  const [defaultCommunity, setDefaultCommunity] = useState<
+    Partial<Community | undefined>
+  >(undefined);
+  const [token, setToken] = useState<Partial<string | undefined>>(undefined);
   const [session, setSession] = useState({
     signing: true,
     authenticated: false,
     refetchCount: 0
   });
 
-  const storage = new SessionStorage();
+  const storage = SessionStorage();
 
-  const fetchSession = () => {
+  const fetchSession = (): void => {
     storage
       .getAsyncSession()
-      .then(({ token, community }: any = {}) => {
+      .then(({ token, community }: { token: string; community: Community }) => {
         if (!token) throw Error("unauthorized");
 
         setSession({ ...session, signing: false, authenticated: true });
@@ -71,16 +73,17 @@ export default function SessionProvider({ children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const logout = () =>
     storage
       .logout()
       .then(() => redirectToLogin())
       .catch(err => console.log("err", err)); // TODO: Tratar erros
 
-  const setCommunityOnStorage = (community: any) =>
+  const setCommunityOnStorage = (community: Community): void =>
     storage.setAsyncItem("community", community);
 
-  const sessionProps = {
+  const sessionProps: SessionProps = {
     authenticated: session.authenticated,
     signing: session.signing,
     defaultCommunity,
@@ -95,13 +98,13 @@ export default function SessionProvider({ children }) {
       {/* Impplements provider with token recovered on cross-storage */}
       <FetchUser>
         {/* Check token validate and recovery user infos */}
-        {(user: any) => (
+        {(user: { user: User }) => (
           <FetchCommunities
             variables={{ userId: user.user.id }}
             defaultCommunity={defaultCommunity}
             onChange={setCommunityOnStorage}
           >
-            {(communities: any) => (
+            {(communities: Community[]) => (
               <SessionContext.Provider
                 value={{ ...sessionProps, ...user, ...communities }}
               >
@@ -115,7 +118,10 @@ export default function SessionProvider({ children }) {
   );
 }
 
-export const SessionHOC = (WrappedComponent: any, opts?: any) =>
+export const SessionHOC = (
+  WrappedComponent: any,
+  opts?: { required: boolean }
+) =>
   class extends React.Component {
     static contextType = SessionContext;
 

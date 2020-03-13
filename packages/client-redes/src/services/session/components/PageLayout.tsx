@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Route } from "react-router";
 import styled from "styled-components";
@@ -5,19 +6,8 @@ import { Header, Page, Flexbox2 as Flexbox, Footer } from "bonde-styleguide";
 import { SessionHOC } from "../SessionProvider";
 import UserDropdown from "./UserDropdown";
 import CommunitiesDropdown from "./CommunitiesDropdown";
-
-export interface Community {
-  id: number;
-  name: string;
-  image: string;
-}
-
-export interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-  avatar?: string;
-}
+import { User } from "../FetchUser";
+import { Community } from "../FetchCommunities";
 
 const SessionHeader = SessionHOC(
   (props: {
@@ -29,7 +19,7 @@ const SessionHeader = SessionHOC(
       communities: Community[];
       onChangeCommunity: () => void;
     };
-  }): React.ReactChild => {
+  }) => {
     const {
       session: { user, logout, communities, community, onChangeCommunity }
     } = props;
@@ -58,12 +48,7 @@ const StyledFooter = styled(Footer)`
   position: relative;
 `;
 
-const SessionPage = ({
-  children,
-  ...props
-}: {
-  children: React.ReactChildren;
-}): JSX.Element => (
+const SessionPage = ({ children, ...props }: { children: any }) => (
   <Main>
     <SessionHeader />
     <Page {...props}>{children}</Page>
@@ -73,21 +58,21 @@ const SessionPage = ({
 
 interface PageLayoutProps {
   path: string;
+  component: any;
   componentProps?: object;
-  pageProps?: Record<string, string | number | undefined>;
-  children: (any) => React.ReactChildren;
+  pageProps?: object;
 }
 
-const PageLayout = (props: PageLayoutProps): React.ReactNode => {
-  const { children, pageProps, componentProps, ...rest } = props;
+const PageLayout = (props: PageLayoutProps) => {
+  const { component: Component, pageProps, componentProps, ...rest } = props;
 
   return (
     <Route
       {...rest}
-      render={(matchProps): React.ReactNode => {
+      render={matchProps => {
         return (
           <SessionPage {...(pageProps || {})}>
-            {children({ ...matchProps, ...(componentProps || {}) })}
+            <Component {...matchProps} {...(componentProps || {})} />
           </SessionPage>
         );
       }}

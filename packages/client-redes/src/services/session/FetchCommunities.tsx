@@ -16,6 +16,12 @@ const FETCH_RELATED_COMMUNITIES = gql`
   }
 `;
 
+export interface Community {
+  id: number;
+  name: string;
+  image: string;
+}
+
 export default ({ children, variables, defaultCommunity, onChange }: any) => {
   const [community, setCommunity] = useState(defaultCommunity);
   const { loading, error, data } = useQuery(FETCH_RELATED_COMMUNITIES, {

@@ -1,6 +1,6 @@
 import { ApolloLink, Observable } from "apollo-link";
 
-export const handleErrorMiddleware = errorHandler => {
+export const handleErrorMiddleware = (errorHandler): ApolloLink => {
   return new ApolloLink((operation, forward) => {
     return new Observable(observer => {
       let subscription;

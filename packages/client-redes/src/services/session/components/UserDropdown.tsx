@@ -7,14 +7,14 @@ import {
   Icon,
   Text
 } from "bonde-styleguide";
-import { User } from "./PageLayout";
+import { User } from "../FetchUser";
 
 interface UserDropdownProps {
   user: User;
   logout: () => void;
 }
 
-const UserDropdown = ({ user, logout }: UserDropdownProps): JSX.Element => {
+const UserDropdown = ({ user, logout }: UserDropdownProps) => {
   const name = `${user.firstName} ${user.lastName}`;
 
   return (
