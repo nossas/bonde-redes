@@ -16,7 +16,7 @@ export const Wrap = styled.div`
 const Table: React.FC = () => {
   return (
     <FetchMatches>
-      {data => {
+      {(data: Array<Relationship>): React.ReactNode => {
         return data.length === 0 ? (
           <Flexbox middle>
             <Wrap>

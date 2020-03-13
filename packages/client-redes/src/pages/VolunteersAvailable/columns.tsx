@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { Flexbox2 as Flexbox, Button } from "bonde-styleguide";
 // import { getVolunteerType } from '../../services/utils'
 
+type valueString = {
+  value: string;
+};
 const columns = [
   {
     accessor: "name",
@@ -40,7 +43,7 @@ const columns = [
   {
     accessor: "user_id",
     Header: "Link",
-    Cell: ({ value }) =>
+    Cell: ({ value }: valueString): JSX.Element | null =>
       value ? (
         <a
           href={`https://mapadoacolhimento.zendesk.com/agent/users/${value}/requested_tickets`}
@@ -55,7 +58,7 @@ const columns = [
     accessor: "email",
     Header: "Ação",
     width: 200,
-    Cell: ({ value }) =>
+    Cell: ({ value }: valueString): JSX.Element | null =>
       value ? (
         <Flexbox middle>
           <Link

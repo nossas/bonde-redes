@@ -27,9 +27,9 @@ export const Wrap = styled.div`
 `;
 
 export const BtnInverted = styled(Button)`
-  border: ${props => (props.disabled ? "none" : "1px solid #EE0090")}
-  color: ${props => (props.disabled ? "#fff" : "#EE0090")}
-  ${props =>
+  border: ${(props): string => (props.disabled ? "none" : "1px solid #EE0090")}
+  color: ${(props): string => (props.disabled ? "#fff" : "#EE0090")}
+  ${(props): string =>
     props.disabled &&
     `
     &:hover, &:active {

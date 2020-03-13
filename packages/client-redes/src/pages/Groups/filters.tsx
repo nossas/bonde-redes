@@ -1,6 +1,24 @@
+import { Filters } from "../../graphql/FilterQuery";
+
 const data = {
   volunteers: "Voluntárias",
   individuals: "PSR"
+};
+
+type FiltersProps = {
+  volunteersCount: number;
+  individualsCount: number;
+  history: (string) => void;
+  kind: string;
+  filters: {
+    values: Filters;
+    change: (any) => void;
+  };
+};
+
+type FilterData = {
+  name: string;
+  items: Array<{ onClick: () => void; option: string }>;
 };
 
 export default function filters({
@@ -9,17 +27,17 @@ export default function filters({
   history,
   kind,
   filters: _filters
-}: any): any {
+}: FiltersProps): Array<FilterData> {
   return [
     {
       name: `Grupo (${data[kind]})`,
       items: [
         {
-          onClick: () => history.push("/groups/volunteers"),
+          onClick: (): void => history("/groups/volunteers"),
           option: `Voluntárias (${volunteersCount})`
         },
         {
-          onClick: () => history.push("/groups/individuals"),
+          onClick: (): void => history("/groups/individuals"),
           option: `PSR's (${individualsCount})`
         }
       ]
@@ -30,19 +48,19 @@ export default function filters({
       })`,
       items: [
         {
-          onClick: () => _filters.change({ status: "all" }),
+          onClick: (): void => _filters.change({ status: "all" }),
           option: "Todas"
         },
         {
-          onClick: () => _filters.change({ status: "inscrita" }),
+          onClick: (): void => _filters.change({ status: "inscrita" }),
           option: "Inscrita"
         },
         {
-          onClick: () => _filters.change({ status: "reprovada" }),
+          onClick: (): void => _filters.change({ status: "reprovada" }),
           option: "Reprovada"
         },
         {
-          onClick: () => _filters.change({ status: "aprovada" }),
+          onClick: (): void => _filters.change({ status: "aprovada" }),
           option: "Aprovada"
         }
       ]
@@ -55,31 +73,33 @@ export default function filters({
       })`,
       items: [
         {
-          onClick: () => _filters.change({ availability: "all" }),
+          onClick: (): void => _filters.change({ availability: "all" }),
           option: "Todas"
         },
         {
-          onClick: () => _filters.change({ availability: "disponível" }),
+          onClick: (): void => _filters.change({ availability: "disponível" }),
           option: "Disponível"
         },
         {
-          onClick: () => _filters.change({ availability: "indisponível" }),
+          onClick: (): void =>
+            _filters.change({ availability: "indisponível" }),
           option: "Indisponível"
         },
         {
-          onClick: () => _filters.change({ availability: "anti-ética" }),
+          onClick: (): void => _filters.change({ availability: "anti-ética" }),
           option: "Anti-ética"
         },
         {
-          onClick: () => _filters.change({ availability: "férias" }),
+          onClick: (): void => _filters.change({ availability: "férias" }),
           option: "Férias"
         },
         {
-          onClick: () => _filters.change({ availability: "licença" }),
+          onClick: (): void => _filters.change({ availability: "licença" }),
           option: "Licença"
         },
         {
-          onClick: () => _filters.change({ availability: "descadastrada" }),
+          onClick: (): void =>
+            _filters.change({ availability: "descadastrada" }),
           option: "Descadastrada"
         }
       ]

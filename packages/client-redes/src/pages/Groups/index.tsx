@@ -14,34 +14,52 @@ import "react-table/react-table.css";
 import columns from "./columns";
 import filters from "./filters";
 import { Wrap } from "./styles";
-
+import { Individual } from "../../graphql/FetchIndividuals";
 import FetchUsersByGroup from "../../graphql/FetchUsersByGroup";
 
-const Filters = ({ filters }): any => {
+type FilterData = {
+  name: string;
+  items: Array<{ onClick: () => void; option: string }>;
+};
+
+const Filters = ({ filters }: { filters: Array<FilterData> }): JSX.Element => {
   return (
     <Flexbox horizontal>
-      {filters.map(({ items, name }): any => (
-        <Spacing margin={{ right: 20 }}>
-          <Dropdown label={name} inverted>
-            {items.map(({ onClick, option }): any => (
-              <DropdownItem onClick={onClick}>{option}</DropdownItem>
-            ))}
-          </Dropdown>
-        </Spacing>
-      ))}
+      {filters.map(
+        ({ items, name }, i): React.ReactNode => (
+          <Spacing key={`filter-types-${i}`} margin={{ right: 20 }}>
+            <Dropdown label={name} inverted>
+              {items.map(
+                ({ onClick, option }, i): React.ReactNode => (
+                  <DropdownItem key={`options-${i}`} onClick={onClick}>
+                    {option}
+                  </DropdownItem>
+                )
+              )}
+            </Dropdown>
+          </Spacing>
+        )
+      )}
     </Flexbox>
   );
 };
 
-const Groups = () => {
-  // @ts-ignore
+type TableData = {
+  volunteers: Individual;
+  individuals: Individual;
+};
+
+const Groups = (): React.ReactNode => {
   const { pathname } = useLocation();
   const kind = pathname.split("/")[2];
-  const history = useHistory();
-  const setTable = useStoreActions((actions: any) => actions.table.setTable);
+  const { push } = useHistory();
+  const setTable = useStoreActions(
+    (actions: { table: { setTable: ({ individuals, volunteers }) => void } }) =>
+      actions.table.setTable
+  );
 
   useEffect(() => {
-    history.push("/groups/volunteers");
+    push("/groups/volunteers");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -53,8 +71,8 @@ const Groups = () => {
         filters: filtersValues,
         changeFilters,
         page
-      }) => {
-        const data = {
+      }): React.ReactNode => {
+        const data: TableData = {
           volunteers: volunteers.data,
           individuals: individuals.data
         };
@@ -75,10 +93,10 @@ const Groups = () => {
                 <Spacing margin={{ bottom: 20 }}>
                   <Filters
                     filters={filters({
-                      volunteersCount: volunteers.count || 0,
-                      individualsCount: individuals.count || 0,
+                      volunteersCount: Number(volunteers.count) || 0,
+                      individualsCount: Number(individuals.count) || 0,
                       filters: { values: filtersValues, change: changeFilters },
-                      history,
+                      history: push,
                       kind
                     })}
                   />
@@ -91,8 +109,10 @@ const Groups = () => {
                   pageSize={filtersValues.rows}
                   page={page}
                   pages={pages}
-                  onPageChange={page => changeFilters({ page })}
-                  onPageSizeChange={rows => changeFilters({ rows })}
+                  onPageChange={(page: number): void => changeFilters({ page })}
+                  onPageSizeChange={(rows: number): void =>
+                    changeFilters({ rows })
+                  }
                   previousText="Anterior"
                   nextText="Próximo"
                   pageText="Página"

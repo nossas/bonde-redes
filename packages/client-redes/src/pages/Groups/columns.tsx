@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React from "react";
 import { Flexbox2 as Flexbox, Text } from "bonde-styleguide";
 import SelectUpdateStatus from "../../components/SelectUpdateStatus";
@@ -5,15 +6,30 @@ import history from "../../history";
 import { BtnInverted } from "./styles";
 import UPDATE_INDIVIDUAL_MUTATION from "../../graphql/UpdateIndividual";
 
-const TextHeader = ({ value }) => (
+type valueString = {
+  value: string;
+};
+
+type valueAndRow = {
+  value: string;
+  row: {
+    _original: {
+      id: number;
+    };
+  };
+};
+
+const TextHeader = ({ value }: valueString): JSX.Element => (
   <Text fontSize={13} fontWeight={600}>
     {value.toUpperCase()}
   </Text>
 );
 
-const TextCol = ({ value }) => <Text color="#000">{value}</Text>;
+const TextCol = ({ value }: valueString): React.ReactNode => (
+  <Text color="#000">{value}</Text>
+);
 
-const DateText = ({ value }) => {
+const DateText = ({ value }: valueString): React.ReactNode => {
   if (!value) {
     return "-";
   }
@@ -21,7 +37,9 @@ const DateText = ({ value }) => {
   return data.toLocaleDateString("pt-BR");
 };
 
-const ExtraCol = (accessor: string) => ({ value }) =>
+const ExtraCol = (accessor: string) => ({
+  value
+}: valueString): React.ReactNode =>
   value ? <span>{value[accessor]}</span> : "-";
 
 const status = ["inscrita", "reprovada", "aprovada"];
@@ -35,7 +53,7 @@ const availability = [
   "descadastrada"
 ];
 
-const volunteersColumns = [
+const volunteersColumns: Array<Columns> = [
   {
     accessor: "first_name",
     Header: "Nome",
@@ -53,8 +71,8 @@ const volunteersColumns = [
   {
     accessor: "status",
     Header: "Status",
-    Cell: ({ value, row }): any =>
-      value ? (
+    Cell: ({ value, row }: valueAndRow): JSX.Element | null =>
+      value && row ? (
         <SelectUpdateStatus
           name="status"
           row={row}
@@ -69,7 +87,7 @@ const volunteersColumns = [
   {
     accessor: "availability",
     Header: "Disponibilidade",
-    Cell: ({ value, row }): any =>
+    Cell: ({ value, row }: valueAndRow): JSX.Element | null =>
       value ? (
         <SelectUpdateStatus
           name="availability"
@@ -92,7 +110,7 @@ const volunteersColumns = [
     accessor: "address",
     Header: "Endereço",
     width: 300,
-    Cell: ({ value }) =>
+    Cell: ({ value }: valueString): JSX.Element | string =>
       value ? (
         <span>{value === "ZERO_RESULTS" ? "CEP Inválido" : value}</span>
       ) : (
@@ -121,7 +139,13 @@ const volunteersColumns = [
     accessor: "id",
     Header: "Ação",
     width: 200,
-    Cell: ({ value, row }) =>
+    Cell: ({
+      value,
+      row
+    }: {
+      value: number;
+      row: { _original: { availability: string; status: string } };
+    }): React.ReactNode | null =>
       value ? (
         <Flexbox middle>
           <BtnInverted
@@ -129,10 +153,9 @@ const volunteersColumns = [
               row._original.availability !== "disponível" ||
               row._original.status !== "aprovada"
             }
-            onClick={() =>
+            onClick={(): void =>
               history.push({
                 pathname: "/connect",
-                search: `?id=${value}`,
                 state: { volunteer: row._original }
               })
             }
@@ -142,13 +165,21 @@ const volunteersColumns = [
         </Flexbox>
       ) : null
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ].map((col: any) =>
   !!col.Cell
-    ? { ...col, Header: () => <TextHeader value={col.Header} /> }
-    : { ...col, Header: () => <TextHeader value={col.Header} />, Cell: TextCol }
+    ? {
+        ...col,
+        Header: (): JSX.Element => <TextHeader value={col.Header} />
+      }
+    : {
+        ...col,
+        Header: (): JSX.Element => <TextHeader value={col.Header} />,
+        Cell: TextCol
+      }
 );
 
-const individualsColumns = [
+const individualsColumns: Array<Columns> = [
   {
     accessor: "first_name",
     Header: "Nome"
@@ -169,7 +200,7 @@ const individualsColumns = [
   {
     accessor: "status",
     Header: "Status",
-    Cell: ({ value, row }): any =>
+    Cell: ({ value, row }: valueAndRow): React.ReactNode | null =>
       value ? (
         <SelectUpdateStatus
           name="status"
@@ -201,10 +232,15 @@ const individualsColumns = [
     Header: "Data de criação",
     Cell: DateText
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ].map((col: any) =>
   !!col.Cell
-    ? { ...col, Header: () => <TextHeader value={col.Header} /> }
-    : { ...col, Header: () => <TextHeader value={col.Header} />, Cell: TextCol }
+    ? { ...col, Header: (): JSX.Element => <TextHeader value={col.Header} /> }
+    : {
+        ...col,
+        Header: (): JSX.Element => <TextHeader value={col.Header} />,
+        Cell: TextCol
+      }
 );
 
 const dicio = {
@@ -212,6 +248,13 @@ const dicio = {
   "/groups/individuals": individualsColumns
 };
 
-export default function columns(location) {
+interface Columns {
+  accessor: string;
+  Header: string;
+  Cell?: (any) => string | JSX.Element | null;
+  width?: number;
+}
+
+export default function columns(location: string): Array<Columns> {
   return dicio[location];
 }

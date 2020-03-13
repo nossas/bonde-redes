@@ -1,12 +1,20 @@
 import React from "react";
 import BtnConnect from "../../components/BtnConnect";
 import { Flexbox2 as Flexbox } from "bonde-styleguide";
+import { Individual } from "../../graphql/FetchIndividuals";
 
 type valueString = {
   value: string;
 };
 
-const columns = [
+interface Columns {
+  accessor: string;
+  Header: string;
+  Cell?: (any) => string | JSX.Element | null;
+  width?: number;
+}
+
+const columns: Array<Columns> = [
   {
     accessor: "first_name",
     Header: "Nome",
@@ -34,7 +42,7 @@ const columns = [
   {
     accessor: "created_at",
     Header: "Data de criação",
-    Cell: ({ value }: valueString) => {
+    Cell: ({ value }: valueString): string => {
       if (!value) {
         return "-";
       }
@@ -46,8 +54,9 @@ const columns = [
     accessor: "id",
     Header: "Ação",
     width: 200,
-    Cell: ({ value, row }) =>
-      value ? (
+    // eslint-disable-next-line react/display-name
+    Cell: ({ row }: { row: { _original: Individual } }): JSX.Element | null =>
+      row ? (
         <Flexbox middle>
           <BtnConnect individual={row._original} />
         </Flexbox>
