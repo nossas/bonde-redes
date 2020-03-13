@@ -3,11 +3,11 @@ import { useLocation } from "react-router-dom";
 import { Header as BondeHeader, Title, Spacing } from "bonde-styleguide";
 import PageTabs from "./PageTabs";
 
-interface HeaderProps {
+type HeaderProps = {
   zIndex: number;
-}
+};
 
-const Header: React.FC<HeaderProps> = ({ zIndex }) => {
+const Header: React.FC<HeaderProps> = ({ zIndex }: HeaderProps) => {
   const { pathname: path } = useLocation();
   const [selectedTab, setTab] = useState("pessoas");
 

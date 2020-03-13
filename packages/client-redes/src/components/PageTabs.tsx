@@ -8,7 +8,12 @@ const Tabs = styled(Tab)`
   bottom: 0;
 `;
 
-const PageTabs = ({ tabs, selectedTab }) => {
+type PageTabs = {
+  tabs: Array<{ name: string; to: string }>;
+  selectedTab: string;
+};
+
+const PageTabs = ({ tabs, selectedTab }: PageTabs): React.ReactNode => {
   return (
     <Tabs>
       {tabs.map(({ name, to }, i) => (

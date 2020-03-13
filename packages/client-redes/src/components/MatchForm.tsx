@@ -10,11 +10,10 @@ import {
 } from "bonde-styleguide";
 import styled from "styled-components";
 import { useForm, Controller } from "react-hook-form";
-import { useStoreActions, useStoreState } from "easy-peasy";
+import { useStoreActions } from "easy-peasy";
 
 import { emailValidation } from "../services/utils";
 import useAppLogic from "../app-logic";
-import Select from "./Select";
 // import dicioAgent from '../pages/Connect/Table/dicioAgent'
 
 const FormWrapper = styled.form`
@@ -33,18 +32,21 @@ const StyledFlexbox = styled(Flexbox)`
   width: unset;
 `;
 
-const MatchForm = () => {
+const MatchForm = (): React.ReactNode => {
   const { search } = useLocation();
-  const getAvailableVolunteers = useStoreActions(
-    (actions: any) => actions.volunteers.getAvailableVolunteers
+  // const getAvailableVolunteers = useStoreActions(
+  //   (actions: { volunteers: { getAvailableVolunteers: void } }) =>
+  //     actions.volunteers.getAvailableVolunteers
+  // );
+  const setForm = useStoreActions(
+    (actions: { match: { setForm: ({}) => void } }) => actions.match.setForm
   );
-  const setForm = useStoreActions((actions: any) => actions.match.setForm);
 
   const { getUserData, tableData } = useAppLogic();
 
   const {
     handleSubmit,
-    register,
+    // register,
     errors,
     setError,
     control,
@@ -52,13 +54,13 @@ const MatchForm = () => {
   } = useForm();
 
   useEffect(() => {
-    getAvailableVolunteers();
+    // getAvailableVolunteers();
     const email = search.split("=")[1];
     if (email) setValue("email", email);
     // eslint-disable-next-line
   }, [setValue, search])
 
-  const send = (data, e) => {
+  const send = (data, e): void => {
     e.preventDefault();
 
     // buscando dados voluntaria atraves do email
@@ -76,7 +78,7 @@ const MatchForm = () => {
         "Não existe uma voluntária com esse e-mail"
       );
 
-    setForm({
+    return setForm({
       volunteer: user,
       agent: data.agent
       // assignee_name

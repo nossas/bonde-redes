@@ -1,4 +1,4 @@
-// interface IfProps { 
+// interface IfProps {
 //   condition: any,
 //   children?: React.ReactNode
 // }

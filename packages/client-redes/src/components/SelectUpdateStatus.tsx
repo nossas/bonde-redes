@@ -30,28 +30,37 @@ interface Params {
   };
   options: Array<string>;
   selected: string;
-  query: any;
   type: string;
+  query: never;
 }
 
-export default ({ name, row, options, selected, query, type }: Params) => {
+export default function SelectUpdateStatus({
+  name,
+  row,
+  options,
+  selected,
+  query,
+  type
+}: Params): React.ReactNode {
   const [update] = useMutation(query);
 
-  const handleOnChange = ({ target: { value } }) => {
+  const handleOnChange = ({ target: { value } }): Promise<unknown> => {
     const variables = {
       [type]: { [name]: value },
       id: row._original.id
     };
-    update({ variables });
+    return update({ variables });
   };
 
   return (
     <Text color="#000">
       <Select onChange={handleOnChange} value={selected}>
         {options.map((i: string) => (
-          <Option value={i}>{i.replace("_", ": ")}</Option>
+          <Option key={`select-options-${i}`} value={i}>
+            {i.replace("_", ": ")}
+          </Option>
         ))}
       </Select>
     </Text>
   );
-};
+}

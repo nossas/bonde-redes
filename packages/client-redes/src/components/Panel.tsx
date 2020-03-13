@@ -22,13 +22,12 @@ interface StyledDivProps {
 }
 
 interface Size {
-  node?: any;
   width: number;
   height: number;
 }
 
 const StyledDiv = styled.div.attrs((p: StyledDivProps) => p)`
-  position: ${p => (p.relative ? "relative" : "initial")};
+  position: ${(p): string => (p.relative ? "relative" : "initial")};
 `;
 
 const AnimatedDiv = animated(StyledDiv);
@@ -37,7 +36,7 @@ const Panel: React.FC<Props> = ({
   direction,
   open,
   children,
-  relative,
+  // relative,
   className,
   size
 }) => {

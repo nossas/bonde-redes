@@ -49,7 +49,7 @@ const StyledLabel = styled.label`
   padding-right: 10px;
 `;
 
-interface GeobondeForm {
+type GeobondeForm = {
   geolocation: {
     lat: string | null;
     lng: string | null;
@@ -58,7 +58,7 @@ interface GeobondeForm {
   therapist: boolean;
   lawyer: boolean;
   individual: boolean;
-}
+};
 
 const Form: React.FC = () => {
   const {
@@ -78,18 +78,24 @@ const Form: React.FC = () => {
       individual: true
     }
   });
-  const setForm = useStoreActions((actions: any) => actions.geobonde.setForm);
+  const setForm = useStoreActions(
+    (actions: { geobonde: { setForm: ({}) => void } }) =>
+      actions.geobonde.setForm
+  );
 
   React.useEffect(() => {
     register({ name: "geolocation" });
   }, [register]);
 
-  const handleChange = (field: string, value: string | number) => {
+  const handleChange = (
+    field: string,
+    value: string | number
+  ): void | Promise<boolean> => {
     clearError(field);
     return setValue(field, value);
   };
 
-  const onSubmit = (data, e: any) => {
+  const onSubmit = (data, e): void => {
     e.preventDefault();
 
     if (typeof data.geolocation === "undefined")
@@ -109,7 +115,9 @@ const Form: React.FC = () => {
           name="address"
           label="Endereço"
           placeholder="Digite o endereço"
-          onChangeLocation={(e: any) => handleChange("geolocation", e)}
+          onChangeLocation={(e: string): void | Promise<boolean> =>
+            handleChange("geolocation", e)
+          }
           value={getValues().geolocation}
         />
         <Text color="#ffffff">
