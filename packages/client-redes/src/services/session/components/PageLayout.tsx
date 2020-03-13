@@ -6,24 +6,48 @@ import { SessionHOC } from "../SessionProvider";
 import UserDropdown from "./UserDropdown";
 import CommunitiesDropdown from "./CommunitiesDropdown";
 
-const SessionHeader = SessionHOC((props: any) => {
-  const {
-    session: { user, logout, communities, community, onChangeCommunity }
-  } = props;
+export interface Community {
+  id: number;
+  name: string;
+  image: string;
+}
 
-  return (
-    <Header>
-      <Flexbox horizontal spacing="between">
-        <CommunitiesDropdown
-          communities={communities}
-          community={community}
-          onChange={onChangeCommunity}
-        />
-        <UserDropdown user={user} logout={logout} />
-      </Flexbox>
-    </Header>
-  );
-});
+export interface User {
+  firstName: string;
+  lastName: string;
+  email: string;
+  avatar?: string;
+}
+
+const SessionHeader = SessionHOC(
+  (props: {
+    children;
+    session: {
+      community: Community;
+      user: User;
+      logout: () => void;
+      communities: Community[];
+      onChangeCommunity: () => void;
+    };
+  }): React.ReactChild => {
+    const {
+      session: { user, logout, communities, community, onChangeCommunity }
+    } = props;
+
+    return (
+      <Header>
+        <Flexbox horizontal spacing="between">
+          <CommunitiesDropdown
+            communities={communities}
+            community={community}
+            onChange={onChangeCommunity}
+          />
+          <UserDropdown user={user} logout={logout} />
+        </Flexbox>
+      </Header>
+    );
+  }
+);
 
 const Main = styled.main`
   display: flex;
@@ -34,7 +58,12 @@ const StyledFooter = styled(Footer)`
   position: relative;
 `;
 
-const SessionPage = ({ children, ...props }: any) => (
+const SessionPage = ({
+  children,
+  ...props
+}: {
+  children: React.ReactChildren;
+}): JSX.Element => (
   <Main>
     <SessionHeader />
     <Page {...props}>{children}</Page>
@@ -44,21 +73,21 @@ const SessionPage = ({ children, ...props }: any) => (
 
 interface PageLayoutProps {
   path: string;
-  component: any;
   componentProps?: object;
-  pageProps?: object;
+  pageProps?: Record<string, string | number | undefined>;
+  children: (any) => React.ReactChildren;
 }
 
-const PageLayout: React.FC<PageLayoutProps> = props => {
-  const { component: Component, pageProps, componentProps, ...rest } = props;
+const PageLayout = (props: PageLayoutProps): React.ReactNode => {
+  const { children, pageProps, componentProps, ...rest } = props;
 
   return (
     <Route
       {...rest}
-      render={matchProps => {
+      render={(matchProps): React.ReactNode => {
         return (
           <SessionPage {...(pageProps || {})}>
-            <Component {...matchProps} {...(componentProps || {})} />
+            {children({ ...matchProps, ...(componentProps || {}) })}
           </SessionPage>
         );
       }}
