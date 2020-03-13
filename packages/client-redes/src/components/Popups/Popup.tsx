@@ -35,7 +35,7 @@ type Props = {
   volunteerName: string;
   individualName: string;
   isLoading: boolean;
-  onSubmit: () => void;
+  onSubmit: Promise<unknown>;
 };
 
 const Warning = ({
@@ -46,7 +46,7 @@ const Warning = ({
   name: string;
   id: number;
   onClose: () => void;
-}): React.ReactChild => (
+}) => (
   <>
     <Title.H2>Ops!</Title.H2>
     <Text align="center">{"Telefone Inválido ):"}</Text>
@@ -74,8 +74,8 @@ const Confirm = ({
   individualName: string;
   volunteerName: string;
   onClose: () => void;
-  onSubmit: () => void;
-}): React.ReactChild => (
+  onSubmit: Promise<unknown>;
+}) => (
   <>
     <Title.H2>Confirma?</Title.H2>
     <Text align="center">
@@ -99,7 +99,7 @@ const Success = ({
     volunteer: () => string | undefined;
     individual: () => string | undefined;
   };
-}): React.ReactChild => (
+}) => (
   <>
     <Title.H2 align="center">Encaminhamento Realizado</Title.H2>
     <Text align="center">
@@ -129,9 +129,9 @@ const Error = ({
   individualName: string;
   volunteerName: string;
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit: Promise<unknown>;
   message: string;
-}): React.ReactChild => (
+}) => (
   <ErrorWrapper vertical>
     <Title.H2>Ops!</Title.H2>
     <Text align="center">
@@ -161,7 +161,7 @@ const Popup = ({
   individualName,
   isLoading,
   onSubmit
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <StyledModal opened={isOpen} onClose={onClose} width={30}>
       <StyledFlexbox middle vertical spacing="evenly">

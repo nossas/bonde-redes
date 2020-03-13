@@ -13,7 +13,7 @@ type PageTabs = {
   selectedTab: string;
 };
 
-const PageTabs = ({ tabs, selectedTab }: PageTabs): React.ReactNode => {
+const PageTabs = ({ tabs, selectedTab }: PageTabs) => {
   return (
     <Tabs>
       {tabs.map(({ name, to }, i) => (

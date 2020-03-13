@@ -31,7 +31,8 @@ interface Params {
   options: Array<string>;
   selected: string;
   type: string;
-  query: never;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  query: any;
 }
 
 export default function SelectUpdateStatus({
@@ -41,7 +42,7 @@ export default function SelectUpdateStatus({
   selected,
   query,
   type
-}: Params): React.ReactNode {
+}: Params) {
   const [update] = useMutation(query);
 
   const handleOnChange = ({ target: { value } }): Promise<unknown> => {

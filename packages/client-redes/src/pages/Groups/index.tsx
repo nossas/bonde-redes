@@ -49,7 +49,7 @@ type TableData = {
   individuals: Individual;
 };
 
-const Groups = (): React.ReactNode => {
+const Groups = () => {
   const { pathname } = useLocation();
   const kind = pathname.split("/")[2];
   const { push } = useHistory();

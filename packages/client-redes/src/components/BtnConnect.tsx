@@ -10,11 +10,7 @@ const BtnWarning = styled(Button)`
   color: ${(props): string => (props.disabled ? "#fff" : "#EE0090")}
 `;
 
-const Connect = ({
-  individual
-}: {
-  individual: Individual;
-}): React.ReactNode => {
+const Connect = ({ individual }: { individual: Individual }) => {
   const { volunteer, setIndividual, setPopup } = useAppLogic();
 
   const onClick = (data: Individual): void => {
