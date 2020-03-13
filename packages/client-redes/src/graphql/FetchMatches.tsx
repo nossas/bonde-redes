@@ -48,6 +48,7 @@ export type Relationship = {
     id: number;
   };
   id: number;
+  length?: number;
 };
 
 interface RelationshipData {

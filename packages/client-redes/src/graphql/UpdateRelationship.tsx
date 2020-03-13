@@ -15,20 +15,21 @@ export default gql`
     }
   }
 
-fragment relationship on rede_relationships {
-  volunteer {
-    first_name
-    id
-  }
-  recipient {
-    first_name
-    id
-  }
-  created_at
-  status
-  updated_at
-  agent {
-    first_name
-    id
+  fragment relationship on rede_relationships {
+    volunteer {
+      first_name
+      id
+    }
+    recipient {
+      first_name
+      id
+    }
+    created_at
+    status
+    updated_at
+    agent {
+      first_name
+      id
+    }
   }
 `;

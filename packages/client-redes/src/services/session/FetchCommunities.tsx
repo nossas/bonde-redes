@@ -26,12 +26,12 @@ export interface Community {
 }
 
 type FetchProps = {
-  children: (any) => React.ReactChildren;
+  children: any;
   variables: {
     userId: number;
   };
-  defaultCommunity: string;
-  onChange: (c: Community) => Promise<any>;
+  defaultCommunity?: Partial<Community | undefined>;
+  onChange: (c: Community) => any;
 };
 
 interface FetchRelatedCommunitiesData {
@@ -65,7 +65,7 @@ export default ({
 
   const fetchCommunitiesProps = {
     communities: data && data.communities,
-    community: Object.keys(community).length > 0 ? community : undefined,
+    community: typeof community !== "undefined" ? community : undefined,
     onChangeCommunity: c => {
       return onChange(c).then(() => setCommunity(c));
     }

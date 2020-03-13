@@ -64,7 +64,7 @@ const Table = SessionHOC(
       if (data) setSuccess(true);
       // retorna para a home caso não exista nenhuma voluntária no linkState
       if (!linkState.volunteer) push("/");
-    }, [setLoader, loading, error, setError, data]);
+    }, [setLoader, loading, error, setError, data, linkState, push]);
 
     const distance = 50;
     const lat = Number(volunteer.latitude);

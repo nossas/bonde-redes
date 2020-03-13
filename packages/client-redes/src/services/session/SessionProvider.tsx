@@ -80,7 +80,7 @@ export default function SessionProvider({ children }) {
       .then(() => redirectToLogin())
       .catch(err => console.log("err", err)); // TODO: Tratar erros
 
-  const setCommunityOnStorage = (community: Community): void =>
+  const setCommunityOnStorage = (community: Community) =>
     storage.setAsyncItem("community", community);
 
   const sessionProps: SessionProps = {

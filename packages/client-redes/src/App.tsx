@@ -11,7 +11,6 @@ import history from "./history";
 import Match from "./pages/Connect";
 import GroupsWrapper from "./pages/Groups";
 import Relations from "./pages/Relations";
-// import FetchUsersByGroup from './graphql/FetchUsersByGroup'
 
 import { SessionPageLayout, SessionProvider } from "./services/session";
 import store from "./store";
