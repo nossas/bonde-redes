@@ -1,10 +1,10 @@
 import { action } from "easy-peasy";
 
-interface Popups {
+type Popups = {
   confirm: boolean;
   wrapper: boolean;
   noPhoneNumber: boolean;
-}
+};
 
 const data: Popups = {
   confirm: false,

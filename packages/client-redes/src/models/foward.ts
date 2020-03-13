@@ -1,9 +1,9 @@
 import { thunk, action } from "easy-peasy";
 // import request from '../services/request'
 
-interface Foward {
-  setError: Function;
-  setSuccess: Function;
+type Foward = {
+  setError: ({ status: boolean, message: string }) => void;
+  setSuccess: (status: boolean) => void;
   data: {
     volunteer_name: string;
     individual_name: string;
@@ -11,11 +11,11 @@ interface Foward {
     volunteer_user_id: number;
     individual_user_id: number;
   };
-}
+};
 
 const fowardModel = {
   data: {},
-  fowardTickets: thunk(async (actions: any, payload: Foward) => {
+  fowardTickets: thunk(async (actions: unknown, payload: Foward) => {
     const { setError, setSuccess, data } = payload;
     try {
       console.log(data);
@@ -37,7 +37,7 @@ const fowardModel = {
       };
     } catch (err) {
       console.log(err);
-      setError({
+      return setError({
         status: true,
         message: err && err.message
       });

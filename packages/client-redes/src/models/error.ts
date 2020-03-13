@@ -1,9 +1,9 @@
 import { action } from "easy-peasy";
 
-interface Error {
+type Error = {
   status: boolean;
   message: string;
-}
+};
 
 const error: Error = {
   status: false,

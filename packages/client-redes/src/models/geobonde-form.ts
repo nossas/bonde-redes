@@ -1,13 +1,13 @@
 import { action } from "easy-peasy";
 
-interface FormParams {
+type FormParams = {
   lat: number | null;
   lng: number | null;
   distance: number;
   therapist: boolean;
   lawyer: boolean;
   individual: boolean;
-}
+};
 
 const form: FormParams = {
   lat: null,
