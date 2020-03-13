@@ -126,7 +126,9 @@ export const SessionHOC = (
     static contextType = SessionContext;
 
     render() {
-      return opts && opts.required && !this.context.community ? (
+      return opts &&
+        opts.required &&
+        Object.keys(this.context.community).length <= 0 ? (
         <div>Você deve selecionar uma comunidade</div>
       ) : (
         <WrappedComponent {...this.props} session={this.context} />

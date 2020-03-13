@@ -35,7 +35,7 @@ type Props = {
   volunteerName: string;
   individualName: string;
   isLoading: boolean;
-  onSubmit: Promise<unknown>;
+  onSubmit: any;
 };
 
 const Warning = ({
