@@ -1,8 +1,11 @@
 import { useState, useCallback, useEffect } from "react";
 // import { FullPageLoading } from 'bonde-styleguide'
 
-const useFilteredCommunity = (defaultCommunity, onChange): any => {
-  const [community, setCommunity] = useState(undefined);
+const useFilteredCommunity = (
+  defaultCommunity: string,
+  onChange: (c: string) => Promise<void>
+): [string, Function] => {
+  const [community, setCommunity] = useState("");
 
   useEffect(() => {
     setCommunity(defaultCommunity);
