@@ -61,15 +61,13 @@ type RelationshipVars = {
 };
 
 const FetchMatches = SessionHOC(
-  (props: any) => {
+  (props: { children; session: { community: { id: number } } }) => {
     const {
       children,
       session: { community }
     } = props;
 
-    interface RelationshipData {
-      rede_relationships: Relationship[];
-    }
+    const variables = { context: { _eq: community.id } };
 
     const { loading, error, data } = useQuery<
       RelationshipData,
@@ -81,6 +79,7 @@ const FetchMatches = SessionHOC(
       console.log("error", error);
       return <p>Error</p>;
     }
+
     return children(data && data.rede_relationships);
   },
   { required: true }

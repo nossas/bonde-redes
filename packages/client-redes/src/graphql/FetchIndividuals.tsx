@@ -69,11 +69,11 @@ export type Individual = {
   zipcode: string;
   address: string;
   city: string;
-  coordinates: Record<string, any>;
+  coordinates: Record<string, string>;
   state: string;
   status: string;
   availability: string;
-  extras: Record<string, any>;
+  extras: Record<string, string>;
   form_entry_id: number;
   group: {
     id: number;
@@ -88,7 +88,7 @@ type IndividualVars = {
   context: {
     _eq: number;
   };
-  filters: Record<string, any>;
+  filters: Record<string, string>;
   is_volunteer: boolean;
 };
 
@@ -97,30 +97,13 @@ interface IndividualData {
 }
 
 const FetchIndividuals = SessionHOC(
-  (props: any) => (
+  (props: { children; session: { community: { id: number } } }) => (
     <FilterQuery>
-      {({ filters, changeFilters, page }) => {
+      {({ filters, changeFilters, page }): void | React.ReactNode => {
         const {
           children,
           session: { community }
         } = props;
-
-        type IndividualVars = {
-          context: {
-            _eq: number;
-          };
-          filters: Record<string, any>;
-          is_volunteer: boolean;
-        };
-
-        interface IndividualData {
-          rede_individuals: Individual[];
-        }
-
-        const { loading, error, data } = useQuery<
-          IndividualData,
-          IndividualVars
-        >(USERS, { variables });
 
         const variables = {
           context: { _eq: community.id },
@@ -128,10 +111,11 @@ const FetchIndividuals = SessionHOC(
           is_volunteer: false // TODO: deixar isso dinâmico!!
         };
 
-        const { loading, error, data } = useQuery<
-          IndividualData,
-          IndividualVars
-        >(USERS, { variables });
+        const {
+          loading,
+          // error,
+          data
+        } = useQuery<IndividualData, IndividualVars>(USERS, { variables });
 
         if (loading) return <p>Loading...</p>;
 

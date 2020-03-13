@@ -20,7 +20,7 @@ export type Filters = {
   };
 };
 
-const FilterQuery = ({ children }) => {
+const FilterQuery = ({ children }): JSX.Element => {
   const [page, setPage] = useState(0);
   const [rows, setRows] = useState(20);
   const [status, setStatus] = useState("");
@@ -34,7 +34,7 @@ const FilterQuery = ({ children }) => {
     order_by: { created_at: "desc" }
   };
 
-  const changeFilters = ({ page, rows, status, availability }) => {
+  const changeFilters = ({ page, rows, status, availability }): void => {
     if (typeof page !== "undefined") setPage(page);
     if (rows) setRows(rows);
     if (status) setStatus(status === "all" ? undefined : status);
