@@ -11,9 +11,8 @@ import history from "./history";
 import Match from "./pages/Connect";
 import GroupsWrapper from "./pages/Groups";
 import Relations from "./pages/Relations";
-// import FetchUsersByGroup from './graphql/FetchUsersByGroup'
 
-import { SessionPageLayout, SessionProvider } from "./services/session";
+import { SessionProvider, SessionPage } from "bonde-core-tools";
 import store from "./store";
 
 const AppWrapper = styled.div`
@@ -26,27 +25,23 @@ const AppBody = styled.div`
   flex-grow: 1;
 `;
 
-const InsideApp = () => (
-  <AppWrapper>
-    <Header zIndex={0} />
-    <AppBody>
-      <Switch>
-        <Route exact path="/">
-          <Redirect to="/groups" />
-        </Route>
-        <Route path="/groups" component={GroupsWrapper} />
-        <Route path="/connect" component={Match} />
-        <Route path="/relations" component={Relations} />
-      </Switch>
-    </AppBody>
-  </AppWrapper>
-);
-
 const App = () => (
-  <SessionProvider>
+  <SessionProvider baseLayout={SessionPage}>
     <StoreProvider store={store}>
       <Router history={history}>
-        <SessionPageLayout path="/" component={InsideApp} />
+        <AppWrapper>
+          <Header zIndex={0} />
+          <AppBody>
+            <Switch>
+              <Route exact path="/">
+                <Redirect to="/groups" />
+              </Route>
+              <Route path="/groups" component={GroupsWrapper} />
+              <Route path="/connect" component={Match} />
+              <Route path="/relations" component={Relations} />
+            </Switch>
+          </AppBody>
+        </AppWrapper>
       </Router>
     </StoreProvider>
   </SessionProvider>

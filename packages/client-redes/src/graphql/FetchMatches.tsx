@@ -1,7 +1,6 @@
 import React from 'react'
 import { gql } from 'apollo-boost'
-import { useQuery } from '@apollo/react-hooks'
-import { SessionHOC } from '../services/session'
+import { SessionHOC, useQuery } from 'bonde-core-tools'
 
 const MATCHES = gql`
 query RedeRelationships ($context: Int_comparison_exp!) {

@@ -1,7 +1,6 @@
 import React from 'react'
 import { gql } from 'apollo-boost'
-import { useQuery } from '@apollo/react-hooks'
-import { SessionHOC } from '../services/session'
+import { SessionHOC, useQuery } from 'bonde-core-tools'
 import FilterQuery from './FilterQuery'
 
 const USERS_BY_GROUP = gql`

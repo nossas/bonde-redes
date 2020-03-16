@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from 'bonde-core-tools'
 import { Text } from 'bonde-styleguide'
 
 const Select = styled.select`

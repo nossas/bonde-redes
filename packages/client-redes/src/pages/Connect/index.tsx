@@ -9,14 +9,13 @@ import ReactTable from "react-table";
 import * as turf from "@turf/turf";
 import { useHistory, useLocation } from "react-router-dom";
 import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
-import { useMutation } from '@apollo/react-hooks'
+import { SessionHOC, useMutation } from 'bonde-core-tools';
 
 import { Wrap, StyledButton } from './style'
 import columns from './columns'
 import FetchIndividuals from '../../graphql/FetchIndividuals'
 import CREATE_RELATIONSHIP from '../../graphql/CreateRelationship'
 import useAppLogic from '../../app-logic'
-import { SessionHOC } from '../../services/session/SessionProvider'
 
 import { If } from '../../components/If'
 import Popup from '../../components/Popups/Popup'
