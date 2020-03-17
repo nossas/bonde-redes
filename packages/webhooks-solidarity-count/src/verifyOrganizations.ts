@@ -9,17 +9,16 @@ const verifyOrganization = async (ticket: TicketHasuraIn) => {
     const organizations = await yup.object().shape({
       ADVOGADA: yup.number().required(),
       MSR: yup.number().required(),
-      PSICÓLOGA: yup.number().required(),
+      PSICOLOGA: yup.number().required(),
     }).validate(JSON.parse(ZENDESK_ORGANIZATIONS))
 
     const { organization_id } = ticket
-
     switch (organization_id) {
       case organizations.ADVOGADA:
         return ORGANIZATIONS.ADVOGADA
       case organizations.MSR:
         return ORGANIZATIONS.MSR
-      case organizations.PSICÓLOGA:
+      case organizations.PSICOLOGA:
         return ORGANIZATIONS.PSICOLOGA
       default:
         return null

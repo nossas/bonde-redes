@@ -8,7 +8,7 @@ const get = async <T>(url: string, params?: any) => {
   const { ZENDESK_API_URL, ZENDESK_API_TOKEN, ZENDESK_API_USER } = process.env
   const endpoint = urljoin(ZENDESK_API_URL, url)
   try {
-    return await axios.get<T>(endpoint, {
+    return await axios.get(endpoint, {
       auth: {
         username: ZENDESK_API_USER,
         password: ZENDESK_API_TOKEN,
@@ -24,7 +24,7 @@ const put = async <T>(url: string, data?: any) => {
   const { ZENDESK_API_URL, ZENDESK_API_TOKEN, ZENDESK_API_USER } = process.env
   const endpoint = urljoin(ZENDESK_API_URL!, url)
   try {
-    return await axios.put<T>(endpoint, data, {
+    return await axios.put(endpoint, data, {
       auth: {
         username: ZENDESK_API_USER,
         password: ZENDESK_API_TOKEN,
