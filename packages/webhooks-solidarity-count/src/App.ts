@@ -14,6 +14,7 @@ import saveUsers from './hasura/saveUsers'
 import handleCustomFields from './interfaces/Ticket/handleCustomFields'
 import setCommunity from './util/setCommunity'
 import getLatLng from './util/getLatLng'
+import parseZipcode from './util/parseZipcode'
 import handleTicketId from './interfaces/Ticket/handleTicketId'
 
 const log = dbg.extend('app')
@@ -57,37 +58,42 @@ const App = async (ticket_id: string, res: Response) => {
   // Atualizando todos os campos das usuárias
   // Buscando e setando lat/lng/address
   if (organization === ORGANIZATIONS.MSR || organization === ORGANIZATIONS.ADVOGADA || organization === ORGANIZATIONS.PSICOLOGA) {
-    const zipcodeFromZendesk = (userWithUserFields.cep).toString()
-    const coordinates = await getLatLng(zipcodeFromZendesk)
-    const userWithLatLng = { 
-      ...userWithUserFields, 
-      cep: zipcodeFromZendesk,
-      ...coordinates,
-      user_fields: {
-        ...userWithUserFields.user_fields,
-        cep: zipcodeFromZendesk,
-        ...coordinates
+    const parsedZipcode = parseZipcode(userWithUserFields.cep)
+
+    // Caso o CEP possa ser um número e não é vazio
+    if(parsedZipcode.length === 8 && userWithUserFields.cep !== null) {
+      const coordinates = await getLatLng(parsedZipcode)
+
+      userWithUserFields = { 
+        ...userWithUserFields, 
+        cep: parsedZipcode,
+        ...coordinates,
+        user_fields: {
+          ...userWithUserFields.user_fields,
+          cep: parsedZipcode,
+          ...coordinates
+        }
       }
+
+      // Atualiza a usuária voluntária no zendesk
+      const updateRequesterZendeskResponse = await updateRequesterFields(
+        ticket.requester_id,
+        coordinates
+      )
+      if (!updateRequesterZendeskResponse) {
+        log(`Can't update user fields for user '${ticket.requester_id}', ticket '${ticket_id}'.`)
+        return res.status(500).json('Can\'t update user fields.')
+      }
+      log(`User '${ticket.requester_id}' lat/lng/address updated in Zendesk.`)
     }
   
     // Salva a usuária no Hasura
-    const saveUserResponse = await saveUsers([userWithLatLng]) 
+    const saveUserResponse = await saveUsers([userWithUserFields]) 
     if (!saveUserResponse) {
       log(`Failed to save user '${ticket.requester_id}'. Ticket ${ticket.ticket_id}.`)
       return res.status(500).json('Failed to save user.')
     }
     log(`User '${ticket.requester_id}' fields updated in Hasura`)
-
-    // Atualiza a usuária voluntária no zendesk
-    const updateRequesterZendeskResponse = await updateRequesterFields(
-      ticket.requester_id,
-      coordinates
-    )
-    if (!updateRequesterZendeskResponse) {
-      log(`Can't update user fields for user '${ticket.requester_id}', ticket '${ticket_id}'.`)
-      return res.status(500).json('Can\'t update user fields.')
-    }
-    log(`User '${ticket.requester_id}' lat/lng/address updated in Zendesk.`)
   }
 
   // Faz o count dos tickets das voluntárias e atualiza no zendesk e hasura
