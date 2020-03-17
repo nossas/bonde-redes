@@ -216,18 +216,22 @@ interface Response {
 }
 
 const saveUsers = async (users: User[]) => {
-  const query = createQuery(users)
-  const variables = generateRequestVariables(users)
-  const response = await HasuraBase<HasuraResponse<'insert_solidarity_users', Response>>(
-    query,
-    variables,
-  )
-
-  if (isError(response.data)) {
-    return log(response.data.errors)
+  try {
+    const query = createQuery(users)
+    const variables = generateRequestVariables(users)
+    const response = await HasuraBase<HasuraResponse<'insert_solidarity_users', Response>>(
+      query,
+      variables,
+    )
+  
+    if (isError(response.data)) {
+      return log(response.data.errors)
+    }
+  
+    return response.data.data.insert_solidarity_users.affected_rows === 1
+  } catch (e) {
+    return log(e)
   }
-
-  return response.data.data.insert_solidarity_users.affected_rows === 1
 }
 
 export default saveUsers
