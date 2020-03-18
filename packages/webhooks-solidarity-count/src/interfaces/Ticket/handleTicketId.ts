@@ -1,8 +1,5 @@
-interface Obj {
-  id: number
-}
 
-const handleTicketId = <T extends Obj>(ticket: T) => {
+const handleTicketId = (ticket) => {
   const { id, ...otherFields } = ticket
   return {
     ticket_id: id,

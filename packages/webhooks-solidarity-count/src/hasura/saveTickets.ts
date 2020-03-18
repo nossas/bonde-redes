@@ -141,19 +141,23 @@ interface Response {
 }
 
 const saveTickets = async (tickets: TicketHasuraIn[]) => {
-  const validatedTickets = (await validate.validate(tickets, { stripUnknown: true }))
-  const query = createQuery(validatedTickets)
-  const variables = generateRequestVariables(validatedTickets)
-  const response = await HasuraBase<HasuraResponse<'insert_solidarity_tickets', Response>>(
-    query,
-    variables,
-  )
-
-  if (isError(response.data)) {
-    return log(response.data.errors)
+  try {
+    const validatedTickets = (await validate.validate(tickets, { stripUnknown: true }))
+    const query = createQuery(validatedTickets)
+    const variables = generateRequestVariables(validatedTickets)
+    const response = await HasuraBase<HasuraResponse<'insert_solidarity_tickets', Response>>(
+      query,
+      variables,
+    )
+  
+    if (isError(response.data)) {
+      return log(response.data.errors)
+    }
+  
+    return response.data.data.insert_solidarity_tickets.affected_rows
+  } catch (e) {
+    return log(e)
   }
-
-  return response.data.data.insert_solidarity_tickets.affected_rows
 }
 
 export default saveTickets

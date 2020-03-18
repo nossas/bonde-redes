@@ -385,6 +385,7 @@ importers:
       ts-jest: ^24.1.0
   packages/webhooks-solidarity-count:
     dependencies:
+      '@googlemaps/google-maps-services-js': 2.3.1
       '@types/debug': 4.1.5
       '@types/express': 4.17.2
       '@types/jest': 24.9.1
@@ -404,6 +405,7 @@ importers:
       url-join: 4.0.1
       yup: 0.27.0
     specifiers:
+      '@googlemaps/google-maps-services-js': ^2.3.1
       '@types/debug': ^4.1.5
       '@types/express': ^4.17.2
       '@types/jest': ^24.0.23
@@ -1546,6 +1548,14 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-mIU397T3H0Xlio1ftZvB11DQr+7aYEYTMeDuLfI8OTE0mMgvD3sAFWuAhXvCCLrfEy8FXvLxQp1fwYXyM+lRPA==
+  /@googlemaps/google-maps-services-js/2.3.1:
+    dependencies:
+      agentkeepalive: 4.1.0
+      axios: 0.19.2
+      query-string: 6.11.1
+    dev: false
+    resolution:
+      integrity: sha512-47kT5S0aB0UjcR5/2v2C/sm1wHWsrpp1vrb1f22xdPd8pJvjV2rnM9COvNCoG3C6M0we3V5DRN6yTTHPKVoeGA==
   /@hapi/address/2.1.4:
     dev: false
     resolution:
@@ -3623,6 +3633,16 @@ packages:
       node: '>= 4.0.0'
     resolution:
       integrity: sha512-salcGninV0nPrwpGNn4VTXBb1SOuXQBiqbrNXoeizJsHrsL6ERFM2Ne3JUSBWRE6aeNJI2ROP/WEEIDUiDe3cg==
+  /agentkeepalive/4.1.0:
+    dependencies:
+      debug: 4.1.1
+      depd: 1.1.2
+      humanize-ms: 1.2.1
+    dev: false
+    engines:
+      node: '>= 8.0.0'
+    resolution:
+      integrity: sha512-CW/n1wxF8RpEuuiq6Vbn9S8m0VSYDMnZESqaJ6F2cWN9fY8rei2qaxweIaRgq+ek8TqfoFIsUjaGNKGGEHElSg==
   /aggregate-error/3.0.1:
     dependencies:
       clean-stack: 2.2.0
@@ -7699,6 +7719,12 @@ packages:
       node: '>= 4.5.0'
     resolution:
       integrity: sha512-+ML2Rbh6DAuee7d07tYGEKOEi2voWPUGan+ExdPbPW6Z3svq+JCqr0v8WmKPOkz1vOVykPCBSuobe7G8GJUtVg==
+  /humanize-ms/1.2.1:
+    dependencies:
+      ms: 2.1.2
+    dev: false
+    resolution:
+      integrity: sha1-xG4xWaKT9riW2ikxbYtv6Lt5u+0=
   /iconv-lite/0.4.24:
     dependencies:
       safer-buffer: 2.1.2
@@ -11512,6 +11538,16 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-u7aTucqRXCMlFbIosaArYJBD2+s=
+  /query-string/6.11.1:
+    dependencies:
+      decode-uri-component: 0.2.0
+      split-on-first: 1.1.0
+      strict-uri-encode: 2.0.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-1ZvJOUl8ifkkBxu2ByVM/8GijMIPx+cef7u3yroO3Ogm4DOdZcF5dcrWTIlSHe3Pg/mtlt6/eFjObDfJureZZA==
   /querystring-es3/0.2.1:
     dev: false
     engines:
@@ -12938,6 +12974,12 @@ packages:
       node: '>=6.0.0'
     resolution:
       integrity: sha512-HeZS3PBdMA+sZSu0qwpCxl3DeALD5ASx8pAX0jZdKXSpPWbQ6SYGnlg3BBmYLx5LtiZrmkAZfErCm2oECBcioA==
+  /split-on-first/1.1.0:
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-43ZssAJaMusuKWL8sKUBQXHWOpq8d6CfN/u1p4gUzfJkM05C8rxTmYrkIPTXapZpORA6LkkzcUulJ8FqA7Uudw==
   /split-string/3.1.0:
     dependencies:
       extend-shallow: 3.0.2
@@ -13077,6 +13119,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-J5siXfHVgrH1TmWt3UNS4Y+qBxM=
+  /strict-uri-encode/2.0.0:
+    dev: false
+    engines:
+      node: '>=4'
+    resolution:
+      integrity: sha1-ucczDHBChi9rFC3CdLvMWGbONUY=
   /string-argv/0.1.2:
     engines:
       node: '>=0.6.19'
