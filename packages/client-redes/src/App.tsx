@@ -14,9 +14,12 @@ import Relations from "./pages/Relations";
 import { BondeSessionProvider, BondeSessionUI } from "bonde-core-tools";
 import store from "./store";
 
+const adminUrl = process.env.REACT_APP_ADMIN_URL || 'http://admin-canary.bonde.devel:5002';
+const loginPath = process.env.REACT_APP_LOGIN_PATH || '/auth/login';
+
 const config = {
-  loginUrl: process.env.REACT_APP_LOGIN_URL || 'http://admin-canary.bonde.devel:5002/auth/login',
-  graphqlApiUrl: process.env.REACT_APP_HASURA_API_URL || 'https://api-graphql.staging.bonde.org/v1/graphql',
+  loginUrl: new URL(loginPath, adminUrl).href,
+  graphqlApiUrl: process.env.REACT_APP_HASURA_API_URL || 'http://api-graphql.staging.bonde.org/v1/graphql',
   crossStorageUrl: process.env.REACT_APP_DOMAIN_CROSS_STORAGE || 'http://cross-storage.bonde.devel'
 };
 
@@ -24,7 +27,7 @@ const App = () => (
   <BondeSessionProvider config={config}>
     <StoreProvider store={store}>
       <Router history={history}>
-        <BondeSessionUI.Main indexRoute='/'>
+        <BondeSessionUI.Main indexRoute={adminUrl}>
           <Header zIndex={0} />
           <BondeSessionUI.Content>
             <Switch>

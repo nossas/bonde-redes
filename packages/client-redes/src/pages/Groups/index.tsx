@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
 import {
-  Page,
   Flexbox2 as Flexbox,
   Spacing,
   Dropdown,
@@ -65,41 +64,39 @@ const Groups = () => {
         : Math.ceil(individuals.count / filtersValues.rows)
 
       return (
-        <Page>
-          <Flexbox middle>
-            <Wrap>
-              <Spacing margin={{ bottom: 20 }}>
-                <Filters
-                  filters={filters({
-                    volunteersCount: volunteers.count || 0,
-                    individualsCount: individuals.count || 0,
-                    filters: { values: filtersValues, change: changeFilters },
-                    history,
-                    kind
-                  })}
-                />
-              </Spacing>
-              <ReactTable
-                manual
-                sortable={false}
-                data={data[kind]}
-                columns={columns(pathname)}
-                pageSize={filtersValues.rows}
-                page={page}
-                pages={pages}
-                onPageChange={(page) => changeFilters({ page })}
-                onPageSizeChange={(rows) => changeFilters({ rows })}
-                previousText="Anterior"
-                nextText="Próximo"
-                pageText="Página"
-                ofText="de"
-                rowsText="linhas"
-                // Accessibility Labels
-                className="-striped -highlight"
+        <Flexbox middle>
+          <Wrap>
+            <Spacing margin={{ bottom: 20 }}>
+              <Filters
+                filters={filters({
+                  volunteersCount: volunteers.count || 0,
+                  individualsCount: individuals.count || 0,
+                  filters: { values: filtersValues, change: changeFilters },
+                  history,
+                  kind
+                })}
               />
-            </Wrap>
-          </Flexbox>
-        </Page>
+            </Spacing>
+            <ReactTable
+              manual
+              sortable={false}
+              data={data[kind]}
+              columns={columns(pathname)}
+              pageSize={filtersValues.rows}
+              page={page}
+              pages={pages}
+              onPageChange={(page) => changeFilters({ page })}
+              onPageSizeChange={(rows) => changeFilters({ rows })}
+              previousText="Anterior"
+              nextText="Próximo"
+              pageText="Página"
+              ofText="de"
+              rowsText="linhas"
+              // Accessibility Labels
+              className="-striped -highlight"
+            />
+          </Wrap>
+        </Flexbox>
       )
     }}
     </FetchUsersByGroup>
