@@ -30,6 +30,19 @@ const StyledFlexbox = styled(Flexbox)`
   margin-bottom: 25px;
 `;
 
+type Body = {
+  volunteer_name: string;
+  volunteer_registry: string;
+  volunteer_phone: string;
+  volunteer_user_id: number;
+  volunteer_organization_id: number;
+  individual_name: string;
+  individual_ticket_id: number;
+  individual_user_id: number;
+  agent: string;
+  assignee_name: string;
+};
+
 const Table = () => {
   const volunteer = useStoreState(state => state.match.volunteer);
   const zendeskAgent = useStoreState(state => state.match.agent);
@@ -40,11 +53,13 @@ const Table = () => {
   const individual = useStoreState(state => state.individual.data);
   const error = useStoreState(state => state.error.error);
 
-  const getTableData = useStoreActions(actions => actions.table.getTableData)
-  const setPopup = useStoreActions(actions => actions.popups.setPopup);
-  const setError = useStoreActions(actions => actions.error.setError);
+  const getTableData = useStoreActions(
+    (actions: any) => actions.table.getTableData
+  );
+  const setPopup = useStoreActions((actions: any) => actions.popups.setPopup);
+  const setError = useStoreActions((actions: any) => actions.error.setError);
   const fowardTickets = useStoreActions(
-    actions => actions.foward.fowardTickets
+    (actions: any) => actions.foward.fowardTickets
   );
 
   const [success, setSuccess] = useState(false);
@@ -53,7 +68,11 @@ const Table = () => {
 
   const { confirm, wrapper, noPhoneNumber } = popups;
 
-  const { name: individual_name, ticket_id: individual_ticket_id } = individual;
+  const {
+    name: individual_name,
+    ticket_id: individual_ticket_id,
+    user_id: individual_user_id
+  } = individual;
 
   const {
     latitude,
@@ -67,8 +86,8 @@ const Table = () => {
   } = volunteer;
 
   useEffect(() => {
-    getTableData('individuals')
-  }, [getTableData])
+    getTableData("individuals");
+  }, [getTableData]);
 
   const volunteerFirstName = volunteer_name.split(" ")[0];
   const selectedCategory = volunteer_category(volunteer_organization_id);
@@ -111,10 +130,7 @@ const Table = () => {
   );
 
   const filterByCategory = useCallback(
-    data =>
-      data.filter(
-        i => i.tipo_de_acolhimento === selectedCategory
-      ),
+    data => data.filter(i => i.tipo_de_acolhimento === selectedCategory),
     // eslint-disable-next-line
     [volunteer_organization_id]
   );
@@ -126,7 +142,7 @@ const Table = () => {
     // eslint-disable-next-line
   }, [filterByDistance, tableData]);
 
-  const submitConfirm = async requestBody => {
+  const submitConfirm = async (requestBody: Body) => {
     const req = await fowardTickets({
       setError,
       setSuccess,
@@ -148,14 +164,15 @@ const Table = () => {
     setPopup({ ...popups, confirm: false });
     setLoader(true);
     return submitConfirm({
-      agent: zendeskAgent,
       individual_name,
       individual_ticket_id,
+      individual_user_id,
       volunteer_name,
       volunteer_user_id,
       volunteer_registry,
-      volunteer_phone: Number(parseNumber(phone || "0")),
+      volunteer_phone: parseNumber(phone.toString() || "0"),
       volunteer_organization_id,
+      agent: zendeskAgent,
       assignee_name: zendeskAgentName
     });
   };
