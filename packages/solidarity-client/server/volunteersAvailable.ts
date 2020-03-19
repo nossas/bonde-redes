@@ -1,9 +1,9 @@
-import getSolidarityUsers from './hasura/getSolidarityUsers'
-import getSolidarityMatches from './hasura/getSolidarityMatches'
-import { zendeskOrganizations } from './parse/index'
+import getSolidarityUsers from "./hasura/getSolidarityUsers";
+import getSolidarityMatches from "./hasura/getSolidarityMatches";
+import { zendeskOrganizations } from "./parse/index";
 
 const main = async (req, res, next) => {
-  const INDIVIDUAL = zendeskOrganizations.individual
+  const INDIVIDUAL = zendeskOrganizations.individual;
   const volunteersAvailability = await getSolidarityUsers({
     query: `query ($individual_id: bigint!){
       solidarity_users(
@@ -34,13 +34,13 @@ const main = async (req, res, next) => {
     variables: {
       individual_id: INDIVIDUAL
     }
-  })
+  });
 
-  const today = new Date()
+  const today = new Date();
   // get last month and format
-  const last_month = new Date().setDate((today.getDate() - 30)) 
+  const last_month = new Date().setDate(today.getDate() - 30);
   // format last_month timestamp
-  const timestamp = new Date(last_month).toISOString()
+  const timestamp = new Date(last_month).toISOString();
   const pendingTickets = await getSolidarityMatches({
     query: `query ($last_month: timestamp!){
       solidarity_matches(
@@ -58,7 +58,7 @@ const main = async (req, res, next) => {
     variables: {
       last_month: timestamp
     }
-  })
+  });
 
   // only approved volunteers are available?
   const availableVolunteers = volunteersAvailability
@@ -67,23 +67,28 @@ const main = async (req, res, next) => {
         disponibilidade_de_atendimentos,
         atendimentos_em_andamento_calculado_,
         user_id
-      } = user
-      const formatAvailability = disponibilidade_de_atendimentos !== '5_ou_mais'
-        ? Number(disponibilidade_de_atendimentos)
-        : 5
-      const forwardings_last_30_days = pendingTickets.filter(ticket => ticket.volunteers_user_id === user_id)
-      const countForwardings = forwardings_last_30_days.length
-      const availability = formatAvailability - (countForwardings + atendimentos_em_andamento_calculado_)
+      } = user;
+      const formatAvailability =
+        disponibilidade_de_atendimentos !== "5_ou_mais"
+          ? Number(disponibilidade_de_atendimentos)
+          : 5;
+      const forwardings_last_30_days = pendingTickets.filter(
+        ticket => ticket.volunteers_user_id === user_id
+      );
+      const countForwardings = forwardings_last_30_days.length;
+      const availability =
+        formatAvailability -
+        (countForwardings + atendimentos_em_andamento_calculado_);
 
       return {
         ...user,
         pending: countForwardings,
         availability
-      }
+      };
     })
-  .filter(user => user.availability > 0)
+    .filter(user => user.availability > 0);
 
-  res.json(availableVolunteers)
-}
+  res.json(availableVolunteers);
+};
 
-export default main
+export default main;

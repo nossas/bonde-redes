@@ -1,12 +1,10 @@
-
-import getSolidarityTickets from './hasura/getSolidarityTickets'
-import getSolidarityUsers from './hasura/getSolidarityUsers'
-import { fuseTicketsAndUsers } from './utils'
+import getSolidarityTickets from "./hasura/getSolidarityTickets";
+import getSolidarityUsers from "./hasura/getSolidarityUsers";
+import { fuseTicketsAndUsers } from "./utils";
 
 const main = async (req, res, next) => {
-
-const allUsers = await getSolidarityUsers({
-  query: `query {
+  const allUsers = await getSolidarityUsers({
+    query: `query {
     solidarity_users(
       where: {
       longitude: {_is_null: false},
@@ -35,10 +33,10 @@ const allUsers = await getSolidarityUsers({
       tipo_de_acolhimento
     }
 	}`
-})
+  });
 
-const allTickets = await getSolidarityTickets({
-	query: `query {
+  const allTickets = await getSolidarityTickets({
+    query: `query {
 		solidarity_tickets(
 			where: {
 				status: {_neq: "deleted"}
@@ -53,11 +51,11 @@ const allTickets = await getSolidarityTickets({
 			subject
 		}
 	}`
-})
+  });
 
-  const ticketsWithUser = fuseTicketsAndUsers(allUsers, allTickets)
+  const ticketsWithUser = fuseTicketsAndUsers(allUsers, allTickets);
 
-  res.json(ticketsWithUser)
-}
+  res.json(ticketsWithUser);
+};
 
-export default main
+export default main;

@@ -3,7 +3,7 @@ import volunteerComment from "../comments/volunteer";
 
 type Props = {
   volunteer_user_id: number;
-  agent: string;
+  agent: number;
   volunteer_first_name: string;
   individual_name: string;
   assignee_name: string;

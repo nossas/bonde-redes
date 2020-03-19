@@ -1,10 +1,9 @@
+import getSolidarityUsers from "./hasura/getSolidarityUsers";
+import getSolidarityTickets from "./hasura/getSolidarityTickets";
+import { zendeskOrganizations } from "./parse/index";
+import { fuseTicketsAndUsers } from "./utils";
 
-import getSolidarityUsers from './hasura/getSolidarityUsers'
-import getSolidarityTickets from './hasura/getSolidarityTickets'
-import { zendeskOrganizations } from './parse/index'
-import { fuseTicketsAndUsers } from './utils'
-
-const INDIVIDUAL = zendeskOrganizations.individual
+const INDIVIDUAL = zendeskOrganizations.individual;
 
 const main = async (req, res, next) => {
   const individualUsers = await getSolidarityUsers({
@@ -33,8 +32,8 @@ const main = async (req, res, next) => {
     variables: {
       individual_id: INDIVIDUAL
     }
-  })
-  
+  });
+
   const individualTickets = await getSolidarityTickets({
     query: `query {
       solidarity_tickets(
@@ -56,11 +55,14 @@ const main = async (req, res, next) => {
         id
       }
     }`
-  })
+  });
 
-  const ticketsWithUser = fuseTicketsAndUsers(individualUsers, individualTickets)
+  const ticketsWithUser = fuseTicketsAndUsers(
+    individualUsers,
+    individualTickets
+  );
 
-  res.json(ticketsWithUser)
-}
+  res.json(ticketsWithUser);
+};
 
-export default main
+export default main;

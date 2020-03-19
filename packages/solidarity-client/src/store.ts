@@ -1,5 +1,5 @@
-import { createStore } from 'easy-peasy';
-import GlobalModel from './models'
+import { createStore } from "easy-peasy";
+import GlobalModel from "./models";
 
 const {
   matchFormModel,
@@ -11,7 +11,7 @@ const {
   fowardModel,
   volunteersModel,
   mapModel
-} = GlobalModel
+} = GlobalModel;
 
 const storeModel = {
   match: matchFormModel,
@@ -27,4 +27,4 @@ const storeModel = {
 
 const store = createStore(storeModel);
 
-export default store
+export default store;

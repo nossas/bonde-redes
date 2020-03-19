@@ -1,6 +1,6 @@
-import getSolidarityUsers from './hasura/getSolidarityUsers'
-import getSolidarityTickets from './hasura/getSolidarityTickets'
-import { isValidTicket, getUserFromTicket } from './utils'
+import getSolidarityUsers from "./hasura/getSolidarityUsers";
+import getSolidarityTickets from "./hasura/getSolidarityTickets";
+import { isValidTicket, getUserFromTicket } from "./utils";
 
 const main = async (req, res, next) => {
   const locationUsers = await getSolidarityUsers({
@@ -18,7 +18,7 @@ const main = async (req, res, next) => {
         id
       }
     }`
-  })
+  });
 
   const locationUsersTicket = await getSolidarityTickets({
     query: `query {
@@ -34,19 +34,25 @@ const main = async (req, res, next) => {
         id
       }
     }`
-  })
+  });
 
-  const hasValidLatLng = ({ lat, lng }) => lat <= 90 && lat >= -90 && lng <= 190 && lng >= -180
+  const hasValidLatLng = ({ lat, lng }) =>
+    lat <= 90 && lat >= -90 && lng <= 190 && lng >= -180;
 
   const ticketsWithUser = locationUsersTicket
     .filter(ticket => isValidTicket(locationUsers, ticket))
     .map(ticket => {
-      const user = getUserFromTicket(locationUsers, ticket)[0]
-      return { ...ticket, ...user }
+      const user = getUserFromTicket(locationUsers, ticket)[0];
+      return { ...ticket, ...user };
     })
-    .filter(user => hasValidLatLng({ lat: Number(user.latitude), lng: Number(user.longitude) }))
+    .filter(user =>
+      hasValidLatLng({
+        lat: Number(user.latitude),
+        lng: Number(user.longitude)
+      })
+    );
 
-  res.json(ticketsWithUser)
-}
+  res.json(ticketsWithUser);
+};
 
-export default main
+export default main;
