@@ -10,7 +10,11 @@ import volunteersAvailable from "./volunteersAvailable";
 import locations from "./locations";
 import user from "./user";
 
-const asyncMiddleware = fn => (req, res, next) => {
+const asyncMiddleware = fn => (
+  req: express.Request,
+  res: express.Response,
+  next
+) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 
@@ -31,7 +35,7 @@ app.use(
 );
 app.use(cors());
 app.use(express.static(path.join(__dirname, "..", "..", "build")));
-app.use((err, req, res) => {
+app.use((err, req: express.Request, res: express.Response, next) => {
   console.error(err);
   res.status(500).json({ message: "an error occurred" });
 });
@@ -44,7 +48,7 @@ app.get("/api/user", asyncMiddleware(user));
 
 app.post("/api/forward", asyncMiddleware(forward));
 
-app.get("/*", (req, res) => {
+app.get("/*", (req: express.Request, res: express.Response) => {
   res.sendFile(path.join(__dirname, "..", "..", "build", "index.html"));
 });
 

@@ -2,7 +2,7 @@ import getSolidarityTickets from "./hasura/getSolidarityTickets";
 import getSolidarityUsers from "./hasura/getSolidarityUsers";
 import { fuseTicketsAndUsers } from "./utils";
 
-const main = async res => {
+const main = async (req, res, next) => {
   const allUsers = await getSolidarityUsers({
     query: `query {
     solidarity_users(

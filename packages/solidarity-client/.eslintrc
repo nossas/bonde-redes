@@ -18,7 +18,11 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2020,
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true, // Allows for the parsing of JSX
+      "tsx": true
+    }
   },
   "plugins": ["@typescript-eslint", "security"],
   "rules": {

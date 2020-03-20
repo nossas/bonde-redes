@@ -5,7 +5,7 @@ import { fuseTicketsAndUsers } from "./utils";
 
 const INDIVIDUAL = zendeskOrganizations.individual;
 
-const main = async res => {
+const main = async (req, res, next) => {
   const individualUsers = await getSolidarityUsers({
     query: `query ($individual_id: bigint!){
       solidarity_users(

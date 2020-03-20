@@ -1,4 +1,3 @@
-/* eslint-disable security/detect-object-injection */
 import dicioAgent from "../pages/Match/Table/dicioAgent";
 import { Ticket } from "../models/table-data";
 
@@ -20,7 +19,6 @@ export const whatsappText = ({ volunteer_name, individual_name, agent }) => {
 export const parseNumber = input => input.replace(/\D/g, "");
 
 export const emailValidation = () =>
-  // eslint-disable-next-line security/detect-unsafe-regex
   /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
 export const zendeskOrganizations = JSON.parse(

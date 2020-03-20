@@ -30,7 +30,7 @@ type Body = {
   assignee_name: string;
 };
 
-const main = async (req, res) => {
+const main = async (req, res, next) => {
   const client = zendesk.createClient({
     username: ZENDESK_API_USER || "",
     token: ZENDESK_API_TOKEN || "",
@@ -78,48 +78,52 @@ const main = async (req, res) => {
     errMsg,
     isVolunteer = false
   }): Promise<any> => {
-    return client.tickets.update(ticketId, content, async (err, result) => {
-      if (err) {
-        return handleError({
-          error: err,
-          message: errMsg
-        });
-      }
-
-      if (isVolunteer && typeof result === "object") {
-        // @ts-ignore
-        const saveTicketInHasura = await saveSolidarityTickets(result);
-        if (!saveTicketInHasura) {
-          console.log(
-            `Failed to save volunteer solidarity_ticket '${ticketId}' in Hasura.`
-          );
-          return res
-            .status(500)
-            .json("Failed to update volunteer solidarity_ticket in Hasura.");
+    return client.tickets.update(
+      ticketId,
+      content,
+      async (err, req, result: any) => {
+        if (err) {
+          return handleError({
+            error: err,
+            message: errMsg
+          });
         }
 
-        const saveMatchInHasura = await saveSolidarityMatches({
-          individuals_ticket_id: individual_ticket_id,
-          volunteers_ticket_id: ticketId,
-          individuals_user_id: individual_user_id,
-          volunteers_user_id: volunteer_user_id,
-          community_id: Number(COMMUNITY_ID),
-          status: "encaminhamento__realizado",
-          created_at: new Date().toISOString()
-        });
+        if (isVolunteer && typeof result === "object") {
+          // @ts-ignore
+          const saveTicketInHasura = await saveSolidarityTickets(result);
+          if (!saveTicketInHasura) {
+            console.log(
+              `Failed to save volunteer solidarity_ticket '${ticketId}' in Hasura.`
+            );
+            return res
+              .status(500)
+              .json("Failed to update volunteer solidarity_ticket in Hasura.");
+          }
 
-        if (!saveMatchInHasura) {
-          console.log(
-            `Failed to save match '${ticketId}' in solidarity_matches in Hasura.`
-          );
-          return res
-            .status(500)
-            .json(`Failed to save the match ticket in Hasura`);
+          const saveMatchInHasura = await saveSolidarityMatches({
+            individuals_ticket_id: individual_ticket_id,
+            volunteers_ticket_id: ticketId,
+            individuals_user_id: individual_user_id,
+            volunteers_user_id: volunteer_user_id,
+            community_id: Number(COMMUNITY_ID),
+            status: "encaminhamento__realizado",
+            created_at: new Date().toISOString()
+          });
+
+          if (!saveMatchInHasura) {
+            console.log(
+              `Failed to save match '${ticketId}' in solidarity_matches in Hasura.`
+            );
+            return res
+              .status(500)
+              .json(`Failed to save the match ticket in Hasura`);
+          }
         }
-      }
 
-      return true;
-    });
+        return true;
+      }
+    );
   };
 
   const createTicket = tokens => {
@@ -135,7 +139,7 @@ const main = async (req, res) => {
         volunteer_organization_id,
         individual_ticket_id
       }),
-      async (err, result: any) => {
+      async (err, req, result: any) => {
         if (err) {
           return handleError({
             error: err,
@@ -189,7 +193,7 @@ const main = async (req, res) => {
       {
         filename: "Guia_do_Acolhimento.pdf"
       },
-      (err, result: any) => {
+      (err, req, result: any) => {
         if (err) {
           return handleError({
             error: err,
@@ -205,7 +209,7 @@ const main = async (req, res) => {
           {
             filename: file.filename
           },
-          (error, results: any) => {
+          (error, req, results: any) => {
             if (error) {
               return handleError({
                 error: err,
