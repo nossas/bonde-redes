@@ -5,7 +5,7 @@ import { Ticket } from "./table-data";
 const volunteers: Ticket[] = [];
 
 const volunteersModel = {
-  getAvailableVolunteers: thunk(async (actions: any, payload) => {
+  getAvailableVolunteers: thunk(async (actions: any) => {
     try {
       const res = await request.get("volunteers");
       actions.setVolunteers(res.data);

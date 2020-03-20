@@ -46,7 +46,7 @@ export const getVolunteerFile = id => {
       path: "diretrizes_atendimento_psicologa.pdf",
       filename: "Diretrizes_de_Atendimento___Psicologas_Voluntarias.pdf"
     };
-  throw "Volunteer organization_id not supported in search for file";
+  throw new Error("Volunteer organization_id not supported in search for file");
 };
 
 export const getVolunteerType = id => {

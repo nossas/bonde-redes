@@ -31,7 +31,7 @@ app.use(
 );
 app.use(cors());
 app.use(express.static(path.join(__dirname, "..", "..", "build")));
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err);
   res.status(500).json({ message: "an error occurred" });
 });

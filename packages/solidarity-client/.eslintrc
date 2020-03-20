@@ -22,6 +22,8 @@
   },
   "plugins": ["@typescript-eslint", "security"],
   "rules": {
-    "import/extensions": "off"
+    "import/extensions": "off",
+    "consistent-return": "off",
+    "@typescript-eslint/ban-ts-ignore": "off"
   }
 }

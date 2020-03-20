@@ -2,7 +2,7 @@ import getSolidarityUsers from "./hasura/getSolidarityUsers";
 import getSolidarityMatches from "./hasura/getSolidarityMatches";
 import { zendeskOrganizations } from "./parse/index";
 
-const main = async (req, res, next) => {
+const main = async res => {
   const INDIVIDUAL = zendeskOrganizations.individual;
   const volunteersAvailability = await getSolidarityUsers({
     query: `query ($individual_id: bigint!){
