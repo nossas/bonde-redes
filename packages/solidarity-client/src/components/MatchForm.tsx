@@ -1,44 +1,49 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from "react";
 // import PropTypes from 'prop-types'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from "react-router-dom";
 import {
   Button,
   Flexbox2 as Flexbox,
   FormField,
   Input,
   Text
-} from 'bonde-styleguide'
-import styled from 'styled-components'
-import { useForm, Controller } from 'react-hook-form'
-import { useStoreActions, useStoreState } from 'easy-peasy'
+} from "bonde-styleguide";
+import styled from "styled-components";
+import { useForm, Controller } from "react-hook-form";
+import { useStoreActions, useStoreState } from "easy-peasy";
 
-import { getUserData, emailValidation, getAgentName } from '../services/utils'
+import { getUserData, emailValidation, getAgentName } from "../services/utils";
 
-import Select from './Select'
-import dicioAgent from '../pages/Match/Table/dicioAgent'
+import Select from "./Select";
+import dicioAgent from "../pages/Match/Table/dicioAgent";
 
 const FormWrapper = styled.form`
   width: 50%;
   display: flex;
   align-items: center;
   justify-content: space-around;
-`
+`;
 const StyledField = styled(FormField)`
   padding: 0;
   color: rgba(255, 255, 255, 1);
   position: relative;
   top: 16px;
-`
+`;
 const StyledFlexbox = styled(Flexbox)`
   width: unset;
-`
+`;
 
 const MatchForm = () => {
-  const tableData = useStoreState(state => state.volunteers.volunteers)
-  const getAvailableVolunteers = useStoreActions((actions: any) => actions.volunteers.getAvailableVolunteers)
-  const setForm = useStoreActions((actions: any) => actions.match.setForm)
-  const volunteerData = useStoreState(state => state.table.data)
-  const { search } = useLocation()
+  // dados das voluntarias
+  const volunteersTableData = useStoreState(
+    state => state.volunteers.volunteers
+  );
+  const getAvailableVolunteers = useStoreActions(
+    (actions: any) => actions.volunteers.getAvailableVolunteers
+  );
+  const setForm = useStoreActions((actions: any) => actions.match.setForm);
+  const tableData = useStoreState(state => state.table.data); // dados da MSR
+  const { search } = useLocation();
 
   const {
     handleSubmit,
@@ -50,32 +55,36 @@ const MatchForm = () => {
   } = useForm();
 
   useEffect(() => {
-    getAvailableVolunteers()
-    const email = search.split('=')[1]
-    if (email) setValue('email', email)
+    getAvailableVolunteers();
+    const email = search.split("=")[1];
+    if (email) setValue("email", email);
     // eslint-disable-next-line
   }, [setValue, search])
 
-
   const send = (data, e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // buscando dados voluntaria atraves do email
     const user = getUserData({
       user: data.email,
-      data: tableData,
+      data: volunteersTableData,
       filterBy: "email"
-    })
-    const assignee_name = getAgentName(data.agent)
+    });
+    const assignee_name = getAgentName(data.agent);
 
-    if (typeof user === 'undefined') return setError("email", "notFound", "Não existe uma voluntária com esse e-mail")
+    if (typeof user === "undefined")
+      return setError(
+        "email",
+        "notFound",
+        "Não existe uma voluntária com esse e-mail"
+      );
 
     setForm({
       volunteer: user,
       agent: data.agent,
       assignee_name
-    })
-  }
+    });
+  };
 
   return (
     <FormWrapper onSubmit={handleSubmit(send)}>
@@ -95,11 +104,11 @@ const MatchForm = () => {
             required: "Esse campo é obrigatório",
             pattern: {
               value: emailValidation(),
-              message: 'Insira um endereço de e-mail válido'
+              message: "Insira um endereço de e-mail válido"
             }
           }}
         />
-        <Text color="#ffffff">{errors.email && errors.email['message']}</Text>
+        <Text color="#ffffff">{errors.email && errors.email["message"]}</Text>
       </StyledFlexbox>
       <StyledFlexbox vertical>
         <Select
@@ -108,14 +117,14 @@ const MatchForm = () => {
           defaultValue="Escolha uma voluntária"
           name="agent"
           register={register({
-            validate: value => value !== 'default' || 'Selecione uma agente',
+            validate: value => value !== "default" || "Selecione uma agente"
           })}
         />
-        <Text color="#ffffff">{errors.agent && errors.agent['message']}</Text>
+        <Text color="#ffffff">{errors.agent && errors.agent["message"]}</Text>
       </StyledFlexbox>
       <Flexbox middle>
         <Button
-          disabled={volunteerData.length < 1}
+          disabled={tableData.length < 1 || volunteersTableData.length < 1}
           minWidth="150px"
           type="submit"
         >
@@ -123,7 +132,7 @@ const MatchForm = () => {
         </Button>
       </Flexbox>
     </FormWrapper>
-  )
-}
+  );
+};
 
-export default MatchForm
+export default MatchForm;

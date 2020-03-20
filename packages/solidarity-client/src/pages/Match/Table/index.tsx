@@ -8,7 +8,7 @@ import React, {
 import "react-table/react-table.css";
 import ReactTable from "react-table";
 import * as turf from "@turf/turf";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Flexbox2 as Flexbox, Title, Button } from "bonde-styleguide";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import styled from "styled-components";
@@ -39,7 +39,7 @@ type Body = {
   individual_name: string;
   individual_ticket_id: number;
   individual_user_id: number;
-  agent: string;
+  agent: number;
   assignee_name: string;
 };
 
@@ -67,6 +67,8 @@ const Table = () => {
   const [isLoading, setLoader] = useState(false);
 
   const { confirm, wrapper, noPhoneNumber } = popups;
+
+  const { goBack } = useHistory();
 
   const {
     name: individual_name,
@@ -172,7 +174,7 @@ const Table = () => {
       volunteer_registry,
       volunteer_phone: parseNumber(phone.toString() || "0"),
       volunteer_organization_id,
-      agent: zendeskAgent,
+      agent: Number(zendeskAgent),
       assignee_name: zendeskAgentName
     });
   };
@@ -187,6 +189,7 @@ const Table = () => {
       wrapper: false,
       confirm: false
     });
+    return goBack();
   };
 
   return filteredTableData.length === 0 ? (
@@ -220,7 +223,7 @@ const Table = () => {
           <ReactTable
             data={filteredTableData}
             columns={columns}
-            defaultPageSize={10}
+            defaultPageSize={15}
             className="-striped -highlight"
           />
         </Flexbox>
