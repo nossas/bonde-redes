@@ -1,8 +1,10 @@
 import { action } from "easy-peasy";
 
 type Volunteer = {
-  latitude: string;
-  longitude: string;
+  coordinates: {
+    latitude: string;
+    longitude: string;
+  }
   email: string;
   name: string;
   whatsapp: string;
@@ -11,8 +13,10 @@ type Volunteer = {
 };
 
 const data: Volunteer = {
-  latitude: "0",
-  longitude: "0",
+  coordinates: {
+    latitude: "0",
+    longitude: "0"
+  },
   email: "",
   name: "",
   whatsapp: "",

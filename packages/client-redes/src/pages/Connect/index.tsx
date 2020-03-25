@@ -54,7 +54,8 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
   const {
     first_name: volunteer_name,
     whatsapp: volunteer_whatsapp,
-    id: volunteer_id
+    id: volunteer_id,
+    coordinates
   } = volunteer;
 
   useEffect(() => {
@@ -65,9 +66,9 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
     if (!linkState.volunteer) return push("/");
   }, [setLoader, loading, error, setError, data, linkState, push]);
 
-  const distance = 4000;
-  const lat = Number(volunteer.latitude);
-  const lng = Number(volunteer.longitude);
+  const distance = 2500;
+  const lat = Number(coordinates && coordinates.latitude);
+  const lng = Number(coordinates && coordinates.longitude);
 
   // TODO: Arrumar as variaveis de acordo com a nova key `coordinate`
   const filterByDistance = useCallback(
