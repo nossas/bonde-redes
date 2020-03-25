@@ -23,6 +23,7 @@
     "cross-storage": "^1.0.0",
     "dotenv-safe": "^8.2.0",
     "easy-peasy": "^3.2.6",
+    "graphql": "^14.6.0",
     "history": "^4.10.1",
     "mapbox-gl": "^1.6.0",
     "morgan": "^1.9.1",
@@ -48,10 +49,7 @@
     "start": "react-scripts start",
     "test": "react-scripts test",
     "coverage": "npm run test -- --watchAll=false --coverage",
-    "eject": "react-scripts eject",
-    "typecheck": "tsc --noEmit --skipLibCheck",
-    "lint": "eslint --ignore-path .gitignore . --ext ts --ext tsx --ext js --ext jsx",
-    "lint:fix": "eslint --fix --ignore-path .gitignore . --ext ts --ext tsx --ext js --ext jsx"
+    "eject": "react-scripts eject"
   },
   "browserslist": {
     "production": [
