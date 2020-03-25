@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios";
 
 const query = `query ($organization_id: bigint, $condition: [String!]) {
   solidarity_users(where: {organization_id: {_eq: $organization_id}, condition: {_in: $condition}, longitude: {_is_null: false}, latitude: {_is_null: false}}) {
@@ -19,27 +19,32 @@ const query = `query ($organization_id: bigint, $condition: [String!]) {
     data_de_inscricao_no_bonde
     user_id
   }
-}`
+}`;
 
 const getAllVolunteerUsers = async (organization_id, condition) => {
-  const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
-  const response = await axios.post(HASURA_API_URL || '', {
-    query,
-    variables: {
-      organization_id, condition
+  const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env;
+  const response = await axios.post(
+    HASURA_API_URL || "",
+    {
+      query,
+      variables: {
+        organization_id,
+        condition
+      }
+    },
+    {
+      headers: {
+        "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET
+      }
     }
-  }, {
-    headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET
-    }
-  })
+  );
 
   try {
-    return response.data.data.solidarity_users
+    return response.data.data.solidarity_users;
   } catch (e) {
-    console.log(response.data.errors[0])
-    return null
+    console.log(response.data.errors[0]);
+    return null;
   }
-}
+};
 
-export default getAllVolunteerUsers
+export default getAllVolunteerUsers;

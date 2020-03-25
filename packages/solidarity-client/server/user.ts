@@ -1,4 +1,4 @@
-import getSolidarityUsers from './hasura/getSolidarityUsers'
+import getSolidarityUsers from "./hasura/getSolidarityUsers";
 
 const main = async (req, res, next) => {
   const locations = await getSolidarityUsers({
@@ -22,9 +22,9 @@ const main = async (req, res, next) => {
     variables: {
       id: req.query.id
     }
-  })
+  });
 
-  res.json(locations)
-}
+  res.json(locations);
+};
 
-export default main
+export default main;

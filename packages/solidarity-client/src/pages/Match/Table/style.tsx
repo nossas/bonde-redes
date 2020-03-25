@@ -5,8 +5,7 @@ export const FullWidth = styled.div`
   padding: 40px;
 `;
 export const Spacing = styled.div`
-  // @ts-ignore
-  margin-bottom: ${props => props.margin}px;
+  margin-bottom: ${(props: { margin: string}) => props.margin}px;
 `;
 export const WrapButtons = styled.div`
   width: 300px;

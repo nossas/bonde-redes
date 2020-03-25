@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 // import PropTypes from 'prop-types'
 import {
   Button,
@@ -6,12 +6,12 @@ import {
   FormField,
   Input,
   Text
-} from 'bonde-styleguide'
-import styled from 'styled-components'
-import { useStoreActions } from 'easy-peasy'
-import { useForm, Controller } from 'react-hook-form'
+} from "bonde-styleguide";
+import styled from "styled-components";
+import { useStoreActions, useStoreState } from "easy-peasy";
+import { useForm, Controller } from "react-hook-form";
 
-import MapsSearchInput from './Search/MapsSearchInput'
+import MapsSearchInput from "./Search/MapsSearchInput";
 
 // interface Props {
 //   onSubmit: () => void
@@ -22,23 +22,23 @@ const FormWrapper = styled.form`
   display: flex;
   align-items: center;
   justify-content: space-around;
-`
+`;
 const StyledField = styled(FormField)`
   padding: 0;
   color: rgba(255, 255, 255, 1);
   position: relative;
   top: 16px;
-`
+`;
 const Column = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-`
+`;
 
 const LabelsWrapper = styled.div`
   display: flex;
   margin-bottom: 10px;
-`
+`;
 
 const StyledLabel = styled.label`
   font-size: 13px;
@@ -47,21 +47,20 @@ const StyledLabel = styled.label`
   line-height: 1.15;
   color: rgba(170, 170, 170, 1);
   padding-right: 10px;
-`
+`;
 
 interface GeobondeForm {
   geolocation: {
-    lat: string | null
-    lng: string | null
-  }
-  distance: number
-  therapist: boolean
-  lawyer: boolean
-  individual: boolean
+    lat: string | null;
+    lng: string | null;
+  };
+  distance: number;
+  therapist: boolean;
+  lawyer: boolean;
+  individual: boolean;
 }
 
 const Form: React.FC = () => {
-
   const {
     register,
     setValue,
@@ -76,31 +75,32 @@ const Form: React.FC = () => {
       distance: 20,
       therapist: true,
       lawyer: true,
-      individual: true,
-    },
-  })
-  const setForm = useStoreActions((actions: any) => actions.geobonde.setForm)
-
+      individual: true
+    }
+  });
+  const setForm = useStoreActions((actions: any) => actions.geobonde.setForm);
+  const tableData = useStoreState(state => state.table.data);
   React.useEffect(() => {
-    register({ name: "geolocation" })
-  }, [register])
+    register({ name: "geolocation" });
+  }, [register]);
 
   const handleChange = (field: string, value: string | number) => {
-    clearError(field)
-    return setValue(field, value)
-  }
+    clearError(field);
+    return setValue(field, value);
+  };
 
   const onSubmit = (data, e: any) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (typeof data.geolocation === 'undefined') return setError("geolocation", "required", "Esse campo é obrigatório")
+    if (typeof data.geolocation === "undefined")
+      return setError("geolocation", "required", "Esse campo é obrigatório");
 
     return setForm({
       ...data,
       lat: data.geolocation.lat,
       lng: data.geolocation.lng
-    })
-  }
+    });
+  };
 
   return (
     <FormWrapper onSubmit={handleSubmit(onSubmit)}>
@@ -113,63 +113,43 @@ const Form: React.FC = () => {
           value={getValues().geolocation}
         />
         <Text color="#ffffff">
-          {errors.geolocation && errors.geolocation['message']}
+          {errors.geolocation && errors.geolocation["message"]}
         </Text>
       </div>
       <Controller
-          as={
-            <StyledField
-              label="Distância (km)"
-              placeholder="Informe o raio de busca"
-              type="number"
-              inputComponent={Input}
-            />
-          }
-          name="distance"
-          control={control}
-        />
+        as={
+          <StyledField
+            label="Distância (km)"
+            placeholder="Informe o raio de busca"
+            type="number"
+            inputComponent={Input}
+          />
+        }
+        name="distance"
+        control={control}
+      />
       <Column>
         <LabelsWrapper>
           <StyledLabel htmlFor="lawyer">
-            <input
-              type="checkbox"
-              name="lawyer"
-              ref={register}
-            />
-            {' '}
-            Advogada
+            <input type="checkbox" name="lawyer" ref={register} /> Advogada
           </StyledLabel>
           <br />
           <StyledLabel htmlFor="therapist">
-            <input
-              type="checkbox"
-              name="therapist"
-              ref={register}
-            />
-            {' '}
-            Terapeuta
+            <input type="checkbox" name="therapist" ref={register} /> Terapeuta
           </StyledLabel>
           <br />
           <StyledLabel htmlFor="individual">
-            <input
-              type="checkbox"
-              name="individual"
-              ref={register}
-            />
-            {' '}
-            MSR
+            <input type="checkbox" name="individual" ref={register} /> MSR
           </StyledLabel>
         </LabelsWrapper>
         <Flexbox middle>
-          <Button
-            type="submit"
-          >
+          <Button type="submit" disabled={tableData.length < 1}>
             Buscar
           </Button>
         </Flexbox>
       </Column>
     </FormWrapper>
-  )
-}
+  );
+};
 
-export default Form
+export default Form;
