@@ -33,18 +33,52 @@ interface GoogleMapsAddressComponent {
   type: string[];
 }
 
+const getCityAndState = addressComponents => {
+  let state: string | undefined;
+  let city: string | undefined;
+  // let country: string | undefined
+
+  addressComponents.forEach(
+    ({
+      types,
+      short_name: shortName
+    }: {
+      types: string[];
+      short_name: string;
+    }) => {
+      if (types.includes("administrative_area_level_1")) {
+        state = shortName;
+      }
+      if (types.includes("administrative_area_level_2")) {
+        city = shortName;
+      }
+      // if (types.includes('country')) {
+      //   country = shortName
+      // }
+    }
+  );
+
+  // if (country !== 'BR') {
+  //   state = undefined
+  //   city = undefined
+  // }
+
+  return [state, city];
+};
+
 export const convertCepToAddressWithGoogleApi = async (
   individual: Individual
 ): Promise<Individual | boolean | { error: GMAPS_ERRORS }> => {
-  if (!process.env.GOOGLE_MAPS_API_KEY) {
+  const { GOOGLE_MAPS_API_KEY } = process.env;
+  if (!GOOGLE_MAPS_API_KEY) {
     throw new Error(
       "Please specify the `GOOGLE_MAPS_API_KEY` environment variable."
     );
   }
 
-  const { GOOGLE_MAPS_API_KEY } = process.env;
   const cep = individual.zipcode;
   let data;
+
   try {
     logger.log("info", `requesting google with cep ${cep}...`);
     const response: GoogleMapsResponse = await axios.post(
@@ -69,7 +103,7 @@ export const convertCepToAddressWithGoogleApi = async (
   if (data.status === "ZERO_RESULTS") {
     logger.log(
       "error",
-      `google maps return with zero result (id, zipcode): ${individual.id}, ${individual.zipcode}`
+      `google maps return with zero result (id, zipcode): ${individual.id}, ${cep}`
     );
 
     const i: Individual = {
@@ -83,7 +117,10 @@ export const convertCepToAddressWithGoogleApi = async (
       city: "ZERO_RESULTS"
     };
 
-    return i;
+    return {
+      error: GMAPS_ERRORS.INVALID_INPUT,
+      ...i
+    };
   } else if (data.status === "OK") {
     const {
       results: [
@@ -97,40 +134,13 @@ export const convertCepToAddressWithGoogleApi = async (
       ]
     } = data;
 
-    let state: string | undefined;
-    let city: string | undefined;
-    // let country: string | undefined
-
-    addressComponents.forEach(
-      ({
-        types,
-        short_name: shortName
-      }: {
-        types: string[];
-        short_name: string;
-      }) => {
-        if (types.includes("administrative_area_level_1")) {
-          state = shortName;
-        }
-        if (types.includes("administrative_area_level_2")) {
-          city = shortName;
-        }
-        // if (types.includes('country')) {
-        //   country = shortName
-        // }
-      }
-    );
-
-    // if (country !== 'BR') {
-    //   state = undefined
-    //   city = undefined
-    // }
+    const [state, city] = getCityAndState(addressComponents);
 
     const i: Individual = {
       id: individual.id,
       coordinates: {
-        latitude: lat,
-        longitude: lng
+        latitude: lat.toString(),
+        longitude: lng.toString()
       },
       address,
       state,
