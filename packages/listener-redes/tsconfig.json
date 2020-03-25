@@ -19,8 +19,5 @@
     "strictNullChecks": false,
     "outDir": "dist"
   },
-  "include": [
-    "src/**/*",
-    "__tests__/**/*"
-  ]
+  "include": ["src/**/*", "src/__tests__/**/*"]
 }
