@@ -1,24 +1,24 @@
-import { action } from 'easy-peasy'
+import { action } from "easy-peasy";
 
 type Volunteer = {
-  latitude: string
-  longitude: string
-  email: string
-  name: string
-  whatsapp: string
-  id: number
-  phone: string
-}
+  latitude: string;
+  longitude: string;
+  email: string;
+  name: string;
+  whatsapp: string;
+  id: number;
+  phone: string;
+};
 
 const data: Volunteer = {
-  latitude: '0',
-  longitude: '0',
-  email: '',
-  name: '',
-  whatsapp: '',
+  latitude: "0",
+  longitude: "0",
+  email: "",
+  name: "",
+  whatsapp: "",
   id: 0,
-  phone: '',
-}
+  phone: ""
+};
 
 const volunteersModel = {
   data,
@@ -31,5 +31,4 @@ const volunteersModel = {
   }))
 };
 
-
-export default volunteersModel
+export default volunteersModel;

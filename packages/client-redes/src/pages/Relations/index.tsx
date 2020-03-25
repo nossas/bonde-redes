@@ -1,45 +1,22 @@
-import React from 'react'
-import ReactTable from 'react-table'
-import styled from 'styled-components';
-import FetchMatches from '../../graphql/FetchMatches'
-import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
+import React from "react";
+import ReactTable from "react-table";
+import styled from "styled-components";
+import FetchMatches from "../../graphql/FetchMatches";
+import { Flexbox2 as Flexbox, Title } from "bonde-styleguide";
 
-import 'react-table/react-table.css'
-import columns from './columns'
+import "react-table/react-table.css";
+import columns from "./columns";
+import { Relationship } from "../../graphql/FetchMatches";
 
 export const Wrap = styled.div`
   width: 90%;
   margin: 40px;
-`
-// type Relationship = {
-//   __typename: string
-//   agent: {
-//     __typename: string
-//     first_name: string
-//     id: number
-//   }
-//   comments?: Array<{}>
-//   created_at:  string
-//   is_archived: false
-//   metadata?: Array<{}>
-//   recipient: {​
-//     __typename: string
-//     first_name: string
-//     id: number
-//   }​​
-//   status: string
-//   updated_at:  string
-//   volunteer: {
-//     __typename: string
-//     first_name: string
-//     id: number
-//   }
-// }
+`;
 
 const Table: React.FC = () => {
   return (
     <FetchMatches>
-      {(data) => {
+      {(data: Array<Relationship>): React.ReactNode => {
         return data.length === 0 ? (
           <Flexbox middle>
             <Wrap>
@@ -59,10 +36,10 @@ const Table: React.FC = () => {
               />
             </Wrap>
           </Flexbox>
-        )
-    }}
+        );
+      }}
     </FetchMatches>
-  )
-}
+  );
+};
 
-export default Table
+export default Table;

@@ -1,39 +1,75 @@
-import React, { useState } from 'react'
-import { gql } from 'apollo-boost'
-import { FullPageLoading } from 'bonde-styleguide'
-import { useQuery } from '@apollo/react-hooks'
+import React, { useState } from "react";
+import { gql } from "apollo-boost";
+import { FullPageLoading } from "bonde-styleguide";
+import { useQuery } from "@apollo/react-hooks";
 
 const FETCH_RELATED_COMMUNITIES = gql`
-query RelatedCommunities($userId: Int!) {
-  communities (where: { community_users: { user_id: { _eq: $userId } } }) {
-    id
-    name
-    city
-    image
-    created_at
-    updated_at
+  query RelatedCommunities($userId: Int!) {
+    communities(where: { community_users: { user_id: { _eq: $userId } } }) {
+      id
+      name
+      city
+      image
+      created_at
+      updated_at
+    }
   }
+`;
+
+export interface Community {
+  id: number;
+  name: string;
+  image: string;
+  created_at: string;
+  updated_at: string;
+  city: string;
 }
-`
 
-export default ({ children, variables, defaultCommunity, onChange }: any) => {
-  const [community, setCommunity] = useState(defaultCommunity)
-  const { loading, error, data } = useQuery(FETCH_RELATED_COMMUNITIES, { variables });
+type FetchProps = {
+  children: any;
+  variables: {
+    userId: number;
+  };
+  defaultCommunity?: Partial<Community | undefined>;
+  onChange: (c: Community) => any;
+};
 
-  if (loading) return <FullPageLoading message='Carregando comunidades...' />;
+interface FetchRelatedCommunitiesData {
+  communities: Community[];
+}
 
-  if (error || !data.communities) {
-    console.log('error', { error, data })
-    return children({ communities: [] })
+interface FetchRelatedCommunitiesVars {
+  userId: number;
+}
+
+export default ({
+  children,
+  variables,
+  defaultCommunity,
+  onChange
+}: FetchProps) => {
+  const [community, setCommunity] = useState(defaultCommunity);
+  const { loading, error, data } = useQuery<
+    FetchRelatedCommunitiesData,
+    FetchRelatedCommunitiesVars
+  >(FETCH_RELATED_COMMUNITIES, {
+    variables
+  });
+
+  if (loading) return <FullPageLoading message="Carregando comunidades..." />;
+
+  if (error || (data && !data.communities)) {
+    console.log("error", { error, data });
+    return children({ communities: [] });
   }
 
   const fetchCommunitiesProps = {
-    communities: data.communities,
-    community: Object.keys(community).length > 0 ? community : undefined,
-    onChangeCommunity: (c) => {
-      return onChange(c).then(() => setCommunity(c))
+    communities: data && data.communities,
+    community: typeof community !== "undefined" ? community : undefined,
+    onChangeCommunity: c => {
+      return onChange(c).then(() => setCommunity(c));
     }
-  }
+  };
 
-	return children(fetchCommunitiesProps)
-}
+  return children(fetchCommunitiesProps);
+};
