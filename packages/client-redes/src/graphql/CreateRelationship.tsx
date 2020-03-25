@@ -1,43 +1,39 @@
-import { gql } from 'apollo-boost'
+import { gql } from "apollo-boost";
 
 export default gql`
-mutation createRelationship(
-  $recipientId: Int!
-  $volunteerId: Int!
-  $agent: Int!
-){
-  insert_rede_relationships(objects:
-    {
-      recipient_id: $recipientId
-      volunteer_id: $volunteerId
-      status: "pending"
-      user_id: $agent
-    }
+  mutation createRelationship(
+    $recipientId: Int!
+    $volunteerId: Int!
+    $agentId: Int!
   ) {
-    returning {
-      comments
-      created_at
-      id
-      is_archived
-      metadata
-      priority
-      recipient {
-        id
-        first_name
+    insert_rede_relationships(
+      objects: {
+        recipient_id: $recipientId
+        volunteer_id: $volunteerId
+        status: "pendente"
+        user_id: $agentId
       }
-      recipient_id
-      status
-      updated_at
-      volunteer {
+    ) {
+      returning {
+        created_at
         id
-        first_name
+        recipient_id
+        updated_at
+        agent {
+          id
+        }
       }
-      agent {
+    }
+
+    update_rede_individuals(
+      _set: { availability: "indisponível" }
+      where: { id: { _eq: $volunteerId } }
+    ) {
+      returning {
         id
-        first_name
+        email
+        availability
       }
-      volunteer_id
     }
   }
-}
-`
+`;
