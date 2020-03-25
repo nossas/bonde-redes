@@ -19,6 +19,7 @@ const USERS = gql`
         group: { community_id: $context, is_volunteer: { _eq: $is_volunteer } }
         status: $status
         availability: $availability
+        coordinates: {_is_null: false}
       }
       limit: $rows
       offset: $offset

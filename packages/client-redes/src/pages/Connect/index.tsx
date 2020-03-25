@@ -75,7 +75,7 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
     data =>
       data
         .map(i => {
-          const pointA = [Number(i.latitude), Number(i.longitude)];
+          const pointA = [Number(i.coordinates.latitude), Number(i.coordinates.longitude)];
 
           return {
             ...i,
