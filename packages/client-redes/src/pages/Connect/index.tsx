@@ -65,7 +65,7 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
     if (!linkState.volunteer) return push("/");
   }, [setLoader, loading, error, setError, data, linkState, push]);
 
-  const distance = 50;
+  const distance = 4000;
   const lat = Number(volunteer.latitude);
   const lng = Number(volunteer.longitude);
 
