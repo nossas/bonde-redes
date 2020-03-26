@@ -168,6 +168,20 @@ const individualsColumns = [
     ) : null),
     width: 150
   }, {
+    accessor: 'availability',
+    Header: 'Disponibilidade',
+    Cell: ({ value, row }): any => (value ? (
+      <SelectUpdateStatus
+        name='availability'
+        row={row}
+        options={availability}
+        selected={value}
+        type="individual"
+        query={UPDATE_INDIVIDUAL_MUTATION}
+      />
+    ) : null),
+    width: 150
+  }, {
     accessor: 'address',
     Header: 'Endereço',
     width: 100
