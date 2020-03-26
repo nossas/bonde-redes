@@ -107,6 +107,11 @@ const volunteersColumns = [
     accessor: 'phone',
     Header: 'Telefone'
   }, {
+    accessor: 'extras',
+    Header: 'Termos e Condições',
+    Cell: ExtraCol('accept_terms'),
+    width: 170
+  }, {
     accessor: 'created_at',
     Header: 'Data de criação',
     Cell: DateText,
@@ -190,8 +195,25 @@ const individualsColumns = [
     Header: 'CEP',
     width: 100
   }, {
+    accessor: 'extras',
+    Header: 'Serviço de saúde',
+    Cell: ExtraCol('health_service'),
+    width: 150
+  }, {
     accessor: 'phone',
     Header: 'Telefone'
+  },{
+    accessor: 'extras',
+    Header: 'Gênero',
+    Cell: ExtraCol('gender')
+  },{
+    accessor: 'extras',
+    Header: 'Raça',
+    Cell: ExtraCol('race')
+  },{
+    accessor: 'extras',
+    Header: 'Termos e Condições',
+    Cell: ExtraCol('accept_terms')
   }, {
     accessor: 'created_at',
     Header: 'Data de criação',
