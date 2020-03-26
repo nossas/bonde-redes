@@ -170,7 +170,7 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
               <Popup
                 individualName={individual_name}
                 volunteerName={volunteer_name}
-                onSubmit={onConfirm({
+                onSubmit={() => onConfirm({
                   individual_id, 
                   volunteer_id, 
                   agent_id: agent.id, 
