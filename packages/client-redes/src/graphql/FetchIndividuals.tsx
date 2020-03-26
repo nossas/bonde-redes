@@ -22,6 +22,7 @@ query RedeGroups(
       },
       status: $status,
       availability: $availability
+      coordinates: { _is_null: false }
     },
       limit: $rows,
       offset: $offset,
