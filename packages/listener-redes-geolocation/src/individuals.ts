@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import * as yup from 'yup'
 import { client as GraphQLAPI } from './graphql'
 import convertCepToAddressWithGoogleApi from './geolocation'
 import { 
@@ -14,9 +15,13 @@ const error = (err: Error): void => {
 
 const REDE_INDIVIDUAL_GEOLOCATION_MUTATION = gql`
 mutation update_rede_individuals($id: Int!, $address: String!, $state: String!, $city: String!, $coordinates: jsonb!) {
-  update_rede_individuals(_prepend: {coordinates: $coordinates}, _set: {address: $address, state: $state, city: $city}, where: {id: {_eq: $id}}) {
+  update_rede_individuals(_set: {coordinates: $coordinates, address: $address, state: $state, city: $city}, where: {id: {_eq: $id}}) {
     returning {
       id
+      coordinates
+      address
+      state
+      city
       updated_at
     }
   }
@@ -38,7 +43,32 @@ export const geolocation = async (response: SubscribeIndividualsResponse) => {
 	individuals.forEach(async (individual: SubscribeIndividual) => {
     const individualWithGeolocation: ConvertCepRes = await convertCepToAddressWithGoogleApi(individual)
 
-    return mutationUpdateCoordinates(individualWithGeolocation)
+    const schema = yup.object({
+      id: yup.number(),
+      coordinates: yup.object({
+        latitude: yup.string(),
+        longitude: yup.string()
+      }),
+      address: yup.string(),
+      state: yup.string(),
+      city: yup.string(),
+      updated_at: yup.string()
+    });
+  
+    type IndividualCoordinates = yup.InferType<typeof schema>;
+  
+    const updatedIndividual: IndividualCoordinates = await mutationUpdateCoordinates(individualWithGeolocation)
+  
+    // try {
+    //   await schema.validate(updatedIndividual)
+    //   logger.log("info", 'successfuly validated schema of updated coordinates mutation');
+    //   return updatedIndividual
+    // } catch (err) {
+    //   logger.error('failed to validate schema of updated coordinates mutation response ', err)
+    //   return undefined
+    // }
+
+    return updatedIndividual
 	})
 
   return individuals
