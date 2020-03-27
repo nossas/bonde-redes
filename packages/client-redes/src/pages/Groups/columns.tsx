@@ -7,6 +7,7 @@ import SelectUpdateStatus from '../../components/SelectUpdateStatus'
 import history from '../../history'
 import { BtnInverted } from './styles'
 import UPDATE_INDIVIDUAL_MUTATION from '../../graphql/UpdateIndividual'
+import { isJsonString } from '../../services/utils'
 
 const TextHeader = ({ value }) => (
   <Text fontSize={13} fontWeight={600}>{value.toUpperCase()}</Text>
@@ -24,8 +25,12 @@ const DateText = ({ value }) => {
   return data.toLocaleDateString('pt-BR')
 }
 
+const parseValidJsonString = (value) => isJsonString(value) 
+  ? JSON.parse(value) 
+  : value
+
 const ExtraCol = (accessor: string) => ({ value }) => (value ? (
-  <span>{value[accessor]}</span>
+  <span>{parseValidJsonString(value)[accessor]}</span>
 ) : '-')
 
 const status = [
