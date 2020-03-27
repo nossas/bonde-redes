@@ -81,6 +81,7 @@
     "@types/react-table": "^6.8.5",
     "@types/styled-components": "^4.4.1",
     "@types/testing-library__react": "^9.1.2",
-    "@types/url-join": "^4.0.0"
+    "@types/url-join": "^4.0.0",
+    "jest": "24.9.0"
   }
 }
