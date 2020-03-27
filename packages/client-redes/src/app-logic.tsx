@@ -2,7 +2,7 @@ import { useStoreState, useStoreActions } from 'easy-peasy'
 import {
   encodeText,
   whatsappText,
-  parseNumber,
+  parseNumber
 } from './services/utils';
 
 export default function useAppLogic() {
@@ -27,21 +27,11 @@ export default function useAppLogic() {
   const getUserData = ({ user, data, filterBy }) => data.filter((i) => user === i[filterBy])[0]
 
   const parsedIndividualNumber = parseNumber(individual.phone);
-  const urlencodedIndividualText = encodeText(whatsappText({
-    volunteer_name: volunteer.name,
-    individual_name: individual.name,
-    agent: "Voluntária",
-    isVolunteer: false,
-    volunteer_email: volunteer.email
-  }));
-
   const parsedVolunteerNumber = parseNumber(volunteer.whatsapp);
-  const urlencodedVolunteerText = encodeText(whatsappText({
-    volunteer_name: volunteer.name,
-    individual_name: individual.name,
-    agent: "Voluntária",
-    isVolunteer: true
-  }));
+
+  const distance = 2500;
+  const volunteer_lat = Number(volunteer.coordinates && volunteer.coordinates.latitude);
+  const volunteer_lng = Number(volunteer.coordinates && volunteer.coordinates.longitude);
 
   return {
     individual,
@@ -50,13 +40,16 @@ export default function useAppLogic() {
     popups,
     createWhatsappLink,
     parsedIndividualNumber,
-    urlencodedIndividualText,
     parsedVolunteerNumber,
-    urlencodedVolunteerText,
     getUserData,
     setTable,
     setVolunteer,
     setPopup,
-    setIndividual
+    setIndividual,
+    encodeText,
+    whatsappText,
+    volunteer_lat,
+    volunteer_lng,
+    distance
   }
 }
