@@ -107,9 +107,11 @@ const FetchIndividuals = SessionHOC((props: any) => (
       const { children, session: { community } } = props
 
       const variables = {
-        context: { _eq: community.id },
         ...(filters || {}),
-        is_volunteer: false // TODO: deixar isso dinâmico!!
+        context: { _eq: community.id },
+        is_volunteer: false, // TODO: deixar isso dinâmico!!
+        availability: { _eq: "disponível" },
+        status: { _eq: "aprovada" }
       }
 
       const { loading, error, data } = useQuery<IndividualData, IndividualVars>(USERS, { variables })
