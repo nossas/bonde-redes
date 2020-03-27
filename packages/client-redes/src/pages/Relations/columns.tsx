@@ -41,9 +41,6 @@ const columns = [
       return data.toLocaleDateString('pt-BR')
     },
   }, {
-    accessor: 'relation',
-    Header: 'Relação',
-  }, {
     accessor: 'status',
     Header: 'Status',
     Cell: ({ value, row }): any => (value ? (

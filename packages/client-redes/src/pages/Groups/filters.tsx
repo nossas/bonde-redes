@@ -1,6 +1,6 @@
 const data = {
   'volunteers': 'Psicólogas',
-  'individuals': 'Profissionais da Rede de Saúde'
+  'individuals': 'Profissionais da Saúde'
 }
 
 export default function filters({ volunteersCount, individualsCount, history, kind, filters: _filters }: any): any {
@@ -14,7 +14,7 @@ export default function filters({ volunteersCount, individualsCount, history, ki
         },
         {
           onClick: () => history.push("/groups/individuals"),
-          option: `Profissionais da Rede de Saúde (${individualsCount})`
+          option: `Profissionais da Saúde (${individualsCount})`
         }
       ]
     },  
