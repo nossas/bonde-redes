@@ -22,56 +22,52 @@ mutation update_rede_individuals($id: Int!, $address: String!, $state: String!, 
       address
       state
       city
-      updated_at
     }
   }
 }
 `
+const schema = yup.object({
+  id: yup.number(),
+  coordinates: yup.object({
+    latitude: yup.string(),
+    longitude: yup.string()
+  }),
+  address: yup.string(),
+  state: yup.string(),
+  city: yup.string(),
+});
 
-export const mutationUpdateCoordinates = async (individual: ConvertCepRes): Promise<Record<string, string>> => {
+type IndividualCoordinates = yup.InferType<typeof schema>;
+
+const validateMutationRes = async (schema, updatedIndividual) => {
+  try {
+    await schema.validate(updatedIndividual)
+    logger.log("info", 'successfuly validated schema of updated coordinates mutation');
+    return updatedIndividual
+  } catch(e) {
+    logger.error('failed to validate schema of updated coordinates mutation response ', e.errors)
+    return false
+  }
+}
+
+export const mutationUpdateCoordinates = async (individual: ConvertCepRes): Promise<IndividualCoordinates[] | false> => {
+
   const { data: { update_rede_individuals: { returning: updatedIndividual } } } = await GraphQLAPI.mutate({
 		mutation: REDE_INDIVIDUAL_GEOLOCATION_MUTATION,
     variables: individual
-	})
+  })
 
-	return updatedIndividual
+  return validateMutationRes(schema, updatedIndividual["0"])
 }
 
-export const geolocation = async (response: SubscribeIndividualsResponse) => {
+export const geolocation = (response: SubscribeIndividualsResponse) => {
   const { data: { rede_individuals: individuals } } = response
 
-	individuals.forEach(async (individual: SubscribeIndividual) => {
-    const individualWithGeolocation: ConvertCepRes = await convertCepToAddressWithGoogleApi(individual)
-
-    const schema = yup.object({
-      id: yup.number(),
-      coordinates: yup.object({
-        latitude: yup.string(),
-        longitude: yup.string()
-      }),
-      address: yup.string(),
-      state: yup.string(),
-      city: yup.string(),
-      updated_at: yup.string()
-    });
-  
-    type IndividualCoordinates = yup.InferType<typeof schema>;
-  
-    const updatedIndividual: IndividualCoordinates = await mutationUpdateCoordinates(individualWithGeolocation)
-  
-    // try {
-    //   await schema.validate(updatedIndividual)
-    //   logger.log("info", 'successfuly validated schema of updated coordinates mutation');
-    //   return updatedIndividual
-    // } catch (err) {
-    //   logger.error('failed to validate schema of updated coordinates mutation response ', err)
-    //   return undefined
-    // }
-
-    return updatedIndividual
-	})
-
-  return individuals
+  individuals.map(async (i: SubscribeIndividual) => {
+    const individualWithGeolocation: ConvertCepRes = await convertCepToAddressWithGoogleApi(i)
+    
+    await mutationUpdateCoordinates(individualWithGeolocation)
+  })
 };
 
 const REDES_INDIVIDUALS_SUBSCRIPTION = gql`
