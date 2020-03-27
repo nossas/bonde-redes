@@ -30,7 +30,7 @@
     "build:watch": "tsc -w -p tsconfig.release.json",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch --runInBand --detectOpenHandles"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.5",
