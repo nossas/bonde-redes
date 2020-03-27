@@ -42,4 +42,5 @@ export default gql`
       availability
     }
   }
+}
 `;
