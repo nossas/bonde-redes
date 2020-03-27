@@ -39,6 +39,7 @@
     "react-scripts": "^3.4.0",
     "react-spring": "^8.0.27",
     "react-table": "6.10.3",
+    "serve": "^11.3.0",
     "styled-components": "^4.4.1",
     "typescript": "~3.7.3",
     "validator": "^12.1.0"
@@ -46,7 +47,7 @@
   "scripts": {
     "dev": "react-scripts start",
     "build": "react-scripts build",
-    "start": "react-scripts start",
+    "start": "serve -s build",
     "test": "react-scripts test",
     "coverage": "npm run test -- --watchAll=false --coverage",
     "eject": "react-scripts eject"
