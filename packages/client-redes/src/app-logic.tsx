@@ -31,7 +31,8 @@ export default function useAppLogic() {
     volunteer_name: volunteer.name,
     individual_name: individual.name,
     agent: "Voluntária",
-    isVolunteer: false
+    isVolunteer: false,
+    volunteer_email: volunteer.email
   }));
 
   const parsedVolunteerNumber = parseNumber(volunteer.whatsapp);

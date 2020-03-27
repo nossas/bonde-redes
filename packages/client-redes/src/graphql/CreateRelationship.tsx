@@ -30,7 +30,12 @@ mutation createRelationship(
     _set: {
       availability: "indisponível"
     },
-    where: { id: { _eq: $volunteerId } }
+    where: {
+      _and: [
+        {id: { _eq: $volunteerId }}
+        {id: { _eq: $recipientId }} 
+      ]
+    }
   ) {
     returning {
       id
