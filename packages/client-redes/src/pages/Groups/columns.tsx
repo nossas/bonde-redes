@@ -1,10 +1,13 @@
-/* eslint-disable react/display-name */
-import React from "react";
-import { Flexbox2 as Flexbox, Text } from "bonde-styleguide";
-import SelectUpdateStatus from "../../components/SelectUpdateStatus";
-import history from "../../history";
-import { BtnInverted } from "./styles";
-import UPDATE_INDIVIDUAL_MUTATION from "../../graphql/UpdateIndividual";
+import React from 'react'
+import { 
+  Flexbox2 as Flexbox, 
+  Text,
+} from 'bonde-styleguide'
+import SelectUpdateStatus from '../../components/SelectUpdateStatus'
+import history from '../../history'
+import { BtnInverted } from './styles'
+import UPDATE_INDIVIDUAL_MUTATION from '../../graphql/UpdateIndividual'
+import { isJsonString } from '../../services/utils'
 
 type valueString = {
   value: string;
@@ -37,10 +40,13 @@ const DateText = ({ value }: valueString): React.ReactNode => {
   return data.toLocaleDateString("pt-BR");
 };
 
-const ExtraCol = (accessor: string) => ({
-  value
-}: valueString): React.ReactNode =>
-  value ? <span>{value[accessor]}</span> : "-";
+const parseValidJsonString = (value) => isJsonString(value) 
+  ? JSON.parse(value) 
+  : value
+
+const ExtraCol = (accessor: string) => ({ value }) => (value ? (
+  <span>{parseValidJsonString(value)[accessor]}</span>
+) : '-')
 
 const status = ["inscrita", "reprovada", "aprovada"];
 
@@ -121,23 +127,24 @@ const volunteersColumns: Array<Columns> = [
     accessor: "zipcode",
     Header: "CEP",
     width: 100
-  },
-  {
-    accessor: "whatsapp",
-    Header: "Whatsapp"
-  },
-  {
-    accessor: "phone",
-    Header: "Telefone"
-  },
-  {
-    accessor: "created_at",
-    Header: "Data de criação",
-    Cell: DateText
-  },
-  {
-    accessor: "id",
-    Header: "Ação",
+  }, {
+    accessor: 'whatsapp',
+    Header: 'Whatsapp'
+  }, {
+    accessor: 'phone',
+    Header: 'Telefone'
+  }, {
+    accessor: 'extras',
+    Header: 'Termos e Condições',
+    Cell: ExtraCol('accept_terms'),
+    width: 170
+  }, {
+    accessor: 'created_at',
+    Header: 'Data de criação',
+    Cell: DateText,
+  }, {
+    accessor: 'id',
+    Header: 'Ação',
     width: 200,
     Cell: ({
       value,
@@ -212,36 +219,58 @@ const individualsColumns: Array<Columns> = [
         />
       ) : null,
     width: 150
-  },
-  {
-    accessor: "address",
-    Header: "Endereço",
+  }, {
+    accessor: 'availability',
+    Header: 'Disponibilidade',
+    Cell: ({ value, row }): any => (value ? (
+      <SelectUpdateStatus
+        name='availability'
+        row={row}
+        options={availability}
+        selected={value}
+        type="individual"
+        query={UPDATE_INDIVIDUAL_MUTATION}
+      />
+    ) : null),
+    width: 150
+  }, {
+    accessor: 'address',
+    Header: 'Endereço',
     width: 100
   },
   {
     accessor: "zipcode",
     Header: "CEP",
     width: 100
+  }, {
+    accessor: 'extras',
+    Header: 'Serviço de saúde',
+    Cell: ExtraCol('health_service'),
+    width: 150
+  }, {
+    accessor: 'phone',
+    Header: 'Telefone'
+  },{
+    accessor: 'extras',
+    Header: 'Gênero',
+    Cell: ExtraCol('gender')
+  },{
+    accessor: 'extras',
+    Header: 'Raça',
+    Cell: ExtraCol('race')
+  },{
+    accessor: 'extras',
+    Header: 'Termos e Condições',
+    Cell: ExtraCol('accept_terms')
+  }, {
+    accessor: 'created_at',
+    Header: 'Data de criação',
+    Cell: DateText,
   },
-  {
-    accessor: "phone",
-    Header: "Telefone"
-  },
-  {
-    accessor: "created_at",
-    Header: "Data de criação",
-    Cell: DateText
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-].map((col: any) =>
-  !!col.Cell
-    ? { ...col, Header: (): JSX.Element => <TextHeader value={col.Header} /> }
-    : {
-        ...col,
-        Header: (): JSX.Element => <TextHeader value={col.Header} />,
-        Cell: TextCol
-      }
-);
+].map((col: any) => !!col.Cell
+  ? {...col, Header: () => <TextHeader value={col.Header} />}
+  : {...col, Header: () => <TextHeader value={col.Header} />, Cell: TextCol}
+)
 
 const dicio = {
   "/groups/volunteers": volunteersColumns,

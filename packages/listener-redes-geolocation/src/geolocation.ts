@@ -1,50 +1,59 @@
 import axios from "axios";
 import { logger } from "./logger";
-import { Individual } from "./individuals";
+import { SubscribeIndividual } from "./types/individual";
+import { 
+  GoogleMapsResponse, 
+  GMAPS_ERRORS, 
+  ConvertCepRes,
+  IndividualGeolocation
+} from './types/geolocation'
 
-export enum GMAPS_ERRORS {
-  REQUEST_FAILED,
-  INVALID_INPUT
-}
+const getCityAndState = (addressComponents): Array<string> => {
+  let state: string | undefined;
+  let city: string | undefined;
+  // let country: string | undefined
 
-interface GoogleMapsResponse {
-  data: {
-    results: GoogleMapsResults[];
-    status: string;
-  };
-}
+  addressComponents.forEach(
+    ({
+      types,
+      short_name: shortName
+    }: {
+      types: string[];
+      short_name: string;
+    }) => {
+      if (types.includes("administrative_area_level_1")) {
+        state = shortName;
+      }
+      if (types.includes("administrative_area_level_2")) {
+        city = shortName;
+      }
+      // if (types.includes('country')) {
+      //   country = shortName
+      // }
+    }
+  );
 
-interface GoogleMapsResults {
-  address_components: GoogleMapsAddressComponent[];
-  formatted_address: string;
-  geometry: {
-    location: {
-      lat: string;
-      lng: string;
-    };
-  };
-  place_id: string;
-  types: string[];
-}
+  // if (country !== 'BR') {
+  //   state = undefined
+  //   city = undefined
+  // }
 
-interface GoogleMapsAddressComponent {
-  long_name: string;
-  short_name: string;
-  type: string[];
-}
+  return [state, city];
+};
 
-export const convertCepToAddressWithGoogleApi = async (
-  individual: Individual
-): Promise<Individual | boolean | { error: GMAPS_ERRORS }> => {
-  if (!process.env.GOOGLE_MAPS_API_KEY) {
+const convertCepToAddressWithGoogleApi = async (
+  individual: SubscribeIndividual
+): Promise<ConvertCepRes> => {
+  const { GOOGLE_MAPS_API_KEY } = process.env;
+  if (!GOOGLE_MAPS_API_KEY) {
     throw new Error(
       "Please specify the `GOOGLE_MAPS_API_KEY` environment variable."
     );
   }
 
-  const { GOOGLE_MAPS_API_KEY } = process.env;
   const cep = individual.zipcode;
   let data;
+
   try {
     logger.log("info", `requesting google with cep ${cep}...`);
     const response: GoogleMapsResponse = await axios.post(
@@ -69,10 +78,10 @@ export const convertCepToAddressWithGoogleApi = async (
   if (data.status === "ZERO_RESULTS") {
     logger.log(
       "error",
-      `google maps return with zero result (id, zipcode): ${individual.id}, ${individual.zipcode}`
+      `google maps return with zero result (id, zipcode): ${individual.id}, ${cep}`
     );
 
-    const i: Individual = {
+    const i: IndividualGeolocation = {
       id: individual.id,
       coordinates: {
         latitude: "ZERO_RESULTS",
@@ -83,8 +92,11 @@ export const convertCepToAddressWithGoogleApi = async (
       city: "ZERO_RESULTS"
     };
 
-    return i;
-  } else if (data.status === "OK") {
+    return {
+      error: GMAPS_ERRORS.INVALID_INPUT,
+      ...i
+    };
+  } if (data.status === "OK") {
     const {
       results: [
         {
@@ -97,45 +109,20 @@ export const convertCepToAddressWithGoogleApi = async (
       ]
     } = data;
 
-    let state: string | undefined;
-    let city: string | undefined;
-    // let country: string | undefined
+    const [state, city] = getCityAndState(addressComponents);
 
-    addressComponents.forEach(
-      ({
-        types,
-        short_name: shortName
-      }: {
-        types: string[];
-        short_name: string;
-      }) => {
-        if (types.includes("administrative_area_level_1")) {
-          state = shortName;
-        }
-        if (types.includes("administrative_area_level_2")) {
-          city = shortName;
-        }
-        // if (types.includes('country')) {
-        //   country = shortName
-        // }
-      }
-    );
-
-    // if (country !== 'BR') {
-    //   state = undefined
-    //   city = undefined
-    // }
-
-    const i: Individual = {
+    const i: IndividualGeolocation = {
       id: individual.id,
       coordinates: {
-        latitude: lat,
-        longitude: lng
+        latitude: lat.toString(),
+        longitude: lng.toString()
       },
       address,
       state,
       city
     };
+
+    logger.log("info", "updated individual geolocation data", i);
 
     return i;
   }
@@ -144,3 +131,5 @@ export const convertCepToAddressWithGoogleApi = async (
     error: GMAPS_ERRORS.INVALID_INPUT
   };
 };
+
+export default convertCepToAddressWithGoogleApi
