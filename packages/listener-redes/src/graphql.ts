@@ -6,7 +6,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 import fetch from "node-fetch";
-import ws from "ws";
+import * as ws from "ws";
 
 if (!process.env.JWT_TOKEN && !process.env.HASURA_SECRET) {
   throw new Error(

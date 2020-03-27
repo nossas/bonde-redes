@@ -22,8 +22,8 @@
     "typescript": "~3.7.5"
   },
   "scripts": {
-    "start": "node dist/src/main.js",
-    "dev": "tsc-watch --onSuccess \"node ./dist/src/main.js\"",
+    "start": "node -r dotenv-safe/config dist/src/main.js",
+    "dev": "tsc-watch --onSuccess \"node -r dotenv-safe/config ./dist/src/main.js\"",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "build": "tsc -p tsconfig.release.json",
