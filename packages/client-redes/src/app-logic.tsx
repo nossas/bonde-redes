@@ -2,7 +2,8 @@ import { useStoreState, useStoreActions } from 'easy-peasy'
 import {
   encodeText,
   whatsappText,
-  parseNumber
+  parseNumber,
+  isJsonString
 } from './services/utils';
 
 export default function useAppLogic() {
@@ -30,8 +31,12 @@ export default function useAppLogic() {
   const parsedVolunteerNumber = parseNumber(volunteer.whatsapp);
 
   const distance = 2500;
-  const volunteer_lat = Number(volunteer.coordinates && volunteer.coordinates.latitude);
-  const volunteer_lng = Number(volunteer.coordinates && volunteer.coordinates.longitude);
+
+  const parsedCoordinates = isJsonString(volunteer.coordinates) 
+    ? JSON.parse(volunteer.coordinates) 
+    : volunteer.coordinates
+  const volunteer_lat = parsedCoordinates && Number(parsedCoordinates.latitude);
+  const volunteer_lng = parsedCoordinates && Number(parsedCoordinates.longitude);
 
   return {
     individual,
