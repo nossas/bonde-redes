@@ -1,4 +1,4 @@
-import { geolocation } from "../individuals";
+import { geolocation } from "../src/individuals";
 
 describe("geolocation function", async () => {
   beforeEach(() => {

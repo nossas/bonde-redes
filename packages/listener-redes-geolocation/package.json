@@ -23,8 +23,8 @@
     "typescript": "~3.8.2"
   },
   "scripts": {
-    "dev": "tsc-watch --outDir ./build --onSuccess \"node ./build/src/main.js\"",
-    "start": "node build/src/main.js",
+    "dev": "tsc-watch --outDir ./build --onSuccess \"node -r dotenv/config ./build/src/main.js\"",
+    "start": "node -r dotenv/config build/src/main.js",
     "clean": "rimraf coverage build tmp",
     "build": "tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
