@@ -73,7 +73,7 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
 			}
 		})
 
-		// console.log('individuals', individuals)
+		console.log('individuals', individuals)
 		// Batch insert individuals
 		console.log('Inserting the new individuals on GraphQL API...')
 		await insertRedeIndividuals(individuals)

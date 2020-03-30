@@ -17,12 +17,17 @@ query redes {
 `
 
 const fetchRedesGroups = async (): Promise<any> => {
-	const { data: { rede_groups: groups } } = await GraphQLAPI.query({
-		query: FETCH_REDES_QUERY,
-		fetchPolicy: 'network-only'
-	})
-
-	return groups
+  try {
+    const { data: { rede_groups: groups } } = await GraphQLAPI.query({
+      query: FETCH_REDES_QUERY,
+      fetchPolicy: 'network-only'
+    })
+  
+    return groups
+  } catch (err) {
+		console.error('failed on fetch redes groups: '.red, err)
+		return undefined
+	}
 }
 
 export default fetchRedesGroups
