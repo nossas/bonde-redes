@@ -29,12 +29,17 @@ mutation update_rede_individuals($id: Int!, $address: String!, $state: String!, 
 `
 
 export const mutationUpdateCoordinates = async (individual: ConvertCepRes): Promise<Record<string, string>> => {
-  const { data: { update_rede_individuals: { returning: updatedIndividual } } } = await GraphQLAPI.mutate({
-		mutation: REDE_INDIVIDUAL_GEOLOCATION_MUTATION,
-    variables: individual
-	})
-
-	return updatedIndividual
+  try {
+    const { data: { update_rede_individuals: { returning: updatedIndividual } } } = await GraphQLAPI.mutate({
+      mutation: REDE_INDIVIDUAL_GEOLOCATION_MUTATION,
+      variables: individual
+    })
+  
+    return updatedIndividual
+  } catch (err) {
+		logger.log('failed on mutation update coordinates: ', err)
+		return undefined
+	}
 }
 
 export const geolocation = async (response: SubscribeIndividualsResponse) => {

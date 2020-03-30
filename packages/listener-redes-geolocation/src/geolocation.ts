@@ -92,10 +92,7 @@ const convertCepToAddressWithGoogleApi = async (
       city: "ZERO_RESULTS"
     };
 
-    return {
-      error: GMAPS_ERRORS.INVALID_INPUT,
-      ...i
-    };
+    return i
   } if (data.status === "OK") {
     const {
       results: [
