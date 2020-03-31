@@ -45,7 +45,7 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
     volunteer_lng
   } = useAppLogic()
 
-  const { goBack } = useHistory()
+  const { goBack, push } = useHistory()
   const { 
     state: linkState = { volunteer: {} }
   } = useLocation()

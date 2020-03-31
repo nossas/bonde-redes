@@ -1,4 +1,4 @@
-import { convertCepToAddressWithGoogleApi } from "../geolocation";
+import convertCepToAddressWithGoogleApi from "../geolocation";
 
 describe("convertCepToAddressWithGoogleApi function", () => {
   beforeEach(() => {
