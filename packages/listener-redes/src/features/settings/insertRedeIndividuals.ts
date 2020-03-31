@@ -39,16 +39,17 @@ const INDIVIDUALS_MUTATION = gql`
 `;
 
 const insertRedeIndividuals = async (individuals: any): Promise<any> => {
-  const {
-    data: {
-      insert_rede_individuals: { returning }
-    }
-  } = await GraphQLAPI.mutate({
-    mutation: INDIVIDUALS_MUTATION,
-    variables: { individuals }
-  });
-
-  return returning;
-};
+  try {
+    const { data: { insert_rede_individuals: { returning } } } = await GraphQLAPI.mutate({
+      mutation: INDIVIDUALS_MUTATION,
+      variables: { individuals }
+    })
+  
+    return returning
+  } catch (err) {
+		console.error('failed on insert rede individuals: '.red, err)
+		return undefined
+	}
+}
 
 export default insertRedeIndividuals;

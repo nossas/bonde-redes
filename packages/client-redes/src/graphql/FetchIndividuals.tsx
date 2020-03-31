@@ -5,23 +5,27 @@ import { SessionHOC } from "../services/session";
 import FilterQuery from "./FilterQuery";
 
 const USERS = gql`
-  query RedeGroups(
-    $context: Int_comparison_exp!
-    $rows: Int!
-    $offset: Int!
-    $order_by: [rede_individuals_order_by!]
-    $status: String_comparison_exp
-    $availability: String_comparison_exp
-    $is_volunteer: Boolean!
-  ) {
-    rede_individuals(
-      where: {
-        group: { community_id: $context, is_volunteer: { _eq: $is_volunteer } }
-        status: $status
-        availability: $availability
-      }
-      limit: $rows
-      offset: $offset
+query RedeGroups(
+  $context: Int_comparison_exp!,
+  $rows: Int!,
+  $offset: Int!,
+  $order_by: [rede_individuals_order_by!],
+  $status: String_comparison_exp
+  $availability: String_comparison_exp
+  $is_volunteer: Boolean!
+) {
+  rede_individuals(
+    where: {
+      group: {
+        community_id: $context,
+        is_volunteer: { _eq: $is_volunteer }
+      },
+      status: $status,
+      availability: $availability
+      coordinates: { _is_null: false }
+    },
+      limit: $rows,
+      offset: $offset,
       order_by: $order_by
     ) {
       ...individual

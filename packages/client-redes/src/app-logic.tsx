@@ -1,4 +1,3 @@
-import { Individual } from "./graphql/FetchIndividuals";
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import {
   encodeText,
@@ -6,6 +5,7 @@ import {
   parseNumber,
   isJsonString
 } from './services/utils';
+import { Individual } from "./graphql/FetchIndividuals";
 
 export default function useAppLogic(): {
   individual,
