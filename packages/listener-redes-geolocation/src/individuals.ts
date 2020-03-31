@@ -6,7 +6,7 @@ import {
   SubscribeIndividualsResponse,
   SubscribeIndividual,
 } from './types/individual'
-import { ConvertCepRes } from './types/geolocation'
+import { IndividualGeolocation } from './types/geolocation'
 import { logger } from './logger'
 
 const error = (err: Error): void => {
@@ -28,16 +28,18 @@ mutation update_rede_individuals($id: Int!, $address: String!, $state: String!, 
 }
 `
 
-export const mutationUpdateCoordinates = async (individual: ConvertCepRes): Promise<Record<string, string>> => {
+export const mutationUpdateCoordinates = async (individual: IndividualGeolocation): Promise<Record<string, string>> => {
   try {
     const { data: { update_rede_individuals: { returning: updatedIndividual } } } = await GraphQLAPI.mutate({
       mutation: REDE_INDIVIDUAL_GEOLOCATION_MUTATION,
       variables: individual
     })
-  
+
+    logger.info("info", `Updated individual "${individual.id}" coordinates in Hasura`)
+
     return updatedIndividual
   } catch (err) {
-		logger.log('failed on mutation update coordinates: ', err)
+		logger.error(`Failed to update individual "${individual.id}" coordinates in Hasura `, err)
 		return undefined
 	}
 }
@@ -46,7 +48,9 @@ export const geolocation = async (response: SubscribeIndividualsResponse) => {
   const { data: { rede_individuals: individuals } } = response
 
 	individuals.forEach(async (individual: SubscribeIndividual) => {
-    const individualWithGeolocation: ConvertCepRes = await convertCepToAddressWithGoogleApi(individual)
+    const individualWithGeolocation = await convertCepToAddressWithGoogleApi(individual)
+
+    if(!individualWithGeolocation) return false
 
     const schema = yup.object({
       id: yup.number(),
@@ -60,9 +64,9 @@ export const geolocation = async (response: SubscribeIndividualsResponse) => {
       updated_at: yup.string()
     });
   
-    type IndividualCoordinates = yup.InferType<typeof schema>;
+    type UpdateCoordinatesRes = yup.InferType<typeof schema>;
   
-    const updatedIndividual: IndividualCoordinates = await mutationUpdateCoordinates(individualWithGeolocation)
+    const updatedIndividual: UpdateCoordinatesRes = await mutationUpdateCoordinates(individualWithGeolocation)
   
     // try {
     //   await schema.validate(updatedIndividual)
@@ -101,7 +105,7 @@ export const subscriptionRedesIndividuals = async (): Promise<ZenObservable.Subs
 
     return observable
   } catch (err) {
-    logger.error('failed on subscription: ', err)
+    logger.error('Failed on subscription: ', err)
     return undefined
   }
 }
