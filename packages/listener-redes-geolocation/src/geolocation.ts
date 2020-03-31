@@ -3,8 +3,6 @@ import { logger } from "./logger";
 import { SubscribeIndividual } from "./types/individual";
 import { 
   GoogleMapsResponse, 
-  GMAPS_ERRORS, 
-  ConvertCepRes,
   IndividualGeolocation
 } from './types/geolocation'
 
@@ -26,7 +24,10 @@ const getCityAndState = (addressComponents): Array<string> => {
       }
       if (types.includes("administrative_area_level_2")) {
         city = shortName;
+      } else if (types.includes("locality")) {
+        city = shortName;
       }
+      
       // if (types.includes('country')) {
       //   country = shortName
       // }
@@ -41,19 +42,7 @@ const getCityAndState = (addressComponents): Array<string> => {
   return [state, city];
 };
 
-const convertCepToAddressWithGoogleApi = async (
-  individual: SubscribeIndividual
-): Promise<ConvertCepRes> => {
-  const { GOOGLE_MAPS_API_KEY } = process.env;
-  if (!GOOGLE_MAPS_API_KEY) {
-    throw new Error(
-      "Please specify the `GOOGLE_MAPS_API_KEY` environment variable."
-    );
-  }
-
-  const cep = individual.zipcode;
-  let data;
-
+const getGoogleGeolocation = async (cep, key) => {
   try {
     logger.log("info", `requesting google with cep ${cep}...`);
     const response: GoogleMapsResponse = await axios.post(
@@ -62,23 +51,35 @@ const convertCepToAddressWithGoogleApi = async (
       {
         params: {
           address: cep,
-          key: GOOGLE_MAPS_API_KEY
+          key
         }
       }
     );
-    logger.log("info", "response!", response.data);
-    data = response.data;
+    logger.log("info", "google maps response!", response.data);
+    return response.data;
   } catch (e) {
-    logger.log("error", "falha na requisição para o google maps");
-    return {
-      error: GMAPS_ERRORS.REQUEST_FAILED
-    };
+    logger.error("falha na requisição para o google maps", e);
+    return e
   }
+}
+
+const convertCepToAddressWithGoogleApi = async (
+  individual: SubscribeIndividual
+): Promise<IndividualGeolocation> => {
+  const { GOOGLE_MAPS_API_KEY } = process.env;
+  if (!GOOGLE_MAPS_API_KEY) {
+    throw new Error(
+      "Please specify the `GOOGLE_MAPS_API_KEY` environment variable."
+    );
+  }
+
+  const cep = individual.zipcode;
+  const data = await getGoogleGeolocation(cep, GOOGLE_MAPS_API_KEY) 
 
   if (data.status === "ZERO_RESULTS") {
     logger.log(
       "error",
-      `google maps return with zero result (id, zipcode): ${individual.id}, ${cep}`
+      `google maps return with zero result (id, zipcode): '${individual.id}', ${cep}`
     );
 
     const i: IndividualGeolocation = {
@@ -119,14 +120,12 @@ const convertCepToAddressWithGoogleApi = async (
       city
     };
 
-    logger.log("info", "updated individual geolocation data", i);
+    logger.log("info", "returned valid individual geolocation data", i);
 
     return i;
   }
 
-  return {
-    error: GMAPS_ERRORS.INVALID_INPUT
-  };
+  if (data.message && data.code) return undefined
 };
 
 export default convertCepToAddressWithGoogleApi
