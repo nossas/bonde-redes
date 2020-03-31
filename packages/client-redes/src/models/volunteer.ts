@@ -1,4 +1,4 @@
-import { action } from 'easy-peasy'
+import { action } from "easy-peasy";
 
 type Volunteer = {
   coordinates: {
@@ -21,8 +21,8 @@ const data: Volunteer = {
   name: '',
   whatsapp: '',
   id: 0,
-  phone: '',
-}
+  phone: ""
+};
 
 const volunteersModel = {
   data,
@@ -35,5 +35,4 @@ const volunteersModel = {
   }))
 };
 
-
-export default volunteersModel
+export default volunteersModel;

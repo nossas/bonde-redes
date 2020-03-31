@@ -1,22 +1,22 @@
-import React from 'react'
-import ReactTable from 'react-table'
-import styled from 'styled-components';
-import FetchMatches from '../../graphql/FetchMatches'
-import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
+import React from "react";
+import ReactTable from "react-table";
+import styled from "styled-components";
+import FetchMatches from "../../graphql/FetchMatches";
+import { Flexbox2 as Flexbox, Title } from "bonde-styleguide";
 
-import 'react-table/react-table.css'
-import columns from './columns'
-import { Relationship } from '../../graphql/FetchMatches'
+import "react-table/react-table.css";
+import columns from "./columns";
+import { Relationship } from "../../graphql/FetchMatches";
 
 export const Wrap = styled.div`
   width: 90%;
   margin: 40px;
-`
+`;
 
 const Table: React.FC = () => {
   return (
     <FetchMatches>
-      {(data: Relationship[]) => {
+      {(data: Array<Relationship>): React.ReactNode => {
         return data.length === 0 ? (
           <Flexbox middle>
             <Wrap>
@@ -36,10 +36,10 @@ const Table: React.FC = () => {
               />
             </Wrap>
           </Flexbox>
-        )
-    }}
+        );
+      }}
     </FetchMatches>
-  )
-}
+  );
+};
 
-export default Table
+export default Table;

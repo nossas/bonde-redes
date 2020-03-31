@@ -1,9 +1,9 @@
-import { ApolloLink, Observable } from 'apollo-link'
+import { ApolloLink, Observable } from "apollo-link";
 
-export const handleErrorMiddleware = errorHandler => {
+export const handleErrorMiddleware = (errorHandler): ApolloLink => {
   return new ApolloLink((operation, forward) => {
     return new Observable(observer => {
-      let subscription
+      let subscription;
       try {
         subscription = forward(operation).subscribe({
           next: result => {
@@ -12,9 +12,9 @@ export const handleErrorMiddleware = errorHandler => {
                 graphQLErrors: result.errors,
                 response: result,
                 operation
-              })
+              });
             }
-            observer.next(result)
+            observer.next(result);
           },
           error: error => {
             errorHandler({
@@ -22,30 +22,29 @@ export const handleErrorMiddleware = errorHandler => {
               networkError: error,
               // Network errors can return GraphQL errors on for example a 403
               graphQLErrors: error.result && error.result.errors
-            })
+            });
           },
           complete: observer.complete.bind(observer)
-        })
+        });
       } catch (error) {
-        errorHandler({ networkError: error, operation })
+        errorHandler({ networkError: error, operation });
       }
       return () => {
-        if (subscription) subscription.unsubscribe()
-      }
-    })
-  })
-}
+        if (subscription) subscription.unsubscribe();
+      };
+    });
+  });
+};
 
 export class HandleErrorLink extends ApolloLink {
-
   link: any;
 
-  constructor (errorHandler) {
-    super()
-    this.link = handleErrorMiddleware(errorHandler)
+  constructor(errorHandler) {
+    super();
+    this.link = handleErrorMiddleware(errorHandler);
   }
 
-  request (operation, forward) {
-    return this.link.request(operation, forward)
+  request(operation, forward) {
+    return this.link.request(operation, forward);
   }
 }

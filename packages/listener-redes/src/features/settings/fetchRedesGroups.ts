@@ -1,20 +1,20 @@
-import gql from 'graphql-tag'
-import { client as GraphQLAPI } from '../../graphql'
+import gql from "graphql-tag";
+import { client as GraphQLAPI } from "../../graphql";
 
 const FETCH_REDES_QUERY = gql`
-query redes {
-  rede_groups {
-  	id
-    name
-    is_volunteer
-    metadata
-    widget_id
-    community_id
-    created_at
-    updated_at
+  query redes {
+    rede_groups {
+      id
+      name
+      is_volunteer
+      metadata
+      widget_id
+      community_id
+      created_at
+      updated_at
+    }
   }
-}
-`
+`;
 
 const fetchRedesGroups = async (): Promise<any> => {
   try {
@@ -30,4 +30,4 @@ const fetchRedesGroups = async (): Promise<any> => {
 	}
 }
 
-export default fetchRedesGroups
+export default fetchRedesGroups;

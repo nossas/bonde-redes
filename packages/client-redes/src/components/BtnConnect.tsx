@@ -2,24 +2,21 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Button } from "bonde-styleguide";
-import useAppLogic from '../app-logic'
+import useAppLogic from "../app-logic";
+import { Individual } from "../graphql/FetchIndividuals";
 
 const BtnWarning = styled(Button)`
-  border-color: ${props => (props.disabled ? "unset" : "#EE0090")}
-  color: ${props => (props.disabled ? "#fff" : "#EE0090")}
+  border-color: ${(props): string => (props.disabled ? "unset" : "#EE0090")}
+  color: ${(props): string => (props.disabled ? "#fff" : "#EE0090")}
 `;
 
-const Connect = ({ individual }) => {
-  const {
-    volunteer,
-    setIndividual,
-    setPopup
-  } = useAppLogic()
+const Connect = ({ individual }: { individual: Individual }) => {
+  const { volunteer, setIndividual, setPopup } = useAppLogic();
 
-  const onClick = (data) => {
+  const onClick = (data: Individual): void => {
     // TODO: Tratar caso em que a usuária não tem user_id
     setIndividual(data);
-    setPopup({
+    return setPopup({
       confirm: true,
       wrapper: true
     });
@@ -28,7 +25,7 @@ const Connect = ({ individual }) => {
   return (
     <BtnWarning
       light
-      onClick={() => onClick(individual)}
+      onClick={(): void => onClick(individual)}
       disabled={volunteer && volunteer.email === ""}
     >
       Encaminhar

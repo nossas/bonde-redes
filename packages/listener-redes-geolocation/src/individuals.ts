@@ -10,8 +10,8 @@ import { IndividualGeolocation } from './types/geolocation'
 import { logger } from './logger'
 
 const error = (err: Error): void => {
-  logger.error('Receiving error on subscription GraphQL API: ', err)
-}
+  logger.error("Receiving error on subscription GraphQL API: ", err);
+};
 
 const REDE_INDIVIDUAL_GEOLOCATION_MUTATION = gql`
 mutation update_rede_individuals($id: Int!, $address: String!, $state: String!, $city: String!, $coordinates: jsonb!) {
