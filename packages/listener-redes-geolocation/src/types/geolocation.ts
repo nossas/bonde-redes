@@ -32,5 +32,3 @@ export interface GoogleMapsAddressComponent {
 }
 
 export type IndividualGeolocation = Omit<Individual, 'created_at'| 'zipcode'>
-
-export type ConvertCepRes = IndividualGeolocation | { error: GMAPS_ERRORS }
