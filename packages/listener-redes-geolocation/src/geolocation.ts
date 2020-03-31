@@ -125,7 +125,7 @@ const convertCepToAddressWithGoogleApi = async (
     return i;
   }
 
-  if (data.message && data.code) return undefined
+  return undefined
 };
 
 export default convertCepToAddressWithGoogleApi
