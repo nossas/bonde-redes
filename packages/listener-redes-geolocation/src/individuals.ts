@@ -35,7 +35,7 @@ export const mutationUpdateCoordinates = async (individual: IndividualGeolocatio
       variables: individual
     })
 
-    logger.info("info", `Updated individual "${individual.id}" coordinates in Hasura`)
+    logger.log("info", `Updated individual "${individual.id}" coordinates in Hasura`)
 
     return updatedIndividual
   } catch (err) {
