@@ -1,18 +1,18 @@
-import { action } from 'easy-peasy'
+import { action } from "easy-peasy";
 
-interface Individual {
-  email: string
-  name: string
-  phone: string
-  id: number
-}
+type Individual = {
+  email: string;
+  first_name: string;
+  phone: string;
+  id: number;
+};
 
-const data: Individual =  ({
-  email: '',
-  name: '',
-  phone: '',
+const data: Individual = {
+  email: "",
+  first_name: "",
+  phone: "",
   id: 0
-})
+};
 
 const individualModel = {
   data,
@@ -21,4 +21,4 @@ const individualModel = {
   }))
 };
 
-export default individualModel
+export default individualModel;

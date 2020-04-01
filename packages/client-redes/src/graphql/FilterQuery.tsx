@@ -1,29 +1,48 @@
-import { useState } from 'react'
+import { useState } from "react";
 /*import { useLocation } from 'react-router-dom'*/
 /*import qs from 'query-string'*/
 
-const FilterQuery = ({ children }) => {
-	const [page, setPage] = useState(0)
-	const [rows, setRows] = useState(20)
-	const [status, setStatus] = useState()
-	const [availability, setAvailability] = useState()
+export type Filters = {
+  rows: number;
+  offset: number;
+  status:
+    | {
+        _eq: string;
+      }
+    | undefined;
+  availability:
+    | {
+        _eq: string;
+      }
+    | undefined;
+  order_by: {
+    created_at: string;
+  };
+};
 
-	const filtered = {
-		rows: rows,
-		offset: page * rows,
-		status: !!status ? { _eq: status } : undefined,
-		availability: !!availability ? { _eq: availability } : undefined,
-		order_by: { created_at: 'desc' }
-	}
+const FilterQuery = ({ children }): JSX.Element => {
+  const [page, setPage] = useState(0);
+  const [rows, setRows] = useState(20);
+  const [status, setStatus] = useState("");
+  const [availability, setAvailability] = useState("");
 
-	const changeFilters = ({ page, rows, status, availability }) => {
-		if (page !== undefined) setPage(page)
-		if (rows) setRows(rows)
-		if (status) setStatus(status === 'all' ? undefined : status)
-		if (availability) setAvailability(availability === 'all' ? undefined : availability)
-	}
+  const filtered: Filters = {
+    rows,
+    offset: page * rows,
+    status: !!status ? { _eq: status } : undefined,
+    availability: !!availability ? { _eq: availability } : undefined,
+    order_by: { created_at: "desc" }
+  };
 
-	return children({ filters: filtered, changeFilters, page })
-}
+  const changeFilters = ({ page, rows, status, availability }): void => {
+    if (typeof page !== "undefined") setPage(page);
+    if (rows) setRows(rows);
+    if (status) setStatus(status === "all" ? undefined : status);
+    if (availability)
+      setAvailability(availability === "all" ? undefined : availability);
+  };
 
-export default FilterQuery
+  return children({ filters: filtered, changeFilters, page });
+};
+
+export default FilterQuery;

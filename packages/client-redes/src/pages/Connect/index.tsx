@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  Fragment,
-  useState,
-  useEffect
-} from "react";
+import React, { useCallback, Fragment, useState, useEffect } from "react";
 import "react-table/react-table.css";
 import ReactTable from "react-table";
 import * as turf from "@turf/turf";
@@ -11,17 +6,28 @@ import { useHistory, useLocation } from "react-router-dom";
 import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
 import { SessionHOC, useMutation } from 'bonde-core-tools';
 
-import { Wrap, StyledButton } from './style'
-import columns from './columns'
-import FetchIndividuals from '../../graphql/FetchIndividuals'
-import CREATE_RELATIONSHIP from '../../graphql/CreateRelationship'
-import useAppLogic from '../../app-logic'
+import { Wrap, StyledButton } from "./style";
+import columns from "./columns";
+import FetchIndividuals from "../../graphql/FetchIndividuals";
+import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
+import useAppLogic from "../../app-logic";
+import { Individual } from "../../graphql/FetchIndividuals";
 
-import { If } from '../../components/If'
-import Popup from '../../components/Popups/Popup'
+import Popup from "../../components/Popups/Popup";
 
-const Table = SessionHOC(({ session: { user: agent } }: any) => {
-  const [createConnection, { data, loading, error }] = useMutation(CREATE_RELATIONSHIP);
+type onConfirm = {
+  individual_id: number;
+  volunteer_id: number;
+  agent_id: number;
+  popups: Record<string, string>;
+  volunteer_whatsapp: string;
+};
+
+const Table = SessionHOC(({ session: { user: agent } }) => {
+  const [createConnection, { data, loading, error }] = useMutation(
+    CREATE_RELATIONSHIP
+  );
+
   const {
     individual,
     volunteer,
@@ -31,36 +37,36 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
     urlencodedIndividualText,
     parsedVolunteerNumber,
     urlencodedVolunteerText,
-    lat,
-    lng,
-    distance,
     setVolunteer,
     setPopup
-  } = useAppLogic()
+  } = useAppLogic();
 
-  const { goBack } = useHistory()
-  const { state: linkState } = useLocation()
+  const { goBack, push } = useHistory();
+  const { state: linkState } = useLocation();
 
   const [success, setSuccess] = useState(false);
   const [fail, setError] = useState(false);
-  const [isLoading, setLoader] = useState(false);;
+  const [isLoading, setLoader] = useState(false);
 
   const { confirm, wrapper, noPhoneNumber } = popups;
-  const { 
-    first_name: individual_name, 
-    id: individual_user_id
-  } = individual;
+  const { first_name: individual_name, id: individual_id } = individual;
   const {
     first_name: volunteer_name,
     whatsapp: volunteer_whatsapp,
-    id: volunteer_user_id,
+    id: volunteer_id
   } = volunteer;
 
   useEffect(() => {
-    setLoader(loading)
-    setError(!!(error && error.message))
-    if (data) setSuccess(true)
-  }, [setLoader, loading, error, setError, data])
+    setLoader(loading);
+    setError(!!(error && error.message));
+    if (data) setSuccess(true);
+    // retorna para a home caso não exista nenhuma voluntária no linkState
+    if (!linkState.volunteer) return push("/");
+  }, [setLoader, loading, error, setError, data, linkState, push]);
+
+  const distance = 50;
+  const lat = Number(volunteer.latitude);
+  const lng = Number(volunteer.longitude);
 
   // TODO: Arrumar as variaveis de acordo com a nova key `coordinate`
   const filterByDistance = useCallback(
@@ -89,40 +95,45 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
     [distance, lat, lng]
   );
 
-  const onConfirm = () => {
+  const onConfirm = ({
+    individual_id,
+    volunteer_id,
+    agent_id,
+    popups,
+    volunteer_whatsapp
+  }: onConfirm) => {
     if (!volunteer_whatsapp)
       return setPopup({
         ...popups,
         noPhoneNumber: true,
         confirm: false
       });
+
     setPopup({ ...popups, confirm: false });
-    return createConnection({ 
+    return createConnection({
       variables: {
-        recipientId: individual_user_id,
-        volunteerId: volunteer_user_id,
-        agent: agent.id
+        recipientId: individual_id,
+        volunteerId: volunteer_id,
+        agentId: agent_id
       }
-    })
+    });
   };
 
-  const closeAllPopups = () => {
+  const closeAllPopups = (): void => {
     setSuccess(false);
     setPopup({
       wrapper: false,
       confirm: false
     });
-    return goBack()
-  }
+    return goBack();
+  };
 
   return (
     <FetchIndividuals>
-      {({ data }) => {
-        const filteredTableData = filterByDistance(
-          data  
-        )
+      {({ data }: { data: Individual[] }) => {
+        const filteredTableData = filterByDistance(data);
         // Seta a voluntária
-        setVolunteer(linkState && linkState.volunteer)
+        setVolunteer(linkState && linkState.volunteer);
         return data.length === 0 ? (
           <Flexbox middle>
             <Wrap>
@@ -134,9 +145,11 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
             <Flexbox vertical middle>
               <Wrap>
                 <Flexbox vertical>
-                  <Spacing margin={{ bottom: 20}}>
+                  <Spacing margin={{ bottom: 20 }}>
                     <Flexbox>
-                      <StyledButton flat onClick={goBack}>{'< fazer match'}</StyledButton>
+                      <StyledButton flat onClick={goBack}>
+                        {"< fazer match"}
+                      </StyledButton>
                     </Flexbox>
                     <Spacing margin={{ top: 10, bottom: 10 }}>
                       <Title.H3>Match realizado!</Title.H3>
@@ -154,38 +167,54 @@ const Table = SessionHOC(({ session: { user: agent } }: any) => {
                 />
               </Wrap>
             </Flexbox>
-            <If condition={wrapper}>
+            {wrapper ? (
               <Popup
                 individualName={individual_name}
                 volunteerName={volunteer_name}
-                onSubmit={onConfirm}
+                onSubmit={() =>
+                  onConfirm({
+                    individual_id,
+                    volunteer_id,
+                    agent_id: agent.id,
+                    popups,
+                    volunteer_whatsapp
+                  })
+                }
                 isOpen={wrapper}
                 onClose={closeAllPopups}
                 isLoading={isLoading}
                 confirm={{ isEnabled: confirm }}
                 success={{
                   link: {
-                    individual: () => createWhatsappLink(parsedIndividualNumber, urlencodedIndividualText),
-                    volunteer: () => createWhatsappLink(parsedVolunteerNumber, urlencodedVolunteerText)
+                    individual: (): string | undefined =>
+                      createWhatsappLink(
+                        parsedIndividualNumber,
+                        urlencodedIndividualText
+                      ),
+                    volunteer: (): string | undefined =>
+                      createWhatsappLink(
+                        parsedVolunteerNumber,
+                        urlencodedVolunteerText
+                      )
                   },
                   isEnabled: success
                 }}
                 error={{
                   isEnabled: fail,
-                  message: (error && error.message) || ''
+                  message: (error && error.message) || ""
                 }}
                 warning={{
                   isEnabled: noPhoneNumber,
-                  id: volunteer_user_id,
+                  id: volunteer_id,
                   name: volunteer_name
                 }}
               />
-            </If>
+            ) : null}
           </Fragment>
         );
       }}
     </FetchIndividuals>
-  )
-})
+  );
+});
 
 export default Table;
