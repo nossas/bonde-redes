@@ -82,15 +82,17 @@ const Groups = () => {
           volunteers: volunteers.data
         });
 
-        const pages =
-          kind === "volunteers"
-            ? Math.ceil(volunteers.count / filtersValues.rows)
-            : Math.ceil(individuals.count / filtersValues.rows);
-
         const count = {
           volunteers: Number(volunteers.count) || 0,
           individuals: Number(individuals.count) || 0
         }
+
+        const pages =
+          kind === "volunteers"
+            ? Math.ceil(count.volunteers / filtersValues.rows)
+            : Math.ceil(count.individuals / filtersValues.rows);
+
+        const resizeRow = count[kind] < 1000 ? count[kind] : filtersValues.rows
 
         return (
           <Page>
@@ -117,7 +119,7 @@ const Groups = () => {
                   sortable={false}
                   data={data[kind]}
                   columns={columns(pathname)}
-                  pageSize={filtersValues.rows}
+                  pageSize={resizeRow}
                   page={page}
                   pages={pages}
                   onPageChange={(page: number): void => changeFilters({ page })}
