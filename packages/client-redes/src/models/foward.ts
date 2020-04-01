@@ -1,28 +1,24 @@
-import { thunk, action } from 'easy-peasy'
+import { thunk, action } from "easy-peasy";
 // import request from '../services/request'
 
-interface Foward {
-  setError: Function
-  setSuccess: Function
+type Foward = {
+  setError: ({ status: boolean, message: string }) => void;
+  setSuccess: (status: boolean) => void;
   data: {
-    volunteer_name: string
-    individual_name: string
-    volunteer_phone: string
-    volunteer_user_id: number
-    individual_user_id: number
-  }
-}
+    volunteer_name: string;
+    individual_name: string;
+    volunteer_phone: string;
+    volunteer_user_id: number;
+    individual_user_id: number;
+  };
+};
 
 const fowardModel = {
   data: {},
-  fowardTickets: thunk(async (actions: any, payload: Foward) => {
-    const {
-      setError,
-      setSuccess,
-      data
-    } = payload
+  fowardTickets: thunk(async (actions: unknown, payload: Foward) => {
+    const { setError, setSuccess, data } = payload;
     try {
-      console.log(data)
+      console.log(data);
       // const mockedBody = {
       //   volunteer_name: "Ana Teste teste",
       //   individual_name: "ANA MSR teste match automatizado",
@@ -35,23 +31,21 @@ const fowardModel = {
       //   assignee_name: "Ana"
       // }
       // const response = await request.post(data)
-      setSuccess(true)
+      setSuccess(true);
       return {
         status: 200
-      }
-    }
-    catch (err) {
-      console.log(err)
-      setError({
+      };
+    } catch (err) {
+      console.log(err);
+      return setError({
         status: true,
         message: err && err.message
-      })
+      });
     }
   }),
   setResponse: action((state, payload) => ({
     ...payload
-  })),
+  }))
 };
 
-
-export default fowardModel
+export default fowardModel;

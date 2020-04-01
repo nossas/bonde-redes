@@ -1,12 +1,14 @@
-import { action } from 'easy-peasy';
+import { action } from "easy-peasy";
 
-interface Error {
-  status: boolean, message: string
-}
+type Error = {
+  status: boolean;
+  message: string;
+};
 
 const error: Error = {
-  status: false, message: ''
-}
+  status: false,
+  message: ""
+};
 
 const errorModel = {
   error,
@@ -15,5 +17,4 @@ const errorModel = {
   }))
 };
 
-
-export default errorModel
+export default errorModel;

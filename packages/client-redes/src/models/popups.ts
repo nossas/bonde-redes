@@ -1,16 +1,16 @@
-import { action } from 'easy-peasy';
+import { action } from "easy-peasy";
 
-interface Popups {
-  confirm: boolean
-  wrapper: boolean
-  noPhoneNumber: boolean
-}
+type Popups = {
+  confirm: boolean;
+  wrapper: boolean;
+  noPhoneNumber: boolean;
+};
 
 const data: Popups = {
   confirm: false,
   wrapper: false,
   noPhoneNumber: false
-}
+};
 
 const popupsModel = {
   data,
@@ -19,5 +19,4 @@ const popupsModel = {
   }))
 };
 
-
-export default popupsModel
+export default popupsModel;

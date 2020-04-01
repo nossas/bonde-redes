@@ -17,4 +17,5 @@ module.exports = {
     'src/**/*.{ts,tsx,js,jsx}',
     '!src/**/*.d.ts',
   ],
+  setupFiles: ["<rootDir>/src/setEnvVars.ts"]
 };
