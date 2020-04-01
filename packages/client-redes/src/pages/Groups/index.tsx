@@ -120,6 +120,7 @@ const Groups = () => {
                   data={data[kind]}
                   columns={columns(pathname)}
                   pageSize={resizeRow}
+                  pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
                   page={page}
                   pages={pages}
                   onPageChange={(page: number): void => changeFilters({ page })}
