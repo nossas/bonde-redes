@@ -2,7 +2,7 @@ import React from "react";
 import ReactTable from "react-table";
 import styled from "styled-components";
 import FetchMatches from "../../graphql/FetchMatches";
-import { Flexbox2 as Flexbox, Title } from "bonde-styleguide";
+import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
 
 import "react-table/react-table.css";
 import columns from "./columns";
@@ -27,12 +27,21 @@ const Table: React.FC = () => {
           </Flexbox>
         ) : (
           <Flexbox middle>
+            <Spacing margin={{ bottom: 20 }}>
+              <Title.H4 margin={{ bottom: 30 }}>
+                Relações ({data.length})
+              </Title.H4>
+            </Spacing>
             <Wrap>
               <ReactTable
                 data={data}
                 columns={columns}
                 defaultPageSize={10}
                 className="-striped -highlight"
+                defaultSorted={[{
+                  id: 'created_at',
+                  desc: true
+                }]}
               />
             </Wrap>
           </Flexbox>
