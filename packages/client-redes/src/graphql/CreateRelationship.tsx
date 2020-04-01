@@ -25,22 +25,17 @@ export default gql`
       }
     }
 
-  update_rede_individuals(
-    _set: {
-      availability: "indisponível"
-    },
-    where: {
-      _or: [
-        {id: { _eq: $volunteerId }}
-        {id: { _eq: $recipientId }} 
-      ]
-    }
-  ) {
-    returning {
-      id
-      email
-      availability
+    update_rede_individuals(
+      _set: { availability: "indisponível" }
+      where: {
+        _or: [{ id: { _eq: $volunteerId } }, { id: { _eq: $recipientId } }]
+      }
+    ) {
+      returning {
+        id
+        email
+        availability
+      }
     }
   }
-}
 `;

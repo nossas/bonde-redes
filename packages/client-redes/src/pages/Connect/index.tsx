@@ -43,12 +43,10 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
     distance,
     volunteer_lat,
     volunteer_lng
-  } = useAppLogic()
+  } = useAppLogic();
 
-  const { goBack, push } = useHistory()
-  const { 
-    state: linkState = { volunteer: {} }
-  } = useLocation()
+  const { goBack, push } = useHistory();
+  const { state: linkState = { volunteer: {} } } = useLocation();
 
   const [success, setSuccess] = useState(false);
   const [fail, setError] = useState(false);
@@ -60,23 +58,27 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
     first_name: volunteer_name,
     whatsapp: volunteer_whatsapp,
     id: volunteer_id,
-    email: volunteer_email,
+    email: volunteer_email
   } = volunteer;
 
-  const urlencodedVolunteerText = encodeText(whatsappText({
-    volunteer_name,
-    individual_name,
-    agent: agent.firstName,
-    isVolunteer: true
-  }));
+  const urlencodedVolunteerText = encodeText(
+    whatsappText({
+      volunteer_name,
+      individual_name,
+      agent: agent.firstName,
+      isVolunteer: true
+    })
+  );
 
-  const urlencodedIndividualText = encodeText(whatsappText({
-    volunteer_name,
-    individual_name,
-    agent: agent.firstName,
-    isVolunteer: false,
-    volunteer_email
-  }));
+  const urlencodedIndividualText = encodeText(
+    whatsappText({
+      volunteer_name,
+      individual_name,
+      agent: agent.firstName,
+      isVolunteer: false,
+      volunteer_email
+    })
+  );
 
   useEffect(() => {
     setLoader(loading);
@@ -92,7 +94,7 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
       data
         .map(i => {
           const pointA = [
-            Number(i.coordinates.latitude), 
+            Number(i.coordinates.latitude),
             Number(i.coordinates.longitude)
           ];
 
@@ -103,7 +105,9 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
               !Number.isNaN(pointA[1]) &&
               volunteer_lat &&
               volunteer_lng &&
-              Number(turf.distance([volunteer_lat, volunteer_lng], pointA)).toFixed(2)
+              Number(
+                turf.distance([volunteer_lat, volunteer_lng], pointA)
+              ).toFixed(2)
           };
         })
         .filter(i => {
@@ -151,10 +155,10 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
 
   return (
     <FetchIndividuals>
-      {({ data }: { data: Individual[]}) => {
+      {({ data }: { data: Individual[] }) => {
         // Seta a voluntária
-        setVolunteer(linkState && linkState.volunteer)
-        const filteredTableData = filterByDistance(data)
+        setVolunteer(linkState && linkState.volunteer);
+        const filteredTableData = filterByDistance(data);
 
         return data.length === 0 ? (
           <Flexbox middle>
@@ -193,13 +197,15 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
               <Popup
                 individualName={individual_name}
                 volunteerName={volunteer_name}
-                onSubmit={() => onConfirm({
-                  individual_id, 
-                  volunteer_id, 
-                  agent_id: agent.id, 
-                  popups,
-                  volunteer_whatsapp
-                })}
+                onSubmit={() =>
+                  onConfirm({
+                    individual_id,
+                    volunteer_id,
+                    agent_id: agent.id,
+                    popups,
+                    volunteer_whatsapp
+                  })
+                }
                 isOpen={wrapper}
                 onClose={closeAllPopups}
                 isLoading={isLoading}

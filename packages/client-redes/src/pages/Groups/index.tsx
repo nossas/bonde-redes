@@ -5,7 +5,8 @@ import {
   Flexbox2 as Flexbox,
   Spacing,
   Dropdown,
-  DropdownItem
+  DropdownItem,
+  Title
 } from "bonde-styleguide";
 import ReactTable from "react-table";
 import { useStoreActions } from "easy-peasy";
@@ -86,6 +87,11 @@ const Groups = () => {
             ? Math.ceil(volunteers.count / filtersValues.rows)
             : Math.ceil(individuals.count / filtersValues.rows);
 
+        const count = {
+          volunteers: Number(volunteers.count) || 0,
+          individuals: Number(individuals.count) || 0
+        }
+
         return (
           <Page>
             <Flexbox middle>
@@ -93,13 +99,18 @@ const Groups = () => {
                 <Spacing margin={{ bottom: 20 }}>
                   <Filters
                     filters={filters({
-                      volunteersCount: Number(volunteers.count) || 0,
-                      individualsCount: Number(individuals.count) || 0,
+                      volunteersCount: count.volunteers,
+                      individualsCount: count.individuals,
                       filters: { values: filtersValues, change: changeFilters },
                       history: push,
                       kind
                     })}
                   />
+                </Spacing>
+                <Spacing margin={{ bottom: 20 }}>
+                  <Title.H4 margin={{ bottom: 30 }}>
+                    Total ({count[kind]})
+                  </Title.H4>
                 </Spacing>
                 <ReactTable
                   manual
