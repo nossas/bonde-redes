@@ -2,9 +2,9 @@ pipeline:
   build:
     image: node:12-alpine
     environment:
+      - REACT_APP_ENVIRONMENT=staging
       - REACT_APP_HASURA_API_URL=https://api-graphql.staging.bonde.org/v1/graphql
-      - REACT_APP_LOGIN_URL=https://admin-canary.staging.bonde.org/auth/login
-      - REACT_APP_DOMAIN_CROSS_STORAGE=https://cross-storage.staging.bonde.org
+      - REACT_APP_ADMIN_URL=https://admin-canary.staging.bonde.org
     commands:
       - export REACT_APP_GOOGLE_CLIENT_KEY=$STAG_GOOGLE_CLIENT
       - yarn global add pnpm
@@ -17,9 +17,9 @@ pipeline:
   production-build:
     image: node:12-alpine
     environment:
+      - REACT_APP_ENVIRONMENT=production
       - REACT_APP_HASURA_API_URL=https://api-graphql.bonde.org/v1/graphql
-      - REACT_APP_LOGIN_URL=https://admin-canary.bonde.org/auth/login
-      - REACT_APP_DOMAIN_CROSS_STORAGE=https://cross-storage.bonde.org
+      - REACT_APP_ADMIN_URL=https://admin-canary.bonde.org
     commands:
       - export REACT_APP_GOOGLE_CLIENT_KEY=$STAG_GOOGLE_CLIENT
       - yarn global add pnpm

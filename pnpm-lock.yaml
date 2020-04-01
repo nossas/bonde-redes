@@ -3,6 +3,7 @@ importers:
     devDependencies:
       '@typescript-eslint/eslint-plugin': 2.20.0_3c89355368312e4d14b8122b0cc40d07
       '@typescript-eslint/parser': 2.20.0_eslint@6.8.0+typescript@3.8.2
+      babel-eslint: 10.0.3_eslint@6.8.0
       eslint: 6.8.0
       eslint-config-prettier: 6.10.0_eslint@6.8.0
       eslint-plugin-jest: 23.7.0_eslint@6.8.0+typescript@3.8.2
@@ -16,6 +17,7 @@ importers:
     specifiers:
       '@typescript-eslint/eslint-plugin': ^2.11.0
       '@typescript-eslint/parser': ^2.11.0
+      babel-eslint: 10.0.3
       eslint: ^6.7.2
       eslint-config-prettier: ^6.10.0
       eslint-plugin-jest: ^23.7.0
@@ -322,7 +324,6 @@ packages:
       '@types/react': 16.9.21
       '@wry/equality': 0.1.9
       apollo-client: 2.6.8_graphql@14.6.0
-      apollo-utilities: 1.3.3_graphql@14.6.0
       graphql: 14.6.0
       react: 16.12.0
       react-dom: 16.12.0_react@16.12.0
@@ -508,12 +509,12 @@ packages:
     dependencies:
       '@babel/helper-get-function-arity': 7.8.3
       '@babel/template': 7.8.6
-      '@babel/types': 7.8.7
+      '@babel/types': 7.9.0
     resolution:
       integrity: sha512-BCxgX1BC2hD/oBlIFUgOCQDOPV8nSINxCwM3o93xP4P9Fq6aV5sgv2cOOITDMtCfQ+3PvHp3l689XZvAM9QyOA==
   /@babel/helper-get-function-arity/7.8.3:
     dependencies:
-      '@babel/types': 7.8.7
+      '@babel/types': 7.9.0
     resolution:
       integrity: sha512-FVDR+Gd9iLjUMY1fzE2SR0IuaJToR4RkCDARVfsBBPSP53GEqSFjD8gNyxg246VUyc/ALRxFaAK8rVG7UT7xRA==
   /@babel/helper-hoist-variables/7.8.3:
@@ -597,7 +598,7 @@ packages:
       integrity: sha512-VNGUDjx5cCWg4vvCTR8qQ7YJYZ+HBjxOgXEl7ounz+4Sn7+LMD3CFrCTEU6/qXKbA2nKg21CwhhBzO0RpRbdCw==
   /@babel/helper-split-export-declaration/7.8.3:
     dependencies:
-      '@babel/types': 7.8.3
+      '@babel/types': 7.9.0
     resolution:
       integrity: sha512-3x3yOeyBhW851hroze7ElzdkeRXQYQbFIb7gLK1WQYsw2GWDay5gAJNw1sWJ0VFP6z5J1whqeXH/WCdCjZv6dA==
   /@babel/helper-validator-identifier/7.9.0:
@@ -633,6 +634,7 @@ packages:
     resolution:
       integrity: sha512-0fKu/QqildpXmPVaRBoXOlyBb3MC+J0A66x97qEfLOMkn3u6nfY5esWogQwi/K0BjASYy4DbnsEWnpNL6qT5Mw==
   /@babel/parser/7.8.8:
+    dev: false
     engines:
       node: '>=6.0.0'
     hasBin: true
@@ -1414,8 +1416,8 @@ packages:
   /@babel/template/7.8.6:
     dependencies:
       '@babel/code-frame': 7.8.3
-      '@babel/parser': 7.8.8
-      '@babel/types': 7.8.7
+      '@babel/parser': 7.9.4
+      '@babel/types': 7.9.0
     resolution:
       integrity: sha512-zbMsPMy/v0PWFZEhQJ66bqjhH+z0JgMoBWuikXybgG3Gkd/3t5oQ1Rw2WQhnSrsOmsKXnZOx15tkC4qON/+JPg==
   /@babel/traverse/7.8.4:
@@ -1470,6 +1472,7 @@ packages:
       esutils: 2.0.3
       lodash: 4.17.15
       to-fast-properties: 2.0.0
+    dev: false
     resolution:
       integrity: sha512-k2TreEHxFA4CjGkL+GYjRyx35W0Mr7DP5+9q6WMkyKXB+904bYmG40syjMFV0oLlhhFCwWl0vA0DyzTDkwAiJw==
   /@babel/types/7.9.0:
@@ -3621,6 +3624,7 @@ packages:
       '@typescript-eslint/typescript-estree': 2.20.0_typescript@3.7.5
       eslint: 6.8.0
       eslint-scope: 5.0.0
+      typescript: 3.7.5
     engines:
       node: ^8.10.0 || ^10.13.0 || >=11.10.1
     peerDependencies:
@@ -14314,7 +14318,6 @@ packages:
       react: 16.12.0
       react-dom: 16.12.0_react@16.12.0
       shallowequal: 1.1.0
-      styled-components: 5.0.1_364bfd245d2fd32e75bbcba4856a80df
       supports-color: 5.5.0
     dev: false
     peerDependencies:
@@ -14818,7 +14821,7 @@ packages:
       integrity: sha512-kzeQ5B8H3w60nFY2g8cJIuH7JDpsALXySGtwGJ0p2LSjLgay3NdIpqq5SoOBe46bKDW2iq25irHCr8wjomUS2g==
   /tsutils/3.17.1_typescript@3.8.2:
     dependencies:
-      tslib: 1.11.0
+      tslib: 1.11.1
       typescript: 3.8.2
     dev: true
     engines:
