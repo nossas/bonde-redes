@@ -28,7 +28,7 @@
     "test:watch": "jest --watch --runInBand --detectOpenHandles",
     "build": "tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
-    "clean": "rimraf coverage build tmp"
+    "clean": "rimraf coverage dist tmp"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.5",
