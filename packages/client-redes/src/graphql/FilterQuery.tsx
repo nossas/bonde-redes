@@ -22,7 +22,7 @@ export type Filters = {
 
 const FilterQuery = ({ children }): JSX.Element => {
   const [page, setPage] = useState(0);
-  const [rows, setRows] = useState(100);
+  const [rows, setRows] = useState(1000);
   const [status, setStatus] = useState("");
   const [availability, setAvailability] = useState("");
 
@@ -31,7 +31,7 @@ const FilterQuery = ({ children }): JSX.Element => {
     offset: page * rows,
     status: !!status ? { _eq: status } : undefined,
     availability: !!availability ? { _eq: availability } : undefined,
-    order_by: { created_at: "desc" }
+    order_by: { created_at: "asc" }
   };
 
   const changeFilters = ({ page, rows, status, availability }): void => {
