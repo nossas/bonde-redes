@@ -27,7 +27,11 @@ const USERS_BY_GROUP = gql`
       ...individual
     }
     volunteers_count: rede_individuals_aggregate(
-      where: { group: { community_id: $context, is_volunteer: { _eq: true } } }
+      where: { 
+        group: { community_id: $context, is_volunteer: { _eq: true } }
+        status: $status
+        availability: $availability
+      }
     ) {
       aggregate {
         count
@@ -46,7 +50,11 @@ const USERS_BY_GROUP = gql`
       ...individual
     }
     individuals_count: rede_individuals_aggregate(
-      where: { group: { community_id: $context, is_volunteer: { _eq: false } } }
+      where: { 
+        group: { community_id: $context, is_volunteer: { _eq: false } }
+        status: $status
+        availability: $availability
+      }
     ) {
       aggregate {
         count

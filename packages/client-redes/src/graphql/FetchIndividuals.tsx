@@ -5,7 +5,7 @@ import { useFilterQuery } from "./FilterQuery";
 import Empty from '../components/Empty';
 
 const USERS = gql`
-  query RedeGroups(
+  query RedeIndividuals(
     $context: Int_comparison_exp!
     $rows: Int!
     $offset: Int!
@@ -17,8 +17,8 @@ const USERS = gql`
     rede_individuals(
       where: {
         group: { community_id: $context, is_volunteer: { _eq: $is_volunteer } }
-        status: $status
-        availability: $availability
+        _and: [{ status: $status }, { availability: $availability }]
+        coordinates: { _is_null: false }
       }
       limit: $rows
       offset: $offset
@@ -101,7 +101,9 @@ const FetchIndividuals = ({ children, community }: any) => {
   const variables = {
     context: { _eq: community.id },
     ...(filters || {}),
-    is_volunteer: false // TODO: deixar isso dinâmico!!
+    is_volunteer: false, // TODO: deixar isso dinâmico!!
+    availability: { _eq: "disponível" },
+    status: { _eq: "aprovada" }
   };
 
   const {

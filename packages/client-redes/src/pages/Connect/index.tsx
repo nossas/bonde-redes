@@ -35,15 +35,18 @@ const Table = () => {
     popups,
     createWhatsappLink,
     parsedIndividualNumber,
-    urlencodedIndividualText,
     parsedVolunteerNumber,
-    urlencodedVolunteerText,
     setVolunteer,
-    setPopup
+    setPopup,
+    encodeText,
+    whatsappText,
+    distance,
+    volunteer_lat,
+    volunteer_lng
   } = useAppLogic();
 
   const { goBack, push } = useHistory();
-  const { state: linkState } = useLocation();
+  const { state: linkState = { volunteer: {} } } = useLocation();
 
   const [success, setSuccess] = useState(false);
   const [fail, setError] = useState(false);
@@ -54,8 +57,28 @@ const Table = () => {
   const {
     first_name: volunteer_name,
     whatsapp: volunteer_whatsapp,
-    id: volunteer_id
+    id: volunteer_id,
+    email: volunteer_email
   } = volunteer;
+
+  const urlencodedVolunteerText = encodeText(
+    whatsappText({
+      volunteer_name,
+      individual_name,
+      agent: agent.firstName,
+      isVolunteer: true
+    })
+  );
+
+  const urlencodedIndividualText = encodeText(
+    whatsappText({
+      volunteer_name,
+      individual_name,
+      agent: agent.firstName,
+      isVolunteer: false,
+      volunteer_email
+    })
+  );
 
   useEffect(() => {
     setLoader(loading);
@@ -65,35 +88,36 @@ const Table = () => {
     if (!linkState.volunteer) return push("/");
   }, [setLoader, loading, error, setError, data, linkState, push]);
 
-  const distance = 50;
-  const lat = Number(volunteer.latitude);
-  const lng = Number(volunteer.longitude);
-
   // TODO: Arrumar as variaveis de acordo com a nova key `coordinate`
   const filterByDistance = useCallback(
     data =>
       data
         .map(i => {
-          const pointA = [Number(i.latitude), Number(i.longitude)];
+          const pointA = [
+            Number(i.coordinates.latitude),
+            Number(i.coordinates.longitude)
+          ];
 
           return {
             ...i,
             distance:
               !Number.isNaN(pointA[0]) &&
               !Number.isNaN(pointA[1]) &&
-              lat &&
-              lng &&
-              Number(turf.distance([lat, lng], pointA)).toFixed(2)
+              volunteer_lat &&
+              volunteer_lng &&
+              Number(
+                turf.distance([volunteer_lat, volunteer_lng], pointA)
+              ).toFixed(2)
           };
         })
         .filter(i => {
-          if (!lat || !lng) {
+          if (!volunteer_lat || !volunteer_lng) {
             return true;
           }
           return i.distance && Number(i.distance) < distance;
         })
         .sort((a, b) => Number(a.distance) - Number(b.distance)),
-    [distance, lat, lng]
+    [distance, volunteer_lat, volunteer_lng]
   );
 
   const onConfirm = ({
@@ -132,9 +156,10 @@ const Table = () => {
   return (
     <FetchIndividuals>
       {({ data }: { data: Individual[] }) => {
-        const filteredTableData = filterByDistance(data);
         // Seta a voluntária
         setVolunteer(linkState && linkState.volunteer);
+        const filteredTableData = filterByDistance(data);
+
         return data.length === 0 ? (
           <Flexbox middle>
             <Wrap>

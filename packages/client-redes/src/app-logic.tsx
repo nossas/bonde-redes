@@ -1,22 +1,30 @@
 import { useStoreState, useStoreActions } from "easy-peasy";
-import { encodeText, whatsappText, parseNumber } from "./services/utils";
+import {
+  encodeText,
+  whatsappText,
+  parseNumber,
+  isJsonString
+} from "./services/utils";
 import { Individual } from "./graphql/FetchIndividuals";
 
 export default function useAppLogic(): {
-  individual;
-  volunteer;
-  tableData;
-  popups;
-  createWhatsappLink;
-  parsedIndividualNumber;
-  urlencodedIndividualText;
-  parsedVolunteerNumber;
-  urlencodedVolunteerText;
-  getUserData;
-  setTable;
-  setVolunteer;
-  setPopup;
-  setIndividual;
+  individual,
+  volunteer,
+  tableData,
+  popups,
+  createWhatsappLink,
+  parsedIndividualNumber,
+  parsedVolunteerNumber,
+  getUserData,
+  setTable,
+  setVolunteer,
+  setPopup,
+  setIndividual,
+  encodeText,
+  whatsappText,
+  volunteer_lat,
+  volunteer_lng,
+  distance
 } {
   const individual = useStoreState(state => state.individual.data);
   const volunteer = useStoreState(state => state.volunteer.data);
@@ -51,24 +59,16 @@ export default function useAppLogic(): {
     data.filter(i => user === i[filterBy])[0];
 
   const parsedIndividualNumber = parseNumber(individual.phone);
-  const urlencodedIndividualText = encodeText(
-    whatsappText({
-      volunteer_name: volunteer.name,
-      individual_name: individual.name,
-      agent: "Voluntária",
-      isVolunteer: false
-    })
-  );
-
   const parsedVolunteerNumber = parseNumber(volunteer.whatsapp);
-  const urlencodedVolunteerText = encodeText(
-    whatsappText({
-      volunteer_name: volunteer.name,
-      individual_name: individual.name,
-      agent: "Voluntária",
-      isVolunteer: true
-    })
-  );
+
+  const distance = 4000;
+
+  const parsedCoordinates = isJsonString(volunteer.coordinates)
+    ? JSON.parse(volunteer.coordinates)
+    : volunteer.coordinates;
+  const volunteer_lat = parsedCoordinates && Number(parsedCoordinates.latitude);
+  const volunteer_lng =
+    parsedCoordinates && Number(parsedCoordinates.longitude);
 
   return {
     individual,
@@ -77,13 +77,16 @@ export default function useAppLogic(): {
     popups,
     createWhatsappLink,
     parsedIndividualNumber,
-    urlencodedIndividualText,
     parsedVolunteerNumber,
-    urlencodedVolunteerText,
     getUserData,
     setTable,
     setVolunteer,
     setPopup,
-    setIndividual
+    setIndividual,
+    encodeText,
+    whatsappText,
+    volunteer_lat,
+    volunteer_lng,
+    distance
   };
 }

@@ -1,8 +1,8 @@
 import { Filters } from "../../graphql/FilterQuery";
 
 const data = {
-  volunteers: "Voluntárias",
-  individuals: "PSR"
+  volunteers: 'Psicólogas',
+  individuals: 'Profissionais da Saúde'
 };
 
 type FiltersProps = {
@@ -34,11 +34,11 @@ export default function filters({
       items: [
         {
           onClick: (): void => history("/groups/volunteers"),
-          option: `Voluntárias (${volunteersCount})`
+          option: `Psicólogas (${volunteersCount})`
         },
         {
           onClick: (): void => history("/groups/individuals"),
-          option: `PSR's (${individualsCount})`
+          option: `Profissionais da Saúde (${individualsCount})`
         }
       ]
     },
