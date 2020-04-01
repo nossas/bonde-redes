@@ -22,7 +22,7 @@ export type Filters = {
 
 const FilterQuery = ({ children }): JSX.Element => {
   const [page, setPage] = useState(0);
-  const [rows, setRows] = useState(20);
+  const [rows, setRows] = useState(100);
   const [status, setStatus] = useState("");
   const [availability, setAvailability] = useState("");
 
