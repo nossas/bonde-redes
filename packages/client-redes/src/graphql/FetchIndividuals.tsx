@@ -1,7 +1,8 @@
 import React from "react";
 import { gql } from "apollo-boost";
-import { SessionHOC, useQuery } from 'bonde-core-tools';
-import FilterQuery from "./FilterQuery";
+import { useSession, useQuery } from 'bonde-core-tools';
+import { useFilterQuery } from "./FilterQuery";
+import Empty from '../components/Empty';
 
 const USERS = gql`
   query RedeGroups(
@@ -95,39 +96,34 @@ interface IndividualData {
   rede_individuals: Individual[];
 }
 
-const FetchIndividuals = SessionHOC(
-  (props: { children; session: { community: { id: number } } }) => (
-    <FilterQuery>
-      {({ filters, changeFilters, page }): void | React.ReactNode => {
-        const {
-          children,
-          session: { community }
-        } = props;
+const FetchIndividuals = ({ children, community }: any) => {
+  const { filters, changeFilters, page } = useFilterQuery();
+  const variables = {
+    context: { _eq: community.id },
+    ...(filters || {}),
+    is_volunteer: false // TODO: deixar isso dinâmico!!
+  };
 
-        const variables = {
-          context: { _eq: community.id },
-          ...(filters || {}),
-          is_volunteer: false // TODO: deixar isso dinâmico!!
-        };
+  const {
+    loading,
+    // error,
+    data
+  } = useQuery<IndividualData, IndividualVars>(USERS, { variables });
 
-        const {
-          loading,
-          // error,
-          data
-        } = useQuery<IndividualData, IndividualVars>(USERS, { variables });
+  if (loading) return <p>Loading...</p>;
 
-        if (loading) return <p>Loading...</p>;
+  return children({
+    data: data && data.rede_individuals,
+    filters,
+    page,
+    changeFilters
+  });
+};
 
-        return children({
-          data: data && data.rede_individuals,
-          filters,
-          page,
-          changeFilters
-        });
-      }}
-    </FilterQuery>
-  ),
-  { required: true }
-);
-
-export default FetchIndividuals;
+export default (props: any = {}) => {
+  const { community } = useSession();
+  return community
+    ? <FetchIndividuals community={community} {...props}/>
+    : <Empty message='Selecione uma comunidade' />
+  ;
+};

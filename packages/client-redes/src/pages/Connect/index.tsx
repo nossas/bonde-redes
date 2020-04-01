@@ -4,7 +4,7 @@ import ReactTable from "react-table";
 import * as turf from "@turf/turf";
 import { useHistory, useLocation } from "react-router-dom";
 import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
-import { SessionHOC, useMutation } from 'bonde-core-tools';
+import { useSession, useMutation } from 'bonde-core-tools';
 
 import { Wrap, StyledButton } from "./style";
 import columns from "./columns";
@@ -23,7 +23,8 @@ type onConfirm = {
   volunteer_whatsapp: string;
 };
 
-const Table = SessionHOC(({ session: { user: agent } }) => {
+const Table = () => {
+  const { user: agent } = useSession();
   const [createConnection, { data, loading, error }] = useMutation(
     CREATE_RELATIONSHIP
   );
@@ -215,6 +216,6 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
       }}
     </FetchIndividuals>
   );
-});
+};
 
 export default Table;

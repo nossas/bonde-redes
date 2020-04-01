@@ -1,6 +1,7 @@
 import React from 'react'
 import { gql } from 'apollo-boost'
-import { SessionHOC, useQuery } from 'bonde-core-tools'
+import { useSession, useQuery } from 'bonde-core-tools'
+import Empty from '../components/Empty';
 
 const MATCHES = gql`
 query RedeRelationships ($context: Int_comparison_exp!) {
@@ -33,8 +34,8 @@ query RedeRelationships ($context: Int_comparison_exp!) {
   }
 }`
 
-const FetchMatches = SessionHOC((props: any) => {
-  const { children, session: { community } } = props
+const FetchMatches = (props: any) => {
+  const { children, community } = props
 
   const variables = { context: { _eq: community.id } }
 
@@ -46,6 +47,12 @@ const FetchMatches = SessionHOC((props: any) => {
     return <p>Error</p>
   }
   return children(data.rede_relationships)
-}, { required: true })
+};
 
-export default FetchMatches
+export default (props: any = {}) => {
+  const { community } = useSession();
+  return community
+    ? <FetchMatches community={community} {...props}/>
+    : <Empty message='Selecione uma comunidade' />
+  ;
+};

@@ -11,38 +11,47 @@ import Match from "./pages/Connect";
 import GroupsWrapper from "./pages/Groups";
 import Relations from "./pages/Relations";
 
+import { Loading } from 'bonde-components';
 import { BondeSessionProvider, BondeSessionUI } from "bonde-core-tools";
 import store from "./store";
 
-const adminUrl = process.env.REACT_APP_ADMIN_URL || 'http://admin-canary.bonde.devel:5002';
-const loginPath = process.env.REACT_APP_LOGIN_PATH || '/auth/login';
+const TextLoading = ({ fetching }) => {
+  const messages = {
+    session: 'Carregando sessão...',
+    user: 'Carregando usuário...',
+    communities: 'Carregando communities...',
+    redirect: 'Redirecionando para autenticação...'
+  }
+  return <Loading fullsize message={messages[fetching]} />
+}
 
-const config = {
-  loginUrl: new URL(loginPath, adminUrl).href,
-  graphqlApiUrl: process.env.REACT_APP_HASURA_API_URL || 'http://api-graphql.staging.bonde.org/v1/graphql',
-  crossStorageUrl: process.env.REACT_APP_DOMAIN_CROSS_STORAGE || 'http://cross-storage.bonde.devel'
+const App = () => {
+  const adminUrl = process.env.REACT_APP_ADMIN_URL || 'http://admin-canary.bonde.devel:5001/admin'
+  return (
+    <BondeSessionProvider
+      fetchData
+      environment={process.env.ENVIRONMENT || 'development'}
+      loading={TextLoading}
+    >
+      <StoreProvider store={store}>
+        <Router history={history}>
+          <BondeSessionUI.Main indexRoute={adminUrl}>
+            <Header zIndex={0} />
+            <BondeSessionUI.Content>
+              <Switch>
+                <Route exact path="/">
+                  <Redirect to="/groups" />
+                </Route>
+                <Route path="/groups" component={GroupsWrapper} />
+                <Route path="/connect" component={Match} />
+                <Route path="/relations" component={Relations} />
+              </Switch>
+            </BondeSessionUI.Content>
+          </BondeSessionUI.Main>
+        </Router>
+      </StoreProvider>
+    </BondeSessionProvider>
+  )
 };
-
-const App = () => (
-  <BondeSessionProvider config={config}>
-    <StoreProvider store={store}>
-      <Router history={history}>
-        <BondeSessionUI.Main indexRoute={adminUrl}>
-          <Header zIndex={0} />
-          <BondeSessionUI.Content>
-            <Switch>
-              <Route exact path="/">
-                <Redirect to="/groups" />
-              </Route>
-              <Route path="/groups" component={GroupsWrapper} />
-              <Route path="/connect" component={Match} />
-              <Route path="/relations" component={Relations} />
-            </Switch>
-          </BondeSessionUI.Content>
-        </BondeSessionUI.Main>
-      </Router>
-    </StoreProvider>
-  </BondeSessionProvider>
-);
 
 export default App;
