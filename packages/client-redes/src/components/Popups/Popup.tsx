@@ -1,5 +1,5 @@
 import React from "react";
-import { Title, Text, Button, Link, Loading, Spacing } from "bonde-styleguide";
+import { Title, Text, Button, Loading, Spacing } from "bonde-styleguide";
 
 import { If } from "../If";
 import {
@@ -51,15 +51,7 @@ const Warning = ({
     <Title.H2>Ops!</Title.H2>
     <Text align="center">{"Telefone Inválido ):"}</Text>
     <Text align="center">
-      A voluntária{" "}
-      <Link
-        href={`https://mapadoacolhimento.zendesk.com/agent/users/${id}/requested_tickets`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {name}
-      </Link>{" "}
-      não possui número de Whastapp
+      A voluntária {name} não possui número de Whastapp
     </Text>
     <StyledLink onClick={onClose}>fazer nova busca</StyledLink>
   </>
