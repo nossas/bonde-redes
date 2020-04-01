@@ -1,10 +1,10 @@
-import { useStoreState, useStoreActions } from 'easy-peasy'
+import { useStoreState, useStoreActions } from "easy-peasy";
 import {
   encodeText,
   whatsappText,
   parseNumber,
   isJsonString
-} from './services/utils';
+} from "./services/utils";
 import { Individual } from "./graphql/FetchIndividuals";
 
 export default function useAppLogic(): {
@@ -63,11 +63,12 @@ export default function useAppLogic(): {
 
   const distance = 4000;
 
-  const parsedCoordinates = isJsonString(volunteer.coordinates) 
-    ? JSON.parse(volunteer.coordinates) 
-    : volunteer.coordinates
+  const parsedCoordinates = isJsonString(volunteer.coordinates)
+    ? JSON.parse(volunteer.coordinates)
+    : volunteer.coordinates;
   const volunteer_lat = parsedCoordinates && Number(parsedCoordinates.latitude);
-  const volunteer_lng = parsedCoordinates && Number(parsedCoordinates.longitude);
+  const volunteer_lng =
+    parsedCoordinates && Number(parsedCoordinates.longitude);
 
   return {
     individual,
@@ -87,5 +88,5 @@ export default function useAppLogic(): {
     volunteer_lat,
     volunteer_lng,
     distance
-  }
+  };
 }

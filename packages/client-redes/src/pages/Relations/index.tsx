@@ -38,10 +38,12 @@ const Table: React.FC = () => {
                 columns={columns}
                 defaultPageSize={10}
                 className="-striped -highlight"
-                defaultSorted={[{
-                  id: 'created_at',
-                  desc: true
-                }]}
+                defaultSorted={[
+                  {
+                    id: "created_at",
+                    desc: true
+                  }
+                ]}
               />
             </Wrap>
           </Flexbox>
