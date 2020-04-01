@@ -39,6 +39,7 @@
     "react-scripts": "^3.4.0",
     "react-spring": "^8.0.27",
     "react-table": "6.10.3",
+    "serve": "^11.3.0",
     "styled-components": "^4.4.1",
     "typescript": "~3.7.3",
     "validator": "^12.1.0"
@@ -46,10 +47,11 @@
   "scripts": {
     "dev": "react-scripts start",
     "build": "react-scripts build",
-    "start": "react-scripts start",
+    "start": "serve -s build",
     "test": "react-scripts test",
     "coverage": "npm run test -- --watchAll=false --coverage",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "clean": "rm -rf node_modules && rm -rf build"
   },
   "browserslist": {
     "production": [
@@ -81,6 +83,7 @@
     "@types/react-table": "^6.8.5",
     "@types/styled-components": "^4.4.1",
     "@types/testing-library__react": "^9.1.2",
-    "@types/url-join": "^4.0.0"
+    "@types/url-join": "^4.0.0",
+    "jest": "24.9.0"
   }
 }

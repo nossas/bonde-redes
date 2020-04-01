@@ -9,6 +9,7 @@
   "devDependencies": {
     "@types/jest": "~25.1.2",
     "@types/node": "~12.12.27",
+    "@types/yup": "^0.26.33",
     "@typescript-eslint/eslint-plugin": "~2.19.2",
     "@typescript-eslint/parser": "~2.19.2",
     "eslint": "~6.8.0",
@@ -22,14 +23,14 @@
     "typescript": "~3.8.2"
   },
   "scripts": {
-    "dev": "tsc-watch --outDir ./build --onSuccess \"node ./build/src/main.js\"",
-    "start": "node build/src/main.js",
+    "dev": "tsc-watch --outDir ./build --onSuccess \"node -r dotenv/config ./build/src/main.js\"",
+    "start": "node -r dotenv/config build/src/main.js",
     "clean": "rimraf coverage build tmp",
     "build": "tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch --runInBand --detectOpenHandles"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.5",
@@ -47,6 +48,7 @@
     "throng": "^4.0.0",
     "tslib": "~1.10.0",
     "winston": "^3.2.1",
-    "ws": "^7.2.1"
+    "ws": "^7.2.1",
+    "yup": "^0.28.3"
   }
 }

@@ -37,7 +37,7 @@ const SessionStorage = (): {
         const communityJson = args[1];
         if (authJson) {
           const dataSession = {
-            token: JSON.parse(authJson).jwtToken,
+            token: JSON.parse(authJson).jwtToken || JSON.parse(authJson).token,
             community: communityJson ? JSON.parse(communityJson) : {}
           };
           return Promise.resolve(dataSession);

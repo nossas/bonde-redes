@@ -65,28 +65,22 @@ const columns: Array<Columns> = [
       if (!value) {
         return "-";
       }
-      const data = new Date(value);
-      return data.toLocaleDateString("pt-BR");
-    }
-  },
-  {
-    accessor: "relation",
-    Header: "Relação"
-  },
-  {
-    accessor: "status",
-    Header: "Status",
-    Cell: ({ value, row }: valueAndRow): JSX.Element | null =>
-      value ? (
-        <SelectUpdateStatus
-          name="status"
-          row={row}
-          options={status}
-          selected={value}
-          query={UPDATE_RELATIONSHIP_MUTATION}
-          type="relationship"
-        />
-      ) : null,
+      const data = new Date(value)
+      return data.toLocaleDateString('pt-BR')
+    },
+  }, {
+    accessor: 'status',
+    Header: 'Status',
+    Cell: ({ value, row }: valueAndRow): JSX.Element | null => (value ? (
+      <SelectUpdateStatus
+        name='status'
+        row={row}
+        options={status}
+        selected={value}
+        query={UPDATE_RELATIONSHIP_MUTATION}
+        type="relationship"
+      />
+    ) : null),
     width: 250
   },
   {
