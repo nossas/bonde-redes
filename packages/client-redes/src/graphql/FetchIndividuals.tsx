@@ -5,7 +5,7 @@ import { SessionHOC } from "../services/session";
 import FilterQuery from "./FilterQuery";
 
 const USERS = gql`
-query RedeGroups(
+query RedeIndividuals(
   $context: Int_comparison_exp!,
   $rows: Int!,
   $offset: Int!,
@@ -20,8 +20,10 @@ query RedeGroups(
         community_id: $context,
         is_volunteer: { _eq: $is_volunteer }
       },
-      status: $status,
-      availability: $availability
+      _and: [
+        {status: $status}
+        {availability: $availability}
+      ]
       coordinates: { _is_null: false }
     },
       limit: $rows,

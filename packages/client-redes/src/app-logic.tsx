@@ -61,7 +61,7 @@ export default function useAppLogic(): {
   const parsedIndividualNumber = parseNumber(individual.phone);
   const parsedVolunteerNumber = parseNumber(volunteer.whatsapp);
 
-  const distance = 2500;
+  const distance = 4000;
 
   const parsedCoordinates = isJsonString(volunteer.coordinates) 
     ? JSON.parse(volunteer.coordinates) 
