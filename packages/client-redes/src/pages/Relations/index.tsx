@@ -27,12 +27,12 @@ const Table: React.FC = () => {
           </Flexbox>
         ) : (
           <Flexbox middle>
-            <Spacing margin={{ bottom: 20 }}>
-              <Title.H4 margin={{ bottom: 30 }}>
-                Relações ({data.length})
-              </Title.H4>
-            </Spacing>
             <Wrap>
+              <Spacing margin={{ bottom: 20 }}>
+                <Title.H4 margin={{ bottom: 30 }}>
+                  Relações ({data.length})
+                </Title.H4>
+              </Spacing>
               <ReactTable
                 data={data}
                 columns={columns}

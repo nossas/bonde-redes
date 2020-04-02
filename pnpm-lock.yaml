@@ -332,6 +332,7 @@ packages:
       '@types/react': 16.9.21
       '@wry/equality': 0.1.9
       apollo-client: 2.6.8_graphql@14.6.0
+      apollo-utilities: 1.3.3_graphql@14.6.0
       graphql: 14.6.0
       react: 16.12.0
       react-dom: 16.12.0_react@16.12.0
@@ -3636,7 +3637,6 @@ packages:
       '@typescript-eslint/typescript-estree': 2.20.0_typescript@3.7.5
       eslint: 6.8.0
       eslint-scope: 5.0.0
-      typescript: 3.7.5
     engines:
       node: ^8.10.0 || ^10.13.0 || >=11.10.1
     peerDependencies:
@@ -14562,6 +14562,7 @@ packages:
       react: 16.12.0
       react-dom: 16.12.0_react@16.12.0
       shallowequal: 1.1.0
+      styled-components: 5.0.1_364bfd245d2fd32e75bbcba4856a80df
       supports-color: 5.5.0
     dev: false
     peerDependencies:

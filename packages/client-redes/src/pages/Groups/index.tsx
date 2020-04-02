@@ -6,6 +6,7 @@ import {
   Dropdown,
   DropdownItem
 } from "bonde-styleguide";
+import { Header } from 'bonde-components';
 import ReactTable from "react-table";
 import { useStoreActions } from "easy-peasy";
 
@@ -80,10 +81,17 @@ const Groups = () => {
           volunteers: volunteers.data
         });
 
+        const count = {
+          volunteers: Number(volunteers.count) || 0,
+          individuals: Number(individuals.count) || 0
+        }
+
         const pages =
           kind === "volunteers"
-            ? Math.ceil(volunteers.count / filtersValues.rows)
-            : Math.ceil(individuals.count / filtersValues.rows);
+            ? Math.ceil(count.volunteers / filtersValues.rows)
+            : Math.ceil(count.individuals / filtersValues.rows);
+
+        const resizeRow = count[kind] < 1000 ? count[kind] : filtersValues.rows
 
         return (
           <Flexbox middle>
@@ -91,20 +99,24 @@ const Groups = () => {
               <Spacing margin={{ bottom: 20 }}>
                 <Filters
                   filters={filters({
-                    volunteersCount: Number(volunteers.count) || 0,
-                    individualsCount: Number(individuals.count) || 0,
+                    volunteersCount: count.volunteers,
+                    individualsCount: count.individuals,
                     filters: { values: filtersValues, change: changeFilters },
                     history: push,
                     kind
                   })}
                 />
               </Spacing>
+              <Spacing margin={{ bottom: 20 }}>
+                <Header.h4>Total ({count[kind]})</Header.h4>
+              </Spacing>
               <ReactTable
                 manual
                 sortable={false}
                 data={data[kind]}
                 columns={columns(pathname)}
-                pageSize={filtersValues.rows}
+                pageSize={resizeRow}
+                pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
                 page={page}
                 pages={pages}
                 onPageChange={(page: number): void => changeFilters({ page })}

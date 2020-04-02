@@ -150,7 +150,8 @@ const Table = () => {
       wrapper: false,
       confirm: false
     });
-    return goBack();
+    const redesUrl = process.env.REACT_APP_REDES_URL || "http://redes.bonde.devel:4000/"
+    window.location.href = redesUrl;
   };
 
   return (
