@@ -29,9 +29,12 @@ mutation update_rede_individuals($id: Int!, $address: String!, $state: String!, 
 
 export const validateMutationRes = async (schema, updatedIndividual) => {
   try {
-    await schema.validate(updatedIndividual)
+    const validation = await schema.validate(
+      updatedIndividual,
+      {strict: true, abortEarly: false}
+    )
     logger.log("info", 'successfuly validated schema of updated coordinates mutation');
-    return updatedIndividual
+    return validation
   } catch(e) {
     logger.error('failed to validate schema of updated coordinates mutation response ', e.errors)
     return false
@@ -55,14 +58,14 @@ export const mutationUpdateCoordinates = async (individual: IndividualGeolocatio
 }
 
 export const schema = yup.object({
-  id: yup.number(),
+  id: yup.number().required(),
   coordinates: yup.object({
-    latitude: yup.string(),
-    longitude: yup.string()
+    latitude: yup.string().required(),
+    longitude: yup.string().required()
   }),
-  address: yup.string(),
-  state: yup.string(),
-  city: yup.string()
+  address: yup.string().required(),
+  state: yup.string().required(),
+  city: yup.string().required()
 });
 
 export const geolocation = (response: SubscribeIndividualsResponse) => {

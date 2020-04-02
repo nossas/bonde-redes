@@ -48,6 +48,19 @@ describe("Individuals", () => {
         city: "São Paulo"
       })
     })
+    it("When validating incorrect input, it returns an error", async () => {
+      expect(
+        await validateMutationRes(
+          schema,
+          {
+            id:25,
+            coordinates:{latitude:"-23.5455809",longitude:"-46.6473778"},
+            address: "Vila Buarque, São Paulo - State of São Paulo, 01222-001, Brazil",
+            state: "SP"
+          }
+        )
+      ).toEqual(false)
+    })
     it("Saves new individual geolocation to Hasura", async () => {
       expect(
         await mutationUpdateCoordinates({
