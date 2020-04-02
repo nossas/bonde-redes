@@ -27,13 +27,16 @@ mutation update_rede_individuals($id: Int!, $address: String!, $state: String!, 
 }
 `
 
-const validateMutationRes = async (schema, updatedIndividual) => {
+export const validateMutationRes = async (schema, updatedIndividual) => {
   try {
-    await schema.validate(updatedIndividual)
+    const validation = await schema.validate(
+      updatedIndividual,
+      {strict: true, abortEarly: false}
+    )
     logger.log("info", 'successfuly validated schema of updated coordinates mutation');
-    return updatedIndividual
+    return validation
   } catch(e) {
-    logger.error('failed to validate schema of updated coordinates mutation response ', e.errors)
+    logger.error('failed to validate schema of updated coordinates', e.errors)
     return false
   }
 }
@@ -50,9 +53,22 @@ export const mutationUpdateCoordinates = async (individual: IndividualGeolocatio
     return updatedIndividual
   } catch (err) {
 		logger.error(`Failed to update individual "${individual.id}" coordinates in Hasura `, err)
-		return undefined
+    throw new Error(
+      "Failed to update individual coordinates in Hasura"
+    );
 	}
 }
+
+export const schema = yup.object({
+  id: yup.number().required(),
+  coordinates: yup.object({
+    latitude: yup.string().required(),
+    longitude: yup.string().required()
+  }),
+  address: yup.string().required(),
+  state: yup.string().required(),
+  city: yup.string().required()
+});
 
 export const geolocation = (response: SubscribeIndividualsResponse) => {
   const { data: { rede_individuals: individuals } } = response
@@ -60,22 +76,19 @@ export const geolocation = (response: SubscribeIndividualsResponse) => {
 	individuals.forEach(async (individual: SubscribeIndividual) => {
     const individualWithGeolocation = await convertCepToAddressWithGoogleApi(individual)
 
-    if(!individualWithGeolocation) return false
+    if(!individualWithGeolocation) {
+      throw new Error(
+        "Google Maps response was invalid."
+      );
+    }
 
-    const schema = yup.object({
-      id: yup.number(),
-      coordinates: yup.object({
-        latitude: yup.string(),
-        longitude: yup.string()
-      }),
-      address: yup.string(),
-      state: yup.string(),
-      city: yup.string(),
-    });
+    const validateDataForMutation = await validateMutationRes(schema, individualWithGeolocation)
 
-    const validateDataForMutation = await validateMutationRes(schema, individualWithGeolocation["0"])
-
-    if(!validateDataForMutation) return false
+    if(!validateDataForMutation) {
+      throw new Error(
+        "Updated coordinates failed validation"
+      );
+    }
   
     type UpdateCoordinatesRes = yup.InferType<typeof schema>;
   
@@ -110,6 +123,8 @@ export const subscriptionRedesIndividuals = async (): Promise<ZenObservable.Subs
     return observable
   } catch (err) {
     logger.error('Failed on subscription: ', err)
-    return undefined
+    throw new Error(
+      "Failed on fetching subscription"
+    );  
   }
 }
