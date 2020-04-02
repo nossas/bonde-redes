@@ -1,7 +1,5 @@
 import { useStoreState, useStoreActions } from "easy-peasy";
 import {
-  encodeText,
-  whatsappText,
   parseNumber,
   isJsonString
 } from "./services/utils";
@@ -12,19 +10,17 @@ export default function useAppLogic(): {
   volunteer,
   tableData,
   popups,
-  createWhatsappLink,
-  parsedIndividualNumber,
-  parsedVolunteerNumber,
-  getUserData,
   setTable,
   setVolunteer,
   setPopup,
   setIndividual,
-  encodeText,
-  whatsappText,
-  volunteer_lat,
-  volunteer_lng,
-  distance
+  createWhatsappLink: (number: string, textVariables: string) => string | undefined,
+  parsedIndividualNumber: string,
+  parsedVolunteerNumber: string,
+  getUserData,
+  volunteer_lat: number,
+  volunteer_lng: number,
+  distance: number
 } {
   const individual = useStoreState(state => state.individual.data);
   const volunteer = useStoreState(state => state.volunteer.data);
@@ -83,8 +79,6 @@ export default function useAppLogic(): {
     setVolunteer,
     setPopup,
     setIndividual,
-    encodeText,
-    whatsappText,
     volunteer_lat,
     volunteer_lng,
     distance

@@ -11,6 +11,7 @@ import history from "./history";
 import Match from "./pages/Connect";
 import GroupsWrapper from "./pages/Groups";
 import Relations from "./pages/Relations";
+import Settings from "./pages/Settings";
 
 import { SessionPageLayout, SessionProvider } from "./services/session";
 import store from "./store";
@@ -36,6 +37,7 @@ const InsideApp = () => (
         <Route path="/groups" component={GroupsWrapper} />
         <Route path="/connect" component={Match} />
         <Route path="/relations" component={Relations} />
+        <Route path="/settings" component={Settings} />
       </Switch>
     </AppBody>
   </AppWrapper>

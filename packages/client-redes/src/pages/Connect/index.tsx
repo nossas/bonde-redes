@@ -11,6 +11,7 @@ import columns from "./columns";
 import FetchIndividuals from "../../graphql/FetchIndividuals";
 import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
 import useAppLogic from "../../app-logic";
+import { encodeText, whatsappText } from "../../services/utils";
 import { SessionHOC } from "../../services/session/SessionProvider";
 import { Individual } from "../../graphql/FetchIndividuals";
 
@@ -38,8 +39,6 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
     parsedVolunteerNumber,
     setVolunteer,
     setPopup,
-    encodeText,
-    whatsappText,
     distance,
     volunteer_lat,
     volunteer_lng
