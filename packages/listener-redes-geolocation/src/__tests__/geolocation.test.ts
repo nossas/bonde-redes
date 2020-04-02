@@ -10,7 +10,6 @@ describe("Geolocation", () => {
           created_at: "2020-12-10"
         })
       ).toEqual({
-        error: 1,
         id: 1,
         coordinates: {
           latitude: "ZERO_RESULTS",
@@ -40,5 +39,5 @@ describe("Geolocation", () => {
         city: "São Paulo"
       });
     });
-  });
+  })
 });
