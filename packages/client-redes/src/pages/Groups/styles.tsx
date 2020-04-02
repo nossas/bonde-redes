@@ -1,8 +1,14 @@
 import styled from "styled-components";
-import { Button } from "bonde-styleguide";
+import { Header } from 'bonde-components';
 
 export const Wrap = styled.div`
-  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+
+  ${Header.h4} {
+    margin: 20px 0 25px;
+  }
 
   .ReactTable {
     border: 1px solid #c7c7c7;
@@ -22,20 +28,3 @@ export const Wrap = styled.div`
     }
   }
 `;
-
-export const BtnInverted = styled(Button)`
-  border: ${(props): string => (props.disabled ? "none" : "1px solid #EE0090")}
-  color: ${(props): string => (props.disabled ? "#fff" : "#EE0090")}
-  ${(props): string =>
-    props.disabled &&
-    `
-    &:hover, &:active {
-      border: none;
-      color: #fff;
-    }
-  `}
-`;
-
-BtnInverted.defaultProps = {
-  light: true
-};

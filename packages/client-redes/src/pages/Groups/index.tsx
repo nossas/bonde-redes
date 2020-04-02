@@ -94,45 +94,39 @@ const Groups = () => {
         const resizeRow = count[kind] < 1000 ? count[kind] : filtersValues.rows
 
         return (
-          <Flexbox middle>
-            <Wrap>
-              <Spacing margin={{ bottom: 20 }}>
-                <Filters
-                  filters={filters({
-                    volunteersCount: count.volunteers,
-                    individualsCount: count.individuals,
-                    filters: { values: filtersValues, change: changeFilters },
-                    history: push,
-                    kind
-                  })}
-                />
-              </Spacing>
-              <Spacing margin={{ bottom: 20 }}>
-                <Header.h4>Total ({count[kind]})</Header.h4>
-              </Spacing>
-              <ReactTable
-                manual
-                sortable={false}
-                data={data[kind]}
-                columns={columns(pathname)}
-                pageSize={resizeRow}
-                pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
-                page={page}
-                pages={pages}
-                onPageChange={(page: number): void => changeFilters({ page })}
-                onPageSizeChange={(rows: number): void =>
-                  changeFilters({ rows })
-                }
-                previousText="Anterior"
-                nextText="Próximo"
-                pageText="Página"
-                ofText="de"
-                rowsText="linhas"
-                // Accessibility Labels
-                className="-striped -highlight"
-              />
-            </Wrap>
-          </Flexbox>
+          <Wrap>
+            <Filters
+              filters={filters({
+                volunteersCount: count.volunteers,
+                individualsCount: count.individuals,
+                filters: { values: filtersValues, change: changeFilters },
+                history: push,
+                kind
+              })}
+            />
+            <Header.h4>Total ({count[kind]})</Header.h4>
+            <ReactTable
+              manual
+              sortable={false}
+              data={data[kind]}
+              columns={columns(pathname)}
+              pageSize={resizeRow}
+              pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
+              page={page}
+              pages={pages}
+              onPageChange={(page: number): void => changeFilters({ page })}
+              onPageSizeChange={(rows: number): void =>
+                changeFilters({ rows })
+              }
+              previousText="Anterior"
+              nextText="Próximo"
+              pageText="Página"
+              ofText="de"
+              rowsText="linhas"
+              // Accessibility Labels
+              className="-striped -highlight"
+            />
+          </Wrap>
         );
       }}
     </FetchUsersByGroup>
