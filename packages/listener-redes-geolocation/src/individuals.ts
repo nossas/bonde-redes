@@ -36,7 +36,7 @@ export const validateMutationRes = async (schema, updatedIndividual) => {
     logger.log("info", 'successfuly validated schema of updated coordinates mutation');
     return validation
   } catch(e) {
-    logger.error('failed to validate schema of updated coordinates mutation response ', e.errors)
+    logger.error('failed to validate schema of updated coordinates', e.errors)
     return false
   }
 }
@@ -53,7 +53,9 @@ export const mutationUpdateCoordinates = async (individual: IndividualGeolocatio
     return updatedIndividual
   } catch (err) {
 		logger.error(`Failed to update individual "${individual.id}" coordinates in Hasura `, err)
-		return undefined
+    throw new Error(
+      "Failed to update individual coordinates in Hasura"
+    );
 	}
 }
 
@@ -74,11 +76,19 @@ export const geolocation = (response: SubscribeIndividualsResponse) => {
 	individuals.forEach(async (individual: SubscribeIndividual) => {
     const individualWithGeolocation = await convertCepToAddressWithGoogleApi(individual)
 
-    if(!individualWithGeolocation) return false
+    if(!individualWithGeolocation) {
+      throw new Error(
+        "Google Maps response was invalid."
+      );
+    }
 
     const validateDataForMutation = await validateMutationRes(schema, individualWithGeolocation)
 
-    if(!validateDataForMutation) return false
+    if(!validateDataForMutation) {
+      throw new Error(
+        "Updated coordinates failed validation"
+      );
+    }
   
     type UpdateCoordinatesRes = yup.InferType<typeof schema>;
   
@@ -113,6 +123,8 @@ export const subscriptionRedesIndividuals = async (): Promise<ZenObservable.Subs
     return observable
   } catch (err) {
     logger.error('Failed on subscription: ', err)
-    return undefined
+    throw new Error(
+      "Failed on fetching subscription"
+    );  
   }
 }
