@@ -18,6 +18,7 @@ query fetchModuleSettings(
     settings
     name
     version
+    community_id
   }
 }
 `;

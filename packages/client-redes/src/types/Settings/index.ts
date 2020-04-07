@@ -7,6 +7,7 @@ export type Settings = {
   }
   name: string
   version: string
+  community_id: number
 };
 
 export interface SettingsData {
