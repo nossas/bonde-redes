@@ -1,10 +1,9 @@
-import React from "react";
-import { gql } from "apollo-boost";
-import { useQuery } from "@apollo/react-hooks";
-import { SessionHOC } from "../services/session";
-import FilterQuery from "./FilterQuery";
+import React from 'react';
+import { gql } from 'apollo-boost';
+import { useSession, useQuery } from 'bonde-core-tools';
+import Empty from '../components/Empty';
+import { Filters, useFilterQuery } from './FilterQuery';
 import { Individual } from "./FetchIndividuals";
-import { Filters } from "./FilterQuery";
 
 const USERS_BY_GROUP = gql`
   query RedeGroups(
@@ -131,51 +130,48 @@ interface GroupsVars {
   filters: Filters;
 }
 
-const FetchUsersByGroup = SessionHOC(
-  (props: { children; session: { community: { id: number } } }) => (
-    <FilterQuery>
-      {({ filters, changeFilters, page }): void | React.ReactNode => {
-        const {
-          children,
-          session: { community }
-        } = props;
+const FetchUsersByGroup = ({ children, community }) => {
+  const { filters, changeFilters, page } = useFilterQuery();
 
-        const variables = {
-          context: { _eq: community.id },
-          ...(filters || {})
-        };
+  const variables = {
+    context: { _eq: community.id },
+    ...(filters || {})
+  };
 
-        const { loading, error, data } = useQuery<GroupsData, GroupsVars>(
-          USERS_BY_GROUP,
-          { variables }
-        );
+  const { loading, error, data } = useQuery<GroupsData, GroupsVars>(
+    USERS_BY_GROUP,
+    { variables }
+  );
 
-        if (error) {
-          console.log("error", error);
-          return <p>Error</p>;
-        }
-        if (loading) return <p>Loading...</p>;
+  if (error) {
+    console.log("error", error);
+    return <p>Error</p>;
+  }
+  if (loading) return <p>Loading...</p>;
 
-        return (
-          data &&
-          children({
-            volunteers: {
-              data: data.volunteers,
-              count: data.volunteers_count.aggregate.count
-            },
-            individuals: {
-              data: data.individuals,
-              count: data.individuals_count.aggregate.count
-            },
-            filters,
-            page,
-            changeFilters
-          })
-        );
-      }}
-    </FilterQuery>
-  ),
-  { required: true }
-);
+  return (
+    data &&
+    children({
+      volunteers: {
+        data: data.volunteers,
+        count: data.volunteers_count.aggregate.count
+      },
+      individuals: {
+        data: data.individuals,
+        count: data.individuals_count.aggregate.count
+      },
+      filters,
+      page,
+      changeFilters
+    })
+  );
+};
 
-export default FetchUsersByGroup;
+export default (props) => {
+  const { community } = useSession();
+
+  return community
+    ? <FetchUsersByGroup community={community} {...props} />
+    : <Empty message='Selecione uma comunidade' />
+  ;
+};

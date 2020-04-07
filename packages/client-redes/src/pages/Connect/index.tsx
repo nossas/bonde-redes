@@ -4,15 +4,13 @@ import ReactTable from "react-table";
 import * as turf from "@turf/turf";
 import { useHistory, useLocation } from "react-router-dom";
 import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
-import { useMutation } from "@apollo/react-hooks";
+import { useSession, useMutation } from 'bonde-core-tools';
 
 import { Wrap, StyledButton } from "./style";
 import columns from "./columns";
 import FetchIndividuals from "../../graphql/FetchIndividuals";
 import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
 import useAppLogic from "../../app-logic";
-import { encodeText, whatsappText } from "../../services/utils";
-import { SessionHOC } from "../../services/session/SessionProvider";
 import { Individual } from "../../graphql/FetchIndividuals";
 
 import Popup from "../../components/Popups/Popup";
@@ -25,7 +23,8 @@ type onConfirm = {
   volunteer_whatsapp: string;
 };
 
-const Table = SessionHOC(({ session: { user: agent } }) => {
+const Table = () => {
+  const { user: agent } = useSession();
   const [createConnection, { data, loading, error }] = useMutation(
     CREATE_RELATIONSHIP
   );
@@ -241,6 +240,6 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
       }}
     </FetchIndividuals>
   );
-});
+};
 
 export default Table;
