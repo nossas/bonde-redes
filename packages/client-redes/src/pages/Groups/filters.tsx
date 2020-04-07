@@ -29,12 +29,9 @@ export default function filters({
     option: `${c.name} (${c.is_volunteer ? volunteersCount : individualsCount})`,
     onClick: (): void => history(c.is_volunteer ? "/groups/volunteers" : "/groups/individuals")
   }))
-  // TODO: Make this dynamic
-  const data = {
-    volunteers: 'Psicólogas',
-    individuals: 'Profissionais da Saúde'
-  };
-  
+
+  const data = groups.reduce((newObj, old) => ({ ...newObj, [old.is_volunteer ? "volunteers" : "individuals"]: old.name }), {})
+
   return [
     {
       name: `Grupo (${data[kind]})`,
