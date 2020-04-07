@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import { gql } from "apollo-boost";
-import styled from 'styled-components';
-import { useSession, useMutation } from 'bonde-core-tools';
-import { Button, ConnectedForm, InputField, Header, Hint, Validators } from 'bonde-components';
+import { useMutation } from 'bonde-core-tools';
+import { 
+  Button, 
+  ConnectedForm, 
+  InputField, 
+  Hint, 
+  Validators, 
+  Header,
+  Text
+} from 'bonde-components';
 import { useSettings } from '../../services/SettingsContext'
+import { WrapForm, SettingsWrapper, BottomWrap } from './styles'
 
 const saveSettingsMutation = gql`
   mutation updateSettings(
@@ -15,7 +23,7 @@ const saveSettingsMutation = gql`
         settings: $settings
       }
       where: {
-        id: { _eq: $communityId }
+        community_id: { _eq: $communityId }
       }
     ) {
       returning {
@@ -26,57 +34,35 @@ const saveSettingsMutation = gql`
   }
 `
 
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-color: #eee;
-  height: 100vh;
-`
-const Form = styled.form`
-  width: 60%;
-  margin: 35px 0;
-`
-  
-const WrapForm = styled.div`
-  padding: 30px;
-  border-radius: 5px;
-  background-color: rgb(255, 255, 255);
-  box-shadow: rgba(0, 0, 0, 0.04) 2px 1px 14px 11px;
-`
-
 const SettingsForm = ({ to }: any) => {
-  const { login } = useSession();
   const [error, setError] = useState(undefined);
   const [saveSettings] = useMutation(saveSettingsMutation);
   const { composeValidators, required, min } = Validators;
-  const { settings } = useSettings()
-  const initialValues = {
-    input: { ...settings }
-  }
+  const { settings, community_id } = useSettings()
+  const initialValues = { input: { ...settings } }
+
   return (
-    <Wrapper>
-      <Header.h1>Configurações do Módulo</Header.h1>
+    <SettingsWrapper>
+      <Header.h3>Configurações do Módulo</Header.h3>
       <ConnectedForm
         initialValues={initialValues}
         onSubmit={async (values: any) => {
           try {
-            const { data } = await saveSettings({ variables: values })
-            login(data.register)
-              .then(() => {
-                window.location.href = to;
-              })
+            const variables = {
+              communityId: community_id,
+              settings: values.input
+            }
+            await saveSettings({ variables })
           } catch (err) {
-            if (err && err.message && err.message.indexOf('invalid_invitation_code') !== -1) {
-              setError(t('form.register.token.invalid'))
+            if (err && err.message) {
+              setError(err.message)
               console.log('err', err)
             }
-            console.log('RegisterFailed', err)
           }
         }}
       >
         {({ submitting }) => (
-          <Form>
+          <WrapForm>
             {error && <Hint color='error'>{error}</Hint>}
               <InputField
                 name='input.distance'
@@ -86,6 +72,7 @@ const SettingsForm = ({ to }: any) => {
                   required("Valor não pode ser vazio"),
                   min(1, "Mínimo de 1km")
                 )}
+                type="number"
               />
               <InputField
                 name='input.volunteer_msg'
@@ -97,16 +84,23 @@ const SettingsForm = ({ to }: any) => {
               name='input.individual_msg'
               label="PSR"
               placeholder="Insira uma mensagem de Whatsapp para a PSR"
+              validate={required("Valor não pode ser vazio")}
             />
-            <div>
+            <BottomWrap>
               <Button type='submit' disabled={submitting}>
                 Enviar
               </Button>
-            </div>
-          </Form>
+              <div>
+                <Text>*VNAME: Nome da voluntária</Text>
+                <Text>*PNAME: Nome da PSR</Text>
+                <Text>*VEMAIL: Email da voluntária</Text>
+                <Text>*AGENT: Nome da agente</Text>
+              </div>
+            </BottomWrap>
+          </WrapForm>
         )}
       </ConnectedForm>
-    </Wrapper>
+    </SettingsWrapper>
   );
 };
 
