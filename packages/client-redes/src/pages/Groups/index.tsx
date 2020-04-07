@@ -68,6 +68,7 @@ const Groups = () => {
       {({
         volunteers,
         individuals,
+        groups,
         filters: filtersValues,
         changeFilters,
         page
@@ -101,7 +102,8 @@ const Groups = () => {
                 individualsCount: count.individuals,
                 filters: { values: filtersValues, change: changeFilters },
                 history: push,
-                kind
+                kind,
+                groups
               })}
             />
             <Header.h4>Total ({count[kind]})</Header.h4>

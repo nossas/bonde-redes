@@ -62,7 +62,7 @@ const USERS_BY_GROUP = gql`
     }
     community_groups: rede_groups(
       where: {
-        community_id: { _eq: $context }
+        community_id: $context
       }
     ) {
       is_volunteer

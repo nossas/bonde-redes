@@ -1,10 +1,5 @@
 import { Filters } from "../../graphql/FilterQuery";
 
-const data = {
-  volunteers: 'Psicólogas',
-  individuals: 'Profissionais da Saúde'
-};
-
 type FiltersProps = {
   volunteersCount: number;
   individualsCount: number;
@@ -13,7 +8,8 @@ type FiltersProps = {
   filters: {
     values: Filters;
     change: (any) => void;
-  };
+  }
+  groups: Array<{ is_volunteer: boolean, name: string }>
 };
 
 type FilterData = {
@@ -26,21 +22,23 @@ export default function filters({
   individualsCount,
   history,
   kind,
+  groups,
   filters: _filters
 }: FiltersProps): Array<FilterData> {
+  const items = groups.map(c => ({
+    option: `${c.name} (${c.is_volunteer ? volunteersCount : individualsCount})`,
+    onClick: (): void => history(c.is_volunteer ? "/groups/volunteers" : "/groups/individuals")
+  }))
+  // TODO: Make this dynamic
+  const data = {
+    volunteers: 'Psicólogas',
+    individuals: 'Profissionais da Saúde'
+  };
+  
   return [
     {
       name: `Grupo (${data[kind]})`,
-      items: [
-        {
-          onClick: (): void => history("/groups/volunteers"),
-          option: `Psicólogas (${volunteersCount})`
-        },
-        {
-          onClick: (): void => history("/groups/individuals"),
-          option: `Profissionais da Saúde (${individualsCount})`
-        }
-      ]
+      items
     },
     {
       name: `Status (${
