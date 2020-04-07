@@ -11,9 +11,10 @@ import columns from "./columns";
 import FetchIndividuals from "../../graphql/FetchIndividuals";
 import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
 import useAppLogic from "../../app-logic";
-import { Individual } from "../../graphql/FetchIndividuals";
+import { Individual } from "../../types/Individual";
 import { whatsappText, encodeText } from '../../services/utils'
 import Popup from "../../components/Popups/Popup";
+import { useSettings } from '../../services/SettingsContext'
 
 type onConfirm = {
   individual_id: number;
@@ -38,13 +39,13 @@ const Table = () => {
     parsedVolunteerNumber,
     setVolunteer,
     setPopup,
-    distance,
     volunteer_lat,
     volunteer_lng
   } = useAppLogic();
 
   const { goBack, push } = useHistory();
   const { state: linkState = { volunteer: {} } } = useLocation();
+  const { settings: { volunteer_msg, individual_msg, distance } } = useSettings()
 
   const [success, setSuccess] = useState(false);
   const [fail, setError] = useState(false);
@@ -66,7 +67,7 @@ const Table = () => {
       individual_name,
       agent: agent.firstName,
       isVolunteer: true,
-      volunteer_msg: 'blablabla'
+      volunteer_msg
     })
   );
 
@@ -77,7 +78,7 @@ const Table = () => {
       agent: agent.firstName,
       isVolunteer: false,
       volunteer_email,
-      individual_msg: 'blablabla'
+      individual_msg
     })
   );
 

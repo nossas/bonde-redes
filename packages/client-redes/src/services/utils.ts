@@ -19,7 +19,7 @@ export const whatsappText = ({
   volunteer_msg = "",
   individual_msg = ""
 }): string => {
-  const mapObj = { INAME: individual_name, VNAME: volunteer_name, VEMAIL: volunteer_email, AGENT: agent };
+  const mapObj = { PNAME: individual_name, VNAME: volunteer_name, VEMAIL: volunteer_email, AGENT: agent };
   if (isVolunteer) return replaceAll(volunteer_msg, mapObj)
   return replaceAll(individual_msg, mapObj)
 };

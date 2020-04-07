@@ -3,7 +3,7 @@ import {
   parseNumber,
   isJsonString
 } from "./services/utils";
-import { Individual } from "./graphql/FetchIndividuals";
+import { Individual } from "./types/Individual";
 
 export default function useAppLogic(): {
   individual,
@@ -20,7 +20,6 @@ export default function useAppLogic(): {
   getUserData,
   volunteer_lat: number,
   volunteer_lng: number,
-  distance: number
 } {
   const individual = useStoreState(state => state.individual.data);
   const volunteer = useStoreState(state => state.volunteer.data);
@@ -57,8 +56,6 @@ export default function useAppLogic(): {
   const parsedIndividualNumber = parseNumber(individual.phone);
   const parsedVolunteerNumber = parseNumber(volunteer.whatsapp);
 
-  const distance = 4000;
-
   const parsedCoordinates = isJsonString(volunteer.coordinates)
     ? JSON.parse(volunteer.coordinates)
     : volunteer.coordinates;
@@ -81,6 +78,5 @@ export default function useAppLogic(): {
     setIndividual,
     volunteer_lat,
     volunteer_lng,
-    distance
   };
 }
