@@ -102,18 +102,18 @@ pipeline:
   #     branch: [hotfix/*, release/*, feature/*, support/*, develop]
   #     event: push
 
-  # publish-prod-webhooks-solidarity-count:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-webhooks-solidarity-count
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/webhooks-solidarity-count/Dockerfile
-  #   tags:
-  #     - ${DRONE_TAG##v}
-  #     - latest
-  #   when:
-  #     status: success
-  #     event: tag
+  publish-prod-webhooks-solidarity-count:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-solidarity-count
+    group: publishing
+    secrets: [docker_username, docker_password]
+    dockerfile: packages/webhooks-solidarity-count/Dockerfile
+    tags:
+      - ${DRONE_TAG##v}
+      - latest
+    when:
+      status: success
+      event: tag
 
   # # Solidarity match dont works
 
@@ -442,22 +442,22 @@ pipeline:
   #     branch: [hotfix/*, release/*, feature/*, develop]
   #     event: push
 
-  # deploy-prod-webhooks-solidarity-count:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/solidarity-count
-  #   docker_image: "nossas/bonde-webhooks-solidarity-count:${DRONE_TAG##v}"
-  #   timeout: 360
-  #   group: deploying
-  #   confirm: true
-  #   secrets:
-  #     - source: rancher_access_key_prod
-  #       target: rancher_access_key
-  #     - source: rancher_secret_key_prod
-  #       target: rancher_secret_key
-  #   when:
-  #     status: success
-  #     event: tag
+  deploy-prod-webhooks-solidarity-count:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/solidarity-count
+    docker_image: "nossas/bonde-webhooks-solidarity-count:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
 
   # deploy-stag-webhooks-solidarity-match:
   #   image: peloton/drone-rancher
