@@ -24,7 +24,7 @@ query fetchModuleSettings(
 
 const SettingsProvider = ({children}) => {
   const { community } = useSession();
-  const variables = { communityId: community && community.id || 0 };
+  const variables = { communityId: (community && community.id) || 0 };
 
   const { loading, error, data } = useQuery<
     SettingsData,
@@ -38,7 +38,7 @@ const SettingsProvider = ({children}) => {
   }
 
   const value = data && data.app_settings && data.app_settings[0]
-  console.log({value})
+
   return (
     <SettingsContext.Provider value={value}>
       {children}

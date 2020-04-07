@@ -3,6 +3,7 @@ import { gql } from "apollo-boost";
 import styled from 'styled-components';
 import { useSession, useMutation } from 'bonde-core-tools';
 import { Button, ConnectedForm, InputField, Header, Hint, Validators } from 'bonde-components';
+import { useSettings } from '../../services/SettingsContext'
 
 const saveSettingsMutation = gql`
   mutation updateSettings(
@@ -49,15 +50,15 @@ const SettingsForm = ({ to }: any) => {
   const [error, setError] = useState(undefined);
   const [saveSettings] = useMutation(saveSettingsMutation);
   const { composeValidators, required, min } = Validators;
-  // const initialValues = {
-  //   input: { ...data.settings }
-  // }
-  // console.log({data})
+  const { settings } = useSettings()
+  const initialValues = {
+    input: { ...settings }
+  }
   return (
     <Wrapper>
       <Header.h1>Configurações do Módulo</Header.h1>
       <ConnectedForm
-        initialValues={{ input: { distance: 5, volunteer_msg: 'bla', individual_msg: 'bla2' }}}
+        initialValues={initialValues}
         onSubmit={async (values: any) => {
           try {
             const { data } = await saveSettings({ variables: values })
