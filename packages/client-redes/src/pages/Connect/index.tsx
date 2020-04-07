@@ -12,7 +12,7 @@ import FetchIndividuals from "../../graphql/FetchIndividuals";
 import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
 import useAppLogic from "../../app-logic";
 import { Individual } from "../../graphql/FetchIndividuals";
-
+import { whatsappText, encodeText } from '../../services/utils'
 import Popup from "../../components/Popups/Popup";
 
 type onConfirm = {
@@ -59,12 +59,14 @@ const Table = () => {
     email: volunteer_email
   } = volunteer;
 
+  // TODO: Pass settings from context
   const urlencodedVolunteerText = encodeText(
     whatsappText({
       volunteer_name,
       individual_name,
       agent: agent.firstName,
-      isVolunteer: true
+      isVolunteer: true,
+      volunteer_msg: 'blablabla'
     })
   );
 
@@ -74,7 +76,8 @@ const Table = () => {
       individual_name,
       agent: agent.firstName,
       isVolunteer: false,
-      volunteer_email
+      volunteer_email,
+      individual_msg: 'blablabla'
     })
   );
 
@@ -86,7 +89,6 @@ const Table = () => {
     if (!linkState.volunteer) return push("/");
   }, [setLoader, loading, error, setError, data, linkState, push]);
 
-  // TODO: Arrumar as variaveis de acordo com a nova key `coordinate`
   const filterByDistance = useCallback(
     data =>
       data
