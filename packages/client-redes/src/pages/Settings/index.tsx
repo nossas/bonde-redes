@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { gql } from "apollo-boost";
-import { useMutation } from 'bonde-core-tools';
+import { useMutation, useSession } from 'bonde-core-tools';
 import { 
   Button, 
   ConnectedForm, 
@@ -34,12 +34,13 @@ const saveSettingsMutation = gql`
   }
 `
 
-const SettingsForm = ({ to }: any) => {
+const SettingsForm = () => {
   const [error, setError] = useState(undefined);
   const [saveSettings] = useMutation(saveSettingsMutation);
   const { composeValidators, required, min } = Validators;
-  const { settings, community_id } = useSettings()
-  const initialValues = { input: { ...settings } }
+  const { settings } = useSettings()
+  const { community } = useSession()
+  const initialValues = { input: { ...settings } } 
 
   return (
     <SettingsWrapper>
@@ -49,7 +50,7 @@ const SettingsForm = ({ to }: any) => {
         onSubmit={async (values: any) => {
           try {
             const variables = {
-              communityId: community_id,
+              communityId: (community && community.id) || 0,
               settings: values.input
             }
             await saveSettings({ variables })

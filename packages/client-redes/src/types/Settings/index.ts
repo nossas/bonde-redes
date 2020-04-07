@@ -1,13 +1,13 @@
 export type Settings = {
-  id: number
+  id?: number
   settings: {
     volunteer_msg: string
     individual_msg: string
     distance
   }
-  name: string
-  version: string
-  community_id: number
+  name?: string
+  version?: string
+  community_id?: number
 };
 
 export interface SettingsData {

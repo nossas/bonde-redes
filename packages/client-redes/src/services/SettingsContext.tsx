@@ -38,7 +38,15 @@ const SettingsProvider = ({children}) => {
     return <p>Error</p>;
   }
 
-  const value = data && data.app_settings && data.app_settings[0]
+  const initialValue = { 
+    settings: {
+      distance: 0, 
+      volunteer_msg: '', 
+      individual_msg: '' 
+    }
+  }
+
+  const value = (data && data.app_settings && data.app_settings[0]) || initialValue
 
   return (
     <SettingsContext.Provider value={value}>

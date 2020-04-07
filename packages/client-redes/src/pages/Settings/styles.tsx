@@ -9,12 +9,15 @@ export const WrapForm = styled.div`
 
 export const SettingsWrapper = styled.div`
   margin: 40px 0;
-  width: 60%;
   display: flex;
   flex-direction: column;
   align-self: center;
   & > h3 {
     margin-bottom: 20px;
+  }
+  width: 80%;
+  @media(min-width: 768px){
+    width: 60%;
   }
 `
 
