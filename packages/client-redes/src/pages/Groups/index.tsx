@@ -14,7 +14,7 @@ import "react-table/react-table.css";
 import columns from "./columns";
 import filters from "./filters";
 import { Wrap } from "./styles";
-import { Individual } from "../../graphql/FetchIndividuals";
+import { Individual } from "../../types/Individual";
 import FetchUsersByGroup from "../../graphql/FetchUsersByGroup";
 
 type FilterData = {

@@ -2,8 +2,8 @@ import React from 'react';
 import { gql } from 'apollo-boost';
 import { useSession, useQuery } from 'bonde-core-tools';
 import Empty from '../components/Empty';
-import { Filters, useFilterQuery } from './FilterQuery';
-import { Individual } from "./FetchIndividuals";
+import { useFilterQuery } from './FilterQuery';
+import { GroupsData, GroupsVars } from '../types/Groups'
 
 const USERS_BY_GROUP = gql`
   query RedeGroups(
@@ -60,6 +60,14 @@ const USERS_BY_GROUP = gql`
         count
       }
     }
+    community_groups: rede_groups(
+      where: {
+        community_id: { _eq: $context }
+      }
+    ) {
+      is_volunteer
+      name
+    }
   }
 
   fragment individual on rede_individuals {
@@ -93,43 +101,6 @@ const USERS_BY_GROUP = gql`
   }
 `;
 
-interface GroupsData {
-  individuals: Individual[];
-  individuals_count: {
-    aggregate: {
-      count: number;
-    };
-  };
-  volunteers: Individual[];
-  volunteers_count: {
-    aggregate: {
-      count: number;
-    };
-  };
-}
-
-interface GroupsData {
-  individuals: Individual[];
-  individuals_count: {
-    aggregate: {
-      count: number;
-    };
-  };
-  volunteers: Individual[];
-  volunteers_count: {
-    aggregate: {
-      count: number;
-    };
-  };
-}
-
-interface GroupsVars {
-  context: {
-    _eq: number;
-  };
-  filters: Filters;
-}
-
 const FetchUsersByGroup = ({ children, community }) => {
   const { filters, changeFilters, page } = useFilterQuery();
 
@@ -160,6 +131,7 @@ const FetchUsersByGroup = ({ children, community }) => {
         data: data.individuals,
         count: data.individuals_count.aggregate.count
       },
+      groups: data.community_groups,
       filters,
       page,
       changeFilters
