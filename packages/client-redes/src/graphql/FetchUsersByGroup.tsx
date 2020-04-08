@@ -6,7 +6,7 @@ import { Individual } from "./FetchIndividuals";
 import { Filters } from "../services/FilterContext";
 import { useFilterState } from "../services/FilterContext"
 
-const USERS_BY_GROUP = gql`
+export const USERS_BY_GROUP = gql`
   query RedeGroups(
     $context: Int_comparison_exp!
     $rows: Int!

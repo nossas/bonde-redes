@@ -10,10 +10,11 @@ import { Wrap, StyledButton } from "./style";
 import columns from "./columns";
 import FetchIndividuals from "../../graphql/FetchIndividuals";
 import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
+import { USERS_BY_GROUP } from "../../graphql/FetchUsersByGroup";
 import useAppLogic from "../../app-logic";
 import { SessionHOC } from "../../services/session/SessionProvider";
 import { Individual } from "../../graphql/FetchIndividuals";
-
+import { useFilterState } from "../../services/FilterContext"
 import Popup from "../../components/Popups/Popup";
 
 type onConfirm = {
@@ -24,7 +25,7 @@ type onConfirm = {
   volunteer_whatsapp: string;
 };
 
-const Table = SessionHOC(({ session: { user: agent } }) => {
+const Table = SessionHOC(({ session: { user: agent, community } }) => {
   const [createConnection, { data, loading, error }] = useMutation(
     CREATE_RELATIONSHIP
   );
@@ -47,6 +48,7 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
 
   const { goBack, push } = useHistory();
   const { state: linkState = { volunteer: {} } } = useLocation();
+  const filters = useFilterState()
 
   const [success, setSuccess] = useState(false);
   const [fail, setError] = useState(false);
@@ -88,7 +90,6 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
     if (!linkState.volunteer) return push("/");
   }, [setLoader, loading, error, setError, data, linkState, push]);
 
-  // TODO: Arrumar as variaveis de acordo com a nova key `coordinate`
   const filterByDistance = useCallback(
     data =>
       data
@@ -140,7 +141,17 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
         recipientId: individual_id,
         volunteerId: volunteer_id,
         agentId: agent_id
-      }
+      },
+      refetchQueries: [
+        {
+          query: USERS_BY_GROUP,
+          variables: {
+            context: { _eq: community.id },
+            ...filters,
+            page: undefined
+          }
+        }
+      ]
     });
   };
 
@@ -150,9 +161,7 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
       wrapper: false,
       confirm: false
     });
-    const redesUrl =
-      process.env.REACT_APP_REDES_URL || "http://redes.bonde.devel:4000/";
-    window.location.href = redesUrl;
+    goBack();
   };
 
   return (
