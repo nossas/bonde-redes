@@ -50,7 +50,10 @@ export default function SelectUpdateStatus({
       [type]: { [name]: value },
       id: row._original.id
     };
-    return update({ variables });
+    return update({ 
+      variables,
+      refetchQueries: ["RedeGroups"]  
+    });
   };
 
   return (
