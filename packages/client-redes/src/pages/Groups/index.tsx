@@ -13,10 +13,11 @@ import { useStoreActions } from "easy-peasy";
 
 import "react-table/react-table.css";
 import columns from "./columns";
-import filters from "./filters";
+import FiltersData from "./filters";
 import { Wrap } from "./styles";
 import { Individual } from "../../graphql/FetchIndividuals";
 import FetchUsersByGroup from "../../graphql/FetchUsersByGroup";
+import { useFilterDispatch, useFilterState } from '../../services/FilterContext'
 
 type FilterData = {
   name: string;
@@ -58,6 +59,8 @@ const Groups = () => {
     (actions: { table: { setTable: ({ individuals, volunteers }) => void } }) =>
       actions.table.setTable
   );
+  const filters = useFilterState()
+  const dispatch = useFilterDispatch()
 
   useEffect(() => {
     push("/groups/volunteers");
@@ -69,8 +72,6 @@ const Groups = () => {
       {({
         volunteers,
         individuals,
-        filters: filtersValues,
-        changeFilters,
         page
       }): React.ReactNode => {
         const data: TableData = {
@@ -89,10 +90,10 @@ const Groups = () => {
 
         const pages =
           kind === "volunteers"
-            ? Math.ceil(count.volunteers / filtersValues.rows)
-            : Math.ceil(count.individuals / filtersValues.rows);
+            ? Math.ceil(count.volunteers / filters.rows)
+            : Math.ceil(count.individuals / filters.rows);
 
-        const resizeRow = count[kind] < 1000 ? count[kind] : filtersValues.rows;
+        const resizeRow = count[kind] < 1000 ? count[kind] : filters.rows;
 
         return (
           <Page>
@@ -100,10 +101,10 @@ const Groups = () => {
               <Wrap>
                 <Spacing margin={{ bottom: 20 }}>
                   <Filters
-                    filters={filters({
+                    filters={FiltersData({
                       volunteersCount: count.volunteers,
                       individualsCount: count.individuals,
-                      filters: { values: filtersValues, change: changeFilters },
+                      filters: { values: filters, change: dispatch },
                       history: push,
                       kind
                     })}
@@ -123,9 +124,9 @@ const Groups = () => {
                   pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
                   page={page}
                   pages={pages}
-                  onPageChange={(page: number): void => changeFilters({ page })}
+                  onPageChange={(page: number): void => dispatch({ type: "page", value: page })}
                   onPageSizeChange={(rows: number): void =>
-                    changeFilters({ rows })
+                    dispatch({ type: "rows", value: rows })
                   }
                   previousText="Anterior"
                   nextText="Próximo"

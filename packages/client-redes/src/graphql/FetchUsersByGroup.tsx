@@ -2,9 +2,9 @@ import React from "react";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import { SessionHOC } from "../services/session";
-import FilterQuery from "./FilterQuery";
 import { Individual } from "./FetchIndividuals";
-import { Filters } from "./FilterQuery";
+import { Filters } from "../services/FilterContext";
+import { useFilterState } from "../services/FilterContext"
 
 const USERS_BY_GROUP = gql`
   query RedeGroups(
@@ -124,58 +124,48 @@ interface GroupsData {
   };
 }
 
-interface GroupsVars {
+interface GroupsVars extends Filters {
   context: {
     _eq: number;
   };
-  filters: Filters;
 }
 
 const FetchUsersByGroup = SessionHOC(
-  (props: { children; session: { community: { id: number } } }) => (
-    <FilterQuery>
-      {({ filters, changeFilters, page }): void | React.ReactNode => {
-        const {
-          children,
-          session: { community }
-        } = props;
+  (props: { children; session: { community: { id: number } } }) => {
+    const filters = useFilterState()
 
-        const variables = {
-          context: { _eq: community.id },
-          ...(filters || {})
-        };
+    const {
+      children,
+      session: { community }
+    } = props;
 
-        const { loading, error, data } = useQuery<GroupsData, GroupsVars>(
-          USERS_BY_GROUP,
-          { variables }
-        );
+    const variables = {
+      context: { _eq: community.id },
+      ...filters,
+      page: undefined
+    };
 
-        if (error) {
-          console.log("error", error);
-          return <p>Error</p>;
-        }
-        if (loading) return <p>Loading...</p>;
+    const { loading, error, data } = useQuery<GroupsData, GroupsVars>(
+      USERS_BY_GROUP,
+      { variables }
+    );
 
-        return (
-          data &&
-          children({
-            volunteers: {
-              data: data.volunteers,
-              count: data.volunteers_count.aggregate.count
-            },
-            individuals: {
-              data: data.individuals,
-              count: data.individuals_count.aggregate.count
-            },
-            filters,
-            page,
-            changeFilters
-          })
-        );
-      }}
-    </FilterQuery>
-  ),
-  { required: true }
+    if (error) {
+      console.log("error", error);
+      return <p>Error</p>;
+    }
+    if (loading) return <p>Loading...</p>;
+    if (data) return children({
+      volunteers: {
+        data: data.volunteers,
+        count: data.volunteers_count.aggregate.count
+      },
+      individuals: {
+        data: data.individuals,
+        count: data.individuals_count.aggregate.count
+      },
+    })
+  }, { required: true }
 );
 
 export default FetchUsersByGroup;
