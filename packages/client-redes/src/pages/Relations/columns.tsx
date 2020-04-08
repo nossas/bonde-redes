@@ -17,6 +17,7 @@ type valueString = {
 type valueFirstName = {
   value: {
     first_name: string;
+    last_name?: string
   };
 };
 
@@ -50,13 +51,13 @@ const columns: Array<Columns> = [
     accessor: "volunteer",
     Header: "Voluntária",
     Cell: ({ value }: valueFirstName): JSX.Element | string =>
-      value ? <span>{value.first_name}</span> : "-"
+      value ? <span>{`${value.first_name} ${value.last_name}`}</span> : "-"
   },
   {
     accessor: "recipient",
     Header: "PSR",
     Cell: ({ value }: valueFirstName): JSX.Element | string =>
-      value ? <span>{value.first_name}</span> : "-"
+      value ? <span>{`${value.first_name} ${value.last_name}`}</span> : "-"
   },
   {
     accessor: "created_at",
@@ -100,7 +101,7 @@ const columns: Array<Columns> = [
     accessor: "agent",
     Header: "Feito por",
     Cell: ({ value }: valueFirstName): JSX.Element | string =>
-      value ? <span>{value.first_name}</span> : "-"
+      value ? <span>{`${value.first_name} ${value.last_name}`}</span> : "-"
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ].map((col: any) =>
