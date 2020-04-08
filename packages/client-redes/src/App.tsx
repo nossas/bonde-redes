@@ -13,6 +13,7 @@ import GroupsWrapper from "./pages/Groups";
 import Relations from "./pages/Relations";
 
 import { SessionPageLayout, SessionProvider } from "./services/session";
+import { FilterProvider } from './services/FilterContext'
 import store from "./store";
 
 const AppWrapper = styled.div`
@@ -44,9 +45,11 @@ const InsideApp = () => (
 const App = () => (
   <SessionProvider>
     <StoreProvider store={store}>
-      <Router history={history}>
-        <SessionPageLayout path="/" component={InsideApp} />
-      </Router>
+      <FilterProvider>
+        <Router history={history}>
+          <SessionPageLayout path="/" component={InsideApp} />
+        </Router>
+      </FilterProvider>
     </StoreProvider>
   </SessionProvider>
 );
