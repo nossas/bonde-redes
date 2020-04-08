@@ -106,28 +106,36 @@ const Groups = () => {
                 groups
               })}
             />
-            <Header.h4>Total ({count[kind]})</Header.h4>
-            <ReactTable
-              manual
-              sortable={false}
-              data={data[kind]}
-              columns={columns(pathname)}
-              pageSize={resizeRow}
-              pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
-              page={page}
-              pages={pages}
-              onPageChange={(page: number): void => changeFilters({ page })}
-              onPageSizeChange={(rows: number): void =>
-                changeFilters({ rows })
-              }
-              previousText="Anterior"
-              nextText="Próximo"
-              pageText="Página"
-              ofText="de"
-              rowsText="linhas"
-              // Accessibility Labels
-              className="-striped -highlight"
-            />
+            {data[kind].length === 0 ? (
+              <Wrap>
+                <Header.h4>Não existem resultados para essa tabela.</Header.h4>
+              </Wrap>
+            ) : (
+              <>
+                <Header.h4>Total ({count[kind]})</Header.h4>
+                <ReactTable
+                  manual
+                  sortable={false}
+                  data={data[kind]}
+                  columns={columns(pathname)}
+                  pageSize={resizeRow}
+                  pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
+                  page={page}
+                  pages={pages}
+                  onPageChange={(page: number): void => changeFilters({ page })}
+                  onPageSizeChange={(rows: number): void =>
+                    changeFilters({ rows })
+                  }
+                  previousText="Anterior"
+                  nextText="Próximo"
+                  pageText="Página"
+                  ofText="de"
+                  rowsText="linhas"
+                  // Accessibility Labels
+                  className="-striped -highlight"
+                />
+              </>
+            )}
           </Wrap>
         );
       }}

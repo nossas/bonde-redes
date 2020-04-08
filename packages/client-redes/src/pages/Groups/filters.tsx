@@ -34,7 +34,7 @@ export default function filters({
 
   return [
     {
-      name: `Grupo (${data[kind]})`,
+      name: data[kind] ? `Grupo (${data[kind]})` : 'Grupo',
       items
     },
     {
