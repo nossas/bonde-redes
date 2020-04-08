@@ -1,8 +1,8 @@
 import { Filters } from "../../graphql/FilterQuery";
 
 const data = {
-  volunteers: 'Psicólogas',
-  individuals: 'Profissionais da Saúde'
+  volunteers: "Psicólogas",
+  individuals: "Profissionais da Saúde"
 };
 
 type FiltersProps = {

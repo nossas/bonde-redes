@@ -150,7 +150,8 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
       wrapper: false,
       confirm: false
     });
-    const redesUrl = process.env.REACT_APP_REDES_URL || "http://redes.bonde.devel:4000/"
+    const redesUrl =
+      process.env.REACT_APP_REDES_URL || "http://redes.bonde.devel:4000/";
     window.location.href = redesUrl;
   };
 

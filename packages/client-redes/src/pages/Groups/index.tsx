@@ -85,14 +85,14 @@ const Groups = () => {
         const count = {
           volunteers: Number(volunteers.count) || 0,
           individuals: Number(individuals.count) || 0
-        }
+        };
 
         const pages =
           kind === "volunteers"
             ? Math.ceil(count.volunteers / filtersValues.rows)
             : Math.ceil(count.individuals / filtersValues.rows);
 
-        const resizeRow = count[kind] < 1000 ? count[kind] : filtersValues.rows
+        const resizeRow = count[kind] < 1000 ? count[kind] : filtersValues.rows;
 
         return (
           <Page>
