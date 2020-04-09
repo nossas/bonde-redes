@@ -2,10 +2,6 @@ import styled from "styled-components";
 import { Header } from 'bonde-components';
 
 export const Wrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 20px 0;
-
   ${Header.h4} {
     margin: 20px 0 25px;
   }

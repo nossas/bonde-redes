@@ -2,6 +2,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 import { StoreProvider } from "easy-peasy";
 import React from "react";
+import styled from 'styled-components';
 import { Redirect, Route, Switch } from "react-router";
 import { Router } from "react-router-dom";
 
@@ -26,6 +27,17 @@ const TextLoading = ({ fetching }) => {
   return <Loading fullsize message={messages[fetching]} />
 }
 
+const Content = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  ${`width: ${window.innerWidth-16}px;`}
+
+  .wrap {
+    padding: 20px 60px;
+  }
+`
+
 const App = () => {
   const adminUrl = process.env.REACT_APP_ADMIN_URL || 'http://admin-canary.bonde.devel:5001/admin'
   return (
@@ -37,15 +49,19 @@ const App = () => {
       <StoreProvider store={store}>
         <Router history={history}>
           <BondeSessionUI indexRoute={adminUrl}>
-            <Header zIndex={0} />
-            <Switch>
-              <Route exact path="/">
-                <Redirect to="/groups" />
-              </Route>
-              <Route path="/groups" component={GroupsWrapper} />
-              <Route path="/connect" component={Match} />
-              <Route path="/relations" component={Relations} />
-            </Switch>
+            <Content>
+              <Header zIndex={0} />
+              <div className='wrap'>
+                <Switch>
+                  <Route exact path="/">
+                    <Redirect to="/groups" />
+                  </Route>
+                  <Route path="/groups" component={GroupsWrapper} />
+                  <Route path="/connect" component={Match} />
+                  <Route path="/relations" component={Relations} />
+                </Switch>
+              </div>
+            </Content>
           </BondeSessionUI>
         </Router>
       </StoreProvider>
