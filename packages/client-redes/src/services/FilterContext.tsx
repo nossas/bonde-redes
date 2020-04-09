@@ -86,7 +86,7 @@ const FilterProvider = ({children}) => {
 function useFilterState() {
   const context = React.useContext(FilterStateContext)
   if (context === undefined) {
-    throw new Error('useFilterState must be used within a CountProvider')
+    throw new Error('useFilterState must be used within a FilterProvider')
   }
   return context
 }
@@ -94,9 +94,11 @@ function useFilterState() {
 function useFilterDispatch() {
   const context = React.useContext(FilterDispatchContext)
   if (context === undefined) {
-    throw new Error('useFilterDispatch must be used within a CountProvider')
+    throw new Error('useFilterDispatch must be used within a FilterProvider')
   }
   return context
 }
 
-export { FilterProvider, useFilterState, useFilterDispatch }
+const useFilter = (): [Filters, Dispatch] => [useFilterState(), useFilterDispatch()] 
+
+export { FilterProvider, useFilterState, useFilterDispatch, useFilter }

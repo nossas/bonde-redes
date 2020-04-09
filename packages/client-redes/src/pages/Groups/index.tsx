@@ -17,7 +17,7 @@ import FiltersData from "./filters";
 import { Wrap } from "./styles";
 import { Individual } from "../../graphql/FetchIndividuals";
 import FetchUsersByGroup from "../../graphql/FetchUsersByGroup";
-import { useFilterDispatch, useFilterState } from '../../services/FilterContext'
+import { useFilter } from '../../services/FilterContext'
 
 type FilterData = {
   name: string;
@@ -59,8 +59,7 @@ const Groups = () => {
     (actions: { table: { setTable: ({ individuals, volunteers }) => void } }) =>
       actions.table.setTable
   );
-  const filters = useFilterState()
-  const dispatch = useFilterDispatch()
+  const [filters, dispatch] = useFilter()
 
   useEffect(() => {
     push("/groups/volunteers");
