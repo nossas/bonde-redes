@@ -18,6 +18,7 @@ export type Filters = {
   order_by: {
     created_at: string;
   };
+  page?: number;
 };
 
 const FilterQuery = ({ children }): JSX.Element => {

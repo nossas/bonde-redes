@@ -3,43 +3,49 @@ import "react-table/react-table.css";
 import ReactTable from "react-table";
 import * as turf from "@turf/turf";
 import { useHistory, useLocation } from "react-router-dom";
-import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
+import { Flexbox2 as Flexbox, Title, Spacing, Loading } from "bonde-styleguide";
 import { useMutation } from "@apollo/react-hooks";
 
-import { Wrap, StyledButton } from "./style";
-import columns from "./columns";
 import FetchIndividuals from "../../graphql/FetchIndividuals";
 import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
-import useAppLogic from "../../app-logic";
-import { SessionHOC } from "../../services/session/SessionProvider";
+import { USERS_BY_GROUP } from "../../graphql/FetchUsersByGroup";
 import { Individual } from "../../graphql/FetchIndividuals";
+import { SessionHOC } from "../../services/session/SessionProvider";
+import { useFilterState } from "../../services/FilterContext"
+import useAppLogic from "../../app-logic";
+import columns from "./columns";
+import { Wrap, StyledButton } from "./style";
+import { encodeText, whatsappText } from '../../services/utils'
 
 import Popup from "../../components/Popups/Popup";
+import Success from "../../components/Popups/Success";
+import Error from "../../components/Popups/Error";
+import Confirm from "../../components/Popups/Confirm";
 
 type onConfirm = {
   individual_id: number;
   volunteer_id: number;
   agent_id: number;
   popups: Record<string, string>;
-  volunteer_whatsapp: string;
 };
 
-const Table = SessionHOC(({ session: { user: agent } }) => {
-  const [createConnection, { data, loading, error }] = useMutation(
-    CREATE_RELATIONSHIP
-  );
-
+const Table = SessionHOC(({ session: { user: agent, community } }) => {
   const {
-    individual,
-    volunteer,
+    individual: { 
+      first_name: individual_name, 
+      id: individual_id 
+    },
+    volunteer: {
+      first_name: volunteer_name,
+      id: volunteer_id,
+      email: volunteer_email
+    },
     popups,
     createWhatsappLink,
     parsedIndividualNumber,
     parsedVolunteerNumber,
     setVolunteer,
     setPopup,
-    encodeText,
-    whatsappText,
     distance,
     volunteer_lat,
     volunteer_lng
@@ -47,19 +53,13 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
 
   const { goBack, push } = useHistory();
   const { state: linkState = { volunteer: {} } } = useLocation();
+  const filters = useFilterState()
+  const [createConnection, { data, loading, error }] = useMutation(
+    CREATE_RELATIONSHIP
+  );
 
   const [success, setSuccess] = useState(false);
-  const [fail, setError] = useState(false);
   const [isLoading, setLoader] = useState(false);
-
-  const { confirm, wrapper, noPhoneNumber } = popups;
-  const { first_name: individual_name, id: individual_id } = individual;
-  const {
-    first_name: volunteer_name,
-    whatsapp: volunteer_whatsapp,
-    id: volunteer_id,
-    email: volunteer_email
-  } = volunteer;
 
   const urlencodedVolunteerText = encodeText(
     whatsappText({
@@ -82,13 +82,11 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
 
   useEffect(() => {
     setLoader(loading);
-    setError(!!(error && error.message));
     if (data) setSuccess(true);
     // retorna para a home caso não exista nenhuma voluntária no linkState
-    if (!linkState.volunteer) return push("/");
-  }, [setLoader, loading, error, setError, data, linkState, push]);
+    if (Object.keys(linkState.volunteer).length < 1) return push("/");
+  }, [setLoader, loading, error, data, linkState, push]);
 
-  // TODO: Arrumar as variaveis de acordo com a nova key `coordinate`
   const filterByDistance = useCallback(
     data =>
       data
@@ -125,22 +123,24 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
     volunteer_id,
     agent_id,
     popups,
-    volunteer_whatsapp
   }: onConfirm) => {
-    if (!volunteer_whatsapp)
-      return setPopup({
-        ...popups,
-        noPhoneNumber: true,
-        confirm: false
-      });
-
     setPopup({ ...popups, confirm: false });
     return createConnection({
       variables: {
         recipientId: individual_id,
         volunteerId: volunteer_id,
         agentId: agent_id
-      }
+      },
+      refetchQueries: [
+        {
+          query: USERS_BY_GROUP,
+          variables: {
+            context: { _eq: community.id },
+            ...filters,
+            page: undefined
+          }
+        }
+      ]
     });
   };
 
@@ -150,8 +150,7 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
       wrapper: false,
       confirm: false
     });
-    const redesUrl = process.env.REACT_APP_REDES_URL || "http://redes.bonde.devel:4000/"
-    window.location.href = redesUrl;
+    goBack();
   };
 
   return (
@@ -194,49 +193,49 @@ const Table = SessionHOC(({ session: { user: agent } }) => {
                 />
               </Wrap>
             </Flexbox>
-            {wrapper ? (
-              <Popup
-                individualName={individual_name}
-                volunteerName={volunteer_name}
-                onSubmit={() =>
-                  onConfirm({
-                    individual_id,
-                    volunteer_id,
-                    agent_id: agent.id,
-                    popups,
-                    volunteer_whatsapp
-                  })
-                }
-                isOpen={wrapper}
-                onClose={closeAllPopups}
-                isLoading={isLoading}
-                confirm={{ isEnabled: confirm }}
-                success={{
-                  link: {
-                    individual: (): string | undefined =>
-                      createWhatsappLink(
-                        parsedIndividualNumber,
-                        urlencodedIndividualText
-                      ),
-                    volunteer: (): string | undefined =>
-                      createWhatsappLink(
-                        parsedVolunteerNumber,
-                        urlencodedVolunteerText
-                      )
-                  },
-                  isEnabled: success
-                }}
-                error={{
-                  isEnabled: fail,
-                  message: (error && error.message) || ""
-                }}
-                warning={{
-                  isEnabled: noPhoneNumber,
-                  id: volunteer_id,
-                  name: volunteer_name
-                }}
-              />
-            ) : null}
+            <Popup
+              individualName={individual_name}
+              volunteerName={volunteer_name}
+              onSubmit={() =>
+                onConfirm({
+                  individual_id,
+                  volunteer_id,
+                  agent_id: agent.id,
+                  popups
+                })
+              }
+              isOpen={popups.wrapper}
+              onClose={closeAllPopups}
+            >
+              {(props) => {
+                return isLoading 
+                  ? <Loading />
+                  : <>
+                      <Confirm {...props} isEnabled={popups.confirm} />
+                      <Success 
+                        {...props}
+                        link={{
+                          individual: (): string | undefined =>
+                            createWhatsappLink(
+                              parsedIndividualNumber,
+                              urlencodedIndividualText
+                            ),
+                          volunteer: (): string | undefined =>
+                            createWhatsappLink(
+                              parsedVolunteerNumber,
+                              urlencodedVolunteerText
+                            )
+                        }}
+                        isEnabled={success}
+                      />
+                      <Error 
+                        {...props} 
+                        message={(error && error.message) || ""}
+                        isEnabled={error}
+                      />
+                    </>
+              }}
+            </Popup>
           </Fragment>
         );
       }}

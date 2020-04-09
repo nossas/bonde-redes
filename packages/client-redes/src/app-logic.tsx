@@ -8,23 +8,23 @@ import {
 import { Individual } from "./graphql/FetchIndividuals";
 
 export default function useAppLogic(): {
-  individual,
-  volunteer,
-  tableData,
-  popups,
-  createWhatsappLink,
-  parsedIndividualNumber,
-  parsedVolunteerNumber,
-  getUserData,
-  setTable,
-  setVolunteer,
-  setPopup,
-  setIndividual,
-  encodeText,
-  whatsappText,
-  volunteer_lat,
-  volunteer_lng,
-  distance
+  individual;
+  volunteer;
+  tableData;
+  popups;
+  createWhatsappLink;
+  parsedIndividualNumber;
+  parsedVolunteerNumber;
+  getUserData;
+  setTable;
+  setVolunteer;
+  setPopup;
+  setIndividual;
+  encodeText;
+  whatsappText;
+  volunteer_lat;
+  volunteer_lng;
+  distance;
 } {
   const individual = useStoreState(state => state.individual.data);
   const volunteer = useStoreState(state => state.volunteer.data);
