@@ -46,7 +46,7 @@ importers:
       apollo-utilities: 1.3.3_graphql@14.6.0
       body-parser: 1.19.0
       bonde-components: 0.0.2-alpha.16_91142a59788a6b73516b93d9cabe711e
-      bonde-core-tools: 0.1.3-alpha.2_1cc100f105577596390aacccea439e4b
+      bonde-core-tools: 0.1.3-alpha.3_1cc100f105577596390aacccea439e4b
       bonde-styleguide: 0.16.4-alpha.5_react-dom@16.12.0+react@16.12.0
       cors: 2.8.5
       cross-storage: 1.0.0
@@ -141,7 +141,7 @@ importers:
       babel-eslint: 10.0.3
       body-parser: ^1.19.0
       bonde-components: 0.0.2-alpha.16
-      bonde-core-tools: 0.1.3-alpha.2
+      bonde-core-tools: 0.1.3-alpha.3
       bonde-styleguide: 0.16.4-alpha.5
       cors: ^2.8.5
       cross-storage: ^1.0.0
@@ -578,7 +578,7 @@ packages:
       integrity: sha512-JVcQZeXM59Cd1qanDUxv9fgJpt3NeKUaqBqUEvfmQ+BCOKq2xUgaWZW2hr0dkbyJgezYuplEoh5knmrnS68efw==
   /@babel/helper-get-function-arity/7.8.3:
     dependencies:
-      '@babel/types': 7.9.0
+      '@babel/types': 7.9.5
     resolution:
       integrity: sha512-FVDR+Gd9iLjUMY1fzE2SR0IuaJToR4RkCDARVfsBBPSP53GEqSFjD8gNyxg246VUyc/ALRxFaAK8rVG7UT7xRA==
   /@babel/helper-hoist-variables/7.8.3:
@@ -662,14 +662,13 @@ packages:
       integrity: sha512-VNGUDjx5cCWg4vvCTR8qQ7YJYZ+HBjxOgXEl7ounz+4Sn7+LMD3CFrCTEU6/qXKbA2nKg21CwhhBzO0RpRbdCw==
   /@babel/helper-split-export-declaration/7.8.3:
     dependencies:
-      '@babel/types': 7.9.0
+      '@babel/types': 7.9.5
     resolution:
       integrity: sha512-3x3yOeyBhW851hroze7ElzdkeRXQYQbFIb7gLK1WQYsw2GWDay5gAJNw1sWJ0VFP6z5J1whqeXH/WCdCjZv6dA==
   /@babel/helper-validator-identifier/7.9.0:
     resolution:
       integrity: sha512-6G8bQKjOh+of4PV/ThDm/rRqlU7+IGoJuofpagU5GlEl29Vv0RGqqt86ZGRV8ZuSOY3o+8yXl5y782SMcG7SHw==
   /@babel/helper-validator-identifier/7.9.5:
-    dev: false
     resolution:
       integrity: sha512-/8arLKUFq882w4tWGj9JYzRpAlZgiWUJ+dtteNTDqrRBz9Iguck9Rn3ykuBDoUwh2TO4tSAJlrxDUOXWklJe4g==
   /@babel/helper-wrap-function/7.8.3:
@@ -1485,7 +1484,7 @@ packages:
     dependencies:
       '@babel/code-frame': 7.8.3
       '@babel/parser': 7.9.4
-      '@babel/types': 7.9.0
+      '@babel/types': 7.9.5
     resolution:
       integrity: sha512-zbMsPMy/v0PWFZEhQJ66bqjhH+z0JgMoBWuikXybgG3Gkd/3t5oQ1Rw2WQhnSrsOmsKXnZOx15tkC4qON/+JPg==
   /@babel/traverse/7.8.4:
@@ -1569,7 +1568,6 @@ packages:
       '@babel/helper-validator-identifier': 7.9.5
       lodash: 4.17.15
       to-fast-properties: 2.0.0
-    dev: false
     resolution:
       integrity: sha512-XjnvNqenk818r5zMaba+sLQjnbda31UfUURv3ei0qPQw4u+j2jMyJ5b11y8ZHYTRSI3NnInQkkkRT4fLqqPdHg==
   /@bcoe/v8-coverage/0.2.3:
@@ -4079,7 +4077,7 @@ packages:
   /@wry/context/0.4.4:
     dependencies:
       '@types/node': 13.7.2
-      tslib: 1.11.0
+      tslib: 1.11.1
     dev: false
     resolution:
       integrity: sha512-LrKVLove/zw6h2Md/KZyWxIkFM6AoyKp71OqpH9Hiip1csjPVoD3tPxlbQUNxEnHENks3UGgNpSBCAfq9KWuag==
@@ -4374,7 +4372,7 @@ packages:
       graphql: 14.6.0
       optimism: 0.10.3
       ts-invariant: 0.4.4
-      tslib: 1.11.0
+      tslib: 1.11.1
     dev: false
     peerDependencies:
       graphql: 0.11.7 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4423,7 +4421,7 @@ packages:
       graphql: 14.6.0
       symbol-observable: 1.2.0
       ts-invariant: 0.4.4
-      tslib: 1.11.0
+      tslib: 1.11.1
       zen-observable: 0.8.15
     dev: false
     peerDependencies:
@@ -5106,7 +5104,7 @@ packages:
       typescript: '*'
     resolution:
       integrity: sha512-OOG3XnrcYRTPwQRoS+652bSiM9iLYMFOUE7KZIU+44WKbz8L+OaKMI+/lEEu3FK2QOLeOoDlNjiR/dFbF1x+6w==
-  /bonde-core-tools/0.1.3-alpha.2_1cc100f105577596390aacccea439e4b:
+  /bonde-core-tools/0.1.3-alpha.3_1cc100f105577596390aacccea439e4b:
     dependencies:
       '@apollo/react-hooks': 3.1.4_9a8d593eac6ae77decafc4c460056fec
       '@types/react-router-dom': 5.1.3
@@ -5128,7 +5126,7 @@ packages:
       react-dom: '*'
       typescript: '*'
     resolution:
-      integrity: sha512-jTW8qSg+Fc7CouqBvPqXVGO8Ok4luuZFwMmZCD2yPkRGdG4YTvH2beVUikLhQ8WmjmosKGsaiaH1cLamPIVhDA==
+      integrity: sha512-r6kGdOI9nnAiEdRTh96DIr23eLDqr582IZ9YSmkuAxdTkL5+k2mxm49+STy7DYwSr9lS65o0AQjUy7xrFnp4SA==
   /bonde-styleguide/0.16.4-alpha.5_react-dom@16.12.0+react@16.12.0:
     dependencies:
       '@babel/plugin-proposal-class-properties': 7.8.3
@@ -8408,7 +8406,7 @@ packages:
       integrity: sha1-0nRXAQJabHdabFRXk+1QL8DGSaE=
   /hoist-non-react-statics/3.3.2:
     dependencies:
-      react-is: 16.12.0
+      react-is: 16.13.1
     resolution:
       integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
   /hosted-git-info/2.8.5:
@@ -12985,7 +12983,6 @@ packages:
     resolution:
       integrity: sha512-GFMtL0vHkiBv9HluwNZTggSn/sCyEt9n02aM0dSAjGGyqyNlAyftYm4phPxdvCigG15JreC5biwxCgTAJZ7yAA==
   /react-is/16.13.1:
-    dev: false
     resolution:
       integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
   /react-lifecycles-compat/3.0.4:

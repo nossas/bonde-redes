@@ -20,7 +20,8 @@ const TextLoading = ({ fetching }) => {
     session: 'Carregando sessão...',
     user: 'Carregando usuário...',
     communities: 'Carregando communities...',
-    redirect: 'Redirecionando para autenticação...'
+    redirect: 'Redirecionando para autenticação...',
+    module: 'Redirecionando para módulo...'
   }
   return <Loading fullsize message={messages[fetching]} />
 }
@@ -35,19 +36,17 @@ const App = () => {
     >
       <StoreProvider store={store}>
         <Router history={history}>
-          <BondeSessionUI.Main indexRoute={adminUrl}>
+          <BondeSessionUI indexRoute={adminUrl}>
             <Header zIndex={0} />
-            <BondeSessionUI.Content>
-              <Switch>
-                <Route exact path="/">
-                  <Redirect to="/groups" />
-                </Route>
-                <Route path="/groups" component={GroupsWrapper} />
-                <Route path="/connect" component={Match} />
-                <Route path="/relations" component={Relations} />
-              </Switch>
-            </BondeSessionUI.Content>
-          </BondeSessionUI.Main>
+            <Switch>
+              <Route exact path="/">
+                <Redirect to="/groups" />
+              </Route>
+              <Route path="/groups" component={GroupsWrapper} />
+              <Route path="/connect" component={Match} />
+              <Route path="/relations" component={Relations} />
+            </Switch>
+          </BondeSessionUI>
         </Router>
       </StoreProvider>
     </BondeSessionProvider>
