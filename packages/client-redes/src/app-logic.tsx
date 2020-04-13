@@ -1,25 +1,25 @@
 import { useStoreState, useStoreActions } from "easy-peasy";
-import {
-  parseNumber,
-  isJsonString
-} from "./services/utils";
+import { parseNumber, isJsonString } from "./services/utils";
 import { Individual } from "./types/Individual";
 
 export default function useAppLogic(): {
-  individual,
-  volunteer,
-  tableData,
-  popups,
-  setTable,
-  setVolunteer,
-  setPopup,
-  setIndividual,
-  createWhatsappLink: (number: string, textVariables: string) => string | undefined,
-  parsedIndividualNumber: string,
-  parsedVolunteerNumber: string,
-  getUserData,
-  volunteer_lat: number,
-  volunteer_lng: number,
+  individual;
+  volunteer;
+  tableData;
+  popups;
+  setTable;
+  setVolunteer;
+  setPopup;
+  setIndividual;
+  createWhatsappLink: (
+    number: string,
+    textVariables: string
+  ) => string | undefined;
+  parsedIndividualNumber: string;
+  parsedVolunteerNumber: string;
+  getUserData;
+  volunteer_lat: number;
+  volunteer_lng: number;
 } {
   const individual = useStoreState(state => state.individual.data);
   const volunteer = useStoreState(state => state.volunteer.data);
@@ -46,7 +46,7 @@ export default function useAppLogic(): {
     textVariables: string
   ): string | undefined => {
     if (!number) return undefined;
-    return `https://api.whatsapp.com/send?phone=55${number}&text=${textVariables}`;
+    return `https://web.whatsapp.com/send?phone=55${number}&text=${textVariables}`;
   };
 
   // TODO: Disable this func, its not used in the main redes app logic
@@ -77,6 +77,6 @@ export default function useAppLogic(): {
     setPopup,
     setIndividual,
     volunteer_lat,
-    volunteer_lng,
+    volunteer_lng
   };
 }
