@@ -2,24 +2,24 @@ import { action } from "easy-peasy";
 
 type Volunteer = {
   coordinates: {
-    latitude: string
-    longitude: string
-  }
-  email: string
-  name: string
-  whatsapp: string
-  id: number
-  phone: string
-}
+    latitude: string;
+    longitude: string;
+  };
+  email: string;
+  first_name: string;
+  whatsapp: string;
+  id: number;
+  phone: string;
+};
 
 const data: Volunteer = {
   coordinates: {
-    latitude: '0',
-    longitude: '0'
+    latitude: "0",
+    longitude: "0"
   },
-  email: '',
-  name: '',
-  whatsapp: '',
+  email: "",
+  first_name: "",
+  whatsapp: "",
   id: 0,
   phone: ""
 };

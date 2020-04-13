@@ -2,26 +2,19 @@ export const encodeText = (input: string): string => encodeURIComponent(input);
 
 export const parseNumber = (input: string): string => input.replace(/\D/g, "");
 
-const replaceAll = (str,mapObj) => {
-  var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
+export const dicio = (name: string, obj: object) =>
+  Object.keys(obj).reduce((acumulator, k) => {
+    const key = k !== "agent" ? name + k : k;
+    return {
+      ...acumulator,
+      [key.toUpperCase()]: obj[k]
+    };
+  }, {});
 
-  return str.replace(re, function(matched){
-    return mapObj[matched];
-  });
-}
+export const whatsappText = (msg = "", dicio): string => {
+  var re = new RegExp(Object.keys(dicio).join("|"), "gi");
 
-export const whatsappText = ({
-  volunteer_name,
-  individual_name,
-  agent,
-  isVolunteer,
-  volunteer_email = "",
-  volunteer_msg = "",
-  individual_msg = ""
-}): string => {
-  const mapObj = { PNAME: individual_name, VNAME: volunteer_name, VEMAIL: volunteer_email, AGENT: agent };
-  if (isVolunteer) return replaceAll(volunteer_msg, mapObj)
-  return replaceAll(individual_msg, mapObj)
+  return msg.replace(re, matched => dicio[matched]);
 };
 
 export const emailValidation = (): RegExp =>

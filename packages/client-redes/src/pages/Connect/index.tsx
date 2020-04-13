@@ -4,7 +4,7 @@ import ReactTable from "react-table";
 import * as turf from "@turf/turf";
 import { useHistory, useLocation } from "react-router-dom";
 import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
-import { useSession, useMutation } from 'bonde-core-tools';
+import { useMutation } from "bonde-core-tools";
 
 import { Wrap, StyledButton } from "./style";
 import columns from "./columns";
@@ -12,9 +12,7 @@ import FetchIndividuals from "../../graphql/FetchIndividuals";
 import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
 import useAppLogic from "../../app-logic";
 import { Individual } from "../../types/Individual";
-import { whatsappText, encodeText } from '../../services/utils'
 import Popup from "../../components/Popups/Popup";
-import { useSettings } from '../../services/SettingsContext'
 
 type onConfirm = {
   individual_id: number;
@@ -25,11 +23,6 @@ type onConfirm = {
 };
 
 const Table = () => {
-  const { user: agent } = useSession();
-  const [createConnection, { data, loading, error }] = useMutation(
-    CREATE_RELATIONSHIP
-  );
-
   const {
     individual,
     volunteer,
@@ -40,12 +33,19 @@ const Table = () => {
     setVolunteer,
     setPopup,
     volunteer_lat,
-    volunteer_lng
+    volunteer_lng,
+    distance,
+    agent,
+    volunteer_text,
+    individual_text
   } = useAppLogic();
+
+  const [createConnection, { data, loading, error }] = useMutation(
+    CREATE_RELATIONSHIP
+  );
 
   const { goBack, push } = useHistory();
   const { state: linkState = { volunteer: {} } } = useLocation();
-  const { settings: { volunteer_msg, individual_msg, distance } } = useSettings()
 
   const [success, setSuccess] = useState(false);
   const [fail, setError] = useState(false);
@@ -56,31 +56,8 @@ const Table = () => {
   const {
     first_name: volunteer_name,
     whatsapp: volunteer_whatsapp,
-    id: volunteer_id,
-    email: volunteer_email
+    id: volunteer_id
   } = volunteer;
-
-  // TODO: Pass settings from context
-  const urlencodedVolunteerText = encodeText(
-    whatsappText({
-      volunteer_name,
-      individual_name,
-      agent: agent.firstName,
-      isVolunteer: true,
-      volunteer_msg
-    })
-  );
-
-  const urlencodedIndividualText = encodeText(
-    whatsappText({
-      volunteer_name,
-      individual_name,
-      agent: agent.firstName,
-      isVolunteer: false,
-      volunteer_email,
-      individual_msg
-    })
-  );
 
   useEffect(() => {
     setLoader(loading);
@@ -151,7 +128,8 @@ const Table = () => {
       wrapper: false,
       confirm: false
     });
-    const redesUrl = process.env.REACT_APP_REDES_URL || "http://redes.bonde.devel:4000/"
+    const redesUrl =
+      process.env.REACT_APP_REDES_URL || "http://redes.bonde.devel:4000/";
     window.location.href = redesUrl;
   };
 
@@ -217,13 +195,10 @@ const Table = () => {
                     individual: (): string | undefined =>
                       createWhatsappLink(
                         parsedIndividualNumber,
-                        urlencodedIndividualText
+                        individual_text
                       ),
                     volunteer: (): string | undefined =>
-                      createWhatsappLink(
-                        parsedVolunteerNumber,
-                        urlencodedVolunteerText
-                      )
+                      createWhatsappLink(parsedVolunteerNumber, volunteer_text)
                   },
                   isEnabled: success
                 }}

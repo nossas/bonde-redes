@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Button } from "bonde-styleguide";
 import useAppLogic from "../app-logic";
-import { Individual } from "../graphql/FetchIndividuals";
+import { Individual } from "../types/Individual";
 
 const BtnWarning = styled(Button)`
   border-color: ${(props): string => (props.disabled ? "unset" : "#EE0090")}
@@ -14,8 +14,10 @@ const Connect = ({ individual }: { individual: Individual }) => {
   const { volunteer, setIndividual, setPopup } = useAppLogic();
 
   const onClick = (data: Individual): void => {
-    // TODO: Tratar caso em que a usuária não tem user_id
-    setIndividual(data);
+    setIndividual({
+      ...data,
+      register_occupation: data.extras && data.extras.register_occupation
+    });
     return setPopup({
       confirm: true,
       wrapper: true

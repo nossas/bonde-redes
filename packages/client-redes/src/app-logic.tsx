@@ -1,6 +1,9 @@
 import { useStoreState, useStoreActions } from "easy-peasy";
 import { parseNumber, isJsonString } from "./services/utils";
 import { Individual } from "./types/Individual";
+import { useSettings } from "./services/SettingsContext";
+import { whatsappText, encodeText, dicio } from "./services/utils";
+import { useSession } from "bonde-core-tools";
 
 export default function useAppLogic(): {
   individual;
@@ -20,7 +23,18 @@ export default function useAppLogic(): {
   getUserData;
   volunteer_lat: number;
   volunteer_lng: number;
+  distance: number;
+  agent: {
+    id: number;
+  };
+  volunteer_text: string;
+  individual_text: string;
 } {
+  const {
+    settings: { volunteer_msg, individual_msg, distance }
+  } = useSettings();
+  const { user: agent } = useSession();
+
   const individual = useStoreState(state => state.individual.data);
   const volunteer = useStoreState(state => state.volunteer.data);
   const tableData = useStoreState(state => state.table.data);
@@ -48,6 +62,16 @@ export default function useAppLogic(): {
     if (!number) return undefined;
     return `https://web.whatsapp.com/send?phone=55${number}&text=${textVariables}`;
   };
+
+  const whatsappDicio = {
+    ...dicio("v", { ...volunteer, agent: agent.firstName }),
+    ...dicio("p", { ...individual, agent: agent.firstName })
+  };
+
+  const volunteer_text = encodeText(whatsappText(volunteer_msg, whatsappDicio));
+  const individual_text = encodeText(
+    whatsappText(individual_msg, whatsappDicio)
+  );
 
   // TODO: Disable this func, its not used in the main redes app logic
   const getUserData = ({ user, data, filterBy }): Individual =>
@@ -77,6 +101,10 @@ export default function useAppLogic(): {
     setPopup,
     setIndividual,
     volunteer_lat,
-    volunteer_lng
+    volunteer_lng,
+    distance,
+    agent,
+    volunteer_text,
+    individual_text
   };
 }
