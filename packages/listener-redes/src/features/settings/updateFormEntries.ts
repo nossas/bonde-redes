@@ -17,16 +17,22 @@ const FORM_ENTRIES_MUTATION = gql`
 
 const updateFormEntries = async (forms: number[]): Promise<any> => {
   try {
-    const { data: { update_form_entries: { returning: formEntries } } } = await GraphQLAPI.mutate({
+    const {
+      data: {
+        update_form_entries: { returning: formEntries }
+      }
+    } = await GraphQLAPI.mutate({
       mutation: FORM_ENTRIES_MUTATION,
       variables: { forms }
-    })
-  
-    return formEntries
+    });
+
+    console.log("Successfully updated these form_entries status", forms);
+
+    return formEntries;
   } catch (err) {
-		console.error('failed on update form entries: '.red, err)
-		return undefined
-	}
-}
+    console.error("failed on update form entries: ".red, err);
+    return undefined;
+  }
+};
 
 export default updateFormEntries;

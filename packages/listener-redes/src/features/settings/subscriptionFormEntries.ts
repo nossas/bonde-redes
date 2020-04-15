@@ -76,6 +76,7 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
         instance["rede_group_id"] = widget.group_id;
         instance["form_entry_id"] = formEntry.id;
 
+        console.log(`Adding form_entry '${formEntry.id}' to rede_individuals`);
         // store instances
         individuals.push(instance);
         syncronizedForms.push(formEntry.id);
