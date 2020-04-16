@@ -1,8 +1,8 @@
-import { Filters } from "../../graphql/FilterQuery";
+import { Filters } from "../../services/FilterContext";
 
 const data = {
-  volunteers: 'Psicólogas',
-  individuals: 'Profissionais da Saúde'
+  volunteers: "Psicólogas",
+  individuals: "Profissionais da Saúde"
 };
 
 type FiltersProps = {
@@ -44,62 +44,62 @@ export default function filters({
     },
     {
       name: `Status (${
-        !_filters.values.status ? "Todas" : _filters.values.status._eq
+        !_filters.values.status._eq ? "Todas" : _filters.values.status._eq
       })`,
       items: [
         {
-          onClick: (): void => _filters.change({ status: "all" }),
+          onClick: (): void => _filters.change({ type: "status", value: undefined }),
           option: "Todas"
         },
         {
-          onClick: (): void => _filters.change({ status: "inscrita" }),
+          onClick: (): void => _filters.change({ type: "status", value: "inscrita" }),
           option: "Inscrita"
         },
         {
-          onClick: (): void => _filters.change({ status: "reprovada" }),
+          onClick: (): void => _filters.change({ type: "status", value: "reprovada" }),
           option: "Reprovada"
         },
         {
-          onClick: (): void => _filters.change({ status: "aprovada" }),
+          onClick: (): void => _filters.change({ type: "status", value: "aprovada" }),
           option: "Aprovada"
         }
       ]
     },
     {
       name: `Disponibilidade (${
-        !_filters.values.availability
+        !_filters.values.availability._eq
           ? "Todas"
           : _filters.values.availability._eq
       })`,
       items: [
         {
-          onClick: (): void => _filters.change({ availability: "all" }),
+          onClick: (): void => _filters.change({ type: "availability", value: undefined }),
           option: "Todas"
         },
         {
-          onClick: (): void => _filters.change({ availability: "disponível" }),
+          onClick: (): void => _filters.change({ type: "availability", value: "disponível" }),
           option: "Disponível"
         },
         {
           onClick: (): void =>
-            _filters.change({ availability: "indisponível" }),
+            _filters.change({ type: "availability", value: "indisponível" }),
           option: "Indisponível"
         },
         {
-          onClick: (): void => _filters.change({ availability: "anti-ética" }),
+          onClick: (): void => _filters.change({ type: "availability", value: "anti-ética" }),
           option: "Anti-ética"
         },
         {
-          onClick: (): void => _filters.change({ availability: "férias" }),
+          onClick: (): void => _filters.change({ type: "availability", value: "férias" }),
           option: "Férias"
         },
         {
-          onClick: (): void => _filters.change({ availability: "licença" }),
+          onClick: (): void => _filters.change({ type: "availability", value: "licença" }),
           option: "Licença"
         },
         {
           onClick: (): void =>
-            _filters.change({ availability: "descadastrada" }),
+            _filters.change({ type: "availability", value: "descadastrada" }),
           option: "Descadastrada"
         }
       ]

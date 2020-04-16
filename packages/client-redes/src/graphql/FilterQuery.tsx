@@ -16,6 +16,7 @@ export type Filters = {
   order_by: {
     created_at: string;
   };
+  page?: number;
 };
 
 export const useFilterQuery = () => {

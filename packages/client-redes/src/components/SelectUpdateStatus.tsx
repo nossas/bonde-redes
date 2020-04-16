@@ -27,9 +27,12 @@ export default ({ name, row, options, selected, query, type }) => {
     const variables = {
       [type]: { [name]: value },
       id: row._original.id
-    }
-    update({ variables })
-  }
+    };
+    return update({ 
+      variables,
+      refetchQueries: ["RedeGroups"]  
+    });
+  };
 
   return (
     <Text color="#000">

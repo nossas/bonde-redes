@@ -14,6 +14,7 @@ import Relations from "./pages/Relations";
 
 import { Loading } from 'bonde-components';
 import { BondeSessionProvider, BondeSessionUI } from "bonde-core-tools";
+import { FilterProvider } from './services/FilterContext'
 import store from "./store";
 
 const TextLoading = ({ fetching }) => {
@@ -47,23 +48,25 @@ const App = () => {
       loading={TextLoading}
     >
       <StoreProvider store={store}>
-        <Router history={history}>
-          <BondeSessionUI indexRoute={adminUrl}>
-            <Content>
-              <Header zIndex={0} />
-              <div className='wrap'>
-                <Switch>
-                  <Route exact path="/">
-                    <Redirect to="/groups" />
-                  </Route>
-                  <Route path="/groups" component={GroupsWrapper} />
-                  <Route path="/connect" component={Match} />
-                  <Route path="/relations" component={Relations} />
-                </Switch>
-              </div>
-            </Content>
-          </BondeSessionUI>
-        </Router>
+        <FilterProvider>
+          <Router history={history}>
+            <BondeSessionUI indexRoute={adminUrl}>
+              <Content>
+                <Header zIndex={0} />
+                <div className='wrap'>
+                  <Switch>
+                    <Route exact path="/">
+                      <Redirect to="/groups" />
+                    </Route>
+                    <Route path="/groups" component={GroupsWrapper} />
+                    <Route path="/connect" component={Match} />
+                    <Route path="/relations" component={Relations} />
+                  </Switch>
+                </div>
+              </Content>
+            </BondeSessionUI>
+          </Router>
+        </FilterProvider>
       </StoreProvider>
     </BondeSessionProvider>
   )

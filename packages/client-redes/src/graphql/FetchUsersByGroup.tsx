@@ -1,11 +1,12 @@
 import React from 'react';
 import { gql } from 'apollo-boost';
 import { useSession, useQuery } from 'bonde-core-tools';
+
 import Empty from '../components/Empty';
-import { Filters, useFilterQuery } from './FilterQuery';
+import { Filters, useFilterState } from "../services/FilterContext";
 import { Individual } from "./FetchIndividuals";
 
-const USERS_BY_GROUP = gql`
+export const USERS_BY_GROUP = gql`
   query RedeGroups(
     $context: Int_comparison_exp!
     $rows: Int!
@@ -27,7 +28,7 @@ const USERS_BY_GROUP = gql`
       ...individual
     }
     volunteers_count: rede_individuals_aggregate(
-      where: { 
+      where: {
         group: { community_id: $context, is_volunteer: { _eq: true } }
         status: $status
         availability: $availability
@@ -50,7 +51,7 @@ const USERS_BY_GROUP = gql`
       ...individual
     }
     individuals_count: rede_individuals_aggregate(
-      where: { 
+      where: {
         group: { community_id: $context, is_volunteer: { _eq: false } }
         status: $status
         availability: $availability
@@ -123,19 +124,19 @@ interface GroupsData {
   };
 }
 
-interface GroupsVars {
+interface GroupsVars extends Filters {
   context: {
     _eq: number;
   };
-  filters: Filters;
 }
 
 const FetchUsersByGroup = ({ children, community }) => {
-  const { filters, changeFilters, page } = useFilterQuery();
+  const filters = useFilterState()
 
   const variables = {
     context: { _eq: community.id },
-    ...(filters || {})
+    ...filters,
+    page: undefined
   };
 
   const { loading, error, data } = useQuery<GroupsData, GroupsVars>(
@@ -148,23 +149,17 @@ const FetchUsersByGroup = ({ children, community }) => {
     return <p>Error</p>;
   }
   if (loading) return <p>Loading...</p>;
-
-  return (
-    data &&
-    children({
-      volunteers: {
-        data: data.volunteers,
-        count: data.volunteers_count.aggregate.count
-      },
-      individuals: {
-        data: data.individuals,
-        count: data.individuals_count.aggregate.count
-      },
-      filters,
-      page,
-      changeFilters
-    })
-  );
+  if (data) return children({
+    volunteers: {
+      data: data.volunteers,
+      count: data.volunteers_count.aggregate.count
+    },
+    individuals: {
+      data: data.individuals,
+      count: data.individuals_count.aggregate.count
+    },
+    filters
+  });
 };
 
 export default (props) => {
