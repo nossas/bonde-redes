@@ -11,7 +11,6 @@ import FetchIndividuals from "../../graphql/FetchIndividuals";
 import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
 import { USERS_BY_GROUP } from "../../graphql/FetchUsersByGroup";
 import { Individual } from "../../types";
-import { useFilterState } from "../../services/FilterProvider";
 import useAppLogic from "../../app-logic";
 import columns from "./columns";
 
@@ -20,12 +19,14 @@ import Success from "../../components/Popups/Success";
 import Error from "../../components/Popups/Error";
 import Confirm from "../../components/Popups/Confirm";
 import { Wrap, StyledButton } from "./style";
+import { Filters } from "../../services/FilterProvider";
 
 type onConfirm = {
   individual_id: number;
   volunteer_id: number;
   agent_id: number;
   popups: Record<string, string>;
+  filters: Filters;
 };
 
 const Table = () => {
@@ -56,7 +57,6 @@ const Table = () => {
 
   const { goBack, push } = useHistory();
   const { state: linkState = { volunteer: {} } } = useLocation();
-  const filters = useFilterState();
   const { community = { id: 0 } } = useSession();
 
   const [success, setSuccess] = useState(false);
@@ -104,7 +104,8 @@ const Table = () => {
     individual_id,
     volunteer_id,
     agent_id,
-    popups
+    popups,
+    filters
   }: onConfirm) => {
     setPopup({ ...popups, confirm: false });
     return createConnection({
@@ -137,10 +138,20 @@ const Table = () => {
 
   return (
     <FetchIndividuals>
-      {({ data }: { data: Individual[] }) => {
+      {({
+        data,
+        changeFilters,
+        filters
+      }: {
+        data: Individual[];
+        changeFilters;
+        filters: Filters;
+      }) => {
         // Seta a voluntária
         setVolunteer(linkState && linkState.volunteer);
         const filteredTableData = filterByDistance(data);
+
+        const resizeRow = data.length < 1000 ? data.length : filters.rows;
 
         return data.length === 0 ? (
           <Flexbox middle>
@@ -170,7 +181,23 @@ const Table = () => {
                 <ReactTable
                   data={filteredTableData}
                   columns={columns}
-                  defaultPageSize={10}
+                  manual
+                  sortable={false}
+                  pageSize={resizeRow}
+                  pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
+                  page={filters.page}
+                  onPageChange={(page: number): void =>
+                    changeFilters({ type: "page", value: page })
+                  }
+                  onPageSizeChange={(rows: number): void =>
+                    changeFilters({ type: "rows", value: rows })
+                  }
+                  previousText="Anterior"
+                  nextText="Próximo"
+                  pageText="Página"
+                  ofText="de"
+                  rowsText="linhas"
+                  // Accessibility Labels
                   className="-striped -highlight"
                 />
               </Wrap>
@@ -183,7 +210,8 @@ const Table = () => {
                   individual_id,
                   volunteer_id,
                   agent_id: agent.id,
-                  popups
+                  popups,
+                  filters
                 })
               }
               isOpen={popups.wrapper}

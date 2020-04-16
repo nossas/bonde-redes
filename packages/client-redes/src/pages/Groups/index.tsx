@@ -17,7 +17,6 @@ import FiltersData from "./filters";
 import { Wrap } from "./styles";
 import { Individual } from "../../types/Individual";
 import FetchUsersByGroup from "../../graphql/FetchUsersByGroup";
-import { useFilter } from "../../services/FilterProvider";
 
 type FilterData = {
   name: string;
@@ -59,7 +58,6 @@ const Groups = () => {
     (actions: { table: { setTable: ({ individuals, volunteers }) => void } }) =>
       actions.table.setTable
   );
-  const [filters, dispatch] = useFilter();
 
   useEffect(() => {
     push("/groups/volunteers");
@@ -68,7 +66,13 @@ const Groups = () => {
 
   return (
     <FetchUsersByGroup>
-      {({ volunteers, individuals, groups, page }): React.ReactNode => {
+      {({
+        volunteers,
+        individuals,
+        groups,
+        filters,
+        changeFilters
+      }): React.ReactNode => {
         const data: TableData = {
           volunteers: volunteers.data,
           individuals: individuals.data
@@ -104,7 +108,7 @@ const Groups = () => {
                     filters={FiltersData({
                       volunteersCount: count.volunteers,
                       individualsCount: count.individuals,
-                      filters: { values: filters, change: dispatch },
+                      filters: { values: filters, change: changeFilters },
                       history: push,
                       kind,
                       groups
@@ -123,13 +127,13 @@ const Groups = () => {
                   columns={columns(pathname)}
                   pageSize={resizeRow}
                   pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
-                  page={page}
+                  page={filters.page}
                   pages={pages}
                   onPageChange={(page: number): void =>
-                    dispatch({ type: "page", value: page })
+                    changeFilters({ type: "page", value: page })
                   }
                   onPageSizeChange={(rows: number): void =>
-                    dispatch({ type: "rows", value: rows })
+                    changeFilters({ type: "rows", value: rows })
                   }
                   previousText="Anterior"
                   nextText="Próximo"

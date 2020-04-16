@@ -2,7 +2,7 @@ import React from "react";
 import { gql } from "apollo-boost";
 import { useSession, useQuery } from "bonde-core-tools";
 import Empty from "../components/Empty";
-import { useFilterQuery } from "./FilterQuery";
+import { useFilter } from "../services/FilterProvider";
 import { GroupsData, GroupsVars } from "../types/Groups";
 
 export const USERS_BY_GROUP = gql`
@@ -98,7 +98,8 @@ export const USERS_BY_GROUP = gql`
 `;
 
 const FetchUsersByGroup = ({ children, community }) => {
-  const { filters, changeFilters, page } = useFilterQuery();
+  const [state, dispatch] = useFilter();
+  const { page, ...filters } = state;
 
   const variables = {
     context: { _eq: community.id },
@@ -128,9 +129,8 @@ const FetchUsersByGroup = ({ children, community }) => {
         count: data.individuals_count.aggregate.count
       },
       groups: data.community_groups,
-      filters,
-      page,
-      changeFilters
+      filters: state,
+      changeFilters: dispatch
     })
   );
 };

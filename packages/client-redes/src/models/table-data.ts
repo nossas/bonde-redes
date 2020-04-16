@@ -1,5 +1,5 @@
 import { action, computed } from "easy-peasy";
-import { Individual } from "../graphql/FetchIndividuals";
+import { Individual } from "../types";
 
 const data: Individual[] = [];
 

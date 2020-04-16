@@ -3,6 +3,7 @@ import React from "react";
 export type Filters = {
   rows: number;
   offset: number;
+  page: number;
   status: {
     _eq: string | undefined;
   };

@@ -1,7 +1,7 @@
 import React from "react";
 import { gql } from "apollo-boost";
 import { useSession, useQuery } from "bonde-core-tools";
-import { useFilterQuery } from "./FilterQuery";
+import { useFilter } from "../services/FilterProvider";
 import Empty from "../components/Empty";
 import { IndividualData, IndividualVars } from "../types/Individual";
 
@@ -61,7 +61,10 @@ const USERS = gql`
 `;
 
 const FetchIndividuals = ({ children, community }: any) => {
-  const { filters, changeFilters, page } = useFilterQuery();
+  const [state, dispatch] = useFilter();
+
+  const { page, ...filters } = state;
+
   const variables = {
     context: { _eq: community.id },
     ...(filters || {}),
@@ -80,9 +83,8 @@ const FetchIndividuals = ({ children, community }: any) => {
 
   return children({
     data: data && data.rede_individuals,
-    filters,
-    page,
-    changeFilters
+    filters: state,
+    changeFilters: dispatch
   });
 };
 
