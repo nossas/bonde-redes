@@ -1,6 +1,4 @@
 import { useState } from "react";
-/*import { useLocation } from 'react-router-dom'*/
-/*import qs from 'query-string'*/
 
 export type Filters = {
   rows: number;
@@ -21,7 +19,7 @@ export type Filters = {
   page?: number;
 };
 
-const FilterQuery = ({ children }): JSX.Element => {
+export const useFilterQuery = () => {
   const [page, setPage] = useState(0);
   const [rows, setRows] = useState(1000);
   const [status, setStatus] = useState("");
@@ -43,7 +41,5 @@ const FilterQuery = ({ children }): JSX.Element => {
       setAvailability(availability === "all" ? undefined : availability);
   };
 
-  return children({ filters: filtered, changeFilters, page });
-};
-
-export default FilterQuery;
+  return { filters: filtered, changeFilters, page };
+}

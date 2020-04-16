@@ -2,9 +2,9 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 import { StoreProvider } from "easy-peasy";
 import React from "react";
+import styled from 'styled-components';
 import { Redirect, Route, Switch } from "react-router";
 import { Router } from "react-router-dom";
-import styled from "styled-components";
 
 import Header from "./components/Header";
 import history from "./history";
@@ -12,46 +12,64 @@ import Match from "./pages/Connect";
 import GroupsWrapper from "./pages/Groups";
 import Relations from "./pages/Relations";
 
-import { SessionPageLayout, SessionProvider } from "./services/session";
+import { Loading } from 'bonde-components';
+import { BondeSessionProvider, BondeSessionUI } from "bonde-core-tools";
 import { FilterProvider } from './services/FilterContext'
 import store from "./store";
 
-const AppWrapper = styled.div`
+const TextLoading = ({ fetching }) => {
+  const messages = {
+    session: 'Carregando sessão...',
+    user: 'Carregando usuário...',
+    communities: 'Carregando communities...',
+    redirect: 'Redirecionando para autenticação...',
+    module: 'Redirecionando para módulo...'
+  }
+  return <Loading fullsize message={messages[fetching]} />
+}
+
+const Content = styled.div`
   display: flex;
-  flex-direction: column;
-`;
-
-const AppBody = styled.div`
-  min-height: 100vh;
   flex-grow: 1;
-`;
+  flex-direction: column;
+  ${`width: ${window.innerWidth-16}px;`}
 
-const InsideApp = () => (
-  <AppWrapper>
-    <Header zIndex={0} />
-    <AppBody>
-      <Switch>
-        <Route exact path="/">
-          <Redirect to="/groups" />
-        </Route>
-        <Route path="/groups" component={GroupsWrapper} />
-        <Route path="/connect" component={Match} />
-        <Route path="/relations" component={Relations} />
-      </Switch>
-    </AppBody>
-  </AppWrapper>
-);
+  .wrap {
+    padding: 20px 60px;
+  }
+`
 
-const App = () => (
-  <SessionProvider>
-    <StoreProvider store={store}>
-      <FilterProvider>
-        <Router history={history}>
-          <SessionPageLayout path="/" component={InsideApp} />
-        </Router>
-      </FilterProvider>
-    </StoreProvider>
-  </SessionProvider>
-);
+const App = () => {
+  const adminUrl = process.env.REACT_APP_ADMIN_URL || 'http://admin-canary.bonde.devel:5001/admin'
+  return (
+    <BondeSessionProvider
+      fetchData
+      environment={process.env.REACT_APP_ENVIRONMENT || 'development'}
+      loading={TextLoading}
+    >
+      <StoreProvider store={store}>
+        <FilterProvider>
+          <Router history={history}>
+            <BondeSessionUI indexRoute={adminUrl}>
+              <Content>
+                <Header zIndex={0} />
+                <div className='wrap'>
+                  <Switch>
+                    <Route exact path="/">
+                      <Redirect to="/groups" />
+                    </Route>
+                    <Route path="/groups" component={GroupsWrapper} />
+                    <Route path="/connect" component={Match} />
+                    <Route path="/relations" component={Relations} />
+                  </Switch>
+                </div>
+              </Content>
+            </BondeSessionUI>
+          </Router>
+        </FilterProvider>
+      </StoreProvider>
+    </BondeSessionProvider>
+  )
+};
 
 export default App;
