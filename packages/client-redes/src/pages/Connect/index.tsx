@@ -100,7 +100,7 @@ const Table = () => {
     [distance, volunteer_lat, volunteer_lng]
   );
 
-  if (!community) return 'Selecione uma comunidade'
+  if (!community) return "Selecione uma comunidade";
 
   const onConfirm = ({
     individual_id,

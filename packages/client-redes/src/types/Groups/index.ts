@@ -1,5 +1,5 @@
 import { Individual } from "../Individual";
-import { Filters } from "../../graphql/FilterQuery";
+import { Filters } from "../../services/FilterProvider";
 
 export interface GroupsData {
   individuals: Individual[];

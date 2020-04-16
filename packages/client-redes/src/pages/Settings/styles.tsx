@@ -8,7 +8,7 @@ export const WrapForm = styled.div`
 `;
 
 export const SettingsWrapper = styled.div`
-  margin: 40px 0;
+  margin: 10px 0;
   display: flex;
   flex-direction: column;
   align-self: center;

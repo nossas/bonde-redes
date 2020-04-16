@@ -6,7 +6,7 @@ import { Header } from "bonde-components";
 
 import "react-table/react-table.css";
 import columns from "./columns";
-import { Relationship } from "../../graphql/FetchMatches";
+// import { Relationship } from "../../graphql/FetchMatches";
 
 export const Wrap = styled.div`
   padding: 20px 0;
@@ -19,7 +19,7 @@ export const Wrap = styled.div`
 const Table: React.FC = () => {
   return (
     <FetchMatches>
-      {(data: Array<Relationship>): React.ReactNode => {
+      {(data): React.ReactNode => {
         return data.length === 0 ? (
           <Wrap>
             <Header.h4>

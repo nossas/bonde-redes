@@ -4,8 +4,7 @@ import {
   Flexbox2 as Flexbox,
   Spacing,
   Dropdown,
-  DropdownItem,
-  Title
+  DropdownItem
 } from "bonde-styleguide";
 import { Header } from "bonde-components";
 import ReactTable from "react-table";
@@ -102,7 +101,6 @@ const Groups = () => {
               </Wrap>
             ) : (
               <>
-                <Header.h4>Total ({count[kind]})</Header.h4>
                 <Spacing margin={{ bottom: 20 }}>
                   <Filters
                     filters={FiltersData({
@@ -116,9 +114,9 @@ const Groups = () => {
                   />
                 </Spacing>
                 <Spacing margin={{ bottom: 20 }}>
-                  <Title.H4 margin={{ bottom: 30 }}>
+                  <Header.h4 margin={{ bottom: 30 }}>
                     Total ({count[kind]})
-                  </Title.H4>
+                  </Header.h4>
                 </Spacing>
                 <ReactTable
                   manual
