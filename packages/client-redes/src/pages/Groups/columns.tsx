@@ -1,6 +1,7 @@
 import React from "react";
-import { Flexbox2 as Flexbox, Text } from "bonde-styleguide";
-import { Button } from "bonde-components";
+import { Flexbox2 as Flexbox } from "bonde-styleguide";
+import { Text } from "bonde-components";
+import { Btn as Button } from "./styles";
 import SelectUpdateStatus from "../../components/SelectUpdateStatus";
 import history from "../../history";
 import UPDATE_INDIVIDUAL_MUTATION from "../../graphql/UpdateIndividual";

@@ -18,7 +18,7 @@
     "apollo-link-http": "^1.5.16",
     "apollo-utilities": "^1.3.2",
     "body-parser": "^1.19.0",
-    "bonde-components": "0.0.2-alpha.14",
+    "bonde-components": "0.0.2-alpha.17",
     "bonde-core-tools": "0.1.3-alpha.1",
     "bonde-styleguide": "0.16.4-alpha.5",
     "cors": "^2.8.5",

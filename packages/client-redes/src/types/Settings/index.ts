@@ -1,13 +1,13 @@
 export type Settings = {
-  id?: number
+  id?: number;
   settings: {
-    volunteer_msg: string
-    individual_msg: string
-    distance
-  }
-  name?: string
-  version?: string
-  community_id?: number
+    volunteer_msg: string;
+    individual_msg: string;
+    distance;
+  };
+  name?: string;
+  version?: string;
+  community_id?: number;
 };
 
 export interface SettingsData {
@@ -15,5 +15,13 @@ export interface SettingsData {
 }
 
 export type SettingsVars = {
-  communityId: number
+  communityId: number;
+};
+
+export type Form = {
+  input: {
+    distance: number;
+    volunteer_msg: string;
+    individual_msg: string;
+  };
 };

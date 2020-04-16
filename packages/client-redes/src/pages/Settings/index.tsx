@@ -8,10 +8,12 @@ import {
   Hint,
   Validators,
   Header,
-  Text
+  Text,
+  TextareaField
 } from "bonde-components";
 import { useSettings } from "../../services/SettingsContext";
 import { WrapForm, SettingsWrapper, BottomWrap } from "./styles";
+import { Form } from "../../types";
 
 const saveSettingsMutation = gql`
   mutation updateSettings($communityId: bigint, $settings: json) {
@@ -35,26 +37,25 @@ const SettingsForm = () => {
   const { community } = useSession();
   const initialValues = { input: { ...settings } };
 
+  const onSubmit = async (values: Form) => {
+    try {
+      const variables = {
+        communityId: (community && community.id) || 0,
+        settings: values.input
+      };
+      await saveSettings({ variables });
+    } catch (err) {
+      if (err && err.message) {
+        setError(err.message);
+        console.log("err", err);
+      }
+    }
+  };
+
   return (
     <SettingsWrapper>
       <Header.h3>Configurações do Módulo</Header.h3>
-      <ConnectedForm
-        initialValues={initialValues}
-        onSubmit={async (values: any) => {
-          try {
-            const variables = {
-              communityId: (community && community.id) || 0,
-              settings: values.input
-            };
-            await saveSettings({ variables });
-          } catch (err) {
-            if (err && err.message) {
-              setError(err.message);
-              console.log("err", err);
-            }
-          }
-        }}
-      >
+      <ConnectedForm initialValues={initialValues} onSubmit={onSubmit}>
         {({ submitting }) => (
           <WrapForm>
             {error && <Hint color="error">{error}</Hint>}
@@ -68,13 +69,13 @@ const SettingsForm = () => {
               )}
               type="number"
             />
-            <InputField
+            <TextareaField
               name="input.volunteer_msg"
               label="Voluntária"
               placeholder="Insira uma mensagem de Whatsapp para a voluntária"
               validate={required("Valor não pode ser vazio")}
             />
-            <InputField
+            <TextareaField
               name="input.individual_msg"
               label="PSR"
               placeholder="Insira uma mensagem de Whatsapp para a PSR"
