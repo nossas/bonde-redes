@@ -1,6 +1,6 @@
-import React from 'react'
-import styled from 'styled-components';
-import { Header } from 'bonde-components';
+import React from "react";
+import styled from "styled-components";
+import { Header } from "bonde-components";
 
 const EmptyIcon = () => {
   return (
@@ -31,7 +31,6 @@ const EmptyIcon = () => {
   );
 };
 
-
 const EmptyWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -40,7 +39,7 @@ const EmptyWrap = styled.div`
   justify-content: center;
 `;
 
-export default ({ message }) => (
+export default ({ message }: { message: string }) => (
   <EmptyWrap>
     <EmptyIcon />
     <Header.h4>{message}</Header.h4>

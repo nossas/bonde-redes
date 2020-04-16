@@ -1,7 +1,7 @@
 import React from "react";
 import BtnConnect from "../../components/BtnConnect";
 import { Flexbox2 as Flexbox } from "bonde-styleguide";
-import { Individual } from "../../graphql/FetchIndividuals";
+import { Individual } from "../../types";
 
 type valueString = {
   value: string;

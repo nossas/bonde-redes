@@ -1,8 +1,9 @@
 import React from "react";
 import { gql } from "apollo-boost";
-import { useSession, useQuery } from 'bonde-core-tools';
-import { useFilterQuery } from "./FilterQuery";
-import Empty from '../components/Empty';
+import { useSession, useQuery } from "bonde-core-tools";
+import { useFilter } from "../services/FilterProvider";
+import Empty from "../components/Empty";
+import { IndividualData, IndividualVars } from "../types/Individual";
 
 const USERS = gql`
   query RedeIndividuals(
@@ -59,45 +60,11 @@ const USERS = gql`
   }
 `;
 
-export type Individual = {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  whatsapp: string;
-  phone: string;
-  zipcode: string;
-  address: string;
-  city: string;
-  coordinates: Record<string, string>;
-  state: string;
-  status: string;
-  availability: string;
-  extras: Record<string, string>;
-  form_entry_id: number;
-  group: {
-    id: number;
-    community_id: number;
-    is_volunteer: boolean;
-  };
-  created_at: string;
-  updated_at: string;
-};
-
-type IndividualVars = {
-  context: {
-    _eq: number;
-  };
-  filters: Record<string, string>;
-  is_volunteer: boolean;
-};
-
-interface IndividualData {
-  rede_individuals: Individual[];
-}
-
 const FetchIndividuals = ({ children, community }: any) => {
-  const { filters, changeFilters, page } = useFilterQuery();
+  const [state, dispatch] = useFilter();
+
+  const { page, ...filters } = state;
+
   const variables = {
     context: { _eq: community.id },
     ...(filters || {}),
@@ -116,16 +83,16 @@ const FetchIndividuals = ({ children, community }: any) => {
 
   return children({
     data: data && data.rede_individuals,
-    filters,
-    page,
-    changeFilters
+    filters: state,
+    changeFilters: dispatch
   });
 };
 
 export default (props: any = {}) => {
   const { community } = useSession();
-  return community
-    ? <FetchIndividuals community={community} {...props}/>
-    : <Empty message='Selecione uma comunidade' />
-  ;
+  return community ? (
+    <FetchIndividuals community={community} {...props} />
+  ) : (
+    <Empty message="Selecione uma comunidade" />
+  );
 };

@@ -45,7 +45,7 @@ importers:
       apollo-link-http: 1.5.16_graphql@14.6.0
       apollo-utilities: 1.3.3_graphql@14.6.0
       body-parser: 1.19.0
-      bonde-components: 0.0.2-alpha.16_91142a59788a6b73516b93d9cabe711e
+      bonde-components: 0.0.2-alpha.17_91142a59788a6b73516b93d9cabe711e
       bonde-core-tools: 0.1.3-alpha.3_1cc100f105577596390aacccea439e4b
       bonde-styleguide: 0.16.4-alpha.5_react-dom@16.12.0+react@16.12.0
       cors: 2.8.5
@@ -140,7 +140,7 @@ importers:
       apollo-utilities: ^1.3.2
       babel-eslint: 10.0.3
       body-parser: ^1.19.0
-      bonde-components: 0.0.2-alpha.16
+      bonde-components: 0.0.2-alpha.17
       bonde-core-tools: 0.1.3-alpha.3
       bonde-styleguide: 0.16.4-alpha.5
       cors: ^2.8.5
@@ -3716,6 +3716,7 @@ packages:
       '@typescript-eslint/typescript-estree': 2.20.0_typescript@3.7.5
       eslint: 6.8.0
       eslint-scope: 5.0.0
+      typescript: 3.7.5
     engines:
       node: ^8.10.0 || ^10.13.0 || >=11.10.1
     peerDependencies:
@@ -4359,7 +4360,7 @@ packages:
       apollo-utilities: 1.3.3
       optimism: 0.10.3
       ts-invariant: 0.4.4
-      tslib: 1.11.0
+      tslib: 1.11.1
     dev: false
     peerDependencies:
       graphql: 0.11.7 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4381,7 +4382,7 @@ packages:
   /apollo-cache/1.3.4:
     dependencies:
       apollo-utilities: 1.3.3
-      tslib: 1.11.0
+      tslib: 1.11.1
     dev: false
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4405,7 +4406,7 @@ packages:
       apollo-utilities: 1.3.3
       symbol-observable: 1.2.0
       ts-invariant: 0.4.4
-      tslib: 1.11.0
+      tslib: 1.11.1
       zen-observable: 0.8.15
     dev: false
     peerDependencies:
@@ -4451,7 +4452,7 @@ packages:
     dependencies:
       apollo-link: 1.2.13
       ts-invariant: 0.4.4
-      tslib: 1.11.0
+      tslib: 1.11.1
     dev: false
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4514,7 +4515,7 @@ packages:
     dependencies:
       apollo-utilities: 1.3.3
       ts-invariant: 0.4.4
-      tslib: 1.11.0
+      tslib: 1.11.1
       zen-observable-ts: 0.8.20
     dev: false
     peerDependencies:
@@ -5093,10 +5094,8 @@ packages:
     dependencies:
       final-form: 4.19.1
       react: 16.12.0
-      react-dom: 16.12.0_react@16.12.0
       react-final-form: 6.4.0_c4fc4f90ef27e39f9616ac802dbc9e0c
       styled-components: 5.1.0_4fef1ae2ae818dc3f44010f165ce8eb3
-      typescript: 3.7.5
     dev: false
     peerDependencies:
       react: '>=16'
@@ -5104,6 +5103,19 @@ packages:
       typescript: '*'
     resolution:
       integrity: sha512-OOG3XnrcYRTPwQRoS+652bSiM9iLYMFOUE7KZIU+44WKbz8L+OaKMI+/lEEu3FK2QOLeOoDlNjiR/dFbF1x+6w==
+  /bonde-components/0.0.2-alpha.17_91142a59788a6b73516b93d9cabe711e:
+    dependencies:
+      final-form: 4.19.1
+      react: 16.12.0
+      react-final-form: 6.4.0_c4fc4f90ef27e39f9616ac802dbc9e0c
+      styled-components: 5.1.0_4fef1ae2ae818dc3f44010f165ce8eb3
+    dev: false
+    peerDependencies:
+      react: '>=16'
+      react-dom: '*'
+      typescript: '*'
+    resolution:
+      integrity: sha512-Ju3K1ByaUIAm8Z05hbr8Vu+TxBrQO8z0o2K7Q/2S/+ea1GCMP8ZEgMyuO/jKmW1Hv/dxOHWgAbNrH1gRItUpAA==
   /bonde-core-tools/0.1.3-alpha.3_1cc100f105577596390aacccea439e4b:
     dependencies:
       '@apollo/react-hooks': 3.1.4_9a8d593eac6ae77decafc4c460056fec
@@ -12960,7 +12972,6 @@ packages:
       final-form: 4.19.1
       react: 16.12.0
       ts-essentials: 6.0.4_typescript@3.7.5
-      typescript: 3.7.5
     dev: false
     peerDependencies:
       final-form: ^4.19.0
@@ -14644,7 +14655,6 @@ packages:
       react: 16.12.0
       react-dom: 16.12.0_react@16.12.0
       shallowequal: 1.1.0
-      styled-components: 5.1.0_4fef1ae2ae818dc3f44010f165ce8eb3
       supports-color: 5.5.0
     dev: false
     peerDependencies:

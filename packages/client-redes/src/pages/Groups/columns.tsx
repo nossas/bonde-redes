@@ -1,10 +1,12 @@
 import React from "react";
-import { Flexbox2 as Flexbox, Text } from "bonde-styleguide";
-import { Button } from 'bonde-components';
+import { Flexbox2 as Flexbox } from "bonde-styleguide";
+import { Text } from "bonde-components";
+import { Btn as Button } from "./styles";
 import SelectUpdateStatus from "../../components/SelectUpdateStatus";
 import history from "../../history";
 import UPDATE_INDIVIDUAL_MUTATION from "../../graphql/UpdateIndividual";
 import { isJsonString } from "../../services/utils";
+import { Individual } from "../../types/Individual";
 
 type valueString = {
   value: string;
@@ -151,7 +153,7 @@ const volunteersColumns: Array<Columns> = [
       row
     }: {
       value: number;
-      row: { _original: { availability: string; status: string } };
+      row: { _original: Individual };
     }): React.ReactNode | null =>
       value ? (
         <Flexbox middle>
@@ -163,7 +165,14 @@ const volunteersColumns: Array<Columns> = [
             onClick={(): void =>
               history.push({
                 pathname: "/connect",
-                state: { volunteer: row._original }
+                state: {
+                  volunteer: {
+                    ...row._original,
+                    register_occupation:
+                      row._original.extras &&
+                      row._original.extras.register_occupation
+                  }
+                }
               })
             }
           >
@@ -223,7 +232,13 @@ const individualsColumns: Array<Columns> = [
   {
     accessor: "availability",
     Header: "Disponibilidade",
-    Cell: ({ value, row }): any =>
+    Cell: ({
+      value,
+      row
+    }: {
+      value: string;
+      row: { _original: { id: number } };
+    }) =>
       value ? (
         <SelectUpdateStatus
           name="availability"

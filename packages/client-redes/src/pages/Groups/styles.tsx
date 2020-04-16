@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Header } from 'bonde-components';
+import { Header, Button } from "bonde-components";
 
 export const Wrap = styled.div`
   ${Header.h4} {
@@ -23,4 +23,8 @@ export const Wrap = styled.div`
       }
     }
   }
+`;
+
+export const Btn = styled(Button)`
+  max-width: 90%;
 `;
