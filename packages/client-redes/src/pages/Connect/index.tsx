@@ -1,18 +1,17 @@
-import React, { useCallback, Fragment, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import "react-table/react-table.css";
 import ReactTable from "react-table";
 import * as turf from "@turf/turf";
 import { useHistory, useLocation } from "react-router-dom";
+import { useSession, useMutation } from 'bonde-core-tools';
 import { Flexbox2 as Flexbox, Title, Spacing, Loading } from "bonde-styleguide";
-import { useMutation } from "@apollo/react-hooks";
 
 import FetchIndividuals from "../../graphql/FetchIndividuals";
 import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
+import useAppLogic from "../../app-logic";
 import { USERS_BY_GROUP } from "../../graphql/FetchUsersByGroup";
 import { Individual } from "../../graphql/FetchIndividuals";
-import { SessionHOC } from "../../services/session/SessionProvider";
 import { useFilterState } from "../../services/FilterContext"
-import useAppLogic from "../../app-logic";
 import columns from "./columns";
 import { Wrap, StyledButton } from "./style";
 import { encodeText, whatsappText } from '../../services/utils'
@@ -29,7 +28,10 @@ type onConfirm = {
   popups: Record<string, string>;
 };
 
-const Table = SessionHOC(({ session: { user: agent, community } }) => {
+const Table = () => {
+  const { user: agent, community } = useSession();
+
+  
   const {
     individual: { 
       first_name: individual_name, 
@@ -60,25 +62,6 @@ const Table = SessionHOC(({ session: { user: agent, community } }) => {
 
   const [success, setSuccess] = useState(false);
   const [isLoading, setLoader] = useState(false);
-
-  const urlencodedVolunteerText = encodeText(
-    whatsappText({
-      volunteer_name,
-      individual_name,
-      agent: agent.firstName,
-      isVolunteer: true
-    })
-  );
-
-  const urlencodedIndividualText = encodeText(
-    whatsappText({
-      volunteer_name,
-      individual_name,
-      agent: agent.firstName,
-      isVolunteer: false,
-      volunteer_email
-    })
-  );
 
   useEffect(() => {
     setLoader(loading);
@@ -116,6 +99,27 @@ const Table = SessionHOC(({ session: { user: agent, community } }) => {
         })
         .sort((a, b) => Number(a.distance) - Number(b.distance)),
     [distance, volunteer_lat, volunteer_lng]
+  );
+
+  if (!community) return 'Selecione uma comunidade'
+  
+  const urlencodedVolunteerText = encodeText(
+    whatsappText({
+      volunteer_name,
+      individual_name,
+      agent: agent.firstName,
+      isVolunteer: true
+    })
+  );
+
+  const urlencodedIndividualText = encodeText(
+    whatsappText({
+      volunteer_name,
+      individual_name,
+      agent: agent.firstName,
+      isVolunteer: false,
+      volunteer_email
+    })
   );
 
   const onConfirm = ({
@@ -167,32 +171,30 @@ const Table = SessionHOC(({ session: { user: agent, community } }) => {
             </Wrap>
           </Flexbox>
         ) : (
-          <Fragment>
-            <Flexbox vertical middle>
-              <Wrap>
-                <Flexbox vertical>
-                  <Spacing margin={{ bottom: 20 }}>
-                    <Flexbox>
-                      <StyledButton flat onClick={goBack}>
-                        {"< fazer match"}
-                      </StyledButton>
-                    </Flexbox>
-                    <Spacing margin={{ top: 10, bottom: 10 }}>
-                      <Title.H3>Match realizado!</Title.H3>
-                    </Spacing>
-                    <Title.H5 color="#444444">
-                      {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
-                    </Title.H5>
+          <>
+            <Wrap>
+              <Flexbox vertical>
+                <Spacing margin={{ bottom: 20 }}>
+                  <Flexbox>
+                    <StyledButton flat onClick={goBack}>
+                      {"< fazer match"}
+                    </StyledButton>
+                  </Flexbox>
+                  <Spacing margin={{ top: 10, bottom: 10 }}>
+                    <Title.H3>Match realizado!</Title.H3>
                   </Spacing>
-                </Flexbox>
-                <ReactTable
-                  data={filteredTableData}
-                  columns={columns}
-                  defaultPageSize={10}
-                  className="-striped -highlight"
-                />
-              </Wrap>
-            </Flexbox>
+                  <Title.H5 color="#444444">
+                    {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
+                  </Title.H5>
+                </Spacing>
+              </Flexbox>
+              <ReactTable
+                data={filteredTableData}
+                columns={columns}
+                defaultPageSize={10}
+                className="-striped -highlight"
+              />
+            </Wrap>
             <Popup
               individualName={individual_name}
               volunteerName={volunteer_name}
@@ -236,11 +238,11 @@ const Table = SessionHOC(({ session: { user: agent, community } }) => {
                     </>
               }}
             </Popup>
-          </Fragment>
+          </>
         );
       }}
     </FetchIndividuals>
   );
-});
+};
 
 export default Table;

@@ -1,8 +1,8 @@
 import React from "react";
 import { Flexbox2 as Flexbox, Text } from "bonde-styleguide";
+import { Button } from 'bonde-components';
 import SelectUpdateStatus from "../../components/SelectUpdateStatus";
 import history from "../../history";
-import { BtnInverted } from "./styles";
 import UPDATE_INDIVIDUAL_MUTATION from "../../graphql/UpdateIndividual";
 import { isJsonString } from "../../services/utils";
 
@@ -155,7 +155,7 @@ const volunteersColumns: Array<Columns> = [
     }): React.ReactNode | null =>
       value ? (
         <Flexbox middle>
-          <BtnInverted
+          <Button
             disabled={
               row._original.availability !== "disponível" ||
               row._original.status !== "aprovada"
@@ -168,7 +168,7 @@ const volunteersColumns: Array<Columns> = [
             }
           >
             FAZER MATCH
-          </BtnInverted>
+          </Button>
         </Flexbox>
       ) : null
   }

@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import {
-  Page,
   Flexbox2 as Flexbox,
   Spacing,
   Dropdown,
-  DropdownItem,
-  Title
+  DropdownItem
 } from "bonde-styleguide";
+import { Header } from 'bonde-components';
 import ReactTable from "react-table";
 import { useStoreActions } from "easy-peasy";
 
@@ -95,49 +94,45 @@ const Groups = () => {
         const resizeRow = count[kind] < 1000 ? count[kind] : filters.rows;
 
         return (
-          <Page>
-            <Flexbox middle>
-              <Wrap>
-                <Spacing margin={{ bottom: 20 }}>
-                  <Filters
-                    filters={FiltersData({
-                      volunteersCount: count.volunteers,
-                      individualsCount: count.individuals,
-                      filters: { values: filters, change: dispatch },
-                      history: push,
-                      kind
-                    })}
-                  />
-                </Spacing>
-                <Spacing margin={{ bottom: 20 }}>
-                  <Title.H4 margin={{ bottom: 30 }}>
-                    Total ({count[kind]})
-                  </Title.H4>
-                </Spacing>
-                <ReactTable
-                  manual
-                  sortable={false}
-                  data={data[kind]}
-                  columns={columns(pathname)}
-                  pageSize={resizeRow}
-                  pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
-                  page={page}
-                  pages={pages}
-                  onPageChange={(page: number): void => dispatch({ type: "page", value: page })}
-                  onPageSizeChange={(rows: number): void =>
-                    dispatch({ type: "rows", value: rows })
-                  }
-                  previousText="Anterior"
-                  nextText="Próximo"
-                  pageText="Página"
-                  ofText="de"
-                  rowsText="linhas"
-                  // Accessibility Labels
-                  className="-striped -highlight"
-                />
-              </Wrap>
-            </Flexbox>
-          </Page>
+          <Wrap>
+            <Spacing margin={{ bottom: 20 }}>
+              <Filters
+                filters={FiltersData({
+                  volunteersCount: count.volunteers,
+                  individualsCount: count.individuals,
+                  filters: { values: filters, change: dispatch },
+                  history: push,
+                  kind
+                })}
+              />
+            </Spacing>
+            <Spacing margin={{ bottom: 20 }}>
+              <Header.h4 margin={{ bottom: 30 }}>
+                Total ({count[kind]})
+              </Header.h4>
+            </Spacing>
+            <ReactTable
+              manual
+              sortable={false}
+              data={data[kind]}
+              columns={columns(pathname)}
+              pageSize={resizeRow}
+              pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
+              page={page}
+              pages={pages}
+              onPageChange={(page: number): void => dispatch({ type: "page", value: page })}
+              onPageSizeChange={(rows: number): void =>
+                dispatch({ type: "rows", value: rows })
+              }
+              previousText="Anterior"
+              nextText="Próximo"
+              pageText="Página"
+              ofText="de"
+              rowsText="linhas"
+              // Accessibility Labels
+              className="-striped -highlight"
+            />
+          </Wrap>
         );
       }}
     </FetchUsersByGroup>
