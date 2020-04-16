@@ -3,7 +3,7 @@ import { gql } from "apollo-boost";
 import { useSession, useQuery } from "bonde-core-tools";
 import Empty from "../components/Empty";
 import { useFilter } from "../services/FilterProvider";
-import { GroupsData, GroupsVars } from "../types/Groups";
+import { GroupsData, GroupsVars } from "../types";
 
 export const USERS_BY_GROUP = gql`
   query RedeGroups(
@@ -103,7 +103,8 @@ const FetchUsersByGroup = ({ children, community }) => {
 
   const variables = {
     context: { _eq: community.id },
-    ...(filters || {})
+    ...filters,
+    page: undefined
   };
 
   const { loading, error, data } = useQuery<GroupsData, GroupsVars>(
@@ -117,9 +118,8 @@ const FetchUsersByGroup = ({ children, community }) => {
   }
   if (loading) return <p>Loading...</p>;
 
-  return (
-    data &&
-    children({
+  if (data)
+    return children({
       volunteers: {
         data: data.volunteers,
         count: data.volunteers_count.aggregate.count
@@ -131,8 +131,7 @@ const FetchUsersByGroup = ({ children, community }) => {
       groups: data.community_groups,
       filters: state,
       changeFilters: dispatch
-    })
-  );
+    });
 };
 
 export default props => {

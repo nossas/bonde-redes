@@ -17,14 +17,17 @@ const MATCHES = gql`
       recipient {
         id
         first_name
+        last_name
       }
       volunteer {
         id
         first_name
+        last_name
       }
       agent {
         id
         first_name
+        last_name
       }
       id
     }

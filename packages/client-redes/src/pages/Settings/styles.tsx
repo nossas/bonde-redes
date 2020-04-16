@@ -16,9 +16,15 @@ export const SettingsWrapper = styled.div`
     margin-bottom: 20px;
   }
   width: 80%;
-  @media (min-width: 768px) {
+  @media (min-width: 576px) {
     width: 60%;
   }
+`;
+
+export const Wrap = styled.div`
+  display: grid;
+  justify-items: center;
+  width: 100%;
 `;
 
 export const BottomWrap = styled.div`

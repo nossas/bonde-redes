@@ -2,6 +2,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 import { StoreProvider } from "easy-peasy";
 import React from "react";
+import styled from "styled-components";
 import { Redirect, Route, Switch } from "react-router";
 import { Router } from "react-router-dom";
 
@@ -28,6 +29,17 @@ const TextLoading = ({ fetching }: { fetching: string }) => {
   return <Loading fullsize message={messages[fetching]} />;
 };
 
+const Content = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  ${`width: ${window.innerWidth - 16}px;`}
+`;
+
+const Wrap = styled.div`
+  padding: 20px 60px;
+`;
+
 const App = () => {
   const adminUrl =
     process.env.REACT_APP_ADMIN_URL ||
@@ -42,20 +54,22 @@ const App = () => {
         <Router history={history}>
           <SettingsProvider>
             <FilterProvider>
-              <BondeSessionUI.Main indexRoute={adminUrl}>
-                <Header zIndex={0} />
-                <BondeSessionUI.Content>
-                  <Switch>
-                    <Route exact path="/">
-                      <Redirect to="/groups" />
-                    </Route>
-                    <Route path="/groups" component={GroupsWrapper} />
-                    <Route path="/connect" component={Match} />
-                    <Route path="/relations" component={Relations} />
-                    <Route path="/settings" component={Settings} />
-                  </Switch>
-                </BondeSessionUI.Content>
-              </BondeSessionUI.Main>
+              <BondeSessionUI indexRoute={adminUrl}>
+                <Content>
+                  <Header zIndex={0} />
+                  <Wrap>
+                    <Switch>
+                      <Route exact path="/">
+                        <Redirect to="/groups" />
+                      </Route>
+                      <Route path="/groups" component={GroupsWrapper} />
+                      <Route path="/connect" component={Match} />
+                      <Route path="/relations" component={Relations} />
+                      <Route path="/settings" component={Settings} />
+                    </Switch>
+                  </Wrap>
+                </Content>
+              </BondeSessionUI>
             </FilterProvider>
           </SettingsProvider>
         </Router>

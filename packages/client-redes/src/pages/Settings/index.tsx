@@ -12,7 +12,7 @@ import {
   TextareaField
 } from "bonde-components";
 import { useSettings } from "../../services/SettingsProvider";
-import { WrapForm, SettingsWrapper, BottomWrap } from "./styles";
+import { WrapForm, SettingsWrapper, BottomWrap, Wrap } from "./styles";
 import { Form } from "../../types";
 
 const saveSettingsMutation = gql`
@@ -53,56 +53,60 @@ const SettingsForm = () => {
   };
 
   return (
-    <SettingsWrapper>
-      <Header.h3>Configurações do Módulo</Header.h3>
-      <ConnectedForm initialValues={initialValues} onSubmit={onSubmit}>
-        {({ submitting }) => (
-          <WrapForm>
-            {error && <Hint color="error">{error}</Hint>}
-            <InputField
-              name="input.distance"
-              label="Distância"
-              placeholder="Insira a distância limite entre um match (valor em km)"
-              validate={composeValidators(
-                required("Valor não pode ser vazio"),
-                min(1, "Mínimo de 1km")
-              )}
-              type="number"
-            />
-            <div style={{ marginBottom: "15px" }}>
-              <Header.h4>Mensagens de Whatsapp</Header.h4>
-            </div>
-            <TextareaField
-              name="input.volunteer_msg"
-              label="Voluntária"
-              placeholder="Insira uma mensagem de Whatsapp para a voluntária"
-              validate={required("Valor não pode ser vazio")}
-            />
-            <TextareaField
-              name="input.individual_msg"
-              label="PSR"
-              placeholder="Insira uma mensagem de Whatsapp para a PSR"
-              validate={required("Valor não pode ser vazio")}
-            />
-            <BottomWrap>
-              <Button type="submit" disabled={submitting}>
-                Enviar
-              </Button>
-              <div>
-                <Text>*VFIRST_NAME: Primeiro nome da voluntária</Text>
-                <Text>*PFIRST_NAME: Primeiro nome da PSR</Text>
-                <Text>*VEMAIL: Email da voluntária</Text>
-                <Text>*PEMAIL: Email da PSR</Text>
-                <Text>*VWHATSAPP: Whatsapp da voluntária</Text>
-                <Text>*PWHATSAPP: Whatsapp da PSR</Text>
-                <Text>*VREGISTER_OCCUPATION: Nº de registro da voluntária</Text>
-                <Text>*AGENT: Nome da agente</Text>
+    <Wrap>
+      <SettingsWrapper>
+        <Header.h3>Configurações do Módulo</Header.h3>
+        <ConnectedForm initialValues={initialValues} onSubmit={onSubmit}>
+          {({ submitting }) => (
+            <WrapForm>
+              {error && <Hint color="error">{error}</Hint>}
+              <InputField
+                name="input.distance"
+                label="Distância"
+                placeholder="Insira a distância limite entre um match (valor em km)"
+                validate={composeValidators(
+                  required("Valor não pode ser vazio"),
+                  min(1, "Mínimo de 1km")
+                )}
+                type="number"
+              />
+              <div style={{ marginBottom: "15px" }}>
+                <Header.h4>Mensagens de Whatsapp</Header.h4>
               </div>
-            </BottomWrap>
-          </WrapForm>
-        )}
-      </ConnectedForm>
-    </SettingsWrapper>
+              <TextareaField
+                name="input.volunteer_msg"
+                label="Voluntária"
+                placeholder="Insira uma mensagem de Whatsapp para a voluntária"
+                validate={required("Valor não pode ser vazio")}
+              />
+              <TextareaField
+                name="input.individual_msg"
+                label="PSR"
+                placeholder="Insira uma mensagem de Whatsapp para a PSR"
+                validate={required("Valor não pode ser vazio")}
+              />
+              <BottomWrap>
+                <Button type="submit" disabled={submitting}>
+                  Enviar
+                </Button>
+                <div>
+                  <Text>*VFIRST_NAME: Primeiro nome da voluntária</Text>
+                  <Text>*PFIRST_NAME: Primeiro nome da PSR</Text>
+                  <Text>*VEMAIL: Email da voluntária</Text>
+                  <Text>*PEMAIL: Email da PSR</Text>
+                  <Text>*VWHATSAPP: Whatsapp da voluntária</Text>
+                  <Text>*PWHATSAPP: Whatsapp da PSR</Text>
+                  <Text>
+                    *VREGISTER_OCCUPATION: Nº de registro da voluntária
+                  </Text>
+                  <Text>*AGENT: Nome da agente</Text>
+                </div>
+              </BottomWrap>
+            </WrapForm>
+          )}
+        </ConnectedForm>
+      </SettingsWrapper>
+    </Wrap>
   );
 };
 

@@ -65,7 +65,7 @@ function filterReducer(state, action) {
   }
 }
 
-const FilterProvider = ({ children }: { children: React.ReactChildren }) => {
+const FilterProvider = ({ children }: { children: any }) => {
   const filtered = {
     rows: 1000,
     offset: 1000 * 0,

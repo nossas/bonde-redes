@@ -17,7 +17,7 @@ const SETTINGS = gql`
   }
 `;
 
-const SettingsProvider = ({ children }: { children: React.ReactChildren }) => {
+const SettingsProvider = ({ children }: { children: any }) => {
   const { community } = useSession();
   const variables = { communityId: (community && community.id) || 0 };
 
