@@ -1,7 +1,7 @@
 import { useStoreState, useStoreActions } from "easy-peasy";
 import { parseNumber, isJsonString } from "./services/utils";
 import { Individual } from "./types/Individual";
-import { useSettings } from "./services/SettingsContext";
+import { useSettings } from "./services/SettingsProvider";
 import { whatsappText, encodeText, dicio } from "./services/utils";
 import { useSession } from "bonde-core-tools";
 

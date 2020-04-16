@@ -11,7 +11,7 @@ import FetchIndividuals from "../../graphql/FetchIndividuals";
 import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
 import { USERS_BY_GROUP } from "../../graphql/FetchUsersByGroup";
 import { Individual } from "../../types";
-import { useFilterState } from "../../services/FilterContext";
+import { useFilterState } from "../../services/FilterProvider";
 import useAppLogic from "../../app-logic";
 import columns from "./columns";
 

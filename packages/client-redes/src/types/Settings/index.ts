@@ -11,7 +11,7 @@ export type Settings = {
 };
 
 export interface SettingsData {
-  app_settings: Settings[];
+  community_settings: Settings[];
 }
 
 export type SettingsVars = {

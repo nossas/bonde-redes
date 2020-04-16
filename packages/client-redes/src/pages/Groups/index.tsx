@@ -17,7 +17,7 @@ import FiltersData from "./filters";
 import { Wrap } from "./styles";
 import { Individual } from "../../types/Individual";
 import FetchUsersByGroup from "../../graphql/FetchUsersByGroup";
-import { useFilter } from "../../services/FilterContext";
+import { useFilter } from "../../services/FilterProvider";
 
 type FilterData = {
   name: string;
@@ -68,14 +68,7 @@ const Groups = () => {
 
   return (
     <FetchUsersByGroup>
-      {({
-        volunteers,
-        individuals,
-        groups,
-        filters: filtersValues,
-        changeFilters,
-        page
-      }): React.ReactNode => {
+      {({ volunteers, individuals, groups, page }): React.ReactNode => {
         const data: TableData = {
           volunteers: volunteers.data,
           individuals: individuals.data

@@ -1,4 +1,4 @@
-import { Filters } from "../../services/FilterContext";
+import { Filters } from "../../services/FilterProvider";
 
 type FiltersProps = {
   volunteersCount: number;

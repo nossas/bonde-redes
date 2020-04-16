@@ -15,7 +15,8 @@ import Settings from "./pages/Settings";
 import { Loading } from "bonde-components";
 import { BondeSessionProvider, BondeSessionUI } from "bonde-core-tools";
 import store from "./store";
-import { SettingsProvider } from "./services/SettingsContext";
+import { SettingsProvider } from "./services/SettingsProvider";
+import { FilterProvider } from "./services/FilterProvider";
 
 const TextLoading = ({ fetching }) => {
   const messages = {
@@ -40,20 +41,22 @@ const App = () => {
       <StoreProvider store={store}>
         <Router history={history}>
           <SettingsProvider>
-            <BondeSessionUI.Main indexRoute={adminUrl}>
-              <Header zIndex={0} />
-              <BondeSessionUI.Content>
-                <Switch>
-                  <Route exact path="/">
-                    <Redirect to="/groups" />
-                  </Route>
-                  <Route path="/groups" component={GroupsWrapper} />
-                  <Route path="/connect" component={Match} />
-                  <Route path="/relations" component={Relations} />
-                  <Route path="/settings" component={Settings} />
-                </Switch>
-              </BondeSessionUI.Content>
-            </BondeSessionUI.Main>
+            <FilterProvider>
+              <BondeSessionUI.Main indexRoute={adminUrl}>
+                <Header zIndex={0} />
+                <BondeSessionUI.Content>
+                  <Switch>
+                    <Route exact path="/">
+                      <Redirect to="/groups" />
+                    </Route>
+                    <Route path="/groups" component={GroupsWrapper} />
+                    <Route path="/connect" component={Match} />
+                    <Route path="/relations" component={Relations} />
+                    <Route path="/settings" component={Settings} />
+                  </Switch>
+                </BondeSessionUI.Content>
+              </BondeSessionUI.Main>
+            </FilterProvider>
           </SettingsProvider>
         </Router>
       </StoreProvider>

@@ -11,13 +11,13 @@ import {
   Text,
   TextareaField
 } from "bonde-components";
-import { useSettings } from "../../services/SettingsContext";
+import { useSettings } from "../../services/SettingsProvider";
 import { WrapForm, SettingsWrapper, BottomWrap } from "./styles";
 import { Form } from "../../types";
 
 const saveSettingsMutation = gql`
   mutation updateSettings($communityId: bigint, $settings: json) {
-    update_app_settings(
+    update_community_settings(
       _set: { settings: $settings }
       where: { community_id: { _eq: $communityId } }
     ) {
