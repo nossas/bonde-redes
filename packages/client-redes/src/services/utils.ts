@@ -12,7 +12,7 @@ export const dicio = (name: string, obj: object) =>
   }, {});
 
 export const whatsappText = (msg = "", dicio): string => {
-  var re = new RegExp(Object.keys(dicio).join("|"), "gi");
+  const re = new RegExp(Object.keys(dicio).join("|"), "gi");
 
   return msg.replace(re, matched => dicio[matched]);
 };

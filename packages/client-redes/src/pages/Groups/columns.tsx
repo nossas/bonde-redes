@@ -232,7 +232,13 @@ const individualsColumns: Array<Columns> = [
   {
     accessor: "availability",
     Header: "Disponibilidade",
-    Cell: ({ value, row }): any =>
+    Cell: ({
+      value,
+      row
+    }: {
+      value: string;
+      row: { _original: { id: number } };
+    }) =>
       value ? (
         <SelectUpdateStatus
           name="availability"

@@ -1,5 +1,5 @@
-import { Individual } from '../Individual'
-import { Filters } from '../../graphql/FilterQuery'
+import { Individual } from "../Individual";
+import { Filters } from "../../graphql/FilterQuery";
 
 export interface GroupsData {
   individuals: Individual[];
@@ -17,9 +17,9 @@ export interface GroupsData {
 }
 
 export type Group = {
-  is_volunteer: boolean
-  name: string
-}
+  is_volunteer: boolean;
+  name: string;
+};
 
 export interface GroupsData {
   individuals: Individual[];
@@ -34,7 +34,7 @@ export interface GroupsData {
       count: number;
     };
   };
-  community_groups: Group[]
+  community_groups: Group[];
 }
 
 export interface GroupsVars {

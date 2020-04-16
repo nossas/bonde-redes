@@ -1,9 +1,9 @@
 import React from "react";
 import { gql } from "apollo-boost";
-import { useSession, useQuery } from 'bonde-core-tools';
+import { useSession, useQuery } from "bonde-core-tools";
 import { useFilterQuery } from "./FilterQuery";
-import Empty from '../components/Empty';
-import { IndividualData, IndividualVars } from '../types/Individual'
+import Empty from "../components/Empty";
+import { IndividualData, IndividualVars } from "../types/Individual";
 
 const USERS = gql`
   query RedeIndividuals(
@@ -88,8 +88,9 @@ const FetchIndividuals = ({ children, community }: any) => {
 
 export default (props: any = {}) => {
   const { community } = useSession();
-  return community
-    ? <FetchIndividuals community={community} {...props}/>
-    : <Empty message='Selecione uma comunidade' />
-  ;
+  return community ? (
+    <FetchIndividuals community={community} {...props} />
+  ) : (
+    <Empty message="Selecione uma comunidade" />
+  );
 };

@@ -18,7 +18,7 @@ import store from "./store";
 import { SettingsProvider } from "./services/SettingsProvider";
 import { FilterProvider } from "./services/FilterProvider";
 
-const TextLoading = ({ fetching }) => {
+const TextLoading = ({ fetching }: { fetching: string }) => {
   const messages = {
     session: "Carregando sessão...",
     user: "Carregando usuário...",

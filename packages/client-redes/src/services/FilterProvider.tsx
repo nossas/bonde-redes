@@ -1,68 +1,70 @@
-import React from 'react'
+import React from "react";
 
 export type Filters = {
   rows: number;
   offset: number;
-  status:{
+  status: {
     _eq: string | undefined;
-  }
+  };
   availability: {
     _eq: string | undefined;
-  }
+  };
   order_by: {
     created_at: string;
   };
 };
 
-type Action = {type: 'page', value: number} | 
-  {type: 'rows', value: number} | 
-  {type: 'status', value: string} | 
-  {type: 'availability', value: string}
+type Action =
+  | { type: "page"; value: number }
+  | { type: "rows"; value: number }
+  | { type: "status"; value: string }
+  | { type: "availability"; value: string };
 
-type Dispatch = (action: Action) => void
+type Dispatch = (action: Action) => void;
 
-const FilterStateContext = React.createContext<Filters | undefined>(undefined)
+const FilterStateContext = React.createContext<Filters | undefined>(undefined);
 const FilterDispatchContext = React.createContext<Dispatch | undefined>(
-  undefined,
-)
+  undefined
+);
 function filterReducer(state, action) {
   switch (action.type) {
-    case 'page': {
-      const valid = typeof action.value !== "undefined" ? action.value : state.page
+    case "page": {
+      const valid =
+        typeof action.value !== "undefined" ? action.value : state.page;
       return {
         ...state,
         page: valid,
         offset: valid * state.rows
-      }
+      };
     }
-    case 'rows': {
+    case "rows": {
       return {
         ...state,
         rows: action.value,
         offset: action.value * state.page
-      }
+      };
     }
-    case 'status': {
-      const valid = action.value === "all" ? undefined : action.value
+    case "status": {
+      const valid = action.value === "all" ? undefined : action.value;
       return {
         ...state,
         status: { _eq: valid }
-      }
+      };
     }
-    case 'availability': {
-      const valid = action.value === "all" ? undefined : action.value
+    case "availability": {
+      const valid = action.value === "all" ? undefined : action.value;
       return {
         ...state,
         availability: { _eq: valid }
-      }
+      };
     }
     default: {
-      throw new Error(`Unhandled action type: ${action.type}`)
+      throw new Error(`Unhandled action type: ${action.type}`);
     }
   }
 }
 
-const FilterProvider = ({children}) => {
+const FilterProvider = ({ children }: { children: React.ReactChildren }) => {
   const filtered = {
     rows: 1000,
     offset: 1000 * 0,
@@ -72,7 +74,7 @@ const FilterProvider = ({children}) => {
     order_by: { created_at: "asc" }
   };
 
-  const [state, dispatch] = React.useReducer(filterReducer, filtered)
+  const [state, dispatch] = React.useReducer(filterReducer, filtered);
 
   return (
     <FilterStateContext.Provider value={state}>
@@ -80,25 +82,28 @@ const FilterProvider = ({children}) => {
         {children}
       </FilterDispatchContext.Provider>
     </FilterStateContext.Provider>
-  )
-}
+  );
+};
 
 function useFilterState() {
-  const context = React.useContext(FilterStateContext)
+  const context = React.useContext(FilterStateContext);
   if (context === undefined) {
-    throw new Error('useFilterState must be used within a FilterProvider')
+    throw new Error("useFilterState must be used within a FilterProvider");
   }
-  return context
+  return context;
 }
 
 function useFilterDispatch() {
-  const context = React.useContext(FilterDispatchContext)
+  const context = React.useContext(FilterDispatchContext);
   if (context === undefined) {
-    throw new Error('useFilterDispatch must be used within a FilterProvider')
+    throw new Error("useFilterDispatch must be used within a FilterProvider");
   }
-  return context
+  return context;
 }
 
-const useFilter = (): [Filters, Dispatch] => [useFilterState(), useFilterDispatch()] 
+const useFilter = (): [Filters, Dispatch] => [
+  useFilterState(),
+  useFilterDispatch()
+];
 
-export { FilterProvider, useFilterState, useFilterDispatch, useFilter }
+export { FilterProvider, useFilterState, useFilterDispatch, useFilter };

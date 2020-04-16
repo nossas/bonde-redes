@@ -2,7 +2,7 @@ import React from "react";
 import ReactTable from "react-table";
 import styled from "styled-components";
 import FetchMatches from "../../graphql/FetchMatches";
-import { Header } from 'bonde-components';
+import { Header } from "bonde-components";
 
 import "react-table/react-table.css";
 import columns from "./columns";
@@ -22,7 +22,9 @@ const Table: React.FC = () => {
       {(data: Array<Relationship>): React.ReactNode => {
         return data.length === 0 ? (
           <Wrap>
-            <Header.h4>Não existem conexões realizadas nessa comunidade.</Header.h4>
+            <Header.h4>
+              Não existem conexões realizadas nessa comunidade.
+            </Header.h4>
           </Wrap>
         ) : (
           <Wrap>

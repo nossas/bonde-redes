@@ -21,10 +21,27 @@ const Option = styled.option`
   text-transform: capitalize;
 `;
 
-export default ({ name, row, options, selected, query, type }) => {
+type Props = {
+  name: string;
+  row: {
+    _original: {
+      id: number;
+    };
+  };
+  options: string[];
+  selected: string;
+  query: any;
+  type: string;
+};
+
+export default ({ name, row, options, selected, query, type }: Props) => {
   const [update] = useMutation(query);
 
-  const handleOnChange = ({ target: { value } }) => {
+  const handleOnChange = ({
+    target: { value }
+  }: {
+    target: { value: string };
+  }) => {
     const variables = {
       [type]: { [name]: value },
       id: row._original.id
@@ -39,7 +56,9 @@ export default ({ name, row, options, selected, query, type }) => {
     <Text color="#000">
       <Select onChange={handleOnChange} value={selected}>
         {options.map(i => (
-          <Option value={i}>{i.replace("_", ": ")}</Option>
+          <Option key={`status-options-${i}`} value={i}>
+            {i.replace("_", ": ")}
+          </Option>
         ))}
       </Select>
     </Text>

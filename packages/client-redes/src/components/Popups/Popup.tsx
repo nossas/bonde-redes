@@ -7,7 +7,7 @@ type Props = {
   volunteerName: string;
   individualName: string;
   onSubmit: any;
-  children
+  children;
 };
 
 const Popup = ({
@@ -17,7 +17,7 @@ const Popup = ({
   individualName,
   onSubmit,
   children
-}: Props) => 
+}: Props) => (
   <StyledModal opened={isOpen} onClose={onClose} width={30}>
     <StyledFlexbox middle vertical spacing="evenly">
       {children({
@@ -28,6 +28,7 @@ const Popup = ({
       })}
     </StyledFlexbox>
   </StyledModal>
+);
 
 Popup.defaultProps = {
   isOpen: false

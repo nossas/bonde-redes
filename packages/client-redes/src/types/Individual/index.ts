@@ -1,4 +1,4 @@
-import { Filters } from '../../graphql/FilterQuery'
+import { Filters } from "../../graphql/FilterQuery";
 
 export type Individual = {
   id: number;

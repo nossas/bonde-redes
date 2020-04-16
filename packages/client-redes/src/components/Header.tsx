@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Header as BondeHeader, Title, Spacing } from "bonde-styleguide";
 import Tabs from "./Tabs";
-import styled from "styled-components"
+import styled from "styled-components";
 
 type HeaderProps = {
   zIndex: number;
@@ -14,7 +14,7 @@ const TabsWrapper = styled.div`
   grid-template-columns: auto 15%;
   position: relative;
   top: 22px;
-`
+`;
 
 const Header: React.FC<HeaderProps> = ({ zIndex }: HeaderProps) => {
   const { pathname: path } = useLocation();
@@ -38,7 +38,7 @@ const Header: React.FC<HeaderProps> = ({ zIndex }: HeaderProps) => {
     }
   ];
 
-  const getTabs = (type) => tabs.filter(t => t.type === type)
+  const getTabs = type => tabs.filter(t => t.type === type);
 
   useEffect(() => {
     const currentTab = tabs.find(i => i["to"] === path) || { name: "pessoas" };
