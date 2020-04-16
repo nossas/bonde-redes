@@ -4,18 +4,20 @@ import {
   Flexbox2 as Flexbox,
   Spacing,
   Dropdown,
-  DropdownItem
+  DropdownItem,
+  Title
 } from "bonde-styleguide";
-import { Header } from 'bonde-components';
+import { Header } from "bonde-components";
 import ReactTable from "react-table";
 import { useStoreActions } from "easy-peasy";
 
 import "react-table/react-table.css";
 import columns from "./columns";
-import filters from "./filters";
+import FiltersData from "./filters";
 import { Wrap } from "./styles";
 import { Individual } from "../../types/Individual";
 import FetchUsersByGroup from "../../graphql/FetchUsersByGroup";
+import { useFilter } from "../../services/FilterContext";
 
 type FilterData = {
   name: string;
@@ -57,6 +59,7 @@ const Groups = () => {
     (actions: { table: { setTable: ({ individuals, volunteers }) => void } }) =>
       actions.table.setTable
   );
+  const [filters, dispatch] = useFilter();
 
   useEffect(() => {
     push("/groups/volunteers");
@@ -85,27 +88,17 @@ const Groups = () => {
         const count = {
           volunteers: Number(volunteers.count) || 0,
           individuals: Number(individuals.count) || 0
-        }
+        };
 
         const pages =
           kind === "volunteers"
-            ? Math.ceil(count.volunteers / filtersValues.rows)
-            : Math.ceil(count.individuals / filtersValues.rows);
+            ? Math.ceil(count.volunteers / filters.rows)
+            : Math.ceil(count.individuals / filters.rows);
 
-        const resizeRow = count[kind] < 1000 ? count[kind] : filtersValues.rows
+        const resizeRow = count[kind] < 1000 ? count[kind] : filters.rows;
 
         return (
           <Wrap>
-            <Filters
-              filters={filters({
-                volunteersCount: count.volunteers,
-                individualsCount: count.individuals,
-                filters: { values: filtersValues, change: changeFilters },
-                history: push,
-                kind,
-                groups
-              })}
-            />
             {data[kind].length === 0 ? (
               <Wrap>
                 <Header.h4>Não existem resultados para essa tabela.</Header.h4>
@@ -113,6 +106,23 @@ const Groups = () => {
             ) : (
               <>
                 <Header.h4>Total ({count[kind]})</Header.h4>
+                <Spacing margin={{ bottom: 20 }}>
+                  <Filters
+                    filters={FiltersData({
+                      volunteersCount: count.volunteers,
+                      individualsCount: count.individuals,
+                      filters: { values: filters, change: dispatch },
+                      history: push,
+                      kind,
+                      groups
+                    })}
+                  />
+                </Spacing>
+                <Spacing margin={{ bottom: 20 }}>
+                  <Title.H4 margin={{ bottom: 30 }}>
+                    Total ({count[kind]})
+                  </Title.H4>
+                </Spacing>
                 <ReactTable
                   manual
                   sortable={false}
@@ -122,9 +132,11 @@ const Groups = () => {
                   pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
                   page={page}
                   pages={pages}
-                  onPageChange={(page: number): void => changeFilters({ page })}
+                  onPageChange={(page: number): void =>
+                    dispatch({ type: "page", value: page })
+                  }
                   onPageSizeChange={(rows: number): void =>
-                    changeFilters({ rows })
+                    dispatch({ type: "rows", value: rows })
                   }
                   previousText="Anterior"
                   nextText="Próximo"

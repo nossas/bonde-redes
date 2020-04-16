@@ -12,27 +12,29 @@ import GroupsWrapper from "./pages/Groups";
 import Relations from "./pages/Relations";
 import Settings from "./pages/Settings";
 
-import { Loading } from 'bonde-components';
+import { Loading } from "bonde-components";
 import { BondeSessionProvider, BondeSessionUI } from "bonde-core-tools";
 import store from "./store";
-import { SettingsProvider } from './services/SettingsContext'
+import { SettingsProvider } from "./services/SettingsContext";
 
 const TextLoading = ({ fetching }) => {
   const messages = {
-    session: 'Carregando sessão...',
-    user: 'Carregando usuário...',
-    communities: 'Carregando communities...',
-    redirect: 'Redirecionando para autenticação...'
-  }
-  return <Loading fullsize message={messages[fetching]} />
-}
+    session: "Carregando sessão...",
+    user: "Carregando usuário...",
+    communities: "Carregando communities...",
+    redirect: "Redirecionando para autenticação..."
+  };
+  return <Loading fullsize message={messages[fetching]} />;
+};
 
 const App = () => {
-  const adminUrl = process.env.REACT_APP_ADMIN_URL || 'http://admin-canary.bonde.devel:5001/admin'
+  const adminUrl =
+    process.env.REACT_APP_ADMIN_URL ||
+    "http://admin-canary.bonde.devel:5001/admin";
   return (
     <BondeSessionProvider
       fetchData
-      environment={process.env.REACT_APP_ENVIRONMENT || 'development'}
+      environment={process.env.REACT_APP_ENVIRONMENT || "development"}
       loading={TextLoading}
     >
       <StoreProvider store={store}>
@@ -56,7 +58,7 @@ const App = () => {
         </Router>
       </StoreProvider>
     </BondeSessionProvider>
-  )
+  );
 };
 
 export default App;

@@ -1,11 +1,11 @@
-import React from 'react';
-import { gql } from 'apollo-boost';
-import { useSession, useQuery } from 'bonde-core-tools';
-import Empty from '../components/Empty';
-import { useFilterQuery } from './FilterQuery';
-import { GroupsData, GroupsVars } from '../types/Groups'
+import React from "react";
+import { gql } from "apollo-boost";
+import { useSession, useQuery } from "bonde-core-tools";
+import Empty from "../components/Empty";
+import { useFilterQuery } from "./FilterQuery";
+import { GroupsData, GroupsVars } from "../types/Groups";
 
-const USERS_BY_GROUP = gql`
+export const USERS_BY_GROUP = gql`
   query RedeGroups(
     $context: Int_comparison_exp!
     $rows: Int!
@@ -27,7 +27,7 @@ const USERS_BY_GROUP = gql`
       ...individual
     }
     volunteers_count: rede_individuals_aggregate(
-      where: { 
+      where: {
         group: { community_id: $context, is_volunteer: { _eq: true } }
         status: $status
         availability: $availability
@@ -50,7 +50,7 @@ const USERS_BY_GROUP = gql`
       ...individual
     }
     individuals_count: rede_individuals_aggregate(
-      where: { 
+      where: {
         group: { community_id: $context, is_volunteer: { _eq: false } }
         status: $status
         availability: $availability
@@ -60,11 +60,7 @@ const USERS_BY_GROUP = gql`
         count
       }
     }
-    community_groups: rede_groups(
-      where: {
-        community_id: $context
-      }
-    ) {
+    community_groups: rede_groups(where: { community_id: $context }) {
       is_volunteer
       name
     }
@@ -139,11 +135,12 @@ const FetchUsersByGroup = ({ children, community }) => {
   );
 };
 
-export default (props) => {
+export default props => {
   const { community } = useSession();
 
-  return community
-    ? <FetchUsersByGroup community={community} {...props} />
-    : <Empty message='Selecione uma comunidade' />
-  ;
+  return community ? (
+    <FetchUsersByGroup community={community} {...props} />
+  ) : (
+    <Empty message="Selecione uma comunidade" />
+  );
 };

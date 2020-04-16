@@ -4,28 +4,38 @@ import ReactTable from "react-table";
 import * as turf from "@turf/turf";
 import { useHistory, useLocation } from "react-router-dom";
 import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
-import { useMutation } from "bonde-core-tools";
+import { Loading } from "bonde-components";
+import { useMutation, useSession } from "bonde-core-tools";
 
-import { Wrap, StyledButton } from "./style";
-import columns from "./columns";
 import FetchIndividuals from "../../graphql/FetchIndividuals";
 import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
+import { USERS_BY_GROUP } from "../../graphql/FetchUsersByGroup";
+import { Individual } from "../../types";
+import { useFilterState } from "../../services/FilterContext";
 import useAppLogic from "../../app-logic";
-import { Individual } from "../../types/Individual";
+import columns from "./columns";
+
 import Popup from "../../components/Popups/Popup";
+import Success from "../../components/Popups/Success";
+import Error from "../../components/Popups/Error";
+import Confirm from "../../components/Popups/Confirm";
+import { Wrap, StyledButton } from "./style";
 
 type onConfirm = {
   individual_id: number;
   volunteer_id: number;
   agent_id: number;
   popups: Record<string, string>;
-  volunteer_whatsapp: string;
 };
 
 const Table = () => {
   const {
-    individual,
-    volunteer,
+    individual: { first_name: individual_name, id: individual_id },
+    volunteer: {
+      first_name: volunteer_name,
+      id: volunteer_id
+      // email: volunteer_email
+    },
     popups,
     createWhatsappLink,
     parsedIndividualNumber,
@@ -46,26 +56,18 @@ const Table = () => {
 
   const { goBack, push } = useHistory();
   const { state: linkState = { volunteer: {} } } = useLocation();
+  const filters = useFilterState();
+  const { community = { id: 0 } } = useSession();
 
   const [success, setSuccess] = useState(false);
-  const [fail, setError] = useState(false);
   const [isLoading, setLoader] = useState(false);
-
-  const { confirm, wrapper, noPhoneNumber } = popups;
-  const { first_name: individual_name, id: individual_id } = individual;
-  const {
-    first_name: volunteer_name,
-    whatsapp: volunteer_whatsapp,
-    id: volunteer_id
-  } = volunteer;
 
   useEffect(() => {
     setLoader(loading);
-    setError(!!(error && error.message));
     if (data) setSuccess(true);
     // retorna para a home caso não exista nenhuma voluntária no linkState
-    if (!linkState.volunteer) return push("/");
-  }, [setLoader, loading, error, setError, data, linkState, push]);
+    if (Object.keys(linkState.volunteer).length < 1) return push("/");
+  }, [setLoader, loading, error, data, linkState, push]);
 
   const filterByDistance = useCallback(
     data =>
@@ -102,23 +104,25 @@ const Table = () => {
     individual_id,
     volunteer_id,
     agent_id,
-    popups,
-    volunteer_whatsapp
+    popups
   }: onConfirm) => {
-    if (!volunteer_whatsapp)
-      return setPopup({
-        ...popups,
-        noPhoneNumber: true,
-        confirm: false
-      });
-
     setPopup({ ...popups, confirm: false });
     return createConnection({
       variables: {
         recipientId: individual_id,
         volunteerId: volunteer_id,
         agentId: agent_id
-      }
+      },
+      refetchQueries: [
+        {
+          query: USERS_BY_GROUP,
+          variables: {
+            context: { _eq: community.id },
+            ...filters,
+            page: undefined
+          }
+        }
+      ]
     });
   };
 
@@ -128,9 +132,7 @@ const Table = () => {
       wrapper: false,
       confirm: false
     });
-    const redesUrl =
-      process.env.REACT_APP_REDES_URL || "http://redes.bonde.devel:4000/";
-    window.location.href = redesUrl;
+    goBack();
   };
 
   return (
@@ -173,46 +175,51 @@ const Table = () => {
                 />
               </Wrap>
             </Flexbox>
-            {wrapper ? (
-              <Popup
-                individualName={individual_name}
-                volunteerName={volunteer_name}
-                onSubmit={() =>
-                  onConfirm({
-                    individual_id,
-                    volunteer_id,
-                    agent_id: agent.id,
-                    popups,
-                    volunteer_whatsapp
-                  })
-                }
-                isOpen={wrapper}
-                onClose={closeAllPopups}
-                isLoading={isLoading}
-                confirm={{ isEnabled: confirm }}
-                success={{
-                  link: {
-                    individual: (): string | undefined =>
-                      createWhatsappLink(
-                        parsedIndividualNumber,
-                        individual_text
-                      ),
-                    volunteer: (): string | undefined =>
-                      createWhatsappLink(parsedVolunteerNumber, volunteer_text)
-                  },
-                  isEnabled: success
-                }}
-                error={{
-                  isEnabled: fail,
-                  message: (error && error.message) || ""
-                }}
-                warning={{
-                  isEnabled: noPhoneNumber,
-                  id: volunteer_id,
-                  name: volunteer_name
-                }}
-              />
-            ) : null}
+            <Popup
+              individualName={individual_name}
+              volunteerName={volunteer_name}
+              onSubmit={() =>
+                onConfirm({
+                  individual_id,
+                  volunteer_id,
+                  agent_id: agent.id,
+                  popups
+                })
+              }
+              isOpen={popups.wrapper}
+              onClose={closeAllPopups}
+            >
+              {props => {
+                return isLoading ? (
+                  <Loading />
+                ) : (
+                  <>
+                    <Confirm {...props} isEnabled={popups.confirm} />
+                    <Success
+                      {...props}
+                      link={{
+                        individual: (): string | undefined =>
+                          createWhatsappLink(
+                            parsedIndividualNumber,
+                            individual_text
+                          ),
+                        volunteer: (): string | undefined =>
+                          createWhatsappLink(
+                            parsedVolunteerNumber,
+                            volunteer_text
+                          )
+                      }}
+                      isEnabled={success}
+                    />
+                    <Error
+                      {...props}
+                      message={(error && error.message) || ""}
+                      isEnabled={error}
+                    />
+                  </>
+                );
+              }}
+            </Popup>
           </Fragment>
         );
       }}
