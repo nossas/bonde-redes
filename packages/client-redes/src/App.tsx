@@ -1,10 +1,14 @@
-import "mapbox-gl/dist/mapbox-gl.css";
+// import "mapbox-gl/dist/mapbox-gl.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import { StoreProvider } from "easy-peasy";
 import React from "react";
 import styled from "styled-components";
 import { Redirect, Route, Switch } from "react-router";
 import { Router } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { Loading } from "bonde-components";
+import { BondeSessionProvider, BondeSessionUI } from "bonde-core-tools";
 
 import Header from "./components/Header";
 import history from "./history";
@@ -13,8 +17,6 @@ import GroupsWrapper from "./pages/Groups";
 import Relations from "./pages/Relations";
 import Settings from "./pages/Settings";
 
-import { Loading } from "bonde-components";
-import { BondeSessionProvider, BondeSessionUI } from "bonde-core-tools";
 import store from "./store";
 import { SettingsProvider } from "./services/SettingsProvider";
 import { FilterProvider } from "./services/FilterProvider";
@@ -40,6 +42,21 @@ const Wrap = styled.div`
   padding: 20px 60px;
 `;
 
+const BondeToastify = styled(ToastContainer)`
+  & > .Toastify_toast {
+    padding: 15px;
+  }
+  & > .Toastify__toast.Toastify__toast--success {
+    background-color: #50e3c2;
+  }
+  & > .Toastify__toast .Toastify__toast-body {
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: white;
+  }
+`;
+
 const App = () => {
   const adminUrl =
     process.env.REACT_APP_ADMIN_URL ||
@@ -51,13 +68,25 @@ const App = () => {
       loading={TextLoading}
     >
       <StoreProvider store={store}>
-        <Router history={history}>
-          <SettingsProvider>
-            <FilterProvider>
+        <SettingsProvider>
+          <FilterProvider>
+            <Router history={history}>
               <BondeSessionUI indexRoute={adminUrl}>
                 <Content>
                   <Header zIndex={0} />
                   <Wrap>
+                    <BondeToastify>
+                      <ToastContainer
+                        position="top-right"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        draggable={false}
+                        pauseOnHover
+                      />
+                    </BondeToastify>
                     <Switch>
                       <Route exact path="/">
                         <Redirect to="/groups" />
@@ -70,9 +99,9 @@ const App = () => {
                   </Wrap>
                 </Content>
               </BondeSessionUI>
-            </FilterProvider>
-          </SettingsProvider>
-        </Router>
+            </Router>
+          </FilterProvider>
+        </SettingsProvider>
       </StoreProvider>
     </BondeSessionProvider>
   );

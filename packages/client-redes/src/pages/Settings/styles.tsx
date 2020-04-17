@@ -8,27 +8,41 @@ export const WrapForm = styled.div`
 `;
 
 export const SettingsWrapper = styled.div`
-  margin: 10px 0;
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  & > h3 {
-    margin-bottom: 20px;
-  }
-  width: 80%;
-  @media (min-width: 576px) {
-    width: 60%;
-  }
-`;
-
-export const Wrap = styled.div`
-  display: grid;
-  justify-items: center;
   width: 100%;
 `;
 
-export const BottomWrap = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+export const HeaderWrap = styled.div`
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto;
+  grid-template-rows: auto auto;
+  grid-row-gap: 20px;
+  @media (min-width: 370px) {
+    justify-content: space-between;
+    grid-template-rows: auto;
+    grid-template-columns: auto 190px;
+  }
+  & > button {
+    padding: 12px 20px;
+  }
+  & > a {
+    font-weight: 800;
+  }
+  margin-bottom: 30px;
+`;
+
+export const WrapTextarea = styled.div`
+  & textarea {
+    height: 100px;
+  }
+`;
+
+export const WrapText = styled.div`
+  & div > p {
+    font-size: 13px;
+  }
+  display: grid;
+  @media (min-width: 576px) {
+    grid-template-columns: auto auto;
+  }
 `;

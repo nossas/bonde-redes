@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button } from "bonde-styleguide";
+import { Button } from "bonde-components";
 
 export const Wrap = styled.div`
   @media (min-width: 768px) {
@@ -8,5 +8,9 @@ export const Wrap = styled.div`
 `;
 
 export const StyledButton = styled(Button)`
-  padding: 0;
+  && {
+    border: none;
+    padding: 0;
+    border-color: transparent;
+  }
 `;

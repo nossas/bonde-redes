@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
+import { useHistory } from "react-router-dom";
 import { gql } from "apollo-boost";
+import { toast } from "react-toastify";
 import { useMutation, useSession } from "bonde-core-tools";
 import {
   Button,
@@ -9,11 +11,15 @@ import {
   Validators,
   Header,
   Text,
-  TextareaField
+  TextareaField,
+  Link
 } from "bonde-components";
+import { Card } from "bonde-styleguide";
 import { useSettings } from "../../services/SettingsProvider";
-import { WrapForm, SettingsWrapper, BottomWrap, Wrap } from "./styles";
-import { Form } from "../../types";
+import { SettingsWrapper, HeaderWrap, WrapTextarea, WrapText } from "./styles";
+import { Form, Settings, SettingsVars } from "../../types";
+import { settingsSaved } from "../../services/utils/notifications";
+import FetchCommunityGroups from "../../graphql/FetchCommunityGroups";
 
 const saveSettingsMutation = gql`
   mutation updateSettings($communityId: bigint, $settings: json) {
@@ -29,12 +35,21 @@ const saveSettingsMutation = gql`
   }
 `;
 
+type SettingsData = {
+  update_community_settings: {
+    returning: Settings[];
+  };
+};
+
 const SettingsForm = () => {
-  const [error, setError] = useState(undefined);
-  const [saveSettings] = useMutation(saveSettingsMutation);
+  const [saveSettings, { error }] = useMutation<SettingsData, SettingsVars>(
+    saveSettingsMutation
+  );
+
   const { composeValidators, required, min } = Validators;
   const { settings } = useSettings();
   const { community } = useSession();
+  const { goBack } = useHistory();
   const initialValues = { input: { ...settings } };
 
   const onSubmit = async (values: Form) => {
@@ -44,69 +59,101 @@ const SettingsForm = () => {
         settings: values.input
       };
       await saveSettings({ variables });
+      if (!error) {
+        toast.success(settingsSaved().message, {
+          autoClose: settingsSaved().dismissAfter,
+          hideProgressBar: settingsSaved().progress,
+          closeButton: settingsSaved().closeButton
+        });
+      }
     } catch (err) {
       if (err && err.message) {
-        setError(err.message);
         console.log("err", err);
       }
     }
   };
 
   return (
-    <Wrap>
-      <SettingsWrapper>
-        <Header.h3>Configurações do Módulo</Header.h3>
-        <ConnectedForm initialValues={initialValues} onSubmit={onSubmit}>
-          {({ submitting }) => (
-            <WrapForm>
-              {error && <Hint color="error">{error}</Hint>}
-              <InputField
-                name="input.distance"
-                label="Distância"
-                placeholder="Insira a distância limite entre um match (valor em km)"
-                validate={composeValidators(
-                  required("Valor não pode ser vazio"),
-                  min(1, "Mínimo de 1km")
-                )}
-                type="number"
-              />
-              <div style={{ marginBottom: "15px" }}>
-                <Header.h4>Mensagens de Whatsapp</Header.h4>
-              </div>
-              <TextareaField
-                name="input.volunteer_msg"
-                label="Voluntária"
-                placeholder="Insira uma mensagem de Whatsapp para a voluntária"
-                validate={required("Valor não pode ser vazio")}
-              />
-              <TextareaField
-                name="input.individual_msg"
-                label="PSR"
-                placeholder="Insira uma mensagem de Whatsapp para a PSR"
-                validate={required("Valor não pode ser vazio")}
-              />
-              <BottomWrap>
-                <Button type="submit" disabled={submitting}>
-                  Enviar
-                </Button>
-                <div>
-                  <Text>*VFIRST_NAME: Primeiro nome da voluntária</Text>
-                  <Text>*PFIRST_NAME: Primeiro nome da PSR</Text>
-                  <Text>*VEMAIL: Email da voluntária</Text>
-                  <Text>*PEMAIL: Email da PSR</Text>
-                  <Text>*VWHATSAPP: Whatsapp da voluntária</Text>
-                  <Text>*PWHATSAPP: Whatsapp da PSR</Text>
-                  <Text>
-                    *VREGISTER_OCCUPATION: Nº de registro da voluntária
-                  </Text>
-                  <Text>*AGENT: Nome da agente</Text>
-                </div>
-              </BottomWrap>
-            </WrapForm>
-          )}
-        </ConnectedForm>
-      </SettingsWrapper>
-    </Wrap>
+    <FetchCommunityGroups>
+      {(data): React.ReactNode => {
+        const { volunteer, individual } = data.reduce((obj, item) => {
+          return {
+            ...obj,
+            [item.is_volunteer ? "volunteer" : "individual"]: item
+          };
+        }, {});
+        return (
+          <SettingsWrapper>
+            <ConnectedForm initialValues={initialValues} onSubmit={onSubmit}>
+              {({ submitting }) => (
+                <>
+                  <HeaderWrap>
+                    <Link onClick={goBack}>{"< voltar"}</Link>
+                    <Button type="submit" disabled={submitting}>
+                      Salvar alterações
+                    </Button>
+                  </HeaderWrap>
+                  <Card
+                    rounded={5}
+                    padding={{ x: 40, y: 40 }}
+                    margin={{ bottom: 10 }}
+                  >
+                    <div style={{ "margin-bottom": 20 }}>
+                      <Header.h2>Match</Header.h2>
+                    </div>
+                    {error && <Hint color="error">{error}</Hint>}
+                    <InputField
+                      name="input.distance"
+                      label="Distância máxima para o match (em km)"
+                      validate={composeValidators(
+                        required("Valor não pode ser vazio"),
+                        min(1, "Mínimo de 1km")
+                      )}
+                      type="number"
+                    />
+                    <WrapTextarea>
+                      {data.map((group, i) => (
+                        <TextareaField
+                          name={
+                            group.is_volunteer
+                              ? "input.volunteer_msg"
+                              : "input.individual_msg"
+                          }
+                          label={`Msg de whatsapp para ${group.name}`}
+                          validate={required("Valor não pode ser vazio")}
+                          key={`textarea-groups-${i}`}
+                        />
+                      ))}
+                    </WrapTextarea>
+                    <WrapText>
+                      <div>
+                        <Text>
+                          *VFIRST_NAME: Primeiro nome da {volunteer.name}
+                        </Text>
+                        <Text>
+                          *IFIRST_NAME: Primeiro nome da {individual.name}
+                        </Text>
+                        <Text>*VEMAIL: Email da {volunteer.name}</Text>
+                        <Text>*IEMAIL: Email da {individual.name}</Text>
+                      </div>
+                      <div>
+                        <Text>*VWHATSAPP: Whatsapp da {volunteer.name}</Text>
+                        <Text>*IWHATSAPP: Whatsapp da {individual.name}</Text>
+                        <Text>
+                          *VREGISTER_OCCUPATION: Nº de registro da{" "}
+                          {volunteer.name}
+                        </Text>
+                        <Text>*AGENT: Pessoa que realiza a relação</Text>
+                      </div>
+                    </WrapText>
+                  </Card>
+                </>
+              )}
+            </ConnectedForm>
+          </SettingsWrapper>
+        );
+      }}
+    </FetchCommunityGroups>
   );
 };
 
