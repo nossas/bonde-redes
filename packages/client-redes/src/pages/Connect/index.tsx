@@ -199,6 +199,9 @@ const Table = () => {
                 rowsText="linhas"
                 // Accessibility Labels
                 className="-striped -highlight"
+                style={{
+                  "max-height": "500px"
+                }}
               />
             </Wrap>
             <Popup

@@ -9,7 +9,6 @@ import {
 import { Header } from "bonde-components";
 import ReactTable from "react-table";
 import { useStoreActions } from "easy-peasy";
-import styled from "styled-components";
 
 import "react-table/react-table.css";
 import columns from "./columns";
@@ -49,10 +48,6 @@ type TableData = {
   volunteers: Individual;
   individuals: Individual;
 };
-
-const WrapTable = styled.div`
-  overflow: auto;
-`;
 
 const Groups = () => {
   const { pathname } = useLocation();
@@ -123,31 +118,32 @@ const Groups = () => {
                     Total ({count[kind]})
                   </Header.h4>
                 </Spacing>
-                <WrapTable>
-                  <ReactTable
-                    manual
-                    sortable={false}
-                    data={data[kind]}
-                    columns={columns(pathname)}
-                    pageSize={resizeRow}
-                    pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
-                    page={filters.page}
-                    pages={pages}
-                    onPageChange={(page: number): void =>
-                      changeFilters({ type: "page", value: page })
-                    }
-                    onPageSizeChange={(rows: number): void =>
-                      changeFilters({ type: "rows", value: rows })
-                    }
-                    previousText="Anterior"
-                    nextText="Próximo"
-                    pageText="Página"
-                    ofText="de"
-                    rowsText="linhas"
-                    // Accessibility Labels
-                    className="-striped -highlight"
-                  />
-                </WrapTable>
+                <ReactTable
+                  manual
+                  sortable={false}
+                  data={data[kind]}
+                  columns={columns(pathname)}
+                  pageSize={resizeRow}
+                  pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
+                  page={filters.page}
+                  pages={pages}
+                  onPageChange={(page: number): void =>
+                    changeFilters({ type: "page", value: page })
+                  }
+                  onPageSizeChange={(rows: number): void =>
+                    changeFilters({ type: "rows", value: rows })
+                  }
+                  previousText="Anterior"
+                  nextText="Próximo"
+                  pageText="Página"
+                  ofText="de"
+                  rowsText="linhas"
+                  // Accessibility Labels
+                  className="-striped -highlight"
+                  style={{
+                    height: "500px"
+                  }}
+                />
               </>
             )}
           </Wrap>

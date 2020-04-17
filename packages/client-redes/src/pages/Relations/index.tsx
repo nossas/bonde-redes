@@ -38,6 +38,9 @@ const Table: React.FC = () => {
                   desc: true
                 }
               ]}
+              style={{
+                height: "500px"
+              }}
             />
           </Wrap>
         );
