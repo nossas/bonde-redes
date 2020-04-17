@@ -15,7 +15,7 @@ import { useSettings } from "../../services/SettingsProvider";
 import {
   WrapForm,
   SettingsWrapper,
-  BottomWrap,
+  HeaderWrap,
   Wrap,
   WrapTextarea
 } from "./styles";
@@ -59,11 +59,16 @@ const SettingsForm = () => {
   };
 
   return (
-    <Wrap>
-      <SettingsWrapper>
-        <Header.h3>Configurações do Módulo</Header.h3>
-        <ConnectedForm initialValues={initialValues} onSubmit={onSubmit}>
-          {({ submitting }) => (
+    <SettingsWrapper>
+      <ConnectedForm initialValues={initialValues} onSubmit={onSubmit}>
+        {({ submitting }) => (
+          <>
+            <HeaderWrap>
+              <Header.h3>Configurações do Módulo</Header.h3>
+              <Button type="submit" disabled={submitting}>
+                Salvar alterações
+              </Button>
+            </HeaderWrap>
             <WrapForm>
               {error && <Hint color="error">{error}</Hint>}
               <InputField
@@ -93,28 +98,21 @@ const SettingsForm = () => {
                   validate={required("Valor não pode ser vazio")}
                 />
               </WrapTextarea>
-              <BottomWrap>
-                <Button type="submit" disabled={submitting}>
-                  Enviar
-                </Button>
-                <div>
-                  <Text>*VFIRST_NAME: Primeiro nome da voluntária</Text>
-                  <Text>*PFIRST_NAME: Primeiro nome da PSR</Text>
-                  <Text>*VEMAIL: Email da voluntária</Text>
-                  <Text>*PEMAIL: Email da PSR</Text>
-                  <Text>*VWHATSAPP: Whatsapp da voluntária</Text>
-                  <Text>*PWHATSAPP: Whatsapp da PSR</Text>
-                  <Text>
-                    *VREGISTER_OCCUPATION: Nº de registro da voluntária
-                  </Text>
-                  <Text>*AGENT: Nome da agente</Text>
-                </div>
-              </BottomWrap>
+              <div>
+                <Text>*VFIRST_NAME: Primeiro nome da voluntária</Text>
+                <Text>*PFIRST_NAME: Primeiro nome da PSR</Text>
+                <Text>*VEMAIL: Email da voluntária</Text>
+                <Text>*PEMAIL: Email da PSR</Text>
+                <Text>*VWHATSAPP: Whatsapp da voluntária</Text>
+                <Text>*PWHATSAPP: Whatsapp da PSR</Text>
+                <Text>*VREGISTER_OCCUPATION: Nº de registro da voluntária</Text>
+                <Text>*AGENT: Nome da agente</Text>
+              </div>
             </WrapForm>
-          )}
-        </ConnectedForm>
-      </SettingsWrapper>
-    </Wrap>
+          </>
+        )}
+      </ConnectedForm>
+    </SettingsWrapper>
   );
 };
 

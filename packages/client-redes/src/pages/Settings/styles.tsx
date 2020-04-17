@@ -8,42 +8,24 @@ export const WrapForm = styled.div`
 `;
 
 export const SettingsWrapper = styled.div`
-  margin: 10px 0;
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  & > h3 {
-    margin-bottom: 20px;
-  }
-  width: auto;
-`;
-
-export const Wrap = styled.div`
-  display: grid;
-  justify-items: center;
   width: 100%;
 `;
 
-export const BottomWrap = styled.div`
+export const HeaderWrap = styled.div`
   display: grid;
-  align-items: start;
+  align-items: center;
   grid-template-columns: auto;
   grid-template-rows: auto auto;
-  direction: rtl;
   grid-row-gap: 20px;
-  & > div {
-    grid-row-start: 1;
-  }
-  @media (min-width: 576px) {
+  @media (min-width: 370px) {
     justify-content: space-between;
     grid-template-rows: auto;
-    grid-template-columns: auto auto;
-    grid-column-gap: 20px;
-    direction: initial;
-    & > div {
-      grid-column-start: 2;
-    }
+    grid-template-columns: auto 190px;
   }
+  & > button {
+    padding: 12px 20px;
+  }
+  margin-bottom: 30px;
 `;
 
 export const WrapTextarea = styled.div`
