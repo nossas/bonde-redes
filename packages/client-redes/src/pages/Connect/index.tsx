@@ -3,8 +3,8 @@ import "react-table/react-table.css";
 import ReactTable from "react-table";
 import * as turf from "@turf/turf";
 import { useHistory, useLocation } from "react-router-dom";
-import { Flexbox2 as Flexbox, Title, Spacing } from "bonde-styleguide";
-import { Loading } from "bonde-components";
+import { Flexbox2 as Flexbox, Spacing } from "bonde-styleguide";
+import { Loading, Header } from "bonde-components";
 import { useMutation, useSession } from "bonde-core-tools";
 
 import FetchIndividuals from "../../graphql/FetchIndividuals";
@@ -158,7 +158,7 @@ const Table = () => {
         return data.length === 0 ? (
           <Flexbox middle>
             <Wrap>
-              <Title.H3 margin={{ bottom: 30 }}>Nenhum resultado.</Title.H3>
+              <Header.h3 margin={{ bottom: 30 }}>Nenhum resultado.</Header.h3>
             </Wrap>
           </Flexbox>
         ) : (
@@ -167,16 +167,16 @@ const Table = () => {
               <Flexbox vertical>
                 <Spacing margin={{ bottom: 20 }}>
                   <Flexbox>
-                    <StyledButton flat onClick={goBack}>
+                    <StyledButton dark onClick={goBack}>
                       {"< fazer match"}
                     </StyledButton>
                   </Flexbox>
                   <Spacing margin={{ top: 10, bottom: 10 }}>
-                    <Title.H3>Match realizado!</Title.H3>
+                    <Header.h3>Match realizado!</Header.h3>
                   </Spacing>
-                  <Title.H5 color="#444444">
+                  <Header.h5 color="#444444">
                     {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
-                  </Title.H5>
+                  </Header.h5>
                 </Spacing>
               </Flexbox>
               <ReactTable

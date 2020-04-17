@@ -51,9 +51,9 @@ const App = () => {
       loading={TextLoading}
     >
       <StoreProvider store={store}>
-        <Router history={history}>
-          <SettingsProvider>
-            <FilterProvider>
+        <SettingsProvider>
+          <FilterProvider>
+            <Router history={history}>
               <BondeSessionUI indexRoute={adminUrl}>
                 <Content>
                   <Header zIndex={0} />
@@ -70,9 +70,9 @@ const App = () => {
                   </Wrap>
                 </Content>
               </BondeSessionUI>
-            </FilterProvider>
-          </SettingsProvider>
-        </Router>
+            </Router>
+          </FilterProvider>
+        </SettingsProvider>
       </StoreProvider>
     </BondeSessionProvider>
   );
