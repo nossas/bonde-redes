@@ -68,7 +68,7 @@ export default function useAppLogic(): {
 
   const whatsappDicio = {
     ...dicio("v", { ...volunteer, agent: agent.firstName }),
-    ...dicio("p", { ...individual, agent: agent.firstName })
+    ...dicio("i", { ...individual, agent: agent.firstName })
   };
 
   const volunteer_text = encodeText(whatsappText(volunteer_msg, whatsappDicio));
