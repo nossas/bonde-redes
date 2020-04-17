@@ -34,15 +34,12 @@ export const HeaderWrap = styled.div`
 export const WrapTextarea = styled.div`
   & textarea {
     height: 100px;
+    margin-bottom: 30px;
   }
 `;
 
-export const WrapText = styled.div`
-  & div > p {
-    font-size: 13px;
-  }
+export const WhatsappCards = styled.div`
   display: grid;
-  @media (min-width: 576px) {
-    grid-template-columns: auto auto;
-  }
+  grid-template-columns: auto 30%;
+  grid-column-gap: 30px;
 `;

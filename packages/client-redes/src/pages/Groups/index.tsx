@@ -109,7 +109,7 @@ const Groups = () => {
             </Spacing>
             {data[kind].length === 0 ? (
               <Wrap>
-                <Header.h4>Não existem resultados para essa tabela.</Header.h4>
+                <Header.h4>Não existem resultados para esse filtro.</Header.h4>
               </Wrap>
             ) : (
               <>
