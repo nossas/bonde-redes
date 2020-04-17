@@ -37,7 +37,7 @@ class SessionStorage {
       })
       .then((authJson: string) => {
         if (authJson) {
-          this.token = JSON.parse(authJson).jwtToken;
+          this.token = JSON.parse(authJson).token;
           return Promise.resolve(this.token);
         }
       });
