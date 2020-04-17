@@ -136,6 +136,7 @@ const volunteersColumns: Array<Columns> = [
       value ? (
         <Flexbox middle>
           <Button
+            dark
             disabled={
               row._original.availability !== "disponível" ||
               row._original.status !== "aprovada"

@@ -16,7 +16,12 @@ import {
 } from "bonde-components";
 import { Card } from "bonde-styleguide";
 import { useSettings } from "../../services/SettingsProvider";
-import { SettingsWrapper, HeaderWrap, WrapTextarea, WrapText } from "./styles";
+import {
+  SettingsWrapper,
+  HeaderWrap,
+  WrapTextarea,
+  WhatsappCards
+} from "./styles";
 import { Form, Settings, SettingsVars } from "../../types";
 import { settingsSaved } from "../../services/utils/notifications";
 import FetchCommunityGroups from "../../graphql/FetchCommunityGroups";
@@ -95,11 +100,11 @@ const SettingsForm = () => {
                   </HeaderWrap>
                   <Card
                     rounded={5}
-                    padding={{ x: 40, y: 40 }}
-                    margin={{ bottom: 10 }}
+                    padding={{ x: 20, y: 30 }}
+                    margin={{ bottom: 30 }}
                   >
                     <div style={{ "margin-bottom": 20 }}>
-                      <Header.h2>Match</Header.h2>
+                      <Header.h3>Match</Header.h3>
                     </div>
                     {error && <Hint color="error">{error}</Hint>}
                     <InputField
@@ -111,42 +116,71 @@ const SettingsForm = () => {
                       )}
                       type="number"
                     />
-                    <WrapTextarea>
-                      {data.map((group, i) => (
-                        <TextareaField
-                          name={
-                            group.is_volunteer
-                              ? "input.volunteer_msg"
-                              : "input.individual_msg"
-                          }
-                          label={`Msg de whatsapp para ${group.name}`}
-                          validate={required("Valor não pode ser vazio")}
-                          key={`textarea-groups-${i}`}
-                        />
-                      ))}
-                    </WrapTextarea>
-                    <WrapText>
-                      <div>
-                        <Text>
-                          *VFIRST_NAME: Primeiro nome da {volunteer.name}
-                        </Text>
-                        <Text>
-                          *IFIRST_NAME: Primeiro nome da {individual.name}
-                        </Text>
-                        <Text>*VEMAIL: Email da {volunteer.name}</Text>
-                        <Text>*IEMAIL: Email da {individual.name}</Text>
-                      </div>
-                      <div>
-                        <Text>*VWHATSAPP: Whatsapp da {volunteer.name}</Text>
-                        <Text>*IWHATSAPP: Whatsapp da {individual.name}</Text>
-                        <Text>
-                          *VREGISTER_OCCUPATION: Nº de registro da{" "}
-                          {volunteer.name}
-                        </Text>
-                        <Text>*AGENT: Pessoa que realiza a relação</Text>
-                      </div>
-                    </WrapText>
                   </Card>
+                  <WhatsappCards>
+                    <Card rounded={5} padding={{ x: 20, y: 30 }}>
+                      <div style={{ "margin-bottom": 20 }}>
+                        <Header.h3>Mensagem de Whatsapp</Header.h3>
+                      </div>
+                      <WrapTextarea>
+                        {data.map((group, i) => (
+                          <TextareaField
+                            name={
+                              group.is_volunteer
+                                ? "input.volunteer_msg"
+                                : "input.individual_msg"
+                            }
+                            label={`Msg de whatsapp para ${group.name}`}
+                            validate={required("Valor não pode ser vazio")}
+                            key={`textarea-groups-${i}`}
+                          />
+                        ))}
+                      </WrapTextarea>
+                    </Card>
+                    <Card rounded={5} padding={{ x: 20, y: 30 }}>
+                      <Header.h3>Dica</Header.h3>
+                      <div style={{ "margin-top": 15, "margin-bottom": 10 }}>
+                        <Text>
+                          Pra usar dados das pessoas diretamente na mensagem,
+                          use as variáveis abaixo:
+                        </Text>
+                      </div>
+                      <Text>
+                        <span style={{ fontWeight: 800 }}>VFIRST_NAME</span>:
+                        Primeiro nome ({volunteer.name})
+                      </Text>
+                      <Text>
+                        <span style={{ fontWeight: 800 }}>IFIRST_NAME</span>:
+                        Primeiro nome ({individual.name})
+                      </Text>
+                      <Text>
+                        <span style={{ fontWeight: 800 }}>VEMAIL</span>: Email (
+                        {volunteer.name})
+                      </Text>
+                      <Text>
+                        <span style={{ fontWeight: 800 }}>IEMAIL</span>: Email (
+                        {individual.name})
+                      </Text>
+                      <Text>
+                        <span style={{ fontWeight: 800 }}>VWHATSAPP</span>:
+                        Whatsapp ({volunteer.name})
+                      </Text>
+                      <Text>
+                        <span style={{ fontWeight: 800 }}>IWHATSAPP</span>:
+                        Whatsapp ({individual.name})
+                      </Text>
+                      <Text>
+                        <span style={{ fontWeight: 800 }}>
+                          VREGISTER_OCCUPATION
+                        </span>
+                        : Nº de registro ({volunteer.name})
+                      </Text>
+                      <Text>
+                        <span style={{ fontWeight: 800 }}>AGENT</span>: Pessoa
+                        que faz o match
+                      </Text>
+                    </Card>
+                  </WhatsappCards>
                 </>
               )}
             </ConnectedForm>

@@ -18,7 +18,7 @@ import Popup from "../../components/Popups/Popup";
 import Success from "../../components/Popups/Success";
 import Error from "../../components/Popups/Error";
 import Confirm from "../../components/Popups/Confirm";
-import { Wrap, StyledButton } from "./style";
+import { StyledButton } from "./style";
 import { Filters } from "../../services/FilterProvider";
 
 type onConfirm = {
@@ -154,103 +154,102 @@ const Table = () => {
 
         const resizeRow = data.length < 1000 ? data.length : filters.rows;
 
-        return data.length === 0 ? (
-          <Flexbox middle>
-            <Wrap>
-              <Header.h3 margin={{ bottom: 30 }}>Nenhum resultado.</Header.h3>
-            </Wrap>
-          </Flexbox>
-        ) : (
+        return (
           <>
-            <Wrap>
-              <Flexbox vertical>
-                <Spacing margin={{ bottom: 20 }}>
-                  <Flexbox>
-                    <StyledButton dark onClick={goBack}>
-                      {"< fazer match"}
-                    </StyledButton>
-                  </Flexbox>
-                  <Spacing margin={{ top: 10, bottom: 10 }}>
-                    <Header.h3>Match realizado!</Header.h3>
+            <StyledButton dark onClick={goBack}>
+              {"< fazer match"}
+            </StyledButton>
+            {data.length < 1 ? (
+              <Spacing margin={{ top: 20 }}>
+                <Header.h3>Nenhum resultado.</Header.h3>
+              </Spacing>
+            ) : (
+              <>
+                <Flexbox vertical>
+                  <Spacing margin={{ bottom: 20 }}>
+                    <Flexbox></Flexbox>
+                    <Spacing margin={{ top: 10, bottom: 10 }}>
+                      <Header.h3>Match realizado!</Header.h3>
+                    </Spacing>
+                    <Header.h5 color="#444444">
+                      {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
+                    </Header.h5>
                   </Spacing>
-                  <Header.h5 color="#444444">
-                    {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
-                  </Header.h5>
-                </Spacing>
-              </Flexbox>
-              <ReactTable
-                data={filteredTableData}
-                columns={columns}
-                manual
-                sortable={false}
-                pageSize={resizeRow}
-                pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
-                page={filters.page}
-                onPageChange={(page: number): void =>
-                  changeFilters({ type: "page", value: page })
-                }
-                onPageSizeChange={(rows: number): void =>
-                  changeFilters({ type: "rows", value: rows })
-                }
-                previousText="Anterior"
-                nextText="Próximo"
-                pageText="Página"
-                ofText="de"
-                rowsText="linhas"
-                // Accessibility Labels
-                className="-striped -highlight"
-                style={{
-                  "max-height": "500px"
-                }}
-              />
-            </Wrap>
-            <Popup
-              individualName={individual_name}
-              volunteerName={volunteer_name}
-              onSubmit={() =>
-                onConfirm({
-                  individual_id,
-                  volunteer_id,
-                  agent_id: agent.id,
-                  popups,
-                  filters
-                })
-              }
-              isOpen={popups.wrapper}
-              onClose={closeAllPopups}
-            >
-              {props => {
-                return isLoading ? (
-                  <Loading />
-                ) : (
-                  <>
-                    <Confirm {...props} isEnabled={popups.confirm} />
-                    <Success
-                      {...props}
-                      link={{
-                        individual: (): string | undefined =>
-                          createWhatsappLink(
-                            parsedIndividualNumber,
-                            individual_text
-                          ),
-                        volunteer: (): string | undefined =>
-                          createWhatsappLink(
-                            parsedVolunteerNumber,
-                            volunteer_text
-                          )
-                      }}
-                      isEnabled={success}
-                      goBack={goBack}
-                    />
-                    <Error
-                      {...props}
-                      message={(error && error.message) || ""}
-                      isEnabled={error}
-                    />
-                  </>
-                );
-              }}
-            </Popup>
+                </Flexbox>
+                <ReactTable
+                  data={filteredTableData}
+                  columns={columns}
+                  manual
+                  sortable={false}
+                  pageSize={resizeRow}
+                  pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
+                  page={filters.page}
+                  onPageChange={(page: number): void =>
+                    changeFilters({ type: "page", value: page })
+                  }
+                  onPageSizeChange={(rows: number): void =>
+                    changeFilters({ type: "rows", value: rows })
+                  }
+                  previousText="Anterior"
+                  nextText="Próximo"
+                  pageText="Página"
+                  ofText="de"
+                  rowsText="linhas"
+                  // Accessibility Labels
+                  className="-striped -highlight"
+                  style={{
+                    "max-height": "500px"
+                  }}
+                />
+                <Popup
+                  individualName={individual_name}
+                  volunteerName={volunteer_name}
+                  onSubmit={() =>
+                    onConfirm({
+                      individual_id,
+                      volunteer_id,
+                      agent_id: agent.id,
+                      popups,
+                      filters
+                    })
+                  }
+                  isOpen={popups.wrapper}
+                  onClose={closeAllPopups}
+                >
+                  {props => {
+                    return isLoading ? (
+                      <Loading />
+                    ) : (
+                      <>
+                        <Confirm {...props} isEnabled={popups.confirm} />
+                        <Success
+                          {...props}
+                          link={{
+                            individual: (): string | undefined =>
+                              createWhatsappLink(
+                                parsedIndividualNumber,
+                                individual_text
+                              ),
+                            volunteer: (): string | undefined =>
+                              createWhatsappLink(
+                                parsedVolunteerNumber,
+                                volunteer_text
+                              )
+                          }}
+                          isEnabled={success}
+                          goBack={goBack}
+                        />
+                        <Error
+                          {...props}
+                          message={(error && error.message) || ""}
+                          isEnabled={error}
+                        />
+                      </>
+                    );
+                  }}
+                </Popup>
+              </>
+            )}
           </>
         );
       }}

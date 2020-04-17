@@ -27,4 +27,7 @@ export const Wrap = styled.div`
 
 export const Btn = styled(Button)`
   max-width: 90%;
+  && {
+    color: ${({ disabled }) => (disabled ? "#fff" : "#ee0099")};
+  }
 `;
