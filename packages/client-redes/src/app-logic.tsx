@@ -1,9 +1,13 @@
 import { useStoreState, useStoreActions } from "easy-peasy";
-import { parseNumber, isJsonString } from "./services/utils";
-import { Individual } from "./types/Individual";
-import { useSettings } from "./services/SettingsProvider";
-import { whatsappText, encodeText, dicio } from "./services/utils";
 import { useSession } from "bonde-core-tools";
+import { useSettings } from "./services/SettingsProvider";
+import {
+  whatsappText,
+  encodeText,
+  dicio,
+  parseNumber,
+  isJsonString
+} from "./services/utils";
 
 export default function useAppLogic(): {
   individual;
@@ -20,7 +24,6 @@ export default function useAppLogic(): {
   ) => string | undefined;
   parsedIndividualNumber: string;
   parsedVolunteerNumber: string;
-  getUserData;
   volunteer_lat: number;
   volunteer_lng: number;
   distance: number;
@@ -73,10 +76,6 @@ export default function useAppLogic(): {
     whatsappText(individual_msg, whatsappDicio)
   );
 
-  // TODO: Disable this func, its not used in the main redes app logic
-  const getUserData = ({ user, data, filterBy }): Individual =>
-    data.filter(i => user === i[filterBy])[0];
-
   const parsedIndividualNumber = parseNumber(individual.phone);
   const parsedVolunteerNumber = parseNumber(volunteer.whatsapp);
 
@@ -95,7 +94,6 @@ export default function useAppLogic(): {
     createWhatsappLink,
     parsedIndividualNumber,
     parsedVolunteerNumber,
-    getUserData,
     setTable,
     setVolunteer,
     setPopup,
