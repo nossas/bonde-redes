@@ -2,12 +2,18 @@ import React from "react";
 import { Title, Text, Button, Spacing } from "bonde-styleguide";
 import { StyledLink } from "./styles";
 
+const closeAndGoBack = (close, back) => {
+  close();
+  return back();
+};
+
 export default function Success({
   individualName,
   volunteerName,
   onClose,
   link,
-  isEnabled
+  isEnabled,
+  goBack
 }: {
   individualName: string;
   volunteerName: string;
@@ -17,6 +23,7 @@ export default function Success({
     individual: () => string | undefined;
   };
   isEnabled: boolean;
+  goBack: () => void;
 }) {
   return isEnabled ? (
     <>
@@ -34,7 +41,9 @@ export default function Success({
           <Button>enviar whats para psr</Button>
         </a>
       </Spacing>
-      <StyledLink onClick={onClose}>voltar à lista de voluntárias</StyledLink>
+      <StyledLink onClick={() => closeAndGoBack(onClose, goBack)}>
+        voltar à lista de voluntárias
+      </StyledLink>
     </>
   ) : null;
 }

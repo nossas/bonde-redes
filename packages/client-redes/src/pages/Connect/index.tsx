@@ -135,7 +135,6 @@ const Table = () => {
       wrapper: false,
       confirm: false
     });
-    goBack();
   };
 
   return (
@@ -238,6 +237,7 @@ const Table = () => {
                           )
                       }}
                       isEnabled={success}
+                      goBack={goBack}
                     />
                     <Error
                       {...props}

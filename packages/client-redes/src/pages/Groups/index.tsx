@@ -95,24 +95,24 @@ const Groups = () => {
 
         return (
           <Wrap>
+            <Spacing margin={{ bottom: 20 }}>
+              <Filters
+                filters={FiltersData({
+                  volunteersCount: count.volunteers,
+                  individualsCount: count.individuals,
+                  filters: { values: filters, change: changeFilters },
+                  history: push,
+                  kind,
+                  groups
+                })}
+              />
+            </Spacing>
             {data[kind].length === 0 ? (
               <Wrap>
                 <Header.h4>Não existem resultados para essa tabela.</Header.h4>
               </Wrap>
             ) : (
               <>
-                <Spacing margin={{ bottom: 20 }}>
-                  <Filters
-                    filters={FiltersData({
-                      volunteersCount: count.volunteers,
-                      individualsCount: count.individuals,
-                      filters: { values: filters, change: changeFilters },
-                      history: push,
-                      kind,
-                      groups
-                    })}
-                  />
-                </Spacing>
                 <Spacing margin={{ bottom: 20 }}>
                   <Header.h4 margin={{ bottom: 30 }}>
                     Total ({count[kind]})
