@@ -12,7 +12,13 @@ import {
   TextareaField
 } from "bonde-components";
 import { useSettings } from "../../services/SettingsProvider";
-import { WrapForm, SettingsWrapper, BottomWrap, Wrap } from "./styles";
+import {
+  WrapForm,
+  SettingsWrapper,
+  BottomWrap,
+  Wrap,
+  WrapTextarea
+} from "./styles";
 import { Form } from "../../types";
 
 const saveSettingsMutation = gql`
@@ -73,18 +79,20 @@ const SettingsForm = () => {
               <div style={{ marginBottom: "15px" }}>
                 <Header.h4>Mensagens de Whatsapp</Header.h4>
               </div>
-              <TextareaField
-                name="input.volunteer_msg"
-                label="Voluntária"
-                placeholder="Insira uma mensagem de Whatsapp para a voluntária"
-                validate={required("Valor não pode ser vazio")}
-              />
-              <TextareaField
-                name="input.individual_msg"
-                label="PSR"
-                placeholder="Insira uma mensagem de Whatsapp para a PSR"
-                validate={required("Valor não pode ser vazio")}
-              />
+              <WrapTextarea>
+                <TextareaField
+                  name="input.volunteer_msg"
+                  label="Voluntária"
+                  placeholder="Insira uma mensagem de Whatsapp para a voluntária"
+                  validate={required("Valor não pode ser vazio")}
+                />
+                <TextareaField
+                  name="input.individual_msg"
+                  label="PSR"
+                  placeholder="Insira uma mensagem de Whatsapp para a PSR"
+                  validate={required("Valor não pode ser vazio")}
+                />
+              </WrapTextarea>
               <BottomWrap>
                 <Button type="submit" disabled={submitting}>
                   Enviar

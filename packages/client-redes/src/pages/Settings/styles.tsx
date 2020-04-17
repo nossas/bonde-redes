@@ -15,10 +15,7 @@ export const SettingsWrapper = styled.div`
   & > h3 {
     margin-bottom: 20px;
   }
-  width: 80%;
-  @media (min-width: 576px) {
-    width: 60%;
-  }
+  width: auto;
 `;
 
 export const Wrap = styled.div`
@@ -28,7 +25,31 @@ export const Wrap = styled.div`
 `;
 
 export const BottomWrap = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  display: grid;
+  align-items: start;
+  grid-template-columns: auto;
+  grid-template-rows: auto auto;
+  direction: rtl;
+  grid-row-gap: 20px;
+  & > div {
+    grid-row-start: 1;
+  }
+  @media (min-width: 576px) {
+    justify-content: space-between;
+    grid-template-rows: auto;
+    grid-template-columns: auto auto;
+    grid-column-gap: 20px;
+    direction: initial;
+    & > div {
+      grid-column-start: 2;
+    }
+  }
+`;
+
+export const WrapTextarea = styled.div`
+  @media (min-width: 576px) {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-column-gap: 20px;
+  }
 `;
