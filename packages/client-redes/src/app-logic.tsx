@@ -7,7 +7,7 @@ import {
   dicio,
   parseNumber,
   isJsonString
-} from "./services/utils";
+} from "./services/utils/utils";
 
 export default function useAppLogic(): {
   individual;

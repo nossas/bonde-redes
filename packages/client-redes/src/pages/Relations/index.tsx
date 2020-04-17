@@ -9,8 +9,6 @@ import columns from "./columns";
 // import { Relationship } from "../../graphql/FetchMatches";
 
 export const Wrap = styled.div`
-  padding: 20px 0;
-
   ${Header.h4} {
     margin: 0 0 15px;
   }

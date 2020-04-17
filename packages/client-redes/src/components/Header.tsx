@@ -38,8 +38,6 @@ const Header: React.FC<HeaderProps> = ({ zIndex }: HeaderProps) => {
     }
   ];
 
-  const getTabs = type => tabs.filter(t => t.type === type);
-
   useEffect(() => {
     const currentTab = tabs.find(i => i["to"] === path) || { name: "pessoas" };
     setTab(currentTab["name"]);
@@ -51,8 +49,7 @@ const Header: React.FC<HeaderProps> = ({ zIndex }: HeaderProps) => {
         <Title.H3 color="#ffffff">Redes</Title.H3>
       </Spacing>
       <TabsWrapper>
-        <Tabs tabs={getTabs("table")} selectedTab={selectedTab} />
-        <Tabs tabs={getTabs("page")} selectedTab={selectedTab} />
+        <Tabs tabs={tabs} selectedTab={selectedTab} />
       </TabsWrapper>
     </BondeHeader>
   );

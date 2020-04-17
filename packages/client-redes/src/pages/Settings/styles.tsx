@@ -34,4 +34,13 @@ export const WrapTextarea = styled.div`
     grid-template-columns: auto auto;
     grid-column-gap: 20px;
   }
+  & textarea {
+    height: 200px;
+  }
+`;
+
+export const WrapText = styled.div`
+  & > p {
+    font-size: 13px;
+  }
 `;

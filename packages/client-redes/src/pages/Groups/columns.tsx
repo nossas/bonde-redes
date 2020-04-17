@@ -5,7 +5,7 @@ import SelectUpdateStatus from "../../components/SelectUpdateStatus";
 import { TextHeader, TextCol, DateText } from "../../components/Columns";
 import history from "../../history";
 import UPDATE_INDIVIDUAL_MUTATION from "../../graphql/UpdateIndividual";
-import { isJsonString } from "../../services/utils";
+import { isJsonString } from "../../services/utils/utils";
 import { Individual } from "../../types/Individual";
 
 type valueString = {
