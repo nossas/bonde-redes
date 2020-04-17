@@ -25,22 +25,24 @@ export const HeaderWrap = styled.div`
   & > button {
     padding: 12px 20px;
   }
+  & > a {
+    font-weight: 800;
+  }
   margin-bottom: 30px;
 `;
 
 export const WrapTextarea = styled.div`
-  @media (min-width: 576px) {
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-column-gap: 20px;
-  }
   & textarea {
-    height: 200px;
+    height: 100px;
   }
 `;
 
 export const WrapText = styled.div`
-  & > p {
+  & div > p {
     font-size: 13px;
+  }
+  display: grid;
+  @media (min-width: 576px) {
+    grid-template-columns: auto auto;
   }
 `;

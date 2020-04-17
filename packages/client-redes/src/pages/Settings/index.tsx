@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { gql } from "apollo-boost";
 import { toast } from "react-toastify";
 import { useMutation, useSession } from "bonde-core-tools";
@@ -10,16 +11,12 @@ import {
   Validators,
   Header,
   Text,
-  TextareaField
+  TextareaField,
+  Link
 } from "bonde-components";
+import { Card } from "bonde-styleguide";
 import { useSettings } from "../../services/SettingsProvider";
-import {
-  WrapForm,
-  SettingsWrapper,
-  HeaderWrap,
-  WrapTextarea,
-  WrapText
-} from "./styles";
+import { SettingsWrapper, HeaderWrap, WrapTextarea, WrapText } from "./styles";
 import { Form, Settings, SettingsVars } from "../../types";
 import { settingsSaved } from "../../services/utils/notifications";
 import FetchCommunityGroups from "../../graphql/FetchCommunityGroups";
@@ -52,6 +49,7 @@ const SettingsForm = () => {
   const { composeValidators, required, min } = Validators;
   const { settings } = useSettings();
   const { community } = useSession();
+  const { goBack } = useHistory();
   const initialValues = { input: { ...settings } };
 
   const onSubmit = async (values: Form) => {
@@ -90,26 +88,29 @@ const SettingsForm = () => {
               {({ submitting }) => (
                 <>
                   <HeaderWrap>
-                    <Header.h3>Configurações do Módulo</Header.h3>
+                    <Link onClick={goBack}>{"< voltar"}</Link>
                     <Button type="submit" disabled={submitting}>
                       Salvar alterações
                     </Button>
                   </HeaderWrap>
-                  <WrapForm>
+                  <Card
+                    rounded={5}
+                    padding={{ x: 40, y: 40 }}
+                    margin={{ bottom: 10 }}
+                  >
+                    <div style={{ "margin-bottom": 20 }}>
+                      <Header.h2>Match</Header.h2>
+                    </div>
                     {error && <Hint color="error">{error}</Hint>}
                     <InputField
                       name="input.distance"
-                      label="Distância"
-                      placeholder="Insira a distância limite entre um match (valor em km)"
+                      label="Distância máxima para o match (em km)"
                       validate={composeValidators(
                         required("Valor não pode ser vazio"),
                         min(1, "Mínimo de 1km")
                       )}
                       type="number"
                     />
-                    <div style={{ marginBottom: "15px" }}>
-                      <Header.h4>Mensagens de Whatsapp</Header.h4>
-                    </div>
                     <WrapTextarea>
                       {data.map((group, i) => (
                         <TextareaField
@@ -118,31 +119,34 @@ const SettingsForm = () => {
                               ? "input.volunteer_msg"
                               : "input.individual_msg"
                           }
-                          label={group.name}
-                          placeholder={`Insira uma mensagem de Whatsapp para o grupo de ${group.name}`}
+                          label={`Msg de whatsapp para ${group.name}`}
                           validate={required("Valor não pode ser vazio")}
                           key={`textarea-groups-${i}`}
                         />
                       ))}
                     </WrapTextarea>
                     <WrapText>
-                      <Text>
-                        *VFIRST_NAME: Primeiro nome da {volunteer.name}
-                      </Text>
-                      <Text>
-                        *IFIRST_NAME: Primeiro nome da {individual.name}
-                      </Text>
-                      <Text>*VEMAIL: Email da {volunteer.name}</Text>
-                      <Text>*IEMAIL: Email da {individual.name}</Text>
-                      <Text>*VWHATSAPP: Whatsapp da {volunteer.name}</Text>
-                      <Text>*IWHATSAPP: Whatsapp da {individual.name}</Text>
-                      <Text>
-                        *VREGISTER_OCCUPATION: Nº de registro da{" "}
-                        {volunteer.name}
-                      </Text>
-                      <Text>*AGENT: Pessoa que realiza a relação</Text>
+                      <div>
+                        <Text>
+                          *VFIRST_NAME: Primeiro nome da {volunteer.name}
+                        </Text>
+                        <Text>
+                          *IFIRST_NAME: Primeiro nome da {individual.name}
+                        </Text>
+                        <Text>*VEMAIL: Email da {volunteer.name}</Text>
+                        <Text>*IEMAIL: Email da {individual.name}</Text>
+                      </div>
+                      <div>
+                        <Text>*VWHATSAPP: Whatsapp da {volunteer.name}</Text>
+                        <Text>*IWHATSAPP: Whatsapp da {individual.name}</Text>
+                        <Text>
+                          *VREGISTER_OCCUPATION: Nº de registro da{" "}
+                          {volunteer.name}
+                        </Text>
+                        <Text>*AGENT: Pessoa que realiza a relação</Text>
+                      </div>
                     </WrapText>
-                  </WrapForm>
+                  </Card>
                 </>
               )}
             </ConnectedForm>
