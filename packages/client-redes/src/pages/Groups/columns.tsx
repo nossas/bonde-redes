@@ -1,10 +1,12 @@
 import React from "react";
-import { Flexbox2 as Flexbox, Text } from "bonde-styleguide";
-import { Button } from 'bonde-components';
+import { Flexbox2 as Flexbox } from "bonde-styleguide";
+import { Btn as Button } from "./styles";
 import SelectUpdateStatus from "../../components/SelectUpdateStatus";
+import { TextHeader, TextCol, DateText } from "../../components/Columns";
 import history from "../../history";
 import UPDATE_INDIVIDUAL_MUTATION from "../../graphql/UpdateIndividual";
-import { isJsonString } from "../../services/utils";
+import { isJsonString } from "../../services/utils/utils";
+import { Individual } from "../../types/Individual";
 
 type valueString = {
   value: string;
@@ -19,29 +21,11 @@ type valueAndRow = {
   };
 };
 
-const TextHeader = ({ value }: valueString): JSX.Element => (
-  <Text fontSize={13} fontWeight={600}>
-    {value.toUpperCase()}
-  </Text>
-);
-
-const TextCol = ({ value }: valueString): React.ReactNode => (
-  <Text color="#000">{value}</Text>
-);
-
-const DateText = ({ value }: valueString): React.ReactNode => {
-  if (!value) {
-    return "-";
-  }
-  const data = new Date(value);
-  return data.toLocaleDateString("pt-BR");
-};
-
 const parseValidJsonString = value =>
   isJsonString(value) ? JSON.parse(value) : value;
 
 const ExtraCol = (accessor: string) => ({ value }) =>
-  value ? <span>{parseValidJsonString(value)[accessor]}</span> : "-";
+  value ? parseValidJsonString(value)[accessor] : "-";
 
 const status = ["inscrita", "reprovada", "aprovada"];
 
@@ -112,11 +96,7 @@ const volunteersColumns: Array<Columns> = [
     Header: "Endereço",
     width: 300,
     Cell: ({ value }: valueString): JSX.Element | string =>
-      value ? (
-        <span>{value === "ZERO_RESULTS" ? "CEP Inválido" : value}</span>
-      ) : (
-        "-"
-      )
+      value ? (value === "ZERO_RESULTS" ? "CEP Inválido" : value) : "-"
   },
   {
     accessor: "zipcode",
@@ -151,11 +131,12 @@ const volunteersColumns: Array<Columns> = [
       row
     }: {
       value: number;
-      row: { _original: { availability: string; status: string } };
+      row: { _original: Individual };
     }): React.ReactNode | null =>
       value ? (
         <Flexbox middle>
           <Button
+            dark
             disabled={
               row._original.availability !== "disponível" ||
               row._original.status !== "aprovada"
@@ -163,7 +144,14 @@ const volunteersColumns: Array<Columns> = [
             onClick={(): void =>
               history.push({
                 pathname: "/connect",
-                state: { volunteer: row._original }
+                state: {
+                  volunteer: {
+                    ...row._original,
+                    register_occupation:
+                      row._original.extras &&
+                      row._original.extras.register_occupation
+                  }
+                }
               })
             }
           >
@@ -223,7 +211,13 @@ const individualsColumns: Array<Columns> = [
   {
     accessor: "availability",
     Header: "Disponibilidade",
-    Cell: ({ value, row }): any =>
+    Cell: ({
+      value,
+      row
+    }: {
+      value: string;
+      row: { _original: { id: number } };
+    }) =>
       value ? (
         <SelectUpdateStatus
           name="availability"

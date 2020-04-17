@@ -3,44 +3,39 @@ import "react-table/react-table.css";
 import ReactTable from "react-table";
 import * as turf from "@turf/turf";
 import { useHistory, useLocation } from "react-router-dom";
-import { useSession, useMutation } from 'bonde-core-tools';
-import { Flexbox2 as Flexbox, Title, Spacing, Loading } from "bonde-styleguide";
+import { Flexbox2 as Flexbox, Spacing } from "bonde-styleguide";
+import { Loading, Header } from "bonde-components";
+import { useMutation, useSession } from "bonde-core-tools";
 
 import FetchIndividuals from "../../graphql/FetchIndividuals";
 import CREATE_RELATIONSHIP from "../../graphql/CreateRelationship";
-import useAppLogic from "../../app-logic";
 import { USERS_BY_GROUP } from "../../graphql/FetchUsersByGroup";
-import { Individual } from "../../graphql/FetchIndividuals";
-import { useFilterState } from "../../services/FilterContext"
+import { Individual } from "../../types";
+import useAppLogic from "../../app-logic";
 import columns from "./columns";
-import { Wrap, StyledButton } from "./style";
-import { encodeText, whatsappText } from '../../services/utils'
 
 import Popup from "../../components/Popups/Popup";
 import Success from "../../components/Popups/Success";
 import Error from "../../components/Popups/Error";
 import Confirm from "../../components/Popups/Confirm";
+import { StyledButton } from "./style";
+import { Filters } from "../../services/FilterProvider";
 
 type onConfirm = {
   individual_id: number;
   volunteer_id: number;
   agent_id: number;
   popups: Record<string, string>;
+  filters: Filters;
 };
 
 const Table = () => {
-  const { user: agent, community } = useSession();
-
-  
   const {
-    individual: { 
-      first_name: individual_name, 
-      id: individual_id 
-    },
+    individual: { first_name: individual_name, id: individual_id },
     volunteer: {
       first_name: volunteer_name,
-      id: volunteer_id,
-      email: volunteer_email
+      id: volunteer_id
+      // email: volunteer_email
     },
     popups,
     createWhatsappLink,
@@ -48,17 +43,21 @@ const Table = () => {
     parsedVolunteerNumber,
     setVolunteer,
     setPopup,
-    distance,
     volunteer_lat,
-    volunteer_lng
+    volunteer_lng,
+    distance,
+    agent,
+    volunteer_text,
+    individual_text
   } = useAppLogic();
 
-  const { goBack, push } = useHistory();
-  const { state: linkState = { volunteer: {} } } = useLocation();
-  const filters = useFilterState()
   const [createConnection, { data, loading, error }] = useMutation(
     CREATE_RELATIONSHIP
   );
+
+  const { goBack, push } = useHistory();
+  const { state: linkState = { volunteer: {} } } = useLocation();
+  const { community = { id: 0 } } = useSession();
 
   const [success, setSuccess] = useState(false);
   const [isLoading, setLoader] = useState(false);
@@ -101,32 +100,14 @@ const Table = () => {
     [distance, volunteer_lat, volunteer_lng]
   );
 
-  if (!community) return 'Selecione uma comunidade'
-  
-  const urlencodedVolunteerText = encodeText(
-    whatsappText({
-      volunteer_name,
-      individual_name,
-      agent: agent.firstName,
-      isVolunteer: true
-    })
-  );
-
-  const urlencodedIndividualText = encodeText(
-    whatsappText({
-      volunteer_name,
-      individual_name,
-      agent: agent.firstName,
-      isVolunteer: false,
-      volunteer_email
-    })
-  );
+  if (!community) return "Selecione uma comunidade";
 
   const onConfirm = ({
     individual_id,
     volunteer_id,
     agent_id,
     popups,
+    filters
   }: onConfirm) => {
     setPopup({ ...popups, confirm: false });
     return createConnection({
@@ -154,90 +135,121 @@ const Table = () => {
       wrapper: false,
       confirm: false
     });
-    goBack();
   };
 
   return (
     <FetchIndividuals>
-      {({ data }: { data: Individual[] }) => {
+      {({
+        data,
+        changeFilters,
+        filters
+      }: {
+        data: Individual[];
+        changeFilters;
+        filters: Filters;
+      }) => {
         // Seta a voluntária
         setVolunteer(linkState && linkState.volunteer);
         const filteredTableData = filterByDistance(data);
 
-        return data.length === 0 ? (
-          <Flexbox middle>
-            <Wrap>
-              <Title.H3 margin={{ bottom: 30 }}>Nenhum resultado.</Title.H3>
-            </Wrap>
-          </Flexbox>
-        ) : (
+        const resizeRow = data.length < 1000 ? data.length : filters.rows;
+
+        return (
           <>
-            <Wrap>
-              <Flexbox vertical>
-                <Spacing margin={{ bottom: 20 }}>
-                  <Flexbox>
-                    <StyledButton flat onClick={goBack}>
-                      {"< fazer match"}
-                    </StyledButton>
-                  </Flexbox>
-                  <Spacing margin={{ top: 10, bottom: 10 }}>
-                    <Title.H3>Match realizado!</Title.H3>
+            <StyledButton dark onClick={goBack}>
+              {"< fazer match"}
+            </StyledButton>
+            {data.length < 1 ? (
+              <Spacing margin={{ top: 20 }}>
+                <Header.h3>Nenhum resultado.</Header.h3>
+              </Spacing>
+            ) : (
+              <>
+                <Flexbox vertical>
+                  <Spacing margin={{ bottom: 20 }}>
+                    <Flexbox></Flexbox>
+                    <Spacing margin={{ top: 10, bottom: 10 }}>
+                      <Header.h3>Match realizado!</Header.h3>
+                    </Spacing>
+                    <Header.h5 color="#444444">
+                      {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
+                    </Header.h5>
                   </Spacing>
-                  <Title.H5 color="#444444">
-                    {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
-                  </Title.H5>
-                </Spacing>
-              </Flexbox>
-              <ReactTable
-                data={filteredTableData}
-                columns={columns}
-                defaultPageSize={10}
-                className="-striped -highlight"
-              />
-            </Wrap>
-            <Popup
-              individualName={individual_name}
-              volunteerName={volunteer_name}
-              onSubmit={() =>
-                onConfirm({
-                  individual_id,
-                  volunteer_id,
-                  agent_id: agent.id,
-                  popups
-                })
-              }
-              isOpen={popups.wrapper}
-              onClose={closeAllPopups}
-            >
-              {(props) => {
-                return isLoading 
-                  ? <Loading />
-                  : <>
-                      <Confirm {...props} isEnabled={popups.confirm} />
-                      <Success 
-                        {...props}
-                        link={{
-                          individual: (): string | undefined =>
-                            createWhatsappLink(
-                              parsedIndividualNumber,
-                              urlencodedIndividualText
-                            ),
-                          volunteer: (): string | undefined =>
-                            createWhatsappLink(
-                              parsedVolunteerNumber,
-                              urlencodedVolunteerText
-                            )
-                        }}
-                        isEnabled={success}
-                      />
-                      <Error 
-                        {...props} 
-                        message={(error && error.message) || ""}
-                        isEnabled={error}
-                      />
-                    </>
-              }}
-            </Popup>
+                </Flexbox>
+                <ReactTable
+                  data={filteredTableData}
+                  columns={columns}
+                  manual
+                  sortable={false}
+                  pageSize={resizeRow}
+                  pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
+                  page={filters.page}
+                  onPageChange={(page: number): void =>
+                    changeFilters({ type: "page", value: page })
+                  }
+                  onPageSizeChange={(rows: number): void =>
+                    changeFilters({ type: "rows", value: rows })
+                  }
+                  previousText="Anterior"
+                  nextText="Próximo"
+                  pageText="Página"
+                  ofText="de"
+                  rowsText="linhas"
+                  // Accessibility Labels
+                  className="-striped -highlight"
+                  style={{
+                    "max-height": "500px"
+                  }}
+                />
+                <Popup
+                  individualName={individual_name}
+                  volunteerName={volunteer_name}
+                  onSubmit={() =>
+                    onConfirm({
+                      individual_id,
+                      volunteer_id,
+                      agent_id: agent.id,
+                      popups,
+                      filters
+                    })
+                  }
+                  isOpen={popups.wrapper}
+                  onClose={closeAllPopups}
+                >
+                  {props => {
+                    return isLoading ? (
+                      <Loading />
+                    ) : (
+                      <>
+                        <Confirm {...props} isEnabled={popups.confirm} />
+                        <Success
+                          {...props}
+                          link={{
+                            individual: (): string | undefined =>
+                              createWhatsappLink(
+                                parsedIndividualNumber,
+                                individual_text
+                              ),
+                            volunteer: (): string | undefined =>
+                              createWhatsappLink(
+                                parsedVolunteerNumber,
+                                volunteer_text
+                              )
+                          }}
+                          isEnabled={success}
+                          goBack={goBack}
+                        />
+                        <Error
+                          {...props}
+                          message={(error && error.message) || ""}
+                          isEnabled={error}
+                        />
+                      </>
+                    );
+                  }}
+                </Popup>
+              </>
+            )}
           </>
         );
       }}

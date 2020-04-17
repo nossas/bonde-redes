@@ -6,7 +6,7 @@ type Volunteer = {
     longitude: string;
   };
   email: string;
-  name: string;
+  first_name: string;
   whatsapp: string;
   id: number;
   phone: string;
@@ -18,7 +18,7 @@ const data: Volunteer = {
     longitude: "0"
   },
   email: "",
-  name: "",
+  first_name: "",
   whatsapp: "",
   id: 0,
   phone: ""

@@ -17,7 +17,7 @@ type valueString = {
 type valueFirstName = {
   value: {
     first_name: string;
-    last_name?: string
+    last_name?: string;
   };
 };
 

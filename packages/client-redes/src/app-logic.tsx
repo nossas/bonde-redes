@@ -1,31 +1,43 @@
 import { useStoreState, useStoreActions } from "easy-peasy";
+import { useSession } from "bonde-core-tools";
+import { useSettings } from "./services/SettingsProvider";
 import {
-  encodeText,
   whatsappText,
+  encodeText,
+  dicio,
   parseNumber,
   isJsonString
-} from "./services/utils";
-import { Individual } from "./graphql/FetchIndividuals";
+} from "./services/utils/utils";
 
 export default function useAppLogic(): {
   individual;
   volunteer;
   tableData;
   popups;
-  createWhatsappLink;
-  parsedIndividualNumber;
-  parsedVolunteerNumber;
-  getUserData;
   setTable;
   setVolunteer;
   setPopup;
   setIndividual;
-  encodeText;
-  whatsappText;
-  volunteer_lat;
-  volunteer_lng;
-  distance;
+  createWhatsappLink: (
+    number: string,
+    textVariables: string
+  ) => string | undefined;
+  parsedIndividualNumber: string;
+  parsedVolunteerNumber: string;
+  volunteer_lat: number;
+  volunteer_lng: number;
+  distance: number;
+  agent: {
+    id: number;
+  };
+  volunteer_text: string;
+  individual_text: string;
 } {
+  const {
+    settings: { volunteer_msg, individual_msg, distance }
+  } = useSettings();
+  const { user: agent } = useSession();
+
   const individual = useStoreState(state => state.individual.data);
   const volunteer = useStoreState(state => state.volunteer.data);
   const tableData = useStoreState(state => state.table.data);
@@ -51,17 +63,21 @@ export default function useAppLogic(): {
     textVariables: string
   ): string | undefined => {
     if (!number) return undefined;
-    return `https://api.whatsapp.com/send?phone=55${number}&text=${textVariables}`;
+    return `https://web.whatsapp.com/send?phone=55${number}&text=${textVariables}`;
   };
 
-  // TODO: Disable this func, its not used in the main redes app logic
-  const getUserData = ({ user, data, filterBy }): Individual =>
-    data.filter(i => user === i[filterBy])[0];
+  const whatsappDicio = {
+    ...dicio("v", { ...volunteer, agent: agent.firstName }),
+    ...dicio("i", { ...individual, agent: agent.firstName })
+  };
+
+  const volunteer_text = encodeText(whatsappText(volunteer_msg, whatsappDicio));
+  const individual_text = encodeText(
+    whatsappText(individual_msg, whatsappDicio)
+  );
 
   const parsedIndividualNumber = parseNumber(individual.phone);
   const parsedVolunteerNumber = parseNumber(volunteer.whatsapp);
-
-  const distance = 4000;
 
   const parsedCoordinates = isJsonString(volunteer.coordinates)
     ? JSON.parse(volunteer.coordinates)
@@ -78,15 +94,15 @@ export default function useAppLogic(): {
     createWhatsappLink,
     parsedIndividualNumber,
     parsedVolunteerNumber,
-    getUserData,
     setTable,
     setVolunteer,
     setPopup,
     setIndividual,
-    encodeText,
-    whatsappText,
     volunteer_lat,
     volunteer_lng,
-    distance
+    distance,
+    agent,
+    volunteer_text,
+    individual_text
   };
 }

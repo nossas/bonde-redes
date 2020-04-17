@@ -45,7 +45,7 @@ importers:
       apollo-link-http: 1.5.16_graphql@14.6.0
       apollo-utilities: 1.3.3_graphql@14.6.0
       body-parser: 1.19.0
-      bonde-components: 0.0.2-alpha.16_91142a59788a6b73516b93d9cabe711e
+      bonde-components: 0.0.2-alpha.17_91142a59788a6b73516b93d9cabe711e
       bonde-core-tools: 0.1.3-alpha.3_1cc100f105577596390aacccea439e4b
       bonde-styleguide: 0.16.4-alpha.5_react-dom@16.12.0+react@16.12.0
       cors: 2.8.5
@@ -68,6 +68,7 @@ importers:
       react-scripts: 3.4.0_typescript@3.7.5
       react-spring: 8.0.27_react-dom@16.12.0+react@16.12.0
       react-table: 6.10.3_75e41294fa833faf4530b305a6d9f4fe
+      react-toastify: 5.5.0_react-dom@16.12.0+react@16.12.0
       serve: 11.3.0
       styled-components: 4.4.1_b5ffe839b1a452f2d2c7d94d3059774c
       typescript: 3.7.5
@@ -140,7 +141,7 @@ importers:
       apollo-utilities: ^1.3.2
       babel-eslint: 10.0.3
       body-parser: ^1.19.0
-      bonde-components: 0.0.2-alpha.16
+      bonde-components: 0.0.2-alpha.17
       bonde-core-tools: 0.1.3-alpha.3
       bonde-styleguide: 0.16.4-alpha.5
       cors: ^2.8.5
@@ -172,6 +173,7 @@ importers:
       react-scripts: ^3.4.0
       react-spring: ^8.0.27
       react-table: 6.10.3
+      react-toastify: ^5.5.0
       serve: ^11.3.0
       styled-components: ^4.4.1
       typescript: ~3.7.3
@@ -4359,7 +4361,7 @@ packages:
       apollo-utilities: 1.3.3
       optimism: 0.10.3
       ts-invariant: 0.4.4
-      tslib: 1.11.0
+      tslib: 1.11.1
     dev: false
     peerDependencies:
       graphql: 0.11.7 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4381,7 +4383,7 @@ packages:
   /apollo-cache/1.3.4:
     dependencies:
       apollo-utilities: 1.3.3
-      tslib: 1.11.0
+      tslib: 1.11.1
     dev: false
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4405,7 +4407,7 @@ packages:
       apollo-utilities: 1.3.3
       symbol-observable: 1.2.0
       ts-invariant: 0.4.4
-      tslib: 1.11.0
+      tslib: 1.11.1
       zen-observable: 0.8.15
     dev: false
     peerDependencies:
@@ -4451,7 +4453,7 @@ packages:
     dependencies:
       apollo-link: 1.2.13
       ts-invariant: 0.4.4
-      tslib: 1.11.0
+      tslib: 1.11.1
     dev: false
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
@@ -4514,7 +4516,7 @@ packages:
     dependencies:
       apollo-utilities: 1.3.3
       ts-invariant: 0.4.4
-      tslib: 1.11.0
+      tslib: 1.11.1
       zen-observable-ts: 0.8.20
     dev: false
     peerDependencies:
@@ -5093,10 +5095,8 @@ packages:
     dependencies:
       final-form: 4.19.1
       react: 16.12.0
-      react-dom: 16.12.0_react@16.12.0
       react-final-form: 6.4.0_c4fc4f90ef27e39f9616ac802dbc9e0c
       styled-components: 5.1.0_4fef1ae2ae818dc3f44010f165ce8eb3
-      typescript: 3.7.5
     dev: false
     peerDependencies:
       react: '>=16'
@@ -5104,6 +5104,19 @@ packages:
       typescript: '*'
     resolution:
       integrity: sha512-OOG3XnrcYRTPwQRoS+652bSiM9iLYMFOUE7KZIU+44WKbz8L+OaKMI+/lEEu3FK2QOLeOoDlNjiR/dFbF1x+6w==
+  /bonde-components/0.0.2-alpha.17_91142a59788a6b73516b93d9cabe711e:
+    dependencies:
+      final-form: 4.19.1
+      react: 16.12.0
+      react-final-form: 6.4.0_c4fc4f90ef27e39f9616ac802dbc9e0c
+      styled-components: 5.1.0_4fef1ae2ae818dc3f44010f165ce8eb3
+    dev: false
+    peerDependencies:
+      react: '>=16'
+      react-dom: '*'
+      typescript: '*'
+    resolution:
+      integrity: sha512-Ju3K1ByaUIAm8Z05hbr8Vu+TxBrQO8z0o2K7Q/2S/+ea1GCMP8ZEgMyuO/jKmW1Hv/dxOHWgAbNrH1gRItUpAA==
   /bonde-core-tools/0.1.3-alpha.3_1cc100f105577596390aacccea439e4b:
     dependencies:
       '@apollo/react-hooks': 3.1.4_9a8d593eac6ae77decafc4c460056fec
@@ -6347,6 +6360,10 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-sEb3XFPx3jNnCAMtqrXPDeSgQr+jojtCeNf8cvMNMh1cG970+lljssvQDzPq6lmmJu2Vhqood/gtEomBiHOGnA==
+  /csstype/2.6.10:
+    dev: false
+    resolution:
+      integrity: sha512-D34BqZU4cIlMCY93rZHbrq9pjTAQJ3U8S8rfBqjwHxkGPThWFjzZDQpgMJY0QViLxth6ZKYiwFBo14RdN44U/w==
   /csstype/2.6.9:
     resolution:
       integrity: sha512-xz39Sb4+OaTsULgUERcCk+TJj8ylkL4aSVDQiX/ksxbELSqwkgt4d4RD7fovIdgJGSuNYqwZEiVjYY5l0ask+Q==
@@ -6696,6 +6713,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-LnuPJ+dwqKDIyotW1VzmOZ5TONUN7CwkCR5hrgawTUbkBGYdeoNLZo6nNfGkCrjtE1nXXaj7iMMpDa8/d9WoIA==
+  /dom-helpers/5.1.4:
+    dependencies:
+      '@babel/runtime': 7.9.2
+      csstype: 2.6.10
+    dev: false
+    resolution:
+      integrity: sha512-TjMyeVUvNEnOnhzs6uAn9Ya47GmMo3qq7m+Lr/3ON0Rs5kHvb8I+SQYjLUSYn7qhEm0QjW0yrBkvz9yOrwwz1A==
   /dom-serializer/0.2.2:
     dependencies:
       domelementtype: 2.0.1
@@ -12960,7 +12984,6 @@ packages:
       final-form: 4.19.1
       react: 16.12.0
       ts-essentials: 6.0.4_typescript@3.7.5
-      typescript: 3.7.5
     dev: false
     peerDependencies:
       final-form: ^4.19.0
@@ -13165,6 +13188,20 @@ packages:
     dev: false
     resolution:
       integrity: sha1-fURm3ZsrX6dQWHJ4JenxUro3mg4=
+  /react-toastify/5.5.0_react-dom@16.12.0+react@16.12.0:
+    dependencies:
+      '@babel/runtime': 7.9.2
+      classnames: 2.2.6
+      prop-types: 15.7.2
+      react: 16.12.0
+      react-dom: 16.12.0_react@16.12.0
+      react-transition-group: 4.3.0_react-dom@16.12.0+react@16.12.0
+    dev: false
+    peerDependencies:
+      react: '>=15.0.0'
+      react-dom: '>=15.0.0'
+    resolution:
+      integrity: sha512-jsVme7jALIFGRyQsri/g4YTsRuaaGI70T6/ikjwZMB4mwTZaCWqj5NqxhGrRStKlJc5npXKKvKeqTiRGQl78LQ==
   /react-transition-group/2.9.0_react-dom@16.12.0+react@16.12.0:
     dependencies:
       dom-helpers: 3.4.0
@@ -13179,6 +13216,20 @@ packages:
       react-dom: '>=15.0.0'
     resolution:
       integrity: sha512-+HzNTCHpeQyl4MJ/bdE0u6XRMe9+XG/+aL4mCxVN4DnPBQ0/5bfHWPDuOZUzYdMj94daZaZdCCc1Dzt9R/xSSg==
+  /react-transition-group/4.3.0_react-dom@16.12.0+react@16.12.0:
+    dependencies:
+      '@babel/runtime': 7.9.2
+      dom-helpers: 5.1.4
+      loose-envify: 1.4.0
+      prop-types: 15.7.2
+      react: 16.12.0
+      react-dom: 16.12.0_react@16.12.0
+    dev: false
+    peerDependencies:
+      react: '>=16.6.0'
+      react-dom: '>=16.6.0'
+    resolution:
+      integrity: sha512-1qRV1ZuVSdxPlPf4O8t7inxUGpdyO5zG9IoNfJxSO0ImU2A1YWkEQvFPuIPZmMLkg5hYs7vv5mMOyfgSkvAwvw==
   /react-virtualized-auto-sizer/1.0.2_react-dom@16.12.0+react@16.12.0:
     dependencies:
       react: 16.12.0
@@ -14644,7 +14695,6 @@ packages:
       react: 16.12.0
       react-dom: 16.12.0_react@16.12.0
       shallowequal: 1.1.0
-      styled-components: 5.1.0_4fef1ae2ae818dc3f44010f165ce8eb3
       supports-color: 5.5.0
     dev: false
     peerDependencies:

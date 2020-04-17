@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Header } from 'bonde-components';
+import { Header, Button } from "bonde-components";
 
 export const Wrap = styled.div`
   ${Header.h4} {
@@ -22,5 +22,12 @@ export const Wrap = styled.div`
         margin: auto;
       }
     }
+  }
+`;
+
+export const Btn = styled(Button)`
+  max-width: 90%;
+  && {
+    color: ${({ disabled }) => (disabled ? "#fff" : "#ee0099")};
   }
 `;

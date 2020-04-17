@@ -1,11 +1,8 @@
 import React from "react";
 import BtnConnect from "../../components/BtnConnect";
 import { Flexbox2 as Flexbox } from "bonde-styleguide";
-import { Individual } from "../../graphql/FetchIndividuals";
-
-type valueString = {
-  value: string;
-};
+import { Individual } from "../../types";
+import { TextHeader, TextCol, DateText } from "../../components/Columns";
 
 interface Columns {
   accessor: string;
@@ -42,13 +39,7 @@ const columns: Array<Columns> = [
   {
     accessor: "created_at",
     Header: "Data de criação",
-    Cell: ({ value }: valueString): string => {
-      if (!value) {
-        return "-";
-      }
-      const data = new Date(value);
-      return data.toLocaleDateString("pt-BR");
-    }
+    Cell: DateText
   },
   {
     accessor: "id",
@@ -62,6 +53,17 @@ const columns: Array<Columns> = [
         </Flexbox>
       ) : null
   }
-];
+].map((col: any) =>
+  !!col.Cell
+    ? {
+        ...col,
+        Header: (): JSX.Element => <TextHeader value={col.Header} />
+      }
+    : {
+        ...col,
+        Header: (): JSX.Element => <TextHeader value={col.Header} />,
+        Cell: TextCol
+      }
+);
 
 export default columns;

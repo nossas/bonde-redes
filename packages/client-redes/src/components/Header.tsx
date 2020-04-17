@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Header as BondeHeader, Title, Spacing } from "bonde-styleguide";
-import PageTabs from "./PageTabs";
+import Tabs from "./Tabs";
+import styled from "styled-components";
 
 type HeaderProps = {
   zIndex: number;
 };
+
+const TabsWrapper = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 15%;
+  position: relative;
+  top: 22px;
+`;
 
 const Header: React.FC<HeaderProps> = ({ zIndex }: HeaderProps) => {
   const { pathname: path } = useLocation();
@@ -14,11 +23,18 @@ const Header: React.FC<HeaderProps> = ({ zIndex }: HeaderProps) => {
   const tabs = [
     {
       name: "pessoas",
-      to: "/groups/volunteers" || "/connect"
+      to: "/groups/volunteers" || "/connect",
+      type: "table"
     },
     {
       name: "relações",
-      to: "/relations"
+      to: "/relations",
+      type: "table"
+    },
+    {
+      name: "configurações",
+      to: "/settings",
+      type: "page"
     }
   ];
 
@@ -32,7 +48,9 @@ const Header: React.FC<HeaderProps> = ({ zIndex }: HeaderProps) => {
       <Spacing margin={{ bottom: 20 }}>
         <Title.H3 color="#ffffff">Redes</Title.H3>
       </Spacing>
-      <PageTabs tabs={tabs} selectedTab={selectedTab} />
+      <TabsWrapper>
+        <Tabs tabs={tabs} selectedTab={selectedTab} />
+      </TabsWrapper>
     </BondeHeader>
   );
 };

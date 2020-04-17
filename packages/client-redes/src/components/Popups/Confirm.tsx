@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react";
 import { Title, Text, Button } from "bonde-styleguide";
 import { StyledLink } from "./styles";
 
-export default function Confirm ({
+export default function Confirm({
   individualName,
   volunteerName,
   onClose,
@@ -13,17 +13,16 @@ export default function Confirm ({
   volunteerName: string;
   onClose: () => void;
   onSubmit: Promise<unknown>;
-  isEnabled: boolean
+  isEnabled: boolean;
 }) {
-  return isEnabled 
-    ? (
-      <>
-        <Title.H2>Confirma?</Title.H2>
-        <Text align="center">
-          {individualName} será encaminhada para {volunteerName}
-        </Text>
-        <Button onClick={onSubmit}>confirmar encaminhamento</Button>
-        <StyledLink onClick={onClose}>voltar para o match</StyledLink>
-      </>
-    ) : null;
+  return isEnabled ? (
+    <>
+      <Title.H2>Confirma?</Title.H2>
+      <Text align="center">
+        {individualName} será encaminhada para {volunteerName}
+      </Text>
+      <Button onClick={onSubmit}>confirmar encaminhamento</Button>
+      <StyledLink onClick={onClose}>voltar para o match</StyledLink>
+    </>
+  ) : null;
 }

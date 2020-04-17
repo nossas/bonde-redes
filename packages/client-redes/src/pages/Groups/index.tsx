@@ -6,7 +6,7 @@ import {
   Dropdown,
   DropdownItem
 } from "bonde-styleguide";
-import { Header } from 'bonde-components';
+import { Header } from "bonde-components";
 import ReactTable from "react-table";
 import { useStoreActions } from "easy-peasy";
 
@@ -14,9 +14,8 @@ import "react-table/react-table.css";
 import columns from "./columns";
 import FiltersData from "./filters";
 import { Wrap } from "./styles";
-import { Individual } from "../../graphql/FetchIndividuals";
+import { Individual } from "../../types/Individual";
 import FetchUsersByGroup from "../../graphql/FetchUsersByGroup";
-import { useFilter } from '../../services/FilterContext'
 
 type FilterData = {
   name: string;
@@ -58,7 +57,6 @@ const Groups = () => {
     (actions: { table: { setTable: ({ individuals, volunteers }) => void } }) =>
       actions.table.setTable
   );
-  const [filters, dispatch] = useFilter()
 
   useEffect(() => {
     push("/groups/volunteers");
@@ -70,7 +68,9 @@ const Groups = () => {
       {({
         volunteers,
         individuals,
-        page
+        groups,
+        filters,
+        changeFilters
       }): React.ReactNode => {
         const data: TableData = {
           volunteers: volunteers.data,
@@ -100,38 +100,52 @@ const Groups = () => {
                 filters={FiltersData({
                   volunteersCount: count.volunteers,
                   individualsCount: count.individuals,
-                  filters: { values: filters, change: dispatch },
+                  filters: { values: filters, change: changeFilters },
                   history: push,
-                  kind
+                  kind,
+                  groups
                 })}
               />
             </Spacing>
-            <Spacing margin={{ bottom: 20 }}>
-              <Header.h4 margin={{ bottom: 30 }}>
-                Total ({count[kind]})
-              </Header.h4>
-            </Spacing>
-            <ReactTable
-              manual
-              sortable={false}
-              data={data[kind]}
-              columns={columns(pathname)}
-              pageSize={resizeRow}
-              pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
-              page={page}
-              pages={pages}
-              onPageChange={(page: number): void => dispatch({ type: "page", value: page })}
-              onPageSizeChange={(rows: number): void =>
-                dispatch({ type: "rows", value: rows })
-              }
-              previousText="Anterior"
-              nextText="Próximo"
-              pageText="Página"
-              ofText="de"
-              rowsText="linhas"
-              // Accessibility Labels
-              className="-striped -highlight"
-            />
+            {data[kind].length === 0 ? (
+              <Wrap>
+                <Header.h4>Não existem resultados para esse filtro.</Header.h4>
+              </Wrap>
+            ) : (
+              <>
+                <Spacing margin={{ bottom: 20 }}>
+                  <Header.h4 margin={{ bottom: 30 }}>
+                    Total ({count[kind]})
+                  </Header.h4>
+                </Spacing>
+                <ReactTable
+                  manual
+                  sortable={false}
+                  data={data[kind]}
+                  columns={columns(pathname)}
+                  pageSize={resizeRow}
+                  pageSizeOptions={[25, 50, 100, 200, 500, 1000]}
+                  page={filters.page}
+                  pages={pages}
+                  onPageChange={(page: number): void =>
+                    changeFilters({ type: "page", value: page })
+                  }
+                  onPageSizeChange={(rows: number): void =>
+                    changeFilters({ type: "rows", value: rows })
+                  }
+                  previousText="Anterior"
+                  nextText="Próximo"
+                  pageText="Página"
+                  ofText="de"
+                  rowsText="linhas"
+                  // Accessibility Labels
+                  className="-striped -highlight"
+                  style={{
+                    height: "500px"
+                  }}
+                />
+              </>
+            )}
           </Wrap>
         );
       }}

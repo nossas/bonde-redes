@@ -1,10 +1,9 @@
-import React from 'react';
-import { gql } from 'apollo-boost';
-import { useSession, useQuery } from 'bonde-core-tools';
-
-import Empty from '../components/Empty';
-import { Filters, useFilterState } from "../services/FilterContext";
-import { Individual } from "./FetchIndividuals";
+import React from "react";
+import { gql } from "apollo-boost";
+import { useSession, useQuery } from "bonde-core-tools";
+import Empty from "../components/Empty";
+import { useFilter } from "../services/FilterProvider";
+import { GroupsData, GroupsVars } from "../types";
 
 export const USERS_BY_GROUP = gql`
   query RedeGroups(
@@ -61,6 +60,10 @@ export const USERS_BY_GROUP = gql`
         count
       }
     }
+    community_groups: rede_groups(where: { community_id: $context }) {
+      is_volunteer
+      name
+    }
   }
 
   fragment individual on rede_individuals {
@@ -94,44 +97,9 @@ export const USERS_BY_GROUP = gql`
   }
 `;
 
-interface GroupsData {
-  individuals: Individual[];
-  individuals_count: {
-    aggregate: {
-      count: number;
-    };
-  };
-  volunteers: Individual[];
-  volunteers_count: {
-    aggregate: {
-      count: number;
-    };
-  };
-}
-
-interface GroupsData {
-  individuals: Individual[];
-  individuals_count: {
-    aggregate: {
-      count: number;
-    };
-  };
-  volunteers: Individual[];
-  volunteers_count: {
-    aggregate: {
-      count: number;
-    };
-  };
-}
-
-interface GroupsVars extends Filters {
-  context: {
-    _eq: number;
-  };
-}
-
 const FetchUsersByGroup = ({ children, community }) => {
-  const filters = useFilterState()
+  const [state, dispatch] = useFilter();
+  const { page, ...filters } = state;
 
   const variables = {
     context: { _eq: community.id },
@@ -149,24 +117,29 @@ const FetchUsersByGroup = ({ children, community }) => {
     return <p>Error</p>;
   }
   if (loading) return <p>Loading...</p>;
-  if (data) return children({
-    volunteers: {
-      data: data.volunteers,
-      count: data.volunteers_count.aggregate.count
-    },
-    individuals: {
-      data: data.individuals,
-      count: data.individuals_count.aggregate.count
-    },
-    filters
-  });
+
+  if (data)
+    return children({
+      volunteers: {
+        data: data.volunteers,
+        count: data.volunteers_count.aggregate.count
+      },
+      individuals: {
+        data: data.individuals,
+        count: data.individuals_count.aggregate.count
+      },
+      groups: data.community_groups,
+      filters: state,
+      changeFilters: dispatch
+    });
 };
 
-export default (props) => {
+export default props => {
   const { community } = useSession();
 
-  return community
-    ? <FetchUsersByGroup community={community} {...props} />
-    : <Empty message='Selecione uma comunidade' />
-  ;
+  return community ? (
+    <FetchUsersByGroup community={community} {...props} />
+  ) : (
+    <Empty message="Selecione uma comunidade" />
+  );
 };

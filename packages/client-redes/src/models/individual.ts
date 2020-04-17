@@ -1,17 +1,27 @@
 import { action } from "easy-peasy";
 
 type Individual = {
+  coordinates: {
+    latitude: string;
+    longitude: string;
+  };
   email: string;
   first_name: string;
-  phone: string;
+  whatsapp: string;
   id: number;
+  phone: string;
 };
 
 const data: Individual = {
+  coordinates: {
+    latitude: "0",
+    longitude: "0"
+  },
   email: "",
   first_name: "",
-  phone: "",
-  id: 0
+  whatsapp: "",
+  id: 0,
+  phone: ""
 };
 
 const individualModel = {
