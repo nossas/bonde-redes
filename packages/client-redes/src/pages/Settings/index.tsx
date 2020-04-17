@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { gql } from "apollo-boost";
+import { toast } from "react-toastify";
 import { useMutation, useSession } from "bonde-core-tools";
 import {
   Button,
@@ -16,10 +17,11 @@ import {
   WrapForm,
   SettingsWrapper,
   HeaderWrap,
-  Wrap,
-  WrapTextarea
+  WrapTextarea,
+  WrapText
 } from "./styles";
-import { Form } from "../../types";
+import { Form, Settings, SettingsVars } from "../../types";
+import { settingsSaved } from "../../services/utils/notifications";
 
 const saveSettingsMutation = gql`
   mutation updateSettings($communityId: bigint, $settings: json) {
@@ -35,9 +37,16 @@ const saveSettingsMutation = gql`
   }
 `;
 
+type SettingsData = {
+  update_community_settings: {
+    returning: Settings[];
+  };
+};
+
 const SettingsForm = () => {
-  const [error, setError] = useState(undefined);
-  const [saveSettings] = useMutation(saveSettingsMutation);
+  const [saveSettings, { error }] = useMutation<SettingsData, SettingsVars>(
+    saveSettingsMutation
+  );
   const { composeValidators, required, min } = Validators;
   const { settings } = useSettings();
   const { community } = useSession();
@@ -50,9 +59,16 @@ const SettingsForm = () => {
         settings: values.input
       };
       await saveSettings({ variables });
+      if (!error) {
+        console.log(settingsSaved());
+        toast.success(settingsSaved().message, {
+          autoClose: settingsSaved().dismissAfter,
+          hideProgressBar: settingsSaved().progress,
+          closeButton: settingsSaved().closeButton
+        });
+      }
     } catch (err) {
       if (err && err.message) {
-        setError(err.message);
         console.log("err", err);
       }
     }
@@ -98,7 +114,7 @@ const SettingsForm = () => {
                   validate={required("Valor não pode ser vazio")}
                 />
               </WrapTextarea>
-              <div>
+              <WrapText>
                 <Text>*VFIRST_NAME: Primeiro nome da voluntária</Text>
                 <Text>*PFIRST_NAME: Primeiro nome da PSR</Text>
                 <Text>*VEMAIL: Email da voluntária</Text>
@@ -107,7 +123,7 @@ const SettingsForm = () => {
                 <Text>*PWHATSAPP: Whatsapp da PSR</Text>
                 <Text>*VREGISTER_OCCUPATION: Nº de registro da voluntária</Text>
                 <Text>*AGENT: Nome da agente</Text>
-              </div>
+              </WrapText>
             </WrapForm>
           </>
         )}
