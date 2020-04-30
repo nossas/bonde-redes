@@ -46,7 +46,7 @@ const main = async (req, res, next) => {
       solidarity_matches(
         order_by: {created_at: desc}
         where: {
-          created_at: {_lte: $last_month},
+          created_at: {_gte: $last_month},
           status: {_eq: "encaminhamento__realizado"}
         }
       ) {
