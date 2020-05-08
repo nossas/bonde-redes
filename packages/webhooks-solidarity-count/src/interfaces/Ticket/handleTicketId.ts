@@ -1,10 +1,9 @@
-
-const handleTicketId = (ticket) => {
-  const { id, ...otherFields } = ticket
+const handleTicketId = ticket => {
+  const { id, ...otherFields } = ticket;
   return {
     ticket_id: id,
-    ...otherFields,
-  }
-}
+    ...otherFields
+  };
+};
 
-export default handleTicketId
+export default handleTicketId;

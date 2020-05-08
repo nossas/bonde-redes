@@ -1,3 +1,3 @@
-import debug from 'debug'
+import debug from "debug";
 
-export default debug('webhooks-solidarity-count')
+export default debug("webhooks-solidarity-count");

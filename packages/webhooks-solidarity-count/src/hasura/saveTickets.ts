@@ -1,9 +1,9 @@
-import * as yup from 'yup'
-import { TicketZendesk, TicketHasuraIn } from '../interfaces/Ticket'
-import dbg from './dbg'
-import generateRequestVariables from './generateRequestVariables'
-import HasuraBase from './HasuraBase'
-import isError, { HasuraResponse } from './isError'
+import * as yup from "yup";
+import { TicketZendesk, TicketHasuraIn } from "../interfaces/Ticket";
+import dbg from "./dbg";
+import generateRequestVariables from "./generateRequestVariables";
+import HasuraBase from "./HasuraBase";
+import isError, { HasuraResponse } from "./isError";
 
 const generateVariablesIndex = (index: number) => `
 $assignee_id_${index}: bigint
@@ -31,7 +31,7 @@ $telefone_${index}: String
 $estado_${index}:String
 $cidade_${index}: String
 $community_id_${index}: Int
-`
+`;
 const generateObjectsIndex = (index: number) => `
 assignee_id: $assignee_id_${index}
 created_at: $created_at_${index}
@@ -58,13 +58,15 @@ telefone: $telefone_${index}
 estado: $estado_${index}
 cidade: $cidade_${index}
 community_id: $community_id_${index}
-`
+`;
 
-const generateVariables = (tickets: TicketZendesk[]) => tickets.map(
-  (_, index) => generateVariablesIndex(index),
-).flat()
+const generateVariables = (tickets: TicketZendesk[]) =>
+  tickets.map((_, index) => generateVariablesIndex(index)).flat();
 
-const generateObjects = (tickets: TicketZendesk[]) => `[${tickets.map((_, index) => `{${generateObjectsIndex(index)}}`).join(',')}]`
+const generateObjects = (tickets: TicketZendesk[]) =>
+  `[${tickets
+    .map((_, index) => `{${generateObjectsIndex(index)}}`)
+    .join(",")}]`;
 
 const createQuery = (tickets: any) => `mutation (${generateVariables(tickets)}){
   insert_solidarity_tickets(objects: ${generateObjects(tickets)}, on_conflict: {
@@ -99,65 +101,70 @@ const createQuery = (tickets: any) => `mutation (${generateVariables(tickets)}){
   }) {
     affected_rows
   }
-}`
+}`;
 
-const validate = yup.array().of(yup.object().shape({
-  id: yup.number().strip(true),
-  ticket_id: yup.number().required(),
-  assignee_id: yup.number().nullable(),
-  created_at: yup.string(),
-  custom_fields: yup.array().of(yup.object().shape({
-    id: yup.number(),
-    value: yup.string().nullable(),
-  })),
-  description: yup.string(),
-  group_id: yup.number().nullable(),
-  organization_id: yup.number().nullable(),
-  raw_subject: yup.string(),
-  requester_id: yup.number(),
-  status: yup.string(),
-  subject: yup.string(),
-  submitter_id: yup.number(),
-  tags: yup.mixed(),
-  updated_at: yup.string(),
-  status_acolhimento: yup.string().nullable(),
-  nome_voluntaria: yup.string().nullable(),
-  link_match: yup.string().nullable(),
-  nome_msr: yup.string().nullable(),
-  data_inscricao_bonde: yup.string().nullable(),
-  data_encaminhamento: yup.string().nullable(),
-  status_inscricao: yup.string().nullable(),
-  telefone: yup.string().nullable(),
-  estado: yup.string().nullable(),
-  cidade: yup.string().nullable(),
-  community_id: yup.number(),
-  webhooks_registry_id: yup.number(),
-}))
+const validate = yup.array().of(
+  yup.object().shape({
+    id: yup.number().strip(true),
+    ticket_id: yup.number().required(),
+    assignee_id: yup.number().nullable(),
+    created_at: yup.string(),
+    custom_fields: yup.array().of(
+      yup.object().shape({
+        id: yup.number(),
+        value: yup.string().nullable()
+      })
+    ),
+    description: yup.string(),
+    group_id: yup.number().nullable(),
+    organization_id: yup.number().nullable(),
+    raw_subject: yup.string(),
+    requester_id: yup.number(),
+    status: yup.string(),
+    subject: yup.string(),
+    submitter_id: yup.number(),
+    tags: yup.mixed(),
+    updated_at: yup.string(),
+    status_acolhimento: yup.string().nullable(),
+    nome_voluntaria: yup.string().nullable(),
+    link_match: yup.string().nullable(),
+    nome_msr: yup.string().nullable(),
+    data_inscricao_bonde: yup.string().nullable(),
+    data_encaminhamento: yup.string().nullable(),
+    status_inscricao: yup.string().nullable(),
+    telefone: yup.string().nullable(),
+    estado: yup.string().nullable(),
+    cidade: yup.string().nullable(),
+    community_id: yup.number(),
+    webhooks_registry_id: yup.number()
+  })
+);
 
-const log = dbg.extend('saveTickets')
+const log = dbg.extend("saveTickets");
 
 interface Response {
-  affected_rows: number
+  affected_rows: number;
 }
 
 const saveTickets = async (tickets: TicketHasuraIn[]) => {
   try {
-    const validatedTickets = (await validate.validate(tickets, { stripUnknown: true }))
-    const query = createQuery(validatedTickets)
-    const variables = generateRequestVariables(validatedTickets)
-    const response = await HasuraBase<HasuraResponse<'insert_solidarity_tickets', Response>>(
-      query,
-      variables,
-    )
-  
-    if (isError(response.data)) {
-      return log(response.data.errors)
-    }
-  
-    return response.data.data.insert_solidarity_tickets.affected_rows
-  } catch (e) {
-    return log(e)
-  }
-}
+    const validatedTickets = await validate.validate(tickets, {
+      stripUnknown: true
+    });
+    const query = createQuery(validatedTickets);
+    const variables = generateRequestVariables(validatedTickets);
+    const response = await HasuraBase<
+      HasuraResponse<"insert_solidarity_tickets", Response>
+    >(query, variables);
 
-export default saveTickets
+    if (isError(response.data)) {
+      return log(response.data.errors);
+    }
+
+    return response.data.data.insert_solidarity_tickets.affected_rows;
+  } catch (e) {
+    return log(e);
+  }
+};
+
+export default saveTickets;
