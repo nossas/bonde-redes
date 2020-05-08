@@ -16,6 +16,6 @@
   "scripts": {
     "lint": "eslint **/*.ts",
     "clean": "rm -rf node_modules",
-    "lint:fix": "eslint ./packages/webhooks-solidarity-count --ext .ts --fix"
+    "lint:fix": "eslint ./ --ext .ts --fix"
   }
 }
