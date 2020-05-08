@@ -25,6 +25,10 @@
     "dev": "DEBUG=webhooks-solidarity-count* tsc-watch --onSuccess \"node dist/index.js\"",
     "clean": "rm -rf node_modules dist",
     "build": "tsc",
-    "test": "DEBUG=webhooks-solidarity-count* jest"
+    "test": "DEBUG=webhooks-solidarity-count* jest",
+    "test:watch": "DEBUG=webhooks-solidarity-count* jest --watch"
+  },
+  "devDependencies": {
+    "faker": "^4.1.0"
   }
 }

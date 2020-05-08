@@ -92,6 +92,7 @@ const Table = () => {
   }, [getTableData]);
 
   const volunteerFirstName = volunteer_name.split(" ")[0];
+  const individualFirstName = individual_name.split(" ")[0];
   const selectedCategory = volunteer_category(volunteer_organization_id);
 
   const distance = 50;
@@ -242,7 +243,7 @@ const Table = () => {
             link: () =>
               createWhatsappLink(volunteer_whatsapp, {
                 volunteer_name: volunteerFirstName,
-                individual_name,
+                individual_name: individualFirstName,
                 agent: zendeskAgentName
               }),
             isEnabled: success,

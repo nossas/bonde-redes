@@ -1,7 +1,6 @@
-import { Client } from "@googlemaps/google-maps-services-js";
 import dbg from "./dbg";
 
-const log = dbg.extend("openStateFile");
+const log = dbg.extend("getLatLng");
 
 type LatLng = {
   latitude: string | null;
@@ -9,26 +8,35 @@ type LatLng = {
   address: string | null;
 };
 
-const getLatLng = async (cep: string): Promise<LatLng> => {
-  const client = new Client({});
-
+const getLatLng = async (
+  cep: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  maps: (cep: string) => Promise<any>
+): Promise<LatLng> => {
   try {
-    const search = await client.geocode({
-      params: {
-        address: `${cep},BR`,
-        key: process.env.GOOGLE_MAPS_API_KEY
-      },
-      timeout: 1000 // milliseconds
-    });
+    const search: {
+      data: {
+        results: Array<{
+          geometry: { location: { lat: number; lng: number } };
+          formatted_address;
+        }>;
+      };
+    } = await maps(cep);
 
-    const results = search.data.results[0];
-    const geometry = results && results.geometry && results.geometry.location;
-    const address = results && results.formatted_address;
+    const {
+      geometry: { location },
+      formatted_address
+    } = search.data.results[0];
+    const address = formatted_address ? formatted_address : "";
+
+    if (!(location && location.lat && location.lng)) {
+      throw new Error("No geolocation in Google Maps response");
+    }
 
     return {
-      latitude: geometry.lat.toString(),
-      longitude: geometry.lng.toString(),
-      address
+      address,
+      latitude: location.lat ? location.lat.toString() : "",
+      longitude: location.lat ? location.lng.toString() : ""
     };
   } catch (e) {
     log(e);
