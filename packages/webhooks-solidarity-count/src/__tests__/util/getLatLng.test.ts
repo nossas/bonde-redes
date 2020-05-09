@@ -74,4 +74,10 @@ describe("getLatLng tests", () => {
     expect(success).not.toBe(invalidOutput);
     expect(success).toStrictEqual(noAddress);
   });
+
+  it("should throw an error if there's no data results", async () => {
+    const mapsFailure = jest.fn().mockRejectedValue({});
+    const failure = await getLatLng(zipcode, mapsFailure);
+    expect(failure).toStrictEqual(invalidOutput);
+  });
 });
