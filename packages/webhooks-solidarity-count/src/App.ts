@@ -21,10 +21,10 @@ import { Client } from "@googlemaps/google-maps-services-js";
 const log = dbg.extend("app");
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const maps = async (cep: string): Promise<any> => {
+const maps = (cep: string): Promise<any> => {
   const client = new Client({});
 
-  await client.geocode({
+  return client.geocode({
     params: {
       address: `${cep},BR`,
       key: process.env.GOOGLE_MAPS_API_KEY
