@@ -1,5 +1,8 @@
 import gql from "graphql-tag";
 import { client as GraphQLAPI } from "../";
+import dbg from "../../dbg";
+
+const log = dbg.extend("insertSolidarityTickets");
 
 const INDIVIDUALS_MUTATION = gql`
   mutation insert_rede_individuals(
@@ -42,16 +45,16 @@ const insertSolidarityTickets = async (individuals: any): Promise<any> => {
   try {
     const {
       data: {
-        insert_rede_individuals: { returning }
-      }
+        insert_rede_individuals: { returning },
+      },
     } = await GraphQLAPI.mutate({
       mutation: INDIVIDUALS_MUTATION,
-      variables: { individuals }
+      variables: { individuals },
     });
 
     return returning;
   } catch (err) {
-    console.error("failed on insert rede individuals: ".red, err);
+    log("failed on insert rede individuals: ".red, err);
     return undefined;
   }
 };

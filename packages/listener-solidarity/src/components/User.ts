@@ -3,6 +3,9 @@
 //   insertRedeIndividuals
 // } from "../../graphql/mutations";
 import { Widget } from "../types";
+import dbg from "../dbg";
+
+const log = dbg.extend("User");
 // import log from "signale";
 
 // interface MetaField {
@@ -13,9 +16,8 @@ import { Widget } from "../types";
 // const cache = [];
 
 const handleNext = (widgets: Widget[]) => async (response: any) => {
-  // log.success(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
-  // log.success({ response: response.data.form_entries });
-  console.log({ response: response.data.form_entries });
+  log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
+  log({ response: response.data.form_entries });
   return widgets;
   // const {
   //   data: { form_entries: entries }

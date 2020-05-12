@@ -1,26 +1,29 @@
 import * as throng from "throng";
 import { subscriptionFormEntries } from "./graphql/subscriptions";
-import widgets from "./form_mapping";
+import widgets from "./form_entries_mapping";
+import dbg from "./dbg";
+
+const log = dbg.extend("main");
 
 throng({
   workers: 1,
   start: async (id: number) => {
-    console.log(`Started worker ${id}`);
+    log(`Started worker ${id}`);
 
     try {
-      console.log("Fetching solidarity users...");
-      console.log(
+      log("Fetching solidarity users...");
+      log(
         "Call subscriptions to form_entries...",
         widgets.map((w: any) => w.id)
       );
       await subscriptionFormEntries(widgets);
     } catch (err) {
-      console.error("throng err: ".red, err);
+      log("throng err: ".red, err);
     }
 
     process.on("SIGTERM", function () {
-      console.log(`Worker ${id} exiting`);
-      console.log("Cleanup here");
+      log(`Worker ${id} exiting`);
+      log("Cleanup here");
       process.exit();
     });
   },
