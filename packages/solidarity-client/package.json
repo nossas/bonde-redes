@@ -33,7 +33,7 @@
     "dev": "tsc-watch --onSuccess \"node -r dotenv-safe/config dist/\"",
     "start": "node -r dotenv-safe/config dist/",
     "clean": "rm -rf node_modules dist",
-    "build": "tsc && npm run build --prefix src/client",
+    "build": "tsc",
     "test": "jest",
     "test:watch": "jest --watch"
   },
