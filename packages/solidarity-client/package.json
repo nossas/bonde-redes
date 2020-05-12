@@ -44,6 +44,7 @@
     "lint": "eslint --ignore-path .gitignore . --ext ts --ext js --fix",
     "build": "react-scripts build && tsc --build server/tsconfig.json",
     "test": "react-scripts test",
+    "test:watch": "jest --watch",
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:5000/",

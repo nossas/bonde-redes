@@ -10,3 +10,5 @@ packages:
   - "packages/webhook-mail"
   - "packages/webhook-activists"
   - "packages/solidarity-client"
+  - "packages/test-solidarity-client"
+  - "packages/test-solidarity-client/src/client"
