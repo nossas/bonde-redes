@@ -1,8 +1,8 @@
-import ZendeskBase from './ZendeskBase'
-import { TicketZendesk } from '../interfaces/Ticket'
+import ZendeskBase from "./ZendeskBase";
+import { TicketZendesk } from "../interfaces/Ticket";
 
 interface ResponseTickets {
-  tickets: TicketZendesk[]
+  tickets: TicketZendesk[];
 }
 
 /**
@@ -10,6 +10,7 @@ interface ResponseTickets {
  * @param requester_id Requester's id
  * @returns ResponseTickets object
  */
-const getUserRequestedTickets = (requester_id: number | string) => ZendeskBase.get<ResponseTickets>(`users/${requester_id}/tickets/requested`)
+const getUserRequestedTickets = (requester_id: number | string) =>
+  ZendeskBase.get<ResponseTickets>(`users/${requester_id}/tickets/requested`);
 
-export default getUserRequestedTickets
+export default getUserRequestedTickets;

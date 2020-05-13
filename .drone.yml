@@ -89,18 +89,18 @@ pipeline:
   #     status: success
   #     event: tag
 
-  # publish-stag-webhooks-solidarity-count:
-  #   image: plugins/docker
-  #   repo: nossas/bonde-webhooks-solidarity-count
-  #   group: publishing
-  #   secrets: [ docker_username, docker_password ]
-  #   dockerfile: packages/webhooks-solidarity-count/Dockerfile
-  #   tags:
-  #     - ${DRONE_BRANCH/\//-}
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, support/*, develop]
-  #     event: push
+  publish-stag-webhooks-solidarity-count:
+    image: plugins/docker
+    repo: nossas/bonde-webhooks-solidarity-count
+    group: publishing
+    secrets: [docker_username, docker_password]
+    dockerfile: packages/webhooks-solidarity-count/Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, support/*, develop]
+      event: push
 
   publish-prod-webhooks-solidarity-count:
     image: plugins/docker
@@ -428,19 +428,19 @@ pipeline:
   #     status: success
   #     event: tag
 
-  # deploy-stag-webhooks-solidarity-count:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/solidarity-count
-  #   group: deploying
-  #   docker_image: nossas/bonde-webhooks-solidarity-count:${DRONE_BRANCH/\//-}
-  #   timeout: 360
-  #   confirm: true
-  #   secrets: [ rancher_access_key, rancher_secret_key ]
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, develop]
-  #     event: push
+  deploy-stag-webhooks-solidarity-count:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/solidarity-count
+    group: deploying
+    docker_image: nossas/bonde-webhooks-solidarity-count:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [rancher_access_key, rancher_secret_key]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
   deploy-prod-webhooks-solidarity-count:
     image: peloton/drone-rancher

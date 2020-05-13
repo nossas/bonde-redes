@@ -4,4 +4,4 @@ export enum ORGANIZATIONS {
   PSICOLOGA
 }
 
-export default ORGANIZATIONS
+export default ORGANIZATIONS;

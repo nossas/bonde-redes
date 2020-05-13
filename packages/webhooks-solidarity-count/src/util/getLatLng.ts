@@ -1,44 +1,58 @@
-import { Client } from "@googlemaps/google-maps-services-js";
-import dbg from './dbg'
+import dbg from "./dbg";
 
-const log = dbg.extend('openStateFile')
+const log = dbg.extend("getLatLng");
 
 type LatLng = {
-  latitude: string | null
-  longitude: string | null
-  address: string | null
-}
+  latitude: string | null;
+  longitude: string | null;
+  address: string | null;
+};
 
-const getLatLng = async (cep: string): Promise<LatLng> => {
-  const client = new Client({});
+const getLatLng = async (
+  cep: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  maps: (cep: string) => Promise<any>
+): Promise<LatLng> => {
+  return maps(cep)
+    .then(
+      ({
+        data
+      }: {
+        data: {
+          results: Array<{
+            geometry: { location: { lat: number; lng: number } };
+            formatted_address;
+          }>;
+        };
+      }) => {
+        if (data && data.results.length > 0) {
+          const {
+            geometry: { location },
+            formatted_address
+          } = data.results[0];
+          const address = formatted_address ? formatted_address : "";
 
-  try {
-    const search = await client
-      .geocode({
-        params: {
-          address: `${cep},BR`,
-          key: process.env.GOOGLE_MAPS_API_KEY
-        },
-        timeout: 1000 // milliseconds
-      })
-    
-    const results = search.data.results[0]
-    const geometry = results && results.geometry && results.geometry.location
-    const address = results && results.formatted_address
+          if (!(location && location.lat && location.lng)) {
+            throw new Error("No geolocation in Google Maps response");
+          }
 
-    return {
-      latitude: (geometry.lat).toString(),
-      longitude: (geometry.lng).toString(),
-      address,
-    }
-  } catch(e) {
-    log(e)
-    return {
-      latitude: null,
-      longitude: null,
-      address: null,
-    }
-  }
-}
+          return {
+            address,
+            latitude: location.lat ? location.lat.toString() : "",
+            longitude: location.lat ? location.lng.toString() : ""
+          };
+        }
+        throw new Error("No data returned from Google Maps response");
+      }
+    )
+    .catch(e => {
+      log(e);
+      return {
+        latitude: null,
+        longitude: null,
+        address: null
+      };
+    });
+};
 
-export default getLatLng
+export default getLatLng;
