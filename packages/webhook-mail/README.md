@@ -1,21 +1,86 @@
-#Mail
+# Bonde Mail README
 
-Webhook to manage sending mail on Bonde.
+## Documentation
 
-**IMPORTANT:** Make sure you have added this project to `bonde-microservices/pnpm-workspace.yaml`
+### Send Mail
 
-## Commands
+Responsible for processing a notification log (`notify_mail`) and sending an SMTP email. Updates the record received successfully for follow-up.
 
-#### Install dependencies
+**Endpoint:** `/`
+
+**Request:**
 ```
-pnpm i --filter bonde-microservices --filter ws-webhook-mail
+{
+  event: {
+    data: {
+      new: {
+        email_from: string;
+        email_to: string;
+        subject: string;
+        body: string;
+        context: json;
+      }
+    }
+  }
+}
 ```
 
-#### Develpement project
+**Response (200):**
+```
+{
+  message: number;
+  mail: number;
+  delivered_at: string;
+}
+```
 
-- **Start server**: ```pnpm run dev```
-- **Build project**: ```pnpm run build```
-- **Clean project**: ```pnpm run clean```
-- **Run tests**: ```pnpm run test```
+**Response (400): Email Reject**
+```
+{
+  mode: 'testing'
+}
+```
 
-:heart_eyes: Made with love by ![Bonde](./bonde.svg)
+## Services
+
+- API-GraphQL
+- Data Structure (Notify Mail)
+- SMTP
+
+## Getting started
+
+Clone repository:
+
+```
+git clone https://github.com/nossas/bonde-redes.git
+git checkout tags/v0.2.2
+```
+
+Install dependencies and run the local server:
+
+```
+cd bonde-redes
+pnpm m i --filter webhook-mail
+pnpm m run dev --filter webhook-mail
+```
+
+Tests:
+
+```
+pnpm m run test --filter webhook-mail
+```
+
+Clean:
+
+```
+pnpm m run lint --filter webhook-mail
+```
+
+Build:
+
+```
+pnpm m run build --filter webhook-mail
+pnpm m run start --filter webhook-mail
+```
+_________________________________________
+<p align='right'>:heart_eyes: Made with love by <b>B</b>onde!</p>
