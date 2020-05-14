@@ -21,17 +21,17 @@ import { Client } from "@googlemaps/google-maps-services-js";
 const log = dbg.extend("app");
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// const maps = (cep: string): Promise<any> => {
-//   const client = new Client({});
+const maps = (cep: string): Promise<any> => {
+  const client = new Client({});
 
-//   return client.geocode({
-//     params: {
-//       address: `${cep},BR`,
-//       key: process.env.GOOGLE_MAPS_API_KEY
-//     },
-//     timeout: 1000 // milliseconds
-//   });
-// };
+  return client.geocode({
+    params: {
+      address: `${cep},BR`,
+      key: process.env.GOOGLE_MAPS_API_KEY
+    },
+    timeout: 1000 // milliseconds
+  });
+};
 
 /**
  * @param ticket_id ID do ticket
@@ -80,31 +80,31 @@ const App = async (ticket_id: string, res: Response) => {
 
     // Caso o CEP possa ser um número e não é vazio
     if (userWithUserFields.cep !== null) {
-      // const coordinates = await getLatLng(userWithUserFields.cep, maps);
+      const coordinates = await getLatLng(userWithUserFields.cep, maps);
 
       userWithUserFields = {
         ...userWithUserFields,
         cep: parsedZipcode,
-        // ...coordinates,
+        ...coordinates,
         user_fields: {
           ...userWithUserFields.user_fields,
-          cep: parsedZipcode
-          // ...coordinates
+          cep: parsedZipcode,
+          ...coordinates
         }
       };
 
       // Atualiza a usuária voluntária no zendesk
-      // const updateRequesterZendeskResponse = await updateRequesterFields(
-      //   ticket.requester_id,
-      //   coordinates
-      // );
-      // if (!updateRequesterZendeskResponse) {
-      //   log(
-      //     `Can't update user fields for user '${ticket.requester_id}', ticket '${ticket_id}'.`
-      //   );
-      //   return res.status(500).json("Can't update user fields.");
-      // }
-      // log(`User '${ticket.requester_id}' lat/lng/address updated in Zendesk.`);
+      const updateRequesterZendeskResponse = await updateRequesterFields(
+        ticket.requester_id,
+        coordinates
+      );
+      if (!updateRequesterZendeskResponse) {
+        log(
+          `Can't update user fields for user '${ticket.requester_id}', ticket '${ticket_id}'.`
+        );
+        return res.status(500).json("Can't update user fields.");
+      }
+      log(`User '${ticket.requester_id}' lat/lng/address updated in Zendesk.`);
     }
 
     // Salva a usuária no Hasura

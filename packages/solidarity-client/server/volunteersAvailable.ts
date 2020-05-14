@@ -68,10 +68,18 @@ const main = async (req, res, next) => {
         atendimentos_em_andamento_calculado_,
         user_id
       } = user;
-      const formatAvailability =
-        disponibilidade_de_atendimentos !== "5_ou_mais"
-          ? Number(disponibilidade_de_atendimentos)
-          : 5;
+
+      let formatAvailability;
+      if (typeof Number(disponibilidade_de_atendimentos) === "number") {
+        formatAvailability = Number(disponibilidade_de_atendimentos);
+      }
+      if (disponibilidade_de_atendimentos === "5_ou_mais") {
+        formatAvailability = 5;
+      }
+      if (disponibilidade_de_atendimentos === null) {
+        formatAvailability = 1;
+      }
+
       const forwardings_last_30_days = pendingTickets.filter(
         ticket => ticket.volunteers_user_id === user_id
       );
