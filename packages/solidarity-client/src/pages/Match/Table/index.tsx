@@ -10,18 +10,19 @@ import ReactTable from "react-table";
 import * as turf from "@turf/turf";
 import { Flexbox2 as Flexbox, Title } from "bonde-styleguide";
 import { useStoreState, useStoreActions } from "easy-peasy";
-import styled from "styled-components";
 
 import { encodeText, whatsappText, parseNumber } from "../../../services/utils";
-import { FullWidth, Spacing } from "./style";
+import { FullWidth, Spacing, StyledFlexbox } from "./style";
 import columns from "./columns";
 
-import { Popup, Loading } from "../../../components";
-
-const StyledFlexbox = styled(Flexbox)`
-  align-items: center;
-  margin-bottom: 25px;
-`;
+import { Loading } from "../../../components";
+import {
+  Popup,
+  Confirm,
+  Error,
+  Success,
+  Warning
+} from "../../../components/Popups";
 
 type Body = {
   volunteer_name: string;
@@ -148,7 +149,7 @@ const Table = () => {
     });
     if (req && req.status === 200) {
       setStatus("success");
-      setTicketId(req.data.ticketId);
+      return setTicketId(req.data.ticketId);
     }
     return setStatus("rejected");
   };
@@ -187,42 +188,46 @@ const Table = () => {
           />
         </Flexbox>
       </FullWidth>
-      {/* <If condition={typeof status !== "undefined"}> */}
       <Popup
         individualName={individual_name}
         volunteerName={volunteer_name}
-        confirm={{
-          onClose: closeAllPopups,
-          onSubmit: onConfirm,
-          isEnabled: status === "confirm"
-        }}
-        success={{
-          onClose: closeAllPopups,
-          link: () =>
-            createWhatsappLink(volunteer_whatsapp, {
-              volunteer_name: volunteerFirstName,
-              individual_name: individualFirstName,
-              agent: zendeskAgentName
-            }),
-          isEnabled: status === "success",
-          ticketId
-        }}
-        error={{
-          onClose: closeAllPopups,
-          onSubmit: onConfirm,
-          isEnabled: status === "rejected",
-          message: error
-        }}
-        warning={{
-          isEnabled: status === "noPhoneNumber",
-          id: volunteer_user_id,
-          name: volunteer_name
-        }}
+        onSubmit={onConfirm}
         isOpen={typeof status !== "undefined"}
         onClose={closeAllPopups}
-        isLoading={status === "pending"}
-      />
-      {/* </If> */}
+      >
+        {props => {
+          return status === "pending" ? (
+            <Loading text="Encaminhando..." />
+          ) : (
+            <>
+              <Confirm {...props} isEnabled={status === "confirm"} />
+              <Success
+                {...props}
+                link={() =>
+                  createWhatsappLink(volunteer_whatsapp, {
+                    volunteer_name: volunteerFirstName,
+                    individual_name: individualFirstName,
+                    agent: zendeskAgentName
+                  })
+                }
+                isEnabled={status === "success"}
+                ticketId={ticketId}
+              />
+              <Error
+                {...props}
+                message={error || ""}
+                isEnabled={status === "rejected"}
+              />
+              <Warning
+                {...props}
+                isEnabled={status === "noPhoneNumber"}
+                id={volunteer_user_id}
+                name={volunteer_name}
+              />
+            </>
+          );
+        }}
+      </Popup>
     </Fragment>
   );
 };

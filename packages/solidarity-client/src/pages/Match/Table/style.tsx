@@ -1,3 +1,4 @@
+import { Flexbox2 as Flexbox } from "bonde-styleguide";
 import styled from "styled-components";
 
 export const FullWidth = styled.div`
@@ -11,4 +12,9 @@ export const WrapButtons = styled.div`
   width: 300px;
   display: flex;
   justify-content: space-evenly;
+`;
+
+export const StyledFlexbox = styled(Flexbox)`
+  align-items: center;
+  margin-bottom: 25px;
 `;

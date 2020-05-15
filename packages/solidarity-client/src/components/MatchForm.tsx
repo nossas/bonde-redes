@@ -54,8 +54,7 @@ const MatchForm = () => {
     errors,
     setError,
     control,
-    setValue,
-    getValues
+    setValue
   } = useForm();
 
   useEffect(() => {
@@ -93,7 +92,7 @@ const MatchForm = () => {
       volunteer_organization_id: user.organization_id
     });
   };
-  console.log(getValues());
+
   return (
     <FormWrapper onSubmit={handleSubmit(send)}>
       <StyledFlexbox vertical>

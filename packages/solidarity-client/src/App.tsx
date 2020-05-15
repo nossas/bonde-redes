@@ -1,7 +1,7 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import React from "react";
-import { Footer } from "bonde-styleguide";
+import { Footer } from "bonde-components";
 import { StoreProvider } from "easy-peasy";
 import { Redirect, Route } from "react-router";
 import { Router } from "react-router-dom";
@@ -24,7 +24,7 @@ const AppWrapper = styled.div`
 `;
 
 const AppBody = styled.div`
-  min-height: 100vh;
+  min-height: 100%;
   flex-grow: 1;
 `;
 
