@@ -1,15 +1,22 @@
-import React from 'react';
-import { Ticket } from '../../../models/table-data'
+import React from "react";
+import { Ticket } from "../../../models/table-data";
 
 const dicioUser = {
   360269610652: "Advogada",
   360273031591: "MSR",
   360282119532: "Psicóloga"
-}
+};
 
-const getUserType = (id: number) => dicioUser[id]
+const getUserType = (id: number) => dicioUser[id];
 
-const UserInfo: React.FC<Ticket> = ({ name, email, data_de_inscricao_no_bonde, user_id, organization_id, condition }) => {
+const UserInfo: React.FC<Ticket> = ({
+  name,
+  email,
+  data_de_inscricao_no_bonde,
+  user_id,
+  organization_id,
+  condition
+}) => {
   return (
     <div>
       <div>
@@ -23,12 +30,17 @@ const UserInfo: React.FC<Ticket> = ({ name, email, data_de_inscricao_no_bonde, u
         <br />
         <span>{`Data de inscrição no BONDE: ${data_de_inscricao_no_bonde}`}</span>
         <br />
-        <span>Link no Zendesk:</span>
-        {' '}
-        <a href={`https://mapadoacolhimento.zendesk.com/agent/#/users/${user_id}`} target="_blank" rel="noopener noreferrer">{user_id}</a>
+        <span>Link no Zendesk:</span>{" "}
+        <a
+          href={`https://mapadoacolhimento.zendesk.com/agent/#/users/${user_id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {user_id}
+        </a>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UserInfo
+export default UserInfo;
