@@ -1,41 +1,43 @@
-import React, { useEffect } from 'react'
-import ReactTable from 'react-table'
-import styled from 'styled-components';
-
-import { Flexbox2 as Flexbox, Title } from 'bonde-styleguide'
-import { useStoreState, useStoreActions } from 'easy-peasy'
-
-import 'react-table/react-table.css'
-import columns from './columns'
+import React, { useEffect } from "react";
+import ReactTable from "react-table";
+import styled from "styled-components";
+import { useStoreState, useStoreActions } from "easy-peasy";
+import { Header } from "bonde-components";
+import "react-table/react-table.css";
+import columns from "./columns";
+import Loading from "../../components/Loading";
 
 export const FullWidth = styled.div`
   width: 100%;
   padding: 40px;
-`
+`;
 
 const Table: React.FC = () => {
-  const tableData = useStoreState(state => state.volunteers.volunteers)
-  const getAvailableVolunteers = useStoreActions((actions: any) => actions.volunteers.getAvailableVolunteers)
+  const tableData = useStoreState(state => state.volunteers.volunteers);
+  const getAvailableVolunteers = useStoreActions(
+    (actions: any) => actions.volunteers.getAvailableVolunteers
+  );
 
   useEffect(() => {
-    getAvailableVolunteers()
-  }, [getAvailableVolunteers])
+    getAvailableVolunteers();
+  }, [getAvailableVolunteers]);
+
+  if (tableData === "pending")
+    return <Loading text="Buscando voluntárias disponíveis..." />;
 
   return tableData.length === 0 ? (
-    <FullWidth>
-      <Flexbox>
-        <Title.H4 margin={{ bottom: 30 }}>
-          Não existem voluntárias disponíveis.
-        </Title.H4>
-      </Flexbox>
-    </FullWidth>
+    <div style={{ height: "calc(100vh - 200px)" }}>
+      <Header.h3 style={{ margin: 30 }}>
+        Não existem voluntárias disponíveis.
+      </Header.h3>
+    </div>
   ) : (
     <FullWidth>
-      <Flexbox vertical>
-        <Title.H2 margin={{ bottom: 20 }}>Voluntárias Encontradas!</Title.H2>
-        <Title.H4 margin={{ bottom: 30 }}>
+      <div style={{ width: "100%", height: "100%", flexDirection: "column" }}>
+        <Header.h2 margin={{ bottom: 20 }}>Voluntárias Encontradas!</Header.h2>
+        <Header.h4 margin={{ bottom: 30 }}>
           {`${tableData.length} voluntárias disponíveis encontradas.`}
-        </Title.H4>
+        </Header.h4>
         <br />
         <ReactTable
           data={tableData}
@@ -49,9 +51,9 @@ const Table: React.FC = () => {
           ]}
           className="-striped -highlight"
         />
-      </Flexbox>
+      </div>
     </FullWidth>
-  )
-}
+  );
+};
 
-export default Table
+export default Table;

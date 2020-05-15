@@ -28,18 +28,23 @@ const tableModel = {
   setTable: action((state, payload) => ({
     data: payload
   })),
-  getTableData: thunk(async (actions: any, payload) => {
-    try {
-      const res = await request.get(payload);
-      actions.setTable(res.data);
-    } catch (err) {
-      console.log(err);
-      actions.setError({
-        message: err && err.message
-      });
+  getTableData: thunk(
+    async (
+      actions: any,
+      payload: { endpoint: string; volunteer_organization_id?: number }
+    ) => {
+      actions.setTable("pending");
+      const { endpoint, volunteer_organization_id = 0 } = payload;
+      try {
+        const res = await request.get(endpoint, { volunteer_organization_id });
+        actions.setTable(res.data);
+      } catch (err) {
+        console.log(err);
+        actions.setError(err && err.message);
+      }
     }
-  }),
-  error: {},
+  ),
+  error: undefined,
   setError: action((state, payload) => ({
     error: payload
   }))

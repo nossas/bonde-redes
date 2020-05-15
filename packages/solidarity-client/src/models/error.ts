@@ -1,19 +1,9 @@
 import { action } from "easy-peasy";
 
-interface Error {
-  status: boolean;
-  message: string;
-}
-
-const error: Error = {
-  status: false,
-  message: ""
-};
-
-const errorModel = {
-  error,
+const errorModel: { error?: string; setError } = {
+  error: undefined,
   setError: action((state, payload) => ({
-    error: { ...payload }
+    error: payload
   }))
 };
 
