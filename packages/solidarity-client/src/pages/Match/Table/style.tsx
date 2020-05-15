@@ -5,10 +5,10 @@ export const FullWidth = styled.div`
   padding: 40px;
 `;
 export const Spacing = styled.div`
-  margin-bottom: ${(props: { margin: string}) => props.margin}px;
+  margin-bottom: ${(props: { margin: string }) => props.margin}px;
 `;
 export const WrapButtons = styled.div`
   width: 300px;
   display: flex;
   justify-content: space-evenly;
-`
+`;

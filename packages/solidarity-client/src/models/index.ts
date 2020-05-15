@@ -1,5 +1,5 @@
 import matchFormModel from "./match-form";
-import popupModel from "./popups";
+import statusModel from "./status";
 import tableModel from "./table-data";
 import geobondeForm from "./geobonde-form";
 import individualModel from "./individual";
@@ -10,7 +10,7 @@ import mapModel from "./map";
 
 export default {
   matchFormModel,
-  popupModel,
+  statusModel,
   tableModel,
   geobondeForm,
   individualModel,
