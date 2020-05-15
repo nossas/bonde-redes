@@ -1,5 +1,5 @@
 import dicioAgent from "../pages/Match/Table/dicioAgent";
-import { Ticket } from "../models/table-data";
+import { Ticket } from "../types";
 
 type Props = {
   user: string | number;

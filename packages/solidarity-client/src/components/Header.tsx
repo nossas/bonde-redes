@@ -53,7 +53,7 @@ const Wrap = styled.div`
 
 const isMatch = (path: string) => path === "/match";
 
-const Header: React.FC = ({ children }) => {
+const Header: React.FC = () => {
   const { pathname: path } = useLocation();
 
   return (
@@ -79,10 +79,6 @@ const Header: React.FC = ({ children }) => {
       </Wrap>
     </StyledBondeHeader>
   );
-};
-
-Header.defaultProps = {
-  children: null
 };
 
 export default Header;

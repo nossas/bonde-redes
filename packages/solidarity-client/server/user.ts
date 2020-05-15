@@ -1,6 +1,6 @@
 import getSolidarityUsers from "./hasura/getSolidarityUsers";
 
-const main = async (req, res, next) => {
+const main = async (req, res, _next) => {
   const locations = await getSolidarityUsers({
     query: `query ($id: bigint!){
       solidarity_users(

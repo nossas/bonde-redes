@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import MapGL, { Popup } from "react-map-gl";
 import { useStoreState, useStoreActions } from "easy-peasy";
 
-import { If } from "../../../components/If";
 import request from "../../../services/request";
 
-import UserInfo from "./user-info";
+import UserInfo from "./UserInfo";
 import Pins from "./Pins";
 
 interface Viewport {
@@ -77,7 +76,7 @@ const Map = () => {
           {...viewport}
         >
           <Pins data={tableData} onClick={handleCityPinClick} />
-          <If condition={popupUser.isOpen}>
+          {popupUser.isOpen && (
             <Popup
               tipSize={5}
               anchor="top"
@@ -88,7 +87,7 @@ const Map = () => {
             >
               <UserInfo {...popupUser} />
             </Popup>
-          </If>
+          )}
         </MapGL>
       )}
     </>

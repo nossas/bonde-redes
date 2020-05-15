@@ -15,7 +15,7 @@ const columns = [
   {
     accessor: "organization_id",
     Header: "Área de Atuação",
-    Cell: ({ value }) =>
+    Cell: ({ value }: { value: number }) =>
       value ? <Flexbox middle>{getVolunteerType(value)}</Flexbox> : null
   },
   {
@@ -37,7 +37,7 @@ const columns = [
   {
     accessor: "user_id",
     Header: "Link",
-    Cell: ({ value }) =>
+    Cell: ({ value }: { value: number }) =>
       value ? (
         <a
           href={`https://mapadoacolhimento.zendesk.com/agent/users/${value}/requested_tickets`}
@@ -52,7 +52,7 @@ const columns = [
     accessor: "email",
     Header: "Ação",
     width: 200,
-    Cell: ({ value }) =>
+    Cell: ({ value }: { value: string }) =>
       value ? (
         <Flexbox middle>
           <Link

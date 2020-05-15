@@ -1,5 +1,5 @@
 import React from "react";
-import { Ticket } from "../../../models/table-data";
+import { Ticket } from "../../../types";
 
 const dicioUser = {
   360269610652: "Advogada",
@@ -9,14 +9,14 @@ const dicioUser = {
 
 const getUserType = (id: number) => dicioUser[id];
 
-const UserInfo: React.FC<Ticket> = ({
+const UserInfo = ({
   name,
   email,
   data_de_inscricao_no_bonde,
   user_id,
   organization_id,
   condition
-}) => {
+}: Ticket) => {
   return (
     <div>
       <div>

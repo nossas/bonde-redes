@@ -5,7 +5,7 @@ import { fuseTicketsAndUsers, volunteer_type } from "./utils";
 
 const INDIVIDUAL = zendeskOrganizations.individual;
 
-const main = async (req, res, next) => {
+const main = async (req, res, _next) => {
   const volunteer_organization_id = Number(req.query.volunteer_organization_id);
   const volunteer_tipo_de_acolhimento = volunteer_type(
     volunteer_organization_id

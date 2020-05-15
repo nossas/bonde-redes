@@ -4,7 +4,7 @@ import { Header } from "bonde-components";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import * as turf from "@turf/turf";
 
-import { Ticket } from "../../../models/table-data";
+import { Ticket } from "../../../types";
 import columns from "./columns";
 import { zendeskOrganizations, isVolunteer } from "../../../services/utils";
 

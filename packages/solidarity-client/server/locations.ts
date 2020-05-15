@@ -2,7 +2,7 @@ import getSolidarityUsers from "./hasura/getSolidarityUsers";
 import getSolidarityTickets from "./hasura/getSolidarityTickets";
 import { isValidTicket, getUserFromTicket } from "./utils";
 
-const main = async (req, res, next) => {
+const main = async (_req, res, _next) => {
   const locationUsers = await getSolidarityUsers({
     query: `query {
       solidarity_users(

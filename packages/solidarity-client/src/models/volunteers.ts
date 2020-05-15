@@ -1,6 +1,6 @@
 import { thunk, action } from "easy-peasy";
 import request from "../services/request";
-import { Ticket } from "./table-data";
+import { Ticket } from "../types";
 
 const volunteers: Ticket[] = [];
 

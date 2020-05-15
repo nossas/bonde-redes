@@ -37,7 +37,7 @@ const Panel: React.FC<Props> = ({
   direction,
   open,
   children,
-  relative,
+  // relative,
   className,
   size
 }) => {
