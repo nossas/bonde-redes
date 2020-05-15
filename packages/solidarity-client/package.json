@@ -9,6 +9,7 @@
     "@turf/turf": "^5.1.6",
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
+    "bonde-components": "^0.0.2-alpha.18",
     "bonde-styleguide": "^0.16.4-alpha.3",
     "concurrently": "^5.0.1",
     "cors": "^2.8.5",
