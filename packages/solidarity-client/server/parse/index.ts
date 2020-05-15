@@ -12,19 +12,19 @@ const addDistance = (user, pointA) => {
 export default (result, pointA) =>
   result.map(user => addDistance(user, pointA));
 
-interface Organizations {
+type Organizations = {
   lawyer: number;
   therapist: number;
   individual: number;
-}
+};
 
 const parseZendeskOrganizations = input => JSON.parse(input);
 export const zendeskOrganizations: Organizations = parseZendeskOrganizations(
-  process.env.REACT_APP_ZENDESK_ORGANIZATIONS!
+  process.env.REACT_APP_ZENDESK_ORGANIZATIONS
 );
 
-const LAWYER = zendeskOrganizations.lawyer;
-const THERAPIST = zendeskOrganizations.therapist;
+export const LAWYER = zendeskOrganizations.lawyer;
+export const THERAPIST = zendeskOrganizations.therapist;
 
 export const getCurrentDate = () => {
   const today = new Date();
