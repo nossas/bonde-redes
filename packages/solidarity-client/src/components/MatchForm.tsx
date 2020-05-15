@@ -18,10 +18,10 @@ import Select from "./Select";
 import dicioAgent from "../pages/Match/Table/dicioAgent";
 
 const FormWrapper = styled.form`
-  width: 50%;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-column-gap: 20px;
   align-items: center;
-  justify-content: space-around;
 `;
 const StyledField = styled(FormField)`
   padding: 0;
@@ -41,8 +41,11 @@ const MatchForm = () => {
   const getAvailableVolunteers = useStoreActions(
     (actions: any) => actions.volunteers.getAvailableVolunteers
   );
+  const getTableData = useStoreActions(
+    (actions: any) => actions.table.getTableData
+  );
   const setForm = useStoreActions((actions: any) => actions.match.setForm);
-  const tableData = useStoreState(state => state.table.data); // dados da MSR
+
   const { search } = useLocation();
 
   const {
@@ -51,7 +54,8 @@ const MatchForm = () => {
     errors,
     setError,
     control,
-    setValue
+    setValue,
+    getValues
   } = useForm();
 
   useEffect(() => {
@@ -59,7 +63,7 @@ const MatchForm = () => {
     const email = search.split("=")[1];
     if (email) setValue("email", email);
     // eslint-disable-next-line
-  }, [setValue, search])
+  }, [setValue, search]);
 
   const send = (data, e) => {
     e.preventDefault();
@@ -84,8 +88,12 @@ const MatchForm = () => {
       agent: data.agent,
       assignee_name
     });
+    getTableData({
+      endpoint: "individuals",
+      volunteer_organization_id: user.organization_id
+    });
   };
-
+  console.log(getValues());
   return (
     <FormWrapper onSubmit={handleSubmit(send)}>
       <StyledFlexbox vertical>
@@ -122,15 +130,13 @@ const MatchForm = () => {
         />
         <Text color="#ffffff">{errors.agent && errors.agent["message"]}</Text>
       </StyledFlexbox>
-      <Flexbox middle>
-        <Button
-          disabled={tableData.length < 1 || volunteersTableData.length < 1}
-          minWidth="150px"
-          type="submit"
-        >
-          Buscar
-        </Button>
-      </Flexbox>
+      <Button
+        disabled={volunteersTableData.length < 1}
+        minWidth="150px"
+        type="submit"
+      >
+        Buscar
+      </Button>
     </FormWrapper>
   );
 };

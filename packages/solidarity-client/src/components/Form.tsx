@@ -1,5 +1,4 @@
 import React from "react";
-// import PropTypes from 'prop-types'
 import {
   Button,
   Flexbox2 as Flexbox,
@@ -18,10 +17,10 @@ import MapsSearchInput from "./Search/MapsSearchInput";
 // }
 
 const FormWrapper = styled.form`
-  width: 70%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-items: end;
+  grid-column-gap: 15px;
 `;
 const StyledField = styled(FormField)`
   padding: 0;
@@ -33,6 +32,9 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  & label:last-child {
+    padding: 0;
+  }
 `;
 
 const LabelsWrapper = styled.div`
