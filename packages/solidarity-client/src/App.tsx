@@ -26,6 +26,7 @@ const AppWrapper = styled.div`
 const AppBody = styled.div`
   min-height: 100%;
   flex-grow: 1;
+  padding: 20px 60px;
 `;
 
 // const FixedFooter = styled.div`

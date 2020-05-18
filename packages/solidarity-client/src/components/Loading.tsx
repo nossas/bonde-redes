@@ -3,7 +3,7 @@ import { Loading as Loader, Text } from "bonde-components";
 import styled from "styled-components";
 
 const Wrap = styled.div`
-  height: calc(100vh - 150px);
+  height: calc(100vh - 130px);
   display: flex;
   justify-content: center;
   flex-direction: column;

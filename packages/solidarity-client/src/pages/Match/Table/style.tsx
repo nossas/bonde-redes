@@ -1,10 +1,7 @@
 import { Flexbox2 as Flexbox } from "bonde-styleguide";
+import { Button } from "bonde-components";
 import styled from "styled-components";
 
-export const FullWidth = styled.div`
-  width: 100%;
-  padding: 40px;
-`;
 export const Spacing = styled.div`
   margin-bottom: ${(props: { margin: string }) => props.margin}px;
 `;
@@ -17,4 +14,13 @@ export const WrapButtons = styled.div`
 export const StyledFlexbox = styled(Flexbox)`
   align-items: center;
   margin-bottom: 25px;
+`;
+
+export const StyledButton = styled(Button)`
+  && {
+    border: none;
+    padding: 0;
+    border-color: transparent;
+    margin-bottom: 15px;
+  }
 `;

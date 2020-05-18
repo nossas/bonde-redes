@@ -8,34 +8,21 @@ import React, {
 import "react-table/react-table.css";
 import ReactTable from "react-table";
 import * as turf from "@turf/turf";
-import { Flexbox2 as Flexbox, Title } from "bonde-styleguide";
+import { useHistory } from "react-router-dom";
 import { useStoreState, useStoreActions } from "easy-peasy";
+import { Header as Title } from "bonde-components";
 
 import { encodeText, whatsappText, parseNumber } from "../../../services/utils";
-import { FullWidth, Spacing, StyledFlexbox } from "./style";
+import { StyledButton } from "./style";
 import columns from "./columns";
-
-import { Loading } from "../../../components";
 import {
   Popup,
   Confirm,
   Error,
   Success,
-  Warning
-} from "../../../components/Popups";
-
-type Body = {
-  volunteer_name: string;
-  volunteer_registry: string;
-  volunteer_phone: string;
-  volunteer_user_id: number;
-  volunteer_organization_id: number;
-  individual_name: string;
-  individual_ticket_id: number;
-  individual_user_id: number;
-  agent: number;
-  assignee_name: string;
-};
+  Warning,
+  Loading
+} from "../../../components";
 
 const Table = () => {
   const volunteer = useStoreState(state => state.match.volunteer);
@@ -57,6 +44,7 @@ const Table = () => {
   );
 
   const [ticketId, setTicketId] = useState(0);
+  const { goBack } = useHistory();
 
   const {
     name: individual_name,
@@ -162,73 +150,72 @@ const Table = () => {
   if (tableData === "pending")
     return <Loading text="Buscando MSR's próximas" />;
 
-  return filteredTableData.length === 0 ? (
-    <div style={{ height: "calc(100vh - 200px)" }}>
-      <Title.H3 style={{ margin: 30 }}>
-        Nenhuma MSR próxima foi encontrada.
-      </Title.H3>
-    </div>
-  ) : (
-    <Fragment>
-      <FullWidth>
-        <Flexbox vertical>
-          <StyledFlexbox spacing="between">
-            <Spacing margin="10">
-              <Title.H3>Match realizado!</Title.H3>
-            </Spacing>
-            <Title.H5 color="#444444">
+  return (
+    <>
+      <StyledButton dark onClick={goBack}>
+        {"< fazer match"}
+      </StyledButton>
+      {filteredTableData.length === 0 ? (
+        <div style={{ height: "calc(100vh - 130px)" }}>
+          <Title.h4>Nenhuma MSR próxima foi encontrada.</Title.h4>
+        </div>
+      ) : (
+        <Fragment>
+          <div style={{ marginBottom: 20 }}>
+            <Title.h4>Match realizado!</Title.h4>
+            <Title.h5 color="#444444">
               {`${filteredTableData.length} solicitações de MSRs próximas de ${volunteer_name}`}
-            </Title.H5>
-          </StyledFlexbox>
+            </Title.h5>
+          </div>
           <ReactTable
             data={filteredTableData}
             columns={columns}
             defaultPageSize={15}
             className="-striped -highlight"
           />
-        </Flexbox>
-      </FullWidth>
-      <Popup
-        individualName={individual_name}
-        volunteerName={volunteer_name}
-        onSubmit={onConfirm}
-        isOpen={typeof status !== "undefined"}
-        onClose={closeAllPopups}
-      >
-        {props => {
-          return status === "pending" ? (
-            <Loading text="Encaminhando..." />
-          ) : (
-            <>
-              <Confirm {...props} isEnabled={status === "confirm"} />
-              <Success
-                {...props}
-                link={() =>
-                  createWhatsappLink(volunteer_whatsapp, {
-                    volunteer_name: volunteerFirstName,
-                    individual_name: individualFirstName,
-                    agent: zendeskAgentName
-                  })
-                }
-                isEnabled={status === "success"}
-                ticketId={ticketId}
-              />
-              <Error
-                {...props}
-                message={error || ""}
-                isEnabled={status === "rejected"}
-              />
-              <Warning
-                {...props}
-                isEnabled={status === "noPhoneNumber"}
-                id={volunteer_user_id}
-                name={volunteer_name}
-              />
-            </>
-          );
-        }}
-      </Popup>
-    </Fragment>
+          <Popup
+            individualName={individual_name}
+            volunteerName={volunteer_name}
+            onSubmit={onConfirm}
+            isOpen={typeof status !== "undefined"}
+            onClose={closeAllPopups}
+          >
+            {props => {
+              return status === "pending" ? (
+                <Loading text="Encaminhando..." />
+              ) : (
+                <>
+                  <Confirm {...props} isEnabled={status === "confirm"} />
+                  <Success
+                    {...props}
+                    link={() =>
+                      createWhatsappLink(volunteer_whatsapp, {
+                        volunteer_name: volunteerFirstName,
+                        individual_name: individualFirstName,
+                        agent: zendeskAgentName
+                      })
+                    }
+                    isEnabled={status === "success"}
+                    ticketId={ticketId}
+                  />
+                  <Error
+                    {...props}
+                    message={error || ""}
+                    isEnabled={status === "rejected"}
+                  />
+                  <Warning
+                    {...props}
+                    isEnabled={status === "noPhoneNumber"}
+                    id={volunteer_user_id}
+                    name={volunteer_name}
+                  />
+                </>
+              );
+            }}
+          </Popup>
+        </Fragment>
+      )}
+    </>
   );
 };
 

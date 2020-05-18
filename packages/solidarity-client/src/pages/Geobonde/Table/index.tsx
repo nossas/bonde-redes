@@ -8,7 +8,6 @@ import { Ticket } from "../../../types";
 import columns from "./columns";
 import { zendeskOrganizations, isVolunteer } from "../../../services/utils";
 
-import { FullWidth } from "./style";
 import { Loading } from "../../../components";
 
 import "react-table/react-table.css";
@@ -109,25 +108,23 @@ const Table: React.FC = () => {
   if (tableData === "pending") return <Loading text="Buscando..." />;
 
   return filteredTableData.length === 0 ? (
-    <div style={{ height: "calc(100vh - 200px)" }}>
+    <div style={{ height: "calc(100vh - 130px)" }}>
       <Header.h3 style={{ margin: 30 }}>Nenhum resultado.</Header.h3>
     </div>
   ) : (
-    <FullWidth>
-      <div style={{ width: "100%", height: "100%", flexDirection: "column" }}>
-        <Header.h2 margin={{ bottom: 20 }}>Match realizado!</Header.h2>
-        <Header.h4 margin={{ bottom: 30 }}>
-          {`${filteredTableData.length} usuárias encontradas em um raio de ${distance}km.`}
-        </Header.h4>
-        <br />
-        <ReactTable
-          data={filteredTableData}
-          columns={columns}
-          defaultPageSize={15}
-          className="-striped -highlight"
-        />
-      </div>
-    </FullWidth>
+    <>
+      <Header.h3 style={{ marginBottom: 10 }}>Usuárias encontradas!</Header.h3>
+      <Header.h5>
+        {`${filteredTableData.length} usuárias encontradas em um raio de ${distance}km.`}
+      </Header.h5>
+      <br />
+      <ReactTable
+        data={filteredTableData}
+        columns={columns}
+        defaultPageSize={15}
+        className="-striped -highlight"
+      />
+    </>
   );
 };
 
