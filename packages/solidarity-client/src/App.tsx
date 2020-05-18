@@ -47,28 +47,26 @@ const App = () => (
   >
     <StoreProvider store={store}>
       <Router history={history}>
-        <BondeSessionUI indexRoute={adminUrl}>
-          <AppWrapper className="app">
-            <Header />
-            <AppBody className="app-body">
-              <Route exact path="/">
-                <Redirect to="/voluntarias" />
-              </Route>
-              <Route exact path="/geobonde">
-                <Geobonde />
-              </Route>
-              {/* <Route exact path="/geobonde/mapa">
+        <AppWrapper className="app">
+          <Header />
+          <AppBody className="app-body">
+            <Route exact path="/">
+              <Redirect to="/voluntarias" />
+            </Route>
+            <Route exact path="/geobonde">
+              <Geobonde />
+            </Route>
+            {/* <Route exact path="/geobonde/mapa">
                 <Map />
               </Route> */}
-              <Route exact path="/match">
-                <Match />
-              </Route>
-              <Route exact path="/voluntarias">
-                <VolunteersAvailable />
-              </Route>
-            </AppBody>
-          </AppWrapper>
-        </BondeSessionUI>
+            <Route exact path="/match">
+              <Match />
+            </Route>
+            <Route exact path="/voluntarias">
+              <VolunteersAvailable />
+            </Route>
+          </AppBody>
+        </AppWrapper>
       </Router>
     </StoreProvider>
   </BondeSessionProvider>
