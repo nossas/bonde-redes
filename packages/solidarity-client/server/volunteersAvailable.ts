@@ -11,9 +11,15 @@ const main = async (_req, res, _next) => {
           condition: {_eq: "disponivel"},
           longitude: {_is_null: false},
           latitude: {_is_null: false},
+          _or: [
+            {phone: {_is_null: false }},
+            {whatsapp: {_is_null: false }}
+          ]
           _and: [
             {organization_id: {_neq: $individual_id }},
             {organization_id: {_is_null: false }}
+            {name: {_is_null: false }}
+            {registration_number: {_is_null: false }}
           ]
         }
       ) {
