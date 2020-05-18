@@ -14,6 +14,7 @@ const FormWrapper = styled.form`
   display: grid;
   grid-template-columns: auto auto auto;
   justify-items: end;
+  grid-column-gap: 10px;
 `;
 const StyledField = styled(FormField)`
   padding: 0;
@@ -31,6 +32,12 @@ const LabelsWrapper = styled.div`
   display: grid;
   grid-template-columns: auto auto auto;
   width: 100%;
+  & > label {
+    padding-right: 5px;
+    &:last-child {
+      padding: 0;
+    }
+  }
 `;
 
 const StyledLabel = styled.label`

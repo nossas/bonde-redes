@@ -9,7 +9,7 @@ import { Loading } from "bonde-components";
 import styled from "styled-components";
 
 import { Header } from "./components";
-import { Map, Geobonde, Match, VolunteersAvailable } from "./pages";
+import { Geobonde, Match, VolunteersAvailable } from "./pages";
 import history from "./history";
 import store from "./store";
 
@@ -57,9 +57,9 @@ const App = () => (
               <Route exact path="/geobonde">
                 <Geobonde />
               </Route>
-              <Route exact path="/geobonde/mapa">
+              {/* <Route exact path="/geobonde/mapa">
                 <Map />
-              </Route>
+              </Route> */}
               <Route exact path="/match">
                 <Match />
               </Route>

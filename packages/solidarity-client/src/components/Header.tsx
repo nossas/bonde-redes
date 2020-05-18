@@ -35,11 +35,11 @@ const Header: React.FC = () => {
     {
       name: "geobonde",
       to: "/geobonde"
-    },
-    {
-      name: "mapa",
-      to: "/geobonde/mapa"
     }
+    // {
+    //   name: "mapa",
+    //   to: "/geobonde/mapa"
+    // }
   ];
 
   useEffect(() => {
