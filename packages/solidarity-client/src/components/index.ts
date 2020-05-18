@@ -7,3 +7,4 @@ export { default as Confirm } from "./Popups/Confirm";
 export { default as Error } from "./Popups/Error";
 export { default as Success } from "./Popups/Success";
 export { default as Warning } from "./Popups/Warning";
+export { default as Header } from "./Header";
