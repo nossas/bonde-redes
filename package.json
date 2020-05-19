@@ -15,6 +15,6 @@
   },
   "scripts": {
     "clean": "rm -rf node_modules",
-    "lint": "eslint ./ --ext .ts,.tsx --fix"
+    "lint": "eslint ./packages/solidarity-client --ext .ts,.tsx --fix"
   }
 }

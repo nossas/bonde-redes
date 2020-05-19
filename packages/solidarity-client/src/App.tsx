@@ -4,7 +4,7 @@ import React from "react";
 import { StoreProvider } from "easy-peasy";
 import { Redirect, Route } from "react-router";
 import { Router } from "react-router-dom";
-import { BondeSessionProvider, BondeSessionUI } from "bonde-core-tools";
+import { BondeSessionProvider } from "bonde-core-tools";
 import { Loading } from "bonde-components";
 import styled from "styled-components";
 
@@ -34,10 +34,6 @@ const TextLoading = ({ fetching }: { fetching: string }) => {
   };
   return <Loading fullsize message={messages[fetching]} />;
 };
-
-const adminUrl =
-  process.env.REACT_APP_ADMIN_URL ||
-  "http://admin-canary.bonde.devel:5001/admin";
 
 const App = () => (
   <BondeSessionProvider
