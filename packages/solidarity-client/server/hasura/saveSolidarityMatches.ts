@@ -63,8 +63,6 @@ const saveMatch = async (matchVariables: Match) => {
     }
   );
 
-  console.log("query", response.config.data, "error", response.data.errors);
-
   if (response.data.errors) {
     return response.data.errors;
   }

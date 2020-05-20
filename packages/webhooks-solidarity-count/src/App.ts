@@ -26,7 +26,7 @@ const maps = (cep: string): Promise<any> => {
 
   return client.geocode({
     params: {
-      address: `${cep},BR`,
+      address: `${cep}`,
       key: process.env.GOOGLE_MAPS_API_KEY
     },
     timeout: 1000 // milliseconds

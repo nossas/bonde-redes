@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 export const StyledFlexbox = styled(Flexbox)`
   min-height: 250px;
+  max-height: 400px;
 `;
 
 export const StyledModal = styled(Modal)`

@@ -14,8 +14,7 @@
     "typescript": "3.7.3"
   },
   "scripts": {
-    "lint": "eslint **/*.ts",
     "clean": "rm -rf node_modules",
-    "lint:fix": "eslint ./ --ext .ts --fix"
+    "lint": "eslint ./packages/solidarity-client --ext .ts,.tsx --fix"
   }
 }

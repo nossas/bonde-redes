@@ -3,7 +3,6 @@ import request from "../services/request";
 
 interface Foward {
   setError: Function;
-  setSuccess: Function;
   data: {
     volunteer_name: string;
     individual_name: string;
@@ -20,9 +19,9 @@ interface Foward {
 const fowardModel = {
   data: {},
   fowardTickets: thunk(async (actions: any, payload: Foward) => {
-    const { setError, setSuccess, data } = payload;
+    const { setError, data } = payload;
     try {
-      console.log(data);
+      // console.log(data);
       // const mockedBody = {
       //   volunteer_name: "Ana Teste teste",
       //   individual_name: "ANA MSR teste match automatizado",
@@ -36,14 +35,10 @@ const fowardModel = {
       //   assignee_name: "Ana"
       // };
       const response = await request.post(data);
-      setSuccess(true);
       return response;
     } catch (err) {
       console.log(err);
-      setError({
-        status: true,
-        message: err && err.message
-      });
+      setError(err && err.message);
     }
   }),
   setResponse: action((state, payload) => ({

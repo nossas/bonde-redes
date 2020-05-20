@@ -1,12 +1,5 @@
 import React from "react";
-// import PropTypes from 'prop-types'
-import {
-  Button,
-  Flexbox2 as Flexbox,
-  FormField,
-  Input,
-  Text
-} from "bonde-styleguide";
+import { Button, FormField, Input, Text } from "bonde-styleguide";
 import styled from "styled-components";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import { useForm, Controller } from "react-hook-form";
@@ -18,10 +11,10 @@ import MapsSearchInput from "./Search/MapsSearchInput";
 // }
 
 const FormWrapper = styled.form`
-  width: 70%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-items: end;
+  grid-column-gap: 10px;
 `;
 const StyledField = styled(FormField)`
   padding: 0;
@@ -30,14 +23,21 @@ const StyledField = styled(FormField)`
   top: 16px;
 `;
 const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  display: grid;
+  width: 100%;
+  justify-items: center;
 `;
 
 const LabelsWrapper = styled.div`
-  display: flex;
-  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  width: 100%;
+  & > label {
+    padding-right: 5px;
+    &:last-child {
+      padding: 0;
+    }
+  }
 `;
 
 const StyledLabel = styled.label`
@@ -46,7 +46,12 @@ const StyledLabel = styled.label`
   font-style: normal;
   line-height: 1.15;
   color: rgba(170, 170, 170, 1);
-  padding-right: 10px;
+`;
+
+const WrapButton = styled.div`
+  && > button {
+    height: 100%;
+  }
 `;
 
 interface GeobondeForm {
@@ -133,20 +138,18 @@ const Form: React.FC = () => {
           <StyledLabel htmlFor="lawyer">
             <input type="checkbox" name="lawyer" ref={register} /> Advogada
           </StyledLabel>
-          <br />
           <StyledLabel htmlFor="therapist">
             <input type="checkbox" name="therapist" ref={register} /> Terapeuta
           </StyledLabel>
-          <br />
           <StyledLabel htmlFor="individual">
             <input type="checkbox" name="individual" ref={register} /> MSR
           </StyledLabel>
         </LabelsWrapper>
-        <Flexbox middle>
+        <WrapButton>
           <Button type="submit" disabled={tableData.length < 1}>
             Buscar
           </Button>
-        </Flexbox>
+        </WrapButton>
       </Column>
     </FormWrapper>
   );

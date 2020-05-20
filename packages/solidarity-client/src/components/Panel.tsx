@@ -1,103 +1,98 @@
-import React, {
-  useState, useCallback,
-} from 'react'
-import { useSpring, animated } from 'react-spring'
-import styled from 'styled-components';
-import PropTypes from 'prop-types'
+import React, { useState, useCallback } from "react";
+import { useSpring, animated } from "react-spring";
+import styled from "styled-components";
+import PropTypes from "prop-types";
 
 interface Props {
-  open: boolean
-  direction: 'top' | 'left'
-  relative?: boolean
-  className?: string
-  size?: number
-  children?: React.ReactNode
+  open: boolean;
+  direction: "top" | "left";
+  relative?: boolean;
+  className?: string;
+  size?: number;
+  children?: React.ReactNode;
 }
 
 interface Animation {
-  marginTop?: number
-  marginLeft?: number
+  marginTop?: number;
+  marginLeft?: number;
 }
 
 interface StyledDivProps {
-  relative?: boolean
+  relative?: boolean;
 }
 
 interface Size {
-  node?: any
-  width: number
-  height: number
+  node?: any;
+  width: number;
+  height: number;
 }
 
 const StyledDiv = styled.div.attrs((p: StyledDivProps) => p)`
-  position: ${(p) => (p.relative ? 'relative' : 'initial')};
+  position: ${p => (p.relative ? "relative" : "initial")};
 `;
 
-const AnimatedDiv = animated(StyledDiv)
+const AnimatedDiv = animated(StyledDiv);
 
 const Panel: React.FC<Props> = ({
   direction,
   open,
   children,
-  relative,
+  // relative,
   className,
-  size,
+  size
 }) => {
   const [clientSize, setClientSize] = useState<Size>({
     height: 0,
-    width: 0,
-  })
+    width: 0
+  });
 
   const measure = useCallback((node: HTMLDivElement) => {
     if (node !== null) {
       setClientSize({
         node,
         width: node.clientWidth,
-        height: node.clientHeight,
-      })
+        height: node.clientHeight
+      });
     }
-  }, [])
+  }, []);
 
-  let flag: number
-  let animation: Animation
-  if (direction === 'top') {
-    flag = open ? 0 : ((size && -size) || -clientSize.height)
+  let flag: number;
+  let animation: Animation;
+  if (direction === "top") {
+    flag = open ? 0 : (size && -size) || -clientSize.height;
     animation = {
-      marginTop: flag,
-    }
+      marginTop: flag
+    };
   } else {
-    flag = open ? 0 : ((size && -size) || -clientSize.width)
+    flag = open ? 0 : (size && -size) || -clientSize.width;
     animation = {
-      marginLeft: flag,
-    }
+      marginLeft: flag
+    };
   }
 
-  const props = useSpring(animation)
+  const props = useSpring(animation);
 
   return (
     <AnimatedDiv style={props} className={className} relative>
-      <div ref={measure}>
-        {children}
-      </div>
+      <div ref={measure}>{children}</div>
     </AnimatedDiv>
-  )
-}
+  );
+};
 
 Panel.defaultProps = {
   relative: false,
-  className: '',
+  className: "",
   size: 0,
-  children: null,
-}
-
+  children: null
+};
 
 Panel.propTypes = {
   open: PropTypes.bool.isRequired,
-  direction: PropTypes.oneOf<'top' | 'left'>(['top', 'left']).isRequired,
+  direction: PropTypes.oneOf<"top" | "left">(["top", "left"]).isRequired,
   relative: PropTypes.bool,
   className: PropTypes.string,
   size: PropTypes.number,
-  children: PropTypes.node,
-}
+  children: PropTypes.node
+};
 
-export default Panel
+export default Panel;

@@ -1,3 +1,5 @@
+import { LAWYER, THERAPIST } from "../parse/index";
+
 export const getUserFromTicket = (users, ticket) =>
   users.filter(user => user.user_id === ticket.requester_id);
 
@@ -20,13 +22,22 @@ export const isValidTicket = (users, ticket) => {
 };
 
 export const getTicketType = (type, subject) => {
-  if (type === "psicológico_e_jurídico") {
-    const match = getSupportType(subject);
-    if (match.length > 0) {
-      return match[0] === "jurdico" ? "jurídico" : "psicológico";
-    }
+  if (typeof type === "undefined" || type === null) {
+    return "-";
   }
-  return typeof type !== "undefined" ? type : "-";
+  const match = getSupportType(subject);
+  if (match.length > 0) {
+    return match[0] === "jurdico" ? "jurídico" : "psicológico";
+  }
+  return "-";
+};
+
+export const volunteer_type = (
+  input: number
+): "jurídico" | "psicológico" | null => {
+  if (input === LAWYER) return "jurídico";
+  if (input === THERAPIST) return "psicológico";
+  return null;
 };
 
 export const fuseTicketsAndUsers = (users, tickets) =>

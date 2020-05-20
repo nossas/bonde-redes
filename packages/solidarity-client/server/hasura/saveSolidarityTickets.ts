@@ -112,8 +112,6 @@ const saveTickets = async (ticket: TicketZendesk) => {
     }
   );
 
-  console.log("query", response.config.data, "error", response.data);
-
   if (response.data.errors) {
     return response.data.errors;
   }

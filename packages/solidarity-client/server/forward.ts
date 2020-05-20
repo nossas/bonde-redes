@@ -30,7 +30,7 @@ type Body = {
   assignee_name: string;
 };
 
-const main = async (req, res, next) => {
+const main = async (req, res, _next) => {
   const client = zendesk.createClient({
     username: ZENDESK_API_USER || "",
     token: ZENDESK_API_TOKEN || "",
@@ -81,7 +81,7 @@ const main = async (req, res, next) => {
     return client.tickets.update(
       ticketId,
       content,
-      async (err, req, result: any) => {
+      async (err, _req, result: any) => {
         if (err) {
           return handleError({
             error: err,
@@ -139,7 +139,7 @@ const main = async (req, res, next) => {
         volunteer_organization_id,
         individual_ticket_id
       }),
-      async (err, req, result: any) => {
+      async (err, _req, result: any) => {
         if (err) {
           return handleError({
             error: err,
@@ -193,7 +193,7 @@ const main = async (req, res, next) => {
       {
         filename: "Guia_do_Acolhimento.pdf"
       },
-      (err, req, result: any) => {
+      (err, _req, result: any) => {
         if (err) {
           return handleError({
             error: err,
@@ -209,7 +209,7 @@ const main = async (req, res, next) => {
           {
             filename: file.filename
           },
-          (error, req, results: any) => {
+          (error, _req, results: any) => {
             if (error) {
               return handleError({
                 error: err,

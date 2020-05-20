@@ -5,8 +5,7 @@ pipeline:
       - COMMUNITY_ID=40
       - REACT_APP_ZENDESK_ORGANIZATIONS={"lawyer":360269610652,"individual":360273031591,"therapist":360282119532}
       - ZENDESK_API_URL=https://mapadoacolhimento.zendesk.com/api/v2/
-      - REACT_APP_LOGIN_URL=https://admin-canary.staging.bonde.org/auth/login
-      - REACT_APP_DOMAIN_CROSS_STORAGE=https://cross-storage.staging.bonde.org
+      - REACT_APP_ENVIRONMENT=staging
     commands:
       - export REACT_APP_GOOGLE_CLIENT_KEY=$STAG_GOOGLE_CLIENT
       - export ZENDESK_API_TOKEN=$STGA_ZENDESK_API_TOKEN
@@ -24,8 +23,7 @@ pipeline:
       - COMMUNITY_ID=40
       - REACT_APP_ZENDESK_ORGANIZATIONS={"lawyer":360269610652,"individual":360273031591,"therapist":360282119532}
       - ZENDESK_API_URL=https://mapadoacolhimento.zendesk.com/api/v2/
-      - REACT_APP_LOGIN_URL=https://admin-canary.bonde.org/auth/login
-      - REACT_APP_DOMAIN_CROSS_STORAGE=https://cross-storage.bonde.org
+      - REACT_APP_ENVIRONMENT=production
     commands:
       - export REACT_APP_GOOGLE_CLIENT_KEY=$STAG_GOOGLE_CLIENT
       - export ZENDESK_API_TOKEN=$STGA_ZENDESK_API_TOKEN

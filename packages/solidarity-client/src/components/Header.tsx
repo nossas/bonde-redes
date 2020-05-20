@@ -1,92 +1,64 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
-import {
-  Header as BondeHeader,
-  Title,
-  Button,
-  Flexbox,
-  Flexbox2
-} from "bonde-styleguide";
+import { Header as BondeHeader } from "bonde-styleguide";
+import { Header as Title } from "bonde-components";
 
-import Form from "./Form";
-import { If } from "./If";
-import MatchForm from "./MatchForm";
+import { Tabs, MatchForm, Form } from "../components";
 
 const StyledBondeHeader = styled(BondeHeader)`
   width: 100%;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  display: flex;
-  padding: 22px 40px;
+  height: 100px;
+  display: grid;
+  grid-template-columns: 50% 50%;
 `;
 
-const FlexDiv = styled(Flexbox2)`
-  width: 450px;
+const TabsWrapper = styled.div`
+  position: absolute;
+  margin-top: 30px;
 `;
 
-const WrapButtons = styled(Flexbox2)`
-  width: 100%;
-`
-
-const isMatch = (path: string) => path === "/match";
-
-const Header: React.FC = ({ children }) => {
+const Header: React.FC = () => {
   const { pathname: path } = useLocation();
+  const [selectedTab, setTab] = useState("pessoas");
+
+  const tabs = [
+    {
+      name: "voluntárias",
+      to: "/voluntarias"
+    },
+    {
+      name: "encaminhamento",
+      to: "/match"
+    },
+    {
+      name: "geobonde",
+      to: "/geobonde"
+    }
+    // {
+    //   name: "mapa",
+    //   to: "/geobonde/mapa"
+    // }
+  ];
+
+  useEffect(() => {
+    const currentTab = tabs.find(i => i["to"] === path) || { name: "geobonde" };
+    setTab(currentTab["name"]);
+  }, [path, setTab, tabs]);
 
   return (
-    <Flexbox vertical>
-      <StyledBondeHeader>
-        <Flexbox alignItems="middle" row horizontal>
-          <Title.H2 color="white">
-            {isMatch(path) ? "Match" : "Mapa do acolhimento"}
-          </Title.H2>
-          {/* <Button onClick={() => { toggleContentState() }}>
-            Alternar para
-              {' '}
-              {visualizationState.get()}
-            </Button> */}
-          <If condition={path === "/match"}>
-            <MatchForm />
-          </If>
-          <If condition={path === "/geobonde"}>
-            <Form />
-          </If>
-          <If condition={path === "/voluntarias" || path === "/geobonde/mapa"}>
-            <WrapButtons justify="flex-end" horizontal>
-              <FlexDiv spacing="evenly">
-                <Link to="/match">
-                  <Button>Encaminhamento</Button>
-                </Link>
-                <Link to="/geobonde">
-                  <Button>Geobonde</Button>
-                </Link>
-                <If condition={path === "/voluntarias"}>
-                  <Link to="/geobonde/mapa">
-                    <Button>Mapa</Button>
-                  </Link>
-                </If>
-                <If condition={path === "/geobonde/mapa"}>
-                  <Link to="/voluntarias">
-                    <Button>Voluntarias</Button>
-                  </Link>
-                </If>
-              </FlexDiv>
-            </WrapButtons>
-          </If>
-        </Flexbox>
-      </StyledBondeHeader>
-    </Flexbox>
+    <StyledBondeHeader>
+      <div>
+        <Title.h3 style={{ color: "#ffffff" }}>Match Otimizado</Title.h3>
+        <TabsWrapper>
+          <Tabs tabs={tabs} selectedTab={selectedTab} />
+        </TabsWrapper>
+      </div>
+      {path === "/match" && <MatchForm />}
+      {path === "/geobonde" && <Form />}
+    </StyledBondeHeader>
   );
-};
-
-Header.defaultProps = {
-  children: null
-};
-
-Header.propTypes = {
-  children: PropTypes.node
 };
 
 export default Header;

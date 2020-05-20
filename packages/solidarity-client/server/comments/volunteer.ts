@@ -30,6 +30,7 @@ Qualquer dúvida ou dificuldade, por favor nos comunique.
 Um abraço,
 
 
-${assignee_name} do Mapa do Acolhimento`};
+${assignee_name} do Mapa do Acolhimento`;
+};
 
 export default volunteerComment;

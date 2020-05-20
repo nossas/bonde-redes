@@ -35,7 +35,7 @@ app.use(
 );
 app.use(cors());
 app.use(express.static(path.join(__dirname, "..", "..", "build")));
-app.use((err, req: express.Request, res: express.Response, next) => {
+app.use((err, _req: express.Request, res: express.Response, _next) => {
   console.error(err);
   res.status(500).json({ message: "an error occurred" });
 });
@@ -48,7 +48,7 @@ app.get("/api/user", asyncMiddleware(user));
 
 app.post("/api/forward", asyncMiddleware(forward));
 
-app.get("/*", (req: express.Request, res: express.Response) => {
+app.get("/*", (_req: express.Request, res: express.Response) => {
   res.sendFile(path.join(__dirname, "..", "..", "build", "index.html"));
 });
 

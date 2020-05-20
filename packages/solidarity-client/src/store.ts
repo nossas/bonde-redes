@@ -3,7 +3,7 @@ import GlobalModel from "./models";
 
 const {
   matchFormModel,
-  popupModel,
+  statusModel,
   geobondeForm,
   tableModel,
   individualModel,
@@ -15,7 +15,7 @@ const {
 
 const storeModel = {
   match: matchFormModel,
-  popups: popupModel,
+  status: statusModel,
   table: tableModel,
   geobonde: geobondeForm,
   individual: individualModel,

@@ -1,14 +1,14 @@
 import React, { useMemo, useCallback, useEffect } from "react";
 import ReactTable from "react-table";
-import { Flexbox2 as Flexbox, Title } from "bonde-styleguide";
+import { Header } from "bonde-components";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import * as turf from "@turf/turf";
 
-import { Ticket } from "../../../models/table-data";
+import { Ticket } from "../../../types";
 import columns from "./columns";
 import { zendeskOrganizations, isVolunteer } from "../../../services/utils";
 
-import { FullWidth } from "./style";
+import { Loading } from "../../../components";
 
 import "react-table/react-table.css";
 
@@ -20,7 +20,7 @@ const Table: React.FC = () => {
   );
 
   useEffect(() => {
-    getTableData("all");
+    getTableData({ endpoint: "all" });
   }, [getTableData]);
 
   const { distance, lat, lng, individual, lawyer, therapist } = searchForm;
@@ -70,7 +70,9 @@ const Table: React.FC = () => {
 
         return true;
         // eslint-disable-next-line
-  }), [individual, lawyer, therapist])
+      }),
+    [individual, lawyer, therapist]
+  );
 
   const filterByUserCondition = useCallback(
     (data: Ticket[]) =>
@@ -93,35 +95,36 @@ const Table: React.FC = () => {
   );
 
   const filteredTableData = useMemo(() => {
-    const data = filterByCategory(
-      filterByDistance(filterByUserCondition(tableData))
-    );
+    let data: Array<any> = [];
+    if (typeof tableData !== "string") {
+      data = filterByCategory(
+        filterByDistance(filterByUserCondition(tableData))
+      );
+    }
 
     return data;
   }, [filterByCategory, filterByDistance, filterByUserCondition, tableData]);
 
+  if (tableData === "pending") return <Loading text="Buscando..." />;
+
   return filteredTableData.length === 0 ? (
-    <FullWidth>
-      <Flexbox>
-        <Title.H4 margin={{ bottom: 30 }}>Nenhum resultado.</Title.H4>
-      </Flexbox>
-    </FullWidth>
+    <div style={{ height: "calc(100vh - 130px)" }}>
+      <Header.h3 style={{ margin: 30 }}>Nenhum resultado.</Header.h3>
+    </div>
   ) : (
-    <FullWidth>
-      <Flexbox vertical>
-        <Title.H2 margin={{ bottom: 20 }}>Match realizado!</Title.H2>
-        <Title.H4 margin={{ bottom: 30 }}>
-          {`${filteredTableData.length} usuárias encontradas em um raio de ${distance}km.`}
-        </Title.H4>
-        <br />
-        <ReactTable
-          data={filteredTableData}
-          columns={columns}
-          defaultPageSize={15}
-          className="-striped -highlight"
-        />
-      </Flexbox>
-    </FullWidth>
+    <>
+      <Header.h3 style={{ marginBottom: 10 }}>Usuárias encontradas!</Header.h3>
+      <Header.h5>
+        {`${filteredTableData.length} usuárias encontradas em um raio de ${distance}km.`}
+      </Header.h5>
+      <br />
+      <ReactTable
+        data={filteredTableData}
+        columns={columns}
+        defaultPageSize={15}
+        className="-striped -highlight"
+      />
+    </>
   );
 };
 
