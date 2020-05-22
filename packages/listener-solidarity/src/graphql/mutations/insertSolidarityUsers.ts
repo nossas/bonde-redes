@@ -4,57 +4,62 @@ import dbg from "../../dbg";
 
 const log = dbg.extend("insertSolidarityUsers");
 
-const INDIVIDUALS_MUTATION = gql`
-  mutation insert_rede_individuals(
-    $individuals: [rede_individuals_insert_input!]!
-  ) {
-    insert_rede_individuals(
-      objects: $individuals
+const SOLIDARITY_USERS_MUTATION = gql`
+  mutation insert_solidarity_users($users: [solidarity_users_insert_input!]!) {
+    insert_solidarity_users(
+      objects: $users
       on_conflict: {
-        constraint: rede_individuals_form_entry_id
-        update_columns: [updated_at]
+        constraint: solidarity_users_user_id_key
+        update_columns: [
+          address
+          cep
+          city
+          community_id
+          condition
+          cor
+          disponibilidade_de_atendimentos
+          created_at
+          data_de_inscricao_no_bonde
+          email
+          external_id
+          latitude
+          longitude
+          name
+          occupation_area
+          organization_id
+          phone
+          registration_number
+          role
+          state
+          tags
+          tipo_de_acolhimento
+          ultima_atualizacao_de_dados
+          updated_at
+          user_fields
+          user_id
+          whatsapp
+        ]
       }
     ) {
-      returning {
-        id
-        first_name
-        last_name
-        email
-        phone
-        whatsapp
-
-        extras
-
-        zipcode
-        address
-        city
-        state
-        coordinates
-
-        form_entry_id
-        rede_group_id
-
-        created_at
-        updated_at
-      }
+      affected_rows
     }
   }
 `;
 
-const insertSolidarityUsers = async (individuals: any): Promise<any> => {
+const insertSolidarityUsers = async (users: any): Promise<any> => {
   try {
     const {
-      data: {
-        insert_rede_individuals: { returning },
-      },
+      data: { insert_solidarity_users },
     } = await GraphQLAPI.mutate({
-      mutation: INDIVIDUALS_MUTATION,
-      variables: { individuals },
+      mutation: SOLIDARITY_USERS_MUTATION,
+      variables: { users },
     });
 
-    return returning;
+    log(insertSolidarityUsers);
+
+    return insert_solidarity_users;
   } catch (err) {
-    log("failed on insert rede individuals: ".red, err);
+    log("failed on insert solidarity users: ".red, err);
     return undefined;
   }
 };

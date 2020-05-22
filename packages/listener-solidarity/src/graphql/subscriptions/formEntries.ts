@@ -9,7 +9,11 @@ const log = dbg.extend("subscriptionFormEntries");
 const FORM_ENTRIES_SUBSCRIPTION = gql`
   subscription pipeline_form_entries($widgets: [Int!]) {
     form_entries(
-      where: { widget_id: { _in: $widgets }, rede_syncronized: { _eq: false } }
+      where: {
+        widget_id: { _in: $widgets }
+        rede_syncronized: { _eq: false }
+        id: { _eq: 2000302 }
+      }
       order_by: { id: asc }
     ) {
       id
