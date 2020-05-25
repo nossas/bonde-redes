@@ -5,8 +5,8 @@ import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
-import fetch from "node-fetch";
-import * as ws from "ws";
+import fetch from "cross-fetch";
+import ws from "ws";
 
 if (!process.env.JWT_TOKEN && !process.env.HASURA_SECRET) {
   throw new Error(
@@ -20,7 +20,7 @@ const authHeaders = process.env.JWT_TOKEN
 
 const httpLink = createHttpLink({
   uri: process.env.GRAPHQL_URL || "data.bonde.devel:3001/graphql",
-  fetch
+  fetch,
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
@@ -33,9 +33,9 @@ const wsLink = new WebSocketLink({
   uri: process.env.WS_GRAPHQL_URL || "ws://localhost:5007/v1/graphql",
   options: {
     reconnect: true,
-    connectionParams: { headers: authHeaders }
+    connectionParams: { headers: authHeaders },
   },
-  webSocketImpl: ws
+  webSocketImpl: ws,
 });
 
 // using the ability to split links, you can send data to each link
@@ -53,9 +53,7 @@ const link = split(
   httpLink
 );
 
-const cache = new InMemoryCache();
-
 export const client = new ApolloClient({
-  cache,
-  link: concat(authMiddleware, link)
+  cache: new InMemoryCache(),
+  link: concat(authMiddleware, link),
 });

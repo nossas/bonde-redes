@@ -1,4 +1,4 @@
-import * as throng from "throng";
+import throng from "throng";
 import { subscriptionFormEntries } from "./graphql/subscriptions";
 import widgets from "./form_entries_mapping";
 import dbg from "./dbg";
