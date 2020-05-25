@@ -21,7 +21,7 @@ export interface Widget {
 }
 
 // Zendesk + Hasura fields to create user
-export type User = {
+export interface User {
   role: "end-user";
   organization_id: number;
   name: string;
@@ -45,7 +45,7 @@ export type User = {
     occupation_area: string | null;
     disponibilidade_de_atendimentos: string | null;
   };
-};
+}
 
 interface GoogleMapsAddressComponent {
   long_name: string;

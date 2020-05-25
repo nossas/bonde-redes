@@ -16,8 +16,12 @@ const handleError = (entries: User[]) => {
       (e) => e.external_id
     )}`
   );
-  return undefined;
+  return Promise.reject(false);
 };
+
+// interface HasuraUser extends User {
+//   user_id: number;
+// }
 
 const createUsersHasura = (
   results: Array<{ id: number; status: string; external_id: string }>,
@@ -26,7 +30,10 @@ const createUsersHasura = (
   if (results.length < 1 || users.length < 1) {
     return handleError(users);
   }
-  const hasuraUsers: Array<User & { user_id: number }> = results.map((r) => {
+
+  // Array<HasuraUser>
+
+  const hasuraUsers = results.map((r) => {
     const user = users.find((u) => u.external_id === r.external_id);
     return {
       ...user,
@@ -154,7 +161,10 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
         if (instance.occupation_area)
           register["user_fields"]["occupation_area"] = instance.occupation_area;
         // widget 1733 and 16838 have two fields that indicate "disponibilidade"
-        if (instance["extras"]["disponibilidade_de_atendimentos_um"]) {
+        if (
+          instance["extras"] &&
+          instance["extras"]["disponibilidade_de_atendimentos_um"]
+        ) {
           register["user_fields"]["disponibilidade_de_atendimentos"] =
             instance["extras"]["disponibilidade_de_atendimentos_um"] +
             instance["extras"]["disponibilidade_de_atendimentos_dois"];

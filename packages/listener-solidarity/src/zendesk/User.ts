@@ -20,7 +20,7 @@ export default async (
       result["job_status"].id,
       500,
       5,
-      (err, _req, result) => {
+      (err, _req, result: any) => {
         if (err) {
           log(err);
           return cb([], users);
