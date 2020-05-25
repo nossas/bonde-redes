@@ -224,11 +224,11 @@ export default [
           uid: "field-1530889975174-37",
         },
         {
-          name: "extras.disponibilidade_de_atendimentos_um",
+          name: "extras.disponibilidade_de_atendimentos",
           uid: "field-1530890024584-74",
         },
         {
-          name: "extras.disponibilidade_de_atendimentos_dois",
+          name: "disponibilidade_de_atendimentos",
           uid: "field-1530890036340-68",
         },
         {
@@ -360,11 +360,11 @@ export default [
           uid: "field-1533735844231-43",
         },
         {
-          name: "extras.disponibilidade_de_atendimentos_um",
+          name: "extras.disponibilidade_de_atendimentos",
           uid: "field-1533735866582-88",
         },
         {
-          name: "extras.disponibilidade_de_atendimentos_dois",
+          name: "disponibilidade_de_atendimentos",
           uid: "field-1533735888966-20",
         },
         {

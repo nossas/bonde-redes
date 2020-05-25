@@ -16,7 +16,7 @@ const handleError = (entries: User[]) => {
       (e) => e.external_id
     )}`
   );
-  return Promise.reject(false);
+  return undefined;
 };
 
 // interface HasuraUser extends User {
@@ -27,7 +27,7 @@ const createUsersHasura = (
   results: Array<{ id: number; status: string; external_id: string }>,
   users: User[]
 ) => {
-  if (results.length < 1 || users.length < 1) {
+  if (results.find((r) => r.status === "Failed") || users.length < 1) {
     return handleError(users);
   }
 
@@ -69,7 +69,7 @@ const register: User = {
   organization_id: 0,
   email: "",
   external_id: "",
-  phone: null,
+  phone: "",
   user_fields: {
     tipo_de_acolhimento: null,
     condition: "desabilitada",
@@ -146,7 +146,12 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
         //   register["user_fields"][g] = geocoding[g];
         // });
 
-        if (instance["extras"] && instance["extras"]["accept_terms"] === "sim")
+        console.log({ instance });
+
+        const terms =
+          (instance["extras"] && instance["extras"]["accept_terms"]) || "";
+
+        if (terms.match(/sim/gi))
           register["user_fields"]["condition"] = "inscrita";
 
         // fields that may go into the `user_fields`
@@ -160,15 +165,7 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
             instance.registration_number;
         if (instance.occupation_area)
           register["user_fields"]["occupation_area"] = instance.occupation_area;
-        // widget 1733 and 16838 have two fields that indicate "disponibilidade"
-        if (
-          instance["extras"] &&
-          instance["extras"]["disponibilidade_de_atendimentos_um"]
-        ) {
-          register["user_fields"]["disponibilidade_de_atendimentos"] =
-            instance["extras"]["disponibilidade_de_atendimentos_um"] +
-            instance["extras"]["disponibilidade_de_atendimentos_dois"];
-        } else if (instance.disponibilidade_de_atendimentos) {
+        if (instance.disponibilidade_de_atendimentos) {
           register["user_fields"]["disponibilidade_de_atendimentos"] =
             instance.disponibilidade_de_atendimentos;
         }

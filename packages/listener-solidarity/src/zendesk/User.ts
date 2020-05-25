@@ -9,7 +9,7 @@ export default async (
   cb: (
     results: Array<{ id: number; status: string; external_id: string }>,
     users: User[]
-  ) => Promise<any>
+  ) => Promise<any> | undefined
 ) => {
   return client.users.createMany({ users }, (err, _req, result: any) => {
     if (err) {
@@ -26,7 +26,11 @@ export default async (
           return cb([], users);
         }
         log(
-          `Results from zendesk user creation ${result["job_status"]["results"]}`
+          `Results from zendesk user creation ${JSON.stringify(
+            result["job_status"]["results"],
+            null,
+            2
+          )}`
         );
         return cb(result["job_status"]["results"], users);
       }

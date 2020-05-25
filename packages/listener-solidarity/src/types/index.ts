@@ -27,7 +27,7 @@ export interface User {
   name: string;
   email: string;
   external_id: string;
-  phone: string | null;
+  phone: string;
   user_fields: {
     condition: "inscrita" | "desabilitada";
     state: string;
