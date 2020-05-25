@@ -5,51 +5,51 @@ export default [
       form_mapping: [
         {
           name: "first_name",
-          uid: "field-1464961964463-91"
+          uid: "field-1464961964463-91",
         },
         {
           name: "last_name",
-          uid: "field-1464961980231-76"
+          uid: "field-1464961980231-76",
         },
         {
           name: "phone",
-          uid: "field-1464961993261-67"
+          uid: "field-1464961993261-67",
         },
         {
           name: "whatsapp",
-          uid: "field-1465303586925-83"
+          uid: "field-1465303586925-83",
         },
         {
           name: "city",
-          uid: "field-1464962001235-81"
+          uid: "field-1464962001235-81",
         },
         {
           name: "cep",
-          uid: "field-1464962010023-34"
+          uid: "field-1464962010023-34",
         },
         {
           name: "email",
-          uid: "field-1464962030025-16"
+          uid: "field-1464962030025-16",
         },
         {
           name: "occupation_area",
-          uid: "field-1464962039059-69"
+          uid: "field-1464962039059-69",
         },
         {
           name: "registration_number",
-          uid: "field-1464962055652-41"
+          uid: "field-1464962055652-41",
         },
         {
           name: "extras.recomendation",
-          uid: "field-1464962083833-11"
+          uid: "field-1464962083833-11",
         },
         {
-          name: "disponiblidade_de_atendimentos",
-          uid: "field-1464962127079-77"
-        }
-      ]
+          name: "disponibilidade_de_atendimentos",
+          uid: "field-1464962127079-77",
+        },
+      ],
     },
-    organization_id: 360269610652
+    organization_id: 360269610652,
   },
   {
     id: 3297,
@@ -57,31 +57,31 @@ export default [
       form_mapping: [
         {
           name: "first_name",
-          uid: "field-1468596771645-85"
+          uid: "field-1468596771645-85",
         },
         {
           name: "last_name",
-          uid: "field-1468596980548-63"
+          uid: "field-1468596980548-63",
         },
         {
           name: "email",
-          uid: "field-1468596987436-37"
+          uid: "field-1468596987436-37",
         },
         {
           name: "city",
-          uid: "field-1468597009217-99"
+          uid: "field-1468597009217-99",
         },
         {
           name: "cep",
-          uid: "field-1468597036505-17"
+          uid: "field-1468597036505-17",
         },
         {
           name: "extras.is_case_registered",
-          uid: "field-1468597056552-95"
-        }
-      ]
+          uid: "field-1468597056552-95",
+        },
+      ],
     },
-    organization_id: 360269610652
+    organization_id: 360269610652,
   },
   {
     id: 8190,
@@ -89,43 +89,43 @@ export default [
       form_mapping: [
         {
           name: "first_name",
-          uid: "field-1497368661426-82"
+          uid: "field-1497368661426-82",
         },
         {
           name: "last_name",
-          uid: "field-1497368672826-91"
+          uid: "field-1497368672826-91",
         },
         {
           name: "phone",
-          uid: "field-1497369273804-61"
+          uid: "field-1497369273804-61",
         },
         {
           name: "email",
-          uid: "field-1497368680011-82"
+          uid: "field-1497368680011-82",
         },
         {
           name: "registration_number",
-          uid: "field-1497368693005-33"
+          uid: "field-1497368693005-33",
         },
         {
           name: "extras.specialization",
-          uid: "field-1497368810164-63"
+          uid: "field-1497368810164-63",
         },
         {
           name: "city",
-          uid: "field-1497369214092-68"
+          uid: "field-1497369214092-68",
         },
         {
           name: "occupation_area",
-          uid: "field-1497369283737-19"
+          uid: "field-1497369283737-19",
         },
         {
           name: "disponibilidade_de_atendimentos",
-          uid: "field-1497369326335-47"
-        }
-      ]
+          uid: "field-1497369326335-47",
+        },
+      ],
     },
-    organization_id: 360269610652
+    organization_id: 360269610652,
   },
   {
     id: 16835,
@@ -133,51 +133,51 @@ export default [
       form_mapping: [
         {
           name: "first_name",
-          uid: "field-1530889190780-12"
+          uid: "field-1530889190780-12",
         },
         {
           name: "last_name",
-          uid: "field-1530889199847-58"
+          uid: "field-1530889199847-58",
         },
         {
           name: "email",
-          uid: "field-1530889206194-83"
+          uid: "field-1530889206194-83",
         },
         {
           name: "registration_number",
-          uid: "field-1530889245511-83"
+          uid: "field-1530889245511-83",
         },
         {
           name: "state",
-          uid: "field-1530889263140-10"
+          uid: "field-1530889263140-10",
         },
         {
           name: "city",
-          uid: "field-1530889278542-68"
+          uid: "field-1530889278542-68",
         },
         {
           name: "address",
-          uid: "field-1530889290557-13"
+          uid: "field-1530889290557-13",
         },
         {
           name: "phone",
-          uid: "field-1530889321904-94"
+          uid: "field-1530889321904-94",
         },
         {
           name: "whatsapp",
-          uid: "field-1530889345052-73"
+          uid: "field-1530889345052-73",
         },
         {
-          name: "disponiblidade_de_atendimentos",
-          uid: "field-1530889372549-40"
+          name: "disponibilidade_de_atendimentos",
+          uid: "field-1530889372549-40",
         },
         {
           name: "occupation_area",
-          uid: "field-1530889382200-77"
-        }
-      ]
+          uid: "field-1530889382200-77",
+        },
+      ],
     },
-    organization_id: 360269610652
+    organization_id: 360269610652,
   },
   {
     id: 16838,
@@ -185,59 +185,59 @@ export default [
       form_mapping: [
         {
           name: "first_name",
-          uid: "field-1530889762581-19"
+          uid: "field-1530889762581-19",
         },
         {
           name: "last_name",
-          uid: "field-1530889778477-47"
+          uid: "field-1530889778477-47",
         },
         {
           name: "email",
-          uid: "field-1530889827033-18"
+          uid: "field-1530889827033-18",
         },
         {
           name: "registration_number",
-          uid: "field-1530889844695-35"
+          uid: "field-1530889844695-35",
         },
         {
           name: "state",
-          uid: "field-1530889861614-27"
+          uid: "field-1530889861614-27",
         },
         {
           name: "city",
-          uid: "field-1530889875964-17"
+          uid: "field-1530889875964-17",
         },
         {
           name: "address",
-          uid: "field-1530889888615-19"
+          uid: "field-1530889888615-19",
         },
         {
           name: "phone",
-          uid: "field-1530889910384-28"
+          uid: "field-1530889910384-28",
         },
         {
           name: "whatsapp",
-          uid: "field-1530889937136-21"
+          uid: "field-1530889937136-21",
         },
         {
           name: "extras.service_type",
-          uid: "field-1530889975174-37"
+          uid: "field-1530889975174-37",
         },
         {
-          name: "disponibilidade_de_atendimentos",
-          uid: "field-1530890024584-74"
+          name: "extras.disponibilidade_de_atendimentos_um",
+          uid: "field-1530890024584-74",
         },
         {
-          name: "disponibilidade_de_atendimentos",
-          uid: "field-1530890036340-68"
+          name: "extras.disponibilidade_de_atendimentos_dois",
+          uid: "field-1530890036340-68",
         },
         {
           name: "occupation_area",
-          uid: "field-1530890050032-24"
-        }
-      ]
+          uid: "field-1530890050032-24",
+        },
+      ],
     },
-    organization_id: 360269610652
+    organization_id: 360269610652,
   },
   {
     id: 16850,
@@ -245,35 +245,35 @@ export default [
       form_mapping: [
         {
           name: "first_name",
-          uid: "field-1531256279518-15"
+          uid: "field-1531256279518-15",
         },
         {
           name: "email",
-          uid: "field-1531256284908-34"
+          uid: "field-1531256284908-34",
         },
         {
           name: "state",
-          uid: "field-1531256429599-79"
+          uid: "field-1531256429599-79",
         },
         {
           name: "city",
-          uid: "field-1531256438968-91"
+          uid: "field-1531256438968-91",
         },
         {
           name: "neighborhood",
-          uid: "field-1531256466688-98"
+          uid: "field-1531256466688-98",
         },
         {
           name: "tipo_de_acolhimento",
-          uid: "field-1531256486749-86"
+          uid: "field-1531256486749-86",
         },
         {
           name: "extras.accept_terms",
-          uid: "field-1546881946816-20"
-        }
-      ]
+          uid: "field-1546881946816-20",
+        },
+      ],
     },
-    organization_id: 360269610652
+    organization_id: 360269610652,
   },
   {
     id: 17628,
@@ -281,39 +281,39 @@ export default [
       form_mapping: [
         {
           name: "first_name",
-          uid: "field-1533733461113-5"
+          uid: "field-1533733461113-5",
         },
         {
           name: "last_name",
-          uid: "field-1533733485653-99"
+          uid: "field-1533733485653-99",
         },
         {
           name: "email",
-          uid: "field-1533733493037-11"
+          uid: "field-1533733493037-11",
         },
         {
           name: "registration_number",
-          uid: "field-1533733501716-34"
+          uid: "field-1533733501716-34",
         },
         {
           name: "cep",
-          uid: "field-1533733650118-7"
+          uid: "field-1533733650118-7",
         },
         {
           name: "phone",
-          uid: "field-1533734419113-13"
+          uid: "field-1533734419113-13",
         },
         {
           name: "whatsapp",
-          uid: "field-1533734468460-38"
+          uid: "field-1533734468460-38",
         },
         {
           name: "extras.accept_terms",
-          uid: "field-1533734495315-40"
-        }
-      ]
+          uid: "field-1533734495315-40",
+        },
+      ],
     },
-    organization_id: 360269610652
+    organization_id: 360269610652,
   },
   {
     id: 17633,
@@ -321,58 +321,58 @@ export default [
       form_mapping: [
         {
           name: "first_name",
-          uid: "field-1533735738039-59"
+          uid: "field-1533735738039-59",
         },
         {
           name: "last_name",
-          uid: "field-1533735745400-14"
+          uid: "field-1533735745400-14",
         },
         {
           name: "email",
-          uid: "field-1533735752669-39"
+          uid: "field-1533735752669-39",
         },
         {
           name: "registration_number",
-          uid: "field-1533735761357-93"
+          uid: "field-1533735761357-93",
         },
         {
           name: "state",
-          uid: "field-1533735770558-86"
+          uid: "field-1533735770558-86",
         },
         {
           name: "city",
-          uid: "field-1533735788159-99"
+          uid: "field-1533735788159-99",
         },
         {
           name: "address",
-          uid: "field-1533735803691-45"
+          uid: "field-1533735803691-45",
         },
         {
           name: "phone",
-          uid: "field-1533735813563-2"
+          uid: "field-1533735813563-2",
         },
         {
           name: "whatsapp",
-          uid: "field-1533735832329-53"
+          uid: "field-1533735832329-53",
         },
         {
           name: "extras.service_type",
-          uid: "field-1533735844231-43"
+          uid: "field-1533735844231-43",
         },
         {
-          name: "disponibilidade_de_atendimentos",
-          uid: "field-1533735866582-88"
+          name: "extras.disponibilidade_de_atendimentos_um",
+          uid: "field-1533735866582-88",
         },
         {
-          name: "disponibilidade_de_atendimentos",
-          uid: "field-1533735888966-20"
+          name: "extras.disponibilidade_de_atendimentos_dois",
+          uid: "field-1533735888966-20",
         },
         {
           name: "occupation_area",
-          uid: "field-1533735911227-68"
-        }
-      ]
+          uid: "field-1533735911227-68",
+        },
+      ],
     },
-    organization_id: 360269610652
-  }
+    organization_id: 360269610652,
+  },
 ];

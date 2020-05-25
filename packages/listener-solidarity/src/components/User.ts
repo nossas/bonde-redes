@@ -1,87 +1,81 @@
-// import {
-//   updateFormEntries,
-//   insertRedeIndividuals
-// } from "../../graphql/mutations";
-import { Widget } from "../types";
+import { Widget, User, MetaField, Entries, Instance } from "../types";
 import dbg from "../dbg";
-import { getGeocoding } from "../utils";
-import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
+import { getOrganizationType, setType } from "../utils";
+// import getGeocoding from "../utils";
+// import {
+//   insertSolidarityUsers,
+//   updateFormEntries
+// } from "../graphql/mutations";
+import { createZendeskUser } from "../zendesk";
 
 const log = dbg.extend("User");
 
-interface MetaField {
-  uid: string;
-  name: string;
-}
-
-type Entries = {
-  fields: string;
-  widget_id: number;
-  id: number;
+const handleError = (entries: User[]) => {
+  log(
+    `Integration failed in these form entries ${entries.map(
+      (e) => e.external_id
+    )}`
+  );
+  return undefined;
 };
 
-type Instance = {
-  extras?: {
-    accept_terms?: "sim" | "não";
-  };
-  tipo_de_acolhimento?: "jurídico" | "psicológico" | "psicológico_e_jurídico";
-  first_name?: string;
-  last_name?: string;
-  condition: "inscrita" | "desabilitada";
-  state?: string;
-  city?: string;
-  neighborhood?: string;
-  cep?: string;
-  address?: string;
-};
-
-type User = {
-  name: string;
-  role: "end-user";
-  organization_id: number;
-  user_fields: {
-    tipo_de_acolhimento:
-      | "jurídico"
-      | "psicológico"
-      | "psicológico_e_jurídico"
-      | null;
-    condition: "inscrita" | "desabilitada" | null;
-    state: string;
-    city: string;
-    neighborhood: string;
-    cep: string;
-    address: string;
-  };
-};
-
-const setType = (type: string) => {
-  switch (type) {
-    case "Acolhimento Jurídico":
-      return "jurídico";
-    case "Acolhimento Terapêutico":
-      return "psicológico";
-    case "Acolhimento Terapêutico & Jurídico":
-    case "psicológico & Jurídico":
-    case "Psicológico & Jurídico":
-      return "psicológico_e_jurídico";
-    default:
-      return null;
+const createUsersHasura = (
+  results: Array<{ id: number; status: string; external_id: string }>,
+  users: User[]
+) => {
+  if (results.length < 1 || users.length < 1) {
+    return handleError(users);
   }
-};
+  const hasuraUsers: Array<User & { user_id: number }> = results.map((r) => {
+    const user = users.find((u) => u.external_id === r.external_id);
+    return {
+      ...user,
+      user_id: r.id,
+    };
+  });
+  log("Saving users in Hasura...");
+  log(hasuraUsers);
+  return Promise.resolve(true);
+  // return insertSolidarityUsers(hasuraUsers);
 
-const therapist_widgets = [2760, 16835, 17628];
-const lawyer_widgets = [8190, 16838, 17633];
-
-const getOrganizationType = (id: number): string => {
-  if (therapist_widgets.includes(id)) return "THERAPIST";
-  if (lawyer_widgets.includes(id)) return "LAWYER";
-  return "MSR";
+  // // Batch update syncronized forms
+  // console.log("Updating form_entries syncronized on GraphQL API...");
+  // console.log({ syncronizedForms });
+  // await updateFormEntries(syncronizedForms);
+  // cache = [];
+  // console.log("Integration is done.");
 };
 
 const organizationsIds = {
   MSR: 360273031591,
   THERAPIST: 360282119532,
   LAWYER: 360269610652,
+};
+
+let cache = new Array();
+let syncronizedForms = new Array();
+let individuals = new Array();
+
+const register: User = {
+  name: "",
+  role: "end-user",
+  organization_id: 0,
+  email: "",
+  external_id: "",
+  phone: null,
+  user_fields: {
+    tipo_de_acolhimento: null,
+    condition: "desabilitada",
+    state: "",
+    city: "",
+    neighborhood: "",
+    cep: "",
+    address: "",
+    whatsapp: null,
+    registration_number: null,
+    occupation_area: null,
+    disponibilidade_de_atendimentos: null,
+  },
 };
 
 const handleNext = (widgets: Widget[]) => async (response: any) => {
@@ -92,15 +86,10 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
     data: { form_entries: entries },
   } = response;
 
-  let cache = new Array();
-
   cache = entries.map((entry: any) => {
     if (!cache.includes(entry.id)) return entry;
     return;
   });
-
-  let syncronizedForms = new Array();
-  let individuals = new Array();
 
   if (cache.length > 0) {
     const registers = cache.map(async (formEntry: Entries) => {
@@ -109,24 +98,11 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
         (w: Widget) => w.id === formEntry.widget_id
       )[0];
       if (widget) {
-        const register: User = {
-          name: "",
-          role: "end-user",
-          organization_id: organizationsIds[getOrganizationType(widget.id)],
-          user_fields: {
-            tipo_de_acolhimento: null,
-            condition: null,
-            state: "",
-            city: "",
-            neighborhood: "",
-            cep: "",
-            address: "",
-          },
-        };
         const instance: Instance = {
-          condition: "desabilitada",
+          tipo_de_acolhimento: null,
+          first_name: "",
+          email: "",
         };
-        const isIndividual = getOrganizationType(widget.id) === "MSR";
 
         widget.metadata.form_mapping.map((field: MetaField) => {
           const acessors = field.name.split(".");
@@ -148,22 +124,46 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
           }
         });
 
-        register["user_fields"]["tipo_de_acolhimento"] = setType(
-          instance.tipo_de_acolhimento
-        );
+        register["email"] = instance.email;
+        if (instance.phone) register["phone"] = instance.phone;
         register["name"] = instance.last_name
           ? `${instance.first_name} ${instance.last_name}`
           : instance.first_name;
+        register["organization_id"] =
+          organizationsIds[getOrganizationType(widget.id)];
+        register["external_id"] = formEntry.id.toString();
+        register["verified"] = true;
 
-        const geocoding = await getGeocoding(instance);
-        Object.keys(geocoding).map((g) => {
-          register["user_fields"][g] = geocoding[g];
-        });
+        // const geocoding = await getGeocoding(instance);
+        // Object.keys(geocoding).map((g) => {
+        //   register["user_fields"][g] = geocoding[g];
+        // });
 
-        if (isIndividual) {
-          if (instance.extras.accept_terms === "sim")
-            return (register["user_fields"]["condition"] = "inscrita");
+        if (instance["extras"] && instance["extras"]["accept_terms"] === "sim")
+          register["user_fields"]["condition"] = "inscrita";
+
+        // fields that may go into the `user_fields`
+        register["user_fields"]["tipo_de_acolhimento"] = setType(
+          instance.tipo_de_acolhimento
+        );
+        if (instance.whatsapp)
+          register["user_fields"]["whatsapp"] = instance.whatsapp;
+        if (instance.registration_number)
+          register["user_fields"]["registration_number"] =
+            instance.registration_number;
+        if (instance.occupation_area)
+          register["user_fields"]["occupation_area"] = instance.occupation_area;
+        // widget 1733 and 16838 have two fields that indicate "disponibilidade"
+        if (instance["extras"]["disponibilidade_de_atendimentos_um"]) {
+          register["user_fields"]["disponibilidade_de_atendimentos"] =
+            instance["extras"]["disponibilidade_de_atendimentos_um"] +
+            instance["extras"]["disponibilidade_de_atendimentos_dois"];
+        } else if (instance.disponibilidade_de_atendimentos) {
+          register["user_fields"]["disponibilidade_de_atendimentos"] =
+            instance.disponibilidade_de_atendimentos;
         }
+
+        log({ register });
 
         // store instances
         individuals = [...individuals, register];
@@ -174,24 +174,14 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
 
     Promise.all(registers).then(async () => {
       // Batch insert individuals
-      console.log("Inserting the new individuals on GraphQL API...");
-      console.log({ individuals });
-      const users = await insertSolidarityUsers(individuals);
-      if (!users) {
-        log(
-          `Integration failed in these form entries ${cache.map((c) => c.id)}`
-        );
-        return undefined;
-      }
-      // Batch update syncronized forms
-      console.log("Updating form_entries syncronized on GraphQL API...");
-      console.log({ syncronizedForms });
-      await updateFormEntries(syncronizedForms);
-      cache = [];
-      console.log("Integration is done.");
+      log("Creating users in Zendesk...");
+
+      // Create users in Zendesk
+      // Cb create users in Hasura
+      await createZendeskUser(individuals, createUsersHasura);
     });
   } else {
-    console.log("No items for integration.");
+    log("No items for integration.");
   }
 };
 
