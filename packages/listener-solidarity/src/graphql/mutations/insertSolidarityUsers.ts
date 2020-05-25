@@ -4,7 +4,7 @@ import dbg from "../../dbg";
 
 const log = dbg.extend("insertSolidarityUsers");
 
-const SOLIDARITY_USERS_MUTATION = gql`
+const CREATE_USERS_MUTATION = gql`
   mutation insert_solidarity_users($users: [solidarity_users_insert_input!]!) {
     insert_solidarity_users(
       objects: $users
@@ -46,21 +46,34 @@ const SOLIDARITY_USERS_MUTATION = gql`
   }
 `;
 
-const insertSolidarityUsers = async (users: any): Promise<any> => {
+type Response = {
+  data: {
+    insert_solidarity_users?: any;
+    errors?: Array<any>;
+  };
+};
+
+const insertSolidarityUsers = async (users: any): Promise<Response> => {
   try {
-    const {
-      data: { insert_solidarity_users },
-    } = await GraphQLAPI.mutate({
-      mutation: SOLIDARITY_USERS_MUTATION,
+    const res = await GraphQLAPI.mutate({
+      mutation: CREATE_USERS_MUTATION,
       variables: { users },
     });
 
+    if (res && res.data && res.data.errors) {
+      return Promise.reject(res.data.errors);
+    }
+
+    const {
+      data: { insert_solidarity_users },
+    } = res;
+
     log(insertSolidarityUsers);
 
-    return insert_solidarity_users;
+    return Promise.resolve(insert_solidarity_users);
   } catch (err) {
     log("failed on insert solidarity users: ".red, err);
-    return undefined;
+    return Promise.reject(err);
   }
 };
 

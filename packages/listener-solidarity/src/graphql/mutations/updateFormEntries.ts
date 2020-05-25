@@ -1,6 +1,7 @@
 import gql from "graphql-tag";
 import { client as GraphQLAPI } from "../";
 import dbg from "../../dbg";
+import formEntries from "../subscriptions/formEntries";
 
 const log = dbg.extend("updateFormEntries");
 
@@ -18,21 +19,39 @@ const FORM_ENTRIES_MUTATION = gql`
   }
 `;
 
-const updateFormEntries = async (forms: number[]): Promise<any> => {
+type Response = {
+  data: {
+    update_form_entries?: {
+      returning: Array<{
+        id;
+        updated_at;
+      }>;
+    };
+    errors?: Array<any>;
+  };
+};
+
+const updateFormEntries = async (forms: number[]): Promise<Response> => {
   try {
-    const {
-      data: {
-        update_form_entries: { returning: formEntries },
-      },
-    } = await GraphQLAPI.mutate({
+    const res = await GraphQLAPI.mutate({
       mutation: FORM_ENTRIES_MUTATION,
       variables: { forms },
     });
 
-    return formEntries;
+    if (res && res.data && res.data.errors) {
+      return Promise.reject(res.data.errors);
+    }
+
+    const {
+      data: {
+        update_form_entries: { returning: formEntries },
+      },
+    } = res;
+
+    return Promise.resolve(formEntries);
   } catch (err) {
     log("failed on update form entries: ".red, err);
-    return undefined;
+    return Promise.reject(err);
   }
 };
 

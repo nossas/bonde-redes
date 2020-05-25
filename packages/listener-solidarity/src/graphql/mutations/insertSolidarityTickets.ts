@@ -4,11 +4,11 @@ import dbg from "../../dbg";
 
 const log = dbg.extend("insertSolidarityTickets");
 
-const INDIVIDUALS_MUTATION = gql`
-  mutation insert_rede_individuals(
+const CREATE_TICKETS_MUTATION = gql`
+  mutation insert_solidarity_tickets(
     $individuals: [rede_individuals_insert_input!]!
   ) {
-    insert_rede_individuals(
+    insert_solidarity_tickets(
       objects: $individuals
       on_conflict: {
         constraint: rede_individuals_form_entry_id
@@ -41,21 +41,32 @@ const INDIVIDUALS_MUTATION = gql`
   }
 `;
 
-const insertSolidarityTickets = async (individuals: any): Promise<any> => {
+type Response = {
+  data: {
+    insert_solidarity_tickets?: any;
+    errors?: Array<any>;
+  };
+};
+
+const insertSolidarityTickets = async (individuals: any): Promise<Response> => {
   try {
-    const {
-      data: {
-        insert_rede_individuals: { returning },
-      },
-    } = await GraphQLAPI.mutate({
-      mutation: INDIVIDUALS_MUTATION,
+    const res = await GraphQLAPI.mutate({
+      mutation: CREATE_TICKETS_MUTATION,
       variables: { individuals },
     });
 
-    return returning;
+    if (res && res.data && res.data.errors) {
+      return Promise.reject(res.data.errors);
+    }
+
+    const {
+      data: { insert_solidarity_tickets },
+    } = res;
+
+    return Promise.resolve(insert_solidarity_tickets);
   } catch (err) {
-    log("failed on insert rede individuals: ".red, err);
-    return undefined;
+    log("failed on insert solidarity tickets: ".red, err);
+    return Promise.reject(err);
   }
 };
 
