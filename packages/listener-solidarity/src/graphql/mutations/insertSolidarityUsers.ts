@@ -11,49 +11,43 @@ const CREATE_USERS_MUTATION = gql`
       on_conflict: {
         constraint: solidarity_users_user_id_key
         update_columns: [
-          address
-          cep
-          city
-          community_id
-          condition
-          cor
-          disponibilidade_de_atendimentos
-          created_at
-          data_de_inscricao_no_bonde
+          name
+          role
+          organization_id
           email
           external_id
-          latitude
-          longitude
-          name
-          occupation_area
-          organization_id
           phone
-          registration_number
-          role
-          state
-          tags
-          tipo_de_acolhimento
-          ultima_atualizacao_de_dados
-          updated_at
           user_fields
-          user_id
+          tipo_de_acolhimento
+          condition
+          state
+          city
+          cep
+          address
           whatsapp
+          registration_number
+          occupation_area
+          disponibilidade_de_atendimentos
+          data_de_inscricao_no_bonde
         ]
       }
     ) {
-      affected_rows
+      returning {
+        external_id
+      }
     }
   }
 `;
 
-type Response = {
-  data: {
-    insert_solidarity_users?: any;
-    errors?: Array<any>;
-  };
-};
+// type Response = {
+//   data: {
+//     insert_solidarity_users?: any;
+//     errors?: Array<any>;
+//   };
+// };
 
-const insertSolidarityUsers = async (users: any): Promise<Response> => {
+const insertSolidarityUsers = async (users: any) => {
+  const ids = users.map((u) => u.external_id);
   try {
     const res = await GraphQLAPI.mutate({
       mutation: CREATE_USERS_MUTATION,
@@ -61,19 +55,20 @@ const insertSolidarityUsers = async (users: any): Promise<Response> => {
     });
 
     if (res && res.data && res.data.errors) {
-      return Promise.reject(res.data.errors);
+      log(`failed on insert solidarity users: ${ids}`.red, res.data.errors);
+      return undefined;
     }
 
     const {
-      data: { insert_solidarity_users },
+      data: {
+        insert_solidarity_users: { returning },
+      },
     } = res;
 
-    log(insertSolidarityUsers);
-
-    return Promise.resolve(insert_solidarity_users);
+    return returning;
   } catch (err) {
-    log("failed on insert solidarity users: ".red, err);
-    return Promise.reject(err);
+    log(`failed on insert solidarity users: ${ids}`.red, err);
+    return undefined;
   }
 };
 

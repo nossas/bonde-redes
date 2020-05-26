@@ -53,10 +53,10 @@ const getGoogleGeolocation = async (address, key) => {
         },
       }
     );
-    log("google maps response!", response.data);
+    log("google maps responded!");
     return response.data;
   } catch (e) {
-    log("failed google maps response");
+    log("failed google maps response", e);
     return e;
   }
 };
@@ -64,7 +64,6 @@ const getGoogleGeolocation = async (address, key) => {
 export default async ({
   state = "",
   city = "",
-  neighborhood = "",
   cep = "",
   address = "",
   email = "",
@@ -72,10 +71,9 @@ export default async ({
   const { GOOGLE_MAPS_API_KEY } = process.env;
 
   const a = address ? address + "," : "";
-  const n = neighborhood ? neighborhood + "," : "";
   const c = city ? city + "," : "";
-  const s = state ? state + "," : "";
-  const compose = a + n + c + s;
+  const s = state ? state : "";
+  const compose = a + c + s;
 
   const data = await getGoogleGeolocation(compose, GOOGLE_MAPS_API_KEY);
 
@@ -103,7 +101,7 @@ export default async ({
       cep,
     };
 
-    log(i);
+    // log(i);
 
     log("returned valid individual geolocation data");
 

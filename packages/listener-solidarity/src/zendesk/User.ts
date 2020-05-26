@@ -11,29 +11,37 @@ export default async (
     users: User[]
   ) => Promise<any> | undefined
 ) => {
-  return client.users.createMany({ users }, (err, _req, result: any) => {
-    if (err) {
-      log(err);
-      return cb([], users);
-    }
-    return client.jobstatuses.watch(
-      result["job_status"].id,
-      500,
-      5,
-      (err, _req, result: any) => {
-        if (err) {
-          log(err);
-          return cb([], users);
-        }
-        log(
-          `Results from zendesk user creation ${JSON.stringify(
-            result["job_status"]["results"],
-            null,
-            2
-          )}`
-        );
-        return cb(result["job_status"]["results"], users);
+  log(`${new Date()}: \nEntering createZendeskUser`);
+
+  return client.users.createOrUpdateMany(
+    { users },
+    (err, _req, result: any) => {
+      if (err) {
+        log(err);
+        return cb([], users);
       }
-    );
-  });
+      return new Promise((resolve) => {
+        return client.jobstatuses.watch(
+          result["job_status"].id,
+          500,
+          5,
+          (err, _req, result: any) => {
+            if (err) {
+              log(err);
+              return cb([], users);
+            }
+            // log(
+            //   `Results from zendesk user creation ${JSON.stringify(
+            //     result["job_status"]["results"],
+            //     null,
+            //     2
+            //   )}`
+            // );
+            cb(result["job_status"]["results"], users);
+            return resolve();
+          }
+        );
+      });
+    }
+  );
 };

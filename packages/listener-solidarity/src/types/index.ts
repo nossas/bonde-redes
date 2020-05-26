@@ -21,18 +21,18 @@ export interface Widget {
 }
 
 // Zendesk + Hasura fields to create user
-export interface User {
+export type User = {
   role: "end-user";
   organization_id: number;
   name: string;
   email: string;
   external_id: string;
   phone: string;
+  user_id?: number;
   user_fields: {
     condition: "inscrita" | "desabilitada";
     state: string;
     city: string;
-    neighborhood: string;
     cep: string;
     address: string;
     tipo_de_acolhimento:
@@ -44,8 +44,9 @@ export interface User {
     registration_number: string | null;
     occupation_area: string | null;
     disponibilidade_de_atendimentos: string | null;
+    data_de_inscricao_no_bonde: string | null;
   };
-}
+};
 
 interface GoogleMapsAddressComponent {
   long_name: string;
@@ -91,6 +92,7 @@ export type Entries = {
   fields: string;
   widget_id: number;
   id: number;
+  created_at: string;
 };
 
 // Fields that come from BONDE widget
@@ -108,7 +110,6 @@ export type Instance = {
   last_name?: string;
   state?: string;
   city?: string;
-  neighborhood?: string;
   cep?: string;
   address?: string;
   phone?: string;

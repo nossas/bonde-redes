@@ -1,14 +1,17 @@
 import { Widget, User, MetaField, Entries, Instance } from "../types";
 import dbg from "../dbg";
 import { getOrganizationType, setType } from "../utils";
-// import getGeocoding from "../utils";
-// import {
-//   insertSolidarityUsers,
-//   updateFormEntries
-// } from "../graphql/mutations";
+import { getGeocoding } from "../utils";
+import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
 import { createZendeskUser } from "../zendesk";
+import Bottleneck from "bottleneck";
 
 const log = dbg.extend("User");
+
+const limiter = new Bottleneck({
+  maxConcurrent: 1,
+  minTime: 1000,
+});
 
 const handleError = (entries: User[]) => {
   log(
@@ -19,40 +22,6 @@ const handleError = (entries: User[]) => {
   return undefined;
 };
 
-// interface HasuraUser extends User {
-//   user_id: number;
-// }
-
-const createUsersHasura = (
-  results: Array<{ id: number; status: string; external_id: string }>,
-  users: User[]
-) => {
-  if (results.find((r) => r.status === "Failed") || users.length < 1) {
-    return handleError(users);
-  }
-
-  // Array<HasuraUser>
-
-  const hasuraUsers = results.map((r) => {
-    const user = users.find((u) => u.external_id === r.external_id);
-    return {
-      ...user,
-      user_id: r.id,
-    };
-  });
-  log("Saving users in Hasura...");
-  log(hasuraUsers);
-  return Promise.resolve(true);
-  // return insertSolidarityUsers(hasuraUsers);
-
-  // // Batch update syncronized forms
-  // console.log("Updating form_entries syncronized on GraphQL API...");
-  // console.log({ syncronizedForms });
-  // await updateFormEntries(syncronizedForms);
-  // cache = [];
-  // console.log("Integration is done.");
-};
-
 const organizationsIds = {
   MSR: 360273031591,
   THERAPIST: 360282119532,
@@ -60,34 +29,64 @@ const organizationsIds = {
 };
 
 let cache = new Array();
-let syncronizedForms = new Array();
-let individuals = new Array();
 
-const register: User = {
-  name: "",
-  role: "end-user",
-  organization_id: 0,
-  email: "",
-  external_id: "",
-  phone: "",
-  user_fields: {
-    tipo_de_acolhimento: null,
-    condition: "desabilitada",
-    state: "",
-    city: "",
-    neighborhood: "",
-    cep: "",
-    address: "",
-    whatsapp: null,
-    registration_number: null,
-    occupation_area: null,
-    disponibilidade_de_atendimentos: null,
-  },
+const createUsersHasura = async (
+  results: Array<{ id: number; status: string; external_id: string }>,
+  users: User[]
+) => {
+  if (results.length < 1 || users.length < 1) {
+    return handleError(users);
+  }
+
+  const hasuraUsers = results.map((r) => {
+    const user = users.find((u) => u.external_id === r.external_id);
+    return {
+      ...user,
+      ...((user && user.user_fields) || {}),
+      community_id: Number(process.env.COMMUNITY_ID),
+      user_id: r.id,
+    };
+  });
+
+  log("Saving users in Hasura...");
+  let syncronizedForms = new Array();
+  const inserted = await insertSolidarityUsers(hasuraUsers);
+  if (!inserted) return handleError(users);
+
+  // Batch update syncronized forms
+  syncronizedForms = [
+    ...syncronizedForms,
+    ...inserted.map((i) => i.external_id),
+  ];
+  log("Updating form_entries syncronized on GraphQL API...");
+  log({ syncronizedForms });
+  const updateEntries = await updateFormEntries(syncronizedForms);
+  if (!updateEntries) {
+    log("Couldn't update form entries with already syncronized forms");
+    return handleError(users);
+  }
+
+  cache = [];
+  return log("Integration is done.");
+};
+
+const makeBatchRequests = async (users) => {
+  let start = 0;
+  let step = 50;
+  let usersLength = users.length;
+  for (start; start < usersLength; start += step) {
+    log({ start, step, usersLength });
+    const batch = users.slice(start, start + step - 1);
+    // Create users in Zendesk
+    // Cb create users in Hasura
+    return await limiter.schedule(() =>
+      createZendeskUser(batch, createUsersHasura)
+    );
+  }
 };
 
 const handleNext = (widgets: Widget[]) => async (response: any) => {
   log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
-  log({ response: response.data.form_entries });
 
   const {
     data: { form_entries: entries },
@@ -99,19 +98,22 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
   });
 
   if (cache.length > 0) {
-    const registers = cache.map(async (formEntry: Entries) => {
+    const usersToRegister = cache.map((formEntry: Entries) => {
       const fields = JSON.parse(formEntry.fields);
       const widget = widgets.filter(
         (w: Widget) => w.id === formEntry.widget_id
       )[0];
-      if (widget) {
-        const instance: Instance = {
-          tipo_de_acolhimento: null,
-          first_name: "",
-          email: "",
-        };
 
-        widget.metadata.form_mapping.map((field: MetaField) => {
+      if (!widget) return;
+
+      const instance: Instance = {
+        tipo_de_acolhimento: null,
+        first_name: "",
+        email: "",
+      };
+
+      const formMapping = widget.metadata.form_mapping.map(
+        (field: MetaField) => {
           const acessors = field.name.split(".");
           if (acessors.length === 1) {
             instance[acessors[0]] = (
@@ -129,7 +131,31 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
 
             instance[rootField] = { ...instance[rootField], ...value };
           }
-        });
+        }
+      );
+
+      return Promise.all(formMapping).then(async () => {
+        const register: User = {
+          name: "",
+          role: "end-user",
+          organization_id: 0,
+          email: "",
+          external_id: "",
+          phone: "",
+          user_fields: {
+            tipo_de_acolhimento: null,
+            condition: "desabilitada",
+            state: "",
+            city: "",
+            cep: "",
+            address: "",
+            whatsapp: null,
+            registration_number: null,
+            occupation_area: null,
+            disponibilidade_de_atendimentos: null,
+            data_de_inscricao_no_bonde: null,
+          },
+        };
 
         register["email"] = instance.email;
         if (instance.phone) register["phone"] = instance.phone;
@@ -140,18 +166,22 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
           organizationsIds[getOrganizationType(widget.id)];
         register["external_id"] = formEntry.id.toString();
         register["verified"] = true;
+        register["user_fields"]["data_de_inscricao_no_bonde"] =
+          formEntry.created_at;
 
-        // const geocoding = await getGeocoding(instance);
-        // Object.keys(geocoding).map((g) => {
-        //   register["user_fields"][g] = geocoding[g];
-        // });
-
-        console.log({ instance });
+        const geocoding = await getGeocoding(instance);
+        Object.keys(geocoding).map((g) => {
+          register["user_fields"][g] = geocoding[g];
+        });
 
         const terms =
           (instance["extras"] && instance["extras"]["accept_terms"]) || "";
-
         if (terms.match(/sim/gi))
+          register["user_fields"]["condition"] = "inscrita";
+        if (
+          formEntry.created_at < "2019-06-10 18:08:55.49997" &&
+          widget.id === 16850
+        )
           register["user_fields"]["condition"] = "inscrita";
 
         // fields that may go into the `user_fields`
@@ -170,22 +200,17 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
             instance.disponibilidade_de_atendimentos;
         }
 
-        log({ register });
-
         // store instances
-        individuals = [...individuals, register];
-        syncronizedForms = [...syncronizedForms, formEntry.id];
-      }
-      return false;
+        return register;
+      });
     });
 
-    Promise.all(registers).then(async () => {
+    return Promise.all(usersToRegister).then(async (users: any) => {
       // Batch insert individuals
       log("Creating users in Zendesk...");
-
       // Create users in Zendesk
       // Cb create users in Hasura
-      await createZendeskUser(individuals, createUsersHasura);
+      return await makeBatchRequests(users);
     });
   } else {
     log("No items for integration.");

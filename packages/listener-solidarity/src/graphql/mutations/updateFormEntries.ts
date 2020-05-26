@@ -1,7 +1,6 @@
 import gql from "graphql-tag";
 import { client as GraphQLAPI } from "../";
 import dbg from "../../dbg";
-import formEntries from "../subscriptions/formEntries";
 
 const log = dbg.extend("updateFormEntries");
 
@@ -19,19 +18,19 @@ const FORM_ENTRIES_MUTATION = gql`
   }
 `;
 
-type Response = {
-  data: {
-    update_form_entries?: {
-      returning: Array<{
-        id;
-        updated_at;
-      }>;
-    };
-    errors?: Array<any>;
-  };
-};
+// type Response = {
+//   data: {
+//     update_form_entries?: {
+//       returning: Array<{
+//         id;
+//         updated_at;
+//       }>;
+//     };
+//     errors?: Array<any>;
+//   };
+// };
 
-const updateFormEntries = async (forms: number[]): Promise<Response> => {
+const updateFormEntries = async (forms: number[]) => {
   try {
     const res = await GraphQLAPI.mutate({
       mutation: FORM_ENTRIES_MUTATION,
@@ -39,7 +38,8 @@ const updateFormEntries = async (forms: number[]): Promise<Response> => {
     });
 
     if (res && res.data && res.data.errors) {
-      return Promise.reject(res.data.errors);
+      log(`failed on update form entries: ${forms}`.red, res.data.errors);
+      return undefined;
     }
 
     const {
@@ -48,10 +48,10 @@ const updateFormEntries = async (forms: number[]): Promise<Response> => {
       },
     } = res;
 
-    return Promise.resolve(formEntries);
+    return formEntries;
   } catch (err) {
-    log("failed on update form entries: ".red, err);
-    return Promise.reject(err);
+    log(`failed on update form entries: ${forms}`.red, err);
+    return undefined;
   }
 };
 
