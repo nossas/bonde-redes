@@ -1,16 +1,11 @@
-import client from "./";
-import { User } from "../types";
-import dbg from "../dbg";
+import client from "../../zendesk";
+import { User } from "../../types";
+import dbg from "../../dbg";
+import saveUsersHasura from "./saveUsersHasura";
 
-const log = dbg.extend("createZendeskUser");
+const log = dbg.extend("createZendeskUsers");
 
-export default async (
-  users: User[],
-  cb: (
-    results: Array<{ id: number; status: string; external_id: string }>,
-    users: User[]
-  ) => Promise<any> | undefined
-) => {
+export default async (users: User[]) => {
   log(`${new Date()}: \nEntering createZendeskUser`);
 
   return client.users.createOrUpdateMany(
@@ -18,7 +13,7 @@ export default async (
     (err, _req, result: any) => {
       if (err) {
         log(err);
-        return cb([], users);
+        return saveUsersHasura([], users);
       }
       return new Promise((resolve) => {
         return client.jobstatuses.watch(
@@ -28,7 +23,7 @@ export default async (
           (err, _req, result: any) => {
             if (err) {
               log(err);
-              return cb([], users);
+              return saveUsersHasura([], users);
             }
             // log(
             //   `Results from zendesk user creation ${JSON.stringify(
@@ -37,7 +32,7 @@ export default async (
             //     2
             //   )}`
             // );
-            cb(result["job_status"]["results"], users);
+            saveUsersHasura(result["job_status"]["results"], users);
             return resolve();
           }
         );

@@ -29,6 +29,7 @@ export type User = {
   external_id: string;
   phone: string;
   user_id?: number;
+  verified: boolean;
   user_fields: {
     condition: "inscrita" | "desabilitada";
     state: string;

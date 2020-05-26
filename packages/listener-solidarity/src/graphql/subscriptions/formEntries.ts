@@ -12,7 +12,17 @@ const FORM_ENTRIES_SUBSCRIPTION = gql`
       where: {
         widget_id: { _in: $widgets }
         rede_syncronized: { _eq: false }
-        id: { _eq: 2000302 }
+        _or: [
+          { id: { _eq: 423413 } }
+          { id: { _eq: 423766 } }
+          { id: { _eq: 423933 } }
+          { id: { _eq: 424053 } }
+          { id: { _eq: 424354 } }
+          { id: { _eq: 424400 } }
+          { id: { _eq: 424614 } }
+          { id: { _eq: 424631 } }
+          { id: { _eq: 424727 } }
+        ]
       }
       order_by: { id: asc }
     ) {

@@ -5,5 +5,3 @@ export default zendesk.createClient({
   token: process.env.ZENDESK_API_TOKEN || "",
   remoteUri: process.env.ZENDESK_API_URL || "",
 });
-
-export { default as createZendeskUser } from "./User";

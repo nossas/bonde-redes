@@ -12,7 +12,6 @@ const FORM_ENTRIES_MUTATION = gql`
     ) {
       returning {
         id
-        updated_at
       }
     }
   }
