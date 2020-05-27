@@ -8,3 +8,17 @@ export const StyledButton = styled(Button)`
     border-color: transparent;
   }
 `;
+
+export const WrapLabel = styled.label`
+  display: flex;
+  align-items: center;
+  & > input {
+    margin-right: 5px;
+  }
+`;
+
+export const Wrap = styled.div`
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+`;
