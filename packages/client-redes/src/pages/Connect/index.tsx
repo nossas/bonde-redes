@@ -18,7 +18,7 @@ import Popup from "../../components/Popups/Popup";
 import Success from "../../components/Popups/Success";
 import Error from "../../components/Popups/Error";
 import Confirm from "../../components/Popups/Confirm";
-import { StyledButton } from "./style";
+import { StyledButton, WrapLabel, Wrap } from "./style";
 import { Filters } from "../../services/FilterProvider";
 
 type onConfirm = {
@@ -28,6 +28,20 @@ type onConfirm = {
   popups: Record<string, string>;
   filters: Filters;
 };
+
+function compare(a, b) {
+  // Use toUpperCase() to ignore character casing
+  const distanceA = a.distance;
+  const distanceB = b.distance;
+
+  let comparison = 0;
+  if (distanceA > distanceB) {
+    comparison = 1;
+  } else if (distanceA < distanceB) {
+    comparison = -1;
+  }
+  return comparison;
+}
 
 const Table = () => {
   const {
@@ -61,6 +75,7 @@ const Table = () => {
 
   const [success, setSuccess] = useState(false);
   const [isLoading, setLoader] = useState(false);
+  const [isShowing, showIncorrectZipcodes] = useState(true);
 
   useEffect(() => {
     setLoader(loading);
@@ -81,23 +96,19 @@ const Table = () => {
           return {
             ...i,
             distance:
-              !Number.isNaN(pointA[0]) &&
-              !Number.isNaN(pointA[1]) &&
-              volunteer_lat &&
-              volunteer_lng &&
               Number(
-                turf.distance([volunteer_lat, volunteer_lng], pointA)
-              ).toFixed(2)
+                !Number.isNaN(pointA[0]) &&
+                  !Number.isNaN(pointA[1]) &&
+                  volunteer_lat &&
+                  volunteer_lng &&
+                  Number(
+                    turf.distance([volunteer_lat, volunteer_lng], pointA)
+                  ).toFixed(2)
+              ) || null
           };
         })
-        .filter(i => {
-          if (!volunteer_lat || !volunteer_lng) {
-            return true;
-          }
-          return i.distance && Number(i.distance) < distance;
-        })
-        .sort((a, b) => Number(a.distance) - Number(b.distance)),
-    [distance, volunteer_lat, volunteer_lng]
+        .sort(compare),
+    [volunteer_lat, volunteer_lng]
   );
 
   if (!community) return "Selecione uma comunidade";
@@ -150,9 +161,19 @@ const Table = () => {
       }) => {
         // Seta a voluntária
         setVolunteer(linkState && linkState.volunteer);
-        const filteredTableData = filterByDistance(data);
+        const filteredTableData = isShowing
+          ? filterByDistance(data)
+          : filterByDistance(data).filter(i => {
+              if (!volunteer_lat || !volunteer_lng) {
+                return false;
+              }
+              return i.distance && Number(i.distance) < distance;
+            });
 
-        const resizeRow = data.length < 1000 ? data.length : filters.rows;
+        const resizeRow =
+          filteredTableData.length < 1000
+            ? filteredTableData.length
+            : filters.rows;
 
         return (
           <>
@@ -171,9 +192,24 @@ const Table = () => {
                     <Spacing margin={{ top: 10, bottom: 10 }}>
                       <Header.h3>Match realizado!</Header.h3>
                     </Spacing>
-                    <Header.h5 color="#444444">
-                      {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
-                    </Header.h5>
+                    <Wrap>
+                      <Header.h5 color="#444444">
+                        {`${filteredTableData.length} solicitações de PSRs próximas de ${volunteer_name}`}
+                      </Header.h5>
+                      <WrapLabel>
+                        <input
+                          name="isShowing"
+                          type="checkbox"
+                          checked={isShowing}
+                          onChange={e =>
+                            showIncorrectZipcodes(e.target.checked)
+                          }
+                        />
+                        <Header.h5>
+                          Mostrar usuários com CEP incorreto
+                        </Header.h5>
+                      </WrapLabel>
+                    </Wrap>
                   </Spacing>
                 </Flexbox>
                 <ReactTable

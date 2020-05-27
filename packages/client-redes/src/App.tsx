@@ -64,7 +64,7 @@ const App = () => {
   return (
     <BondeSessionProvider
       fetchData
-      environment={process.env.REACT_APP_ENVIRONMENT || "development"}
+      environment={process.env.REACT_APP_ENVIRONMENT || ("development" as any)}
       loading={TextLoading}
     >
       <StoreProvider store={store}>
