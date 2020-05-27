@@ -45,7 +45,7 @@ const Table = () => {
     setPopup,
     volunteer_lat,
     volunteer_lng,
-    distance,
+    // distance,
     agent,
     volunteer_text,
     individual_text
@@ -90,14 +90,14 @@ const Table = () => {
               ).toFixed(2)
           };
         })
-        .filter(i => {
-          if (!volunteer_lat || !volunteer_lng) {
-            return true;
-          }
-          return i.distance && Number(i.distance) < distance;
-        })
+        // .filter(i => {
+        //   if (!volunteer_lat || !volunteer_lng) {
+        //     return true;
+        //   }
+        //   return i.distance && Number(i.distance) < distance;
+        // })
         .sort((a, b) => Number(a.distance) - Number(b.distance)),
-    [distance, volunteer_lat, volunteer_lng]
+    [volunteer_lat, volunteer_lng]
   );
 
   if (!community) return "Selecione uma comunidade";
