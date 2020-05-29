@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import { client as GraphQLAPI } from "..";
+import { handleIntegration } from "../../components";
 import { Widget } from "../../types";
-import { handleNext } from "../../components";
 import dbg from "../../dbg";
 
 const log = dbg.extend("subscriptionFormEntries");
@@ -13,15 +13,9 @@ const FORM_ENTRIES_SUBSCRIPTION = gql`
         widget_id: { _in: $widgets }
         rede_syncronized: { _eq: false }
         _or: [
-          { id: { _eq: 423413 } }
-          { id: { _eq: 423766 } }
-          { id: { _eq: 423933 } }
-          { id: { _eq: 424053 } }
-          { id: { _eq: 424354 } }
-          { id: { _eq: 424400 } }
-          { id: { _eq: 424614 } }
-          { id: { _eq: 424631 } }
-          { id: { _eq: 424727 } }
+          { id: { _eq: 2000366 } }
+          { id: { _eq: 2000365 } }
+          { id: { _eq: 2000364 } }
         ]
       }
       order_by: { id: asc }
@@ -46,7 +40,7 @@ export default async (widgets: Widget[]): Promise<any> => {
       query: FORM_ENTRIES_SUBSCRIPTION,
       variables: { widgets: widgets.map((w: any) => w.id) },
       fetchPolicy: "network-only",
-    }).subscribe({ next: handleNext(widgets), error });
+    }).subscribe({ next: handleIntegration(widgets), error });
 
     return observable;
   } catch (err) {

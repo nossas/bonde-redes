@@ -1,6 +1,6 @@
 import { insertSolidarityTickets } from "../../graphql/mutations";
-import { Ticket } from "../../types";
 import { handleTicketError } from "../../utils";
+import { Ticket } from "../../types";
 import dbg from "../../dbg";
 
 const log = dbg.extend("saveZendeskTickets");

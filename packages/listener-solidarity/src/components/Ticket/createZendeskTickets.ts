@@ -1,7 +1,7 @@
-import client from "../../zendesk";
-import dbg from "../../dbg";
-import { handleTicketError } from "../../utils";
 import { saveTicketHasura, checkOldTickets } from "./";
+import client from "../../zendesk";
+import { handleTicketError } from "../../utils";
+import dbg from "../../dbg";
 
 const log = dbg.extend("createZendeskTickets");
 

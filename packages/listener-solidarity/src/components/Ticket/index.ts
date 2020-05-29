@@ -1,7 +1,7 @@
-import dbg from "../../dbg";
-import { User } from "../../types";
-import { capitalize, formatDate } from "../../utils";
 import { createZendeskTickets } from "./";
+import { capitalize, formatDate } from "../../utils";
+import { User } from "../../types";
+import dbg from "../../dbg";
 
 const log = dbg.extend("Tickets");
 

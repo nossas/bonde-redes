@@ -1,6 +1,6 @@
 import client from "../../zendesk";
-import dbg from "../../dbg";
 import { extractTypeFromSubject } from "../../utils";
+import dbg from "../../dbg";
 
 const log = dbg.extend("checkOldTickets");
 

@@ -1,1 +1,1 @@
-export { default as handleNext } from "./User";
+export { default as handleIntegration } from "./User";

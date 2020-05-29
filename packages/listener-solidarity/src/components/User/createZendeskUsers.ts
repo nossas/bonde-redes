@@ -1,7 +1,7 @@
+import { saveUsersHasura } from "./";
 import client from "../../zendesk";
 import { User } from "../../types";
 import dbg from "../../dbg";
-import saveUsersHasura from "./saveUsersHasura";
 
 const log = dbg.extend("createZendeskUsers");
 

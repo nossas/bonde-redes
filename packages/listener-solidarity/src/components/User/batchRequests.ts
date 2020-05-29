@@ -1,7 +1,7 @@
-import createZendeskUsers from "./createZendeskUsers";
 import Bottleneck from "bottleneck";
-import dbg from "../../dbg";
+import { createZendeskUsers } from "./";
 import { User } from "../../types";
+import dbg from "../../dbg";
 
 const log = dbg.extend("batchRequests");
 

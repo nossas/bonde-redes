@@ -1,10 +1,10 @@
+import createUserTickets from "../Ticket";
 import {
   insertSolidarityUsers,
   updateFormEntries,
 } from "../../graphql/mutations";
-import createUserTickets from "../Ticket";
-import { User } from "../../types";
 import { handleUserError } from "../../utils";
+import { User } from "../../types";
 import dbg from "../../dbg";
 
 const log = dbg.extend("createUsersHasura");

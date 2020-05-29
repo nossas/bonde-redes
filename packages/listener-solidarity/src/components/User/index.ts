@@ -1,14 +1,18 @@
+import makeBatchRequests from "./batchRequests";
+import {
+  getOrganizationType,
+  setType,
+  organizationsIds,
+  getGeocoding,
+} from "../../utils";
 import { Widget, User, MetaField, Entries, Instance } from "../../types";
 import dbg from "../../dbg";
-import { getOrganizationType, setType, organizationsIds } from "../../utils";
-import { getGeocoding } from "../../utils";
-import makeBatchRequests from "./batchRequests";
 
 const log = dbg.extend("User");
 
 let cache = new Array();
 
-const handleNext = (widgets: Widget[]) => async (response: any) => {
+const handleIntegration = (widgets: Widget[]) => async (response: any) => {
   log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
   // log({ response: response.data.form_entries });
 
@@ -137,4 +141,8 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
   }
 };
 
-export default handleNext;
+export default handleIntegration;
+
+export { default as createZendeskUsers } from "./createZendeskUsers";
+export { default as makeBatchRequests } from "./batchRequests";
+export { default as saveUsersHasura } from "./saveUsersHasura";
