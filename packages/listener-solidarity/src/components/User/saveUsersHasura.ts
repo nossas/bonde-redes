@@ -3,7 +3,7 @@ import {
   insertSolidarityUsers,
   updateFormEntries,
 } from "../../graphql/mutations";
-import { handleUserError } from "../../utils";
+import { handleUserError, removeDuplicatesBy } from "../../utils";
 import { User } from "../../types";
 import dbg from "../../dbg";
 
@@ -11,11 +11,19 @@ const log = dbg.extend("createUsersHasura");
 let syncronizedForms = new Array();
 
 export default async (
-  results: Array<{ id: number; status: string; external_id: string }>,
+  results: Array<{
+    id: number;
+    status: string;
+    external_id: string;
+    error?: string;
+  }>,
   users: User[]
 ) => {
-  if (results.find((r) => r.status.match(/failed/i)) || users.length < 1) {
-    handleUserError(users);
+  if (
+    results.find((r) => r.error && r.error.match(/error/i)) ||
+    users.length < 1
+  ) {
+    return handleUserError(users);
   }
   log("Preparing zendesk users to be saved in Hasura");
   const hasuraUsers = results.map((r) => {
@@ -29,10 +37,11 @@ export default async (
   });
 
   log("Saving users in Hasura...");
-  const inserted = await insertSolidarityUsers(hasuraUsers);
+  const withoutDuplicates = removeDuplicatesBy((x) => x.user_id, hasuraUsers);
+  const inserted = await insertSolidarityUsers(withoutDuplicates);
   if (!inserted) return handleUserError(users);
 
-  const createTickets = await createUserTickets(hasuraUsers);
+  const createTickets = await createUserTickets(withoutDuplicates);
   if (!createTickets) return handleUserError(users);
 
   // Batch update syncronized forms

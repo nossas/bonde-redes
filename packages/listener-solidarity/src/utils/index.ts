@@ -67,4 +67,14 @@ export const extractTypeFromSubject = (subject: string) =>
     .split(" ")[0]
     .toLowerCase();
 
+export const removeDuplicatesBy = (keyFn, array) => {
+  var mySet = new Set();
+  return array.filter((x) => {
+    var key = keyFn(x),
+      isNew = !mySet.has(key);
+    if (isNew) mySet.add(key);
+    return isNew;
+  });
+};
+
 export { default as getGeocoding } from "./geocoding";
