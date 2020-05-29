@@ -42,22 +42,9 @@ const handleIntegration = (widgets: Widget[]) => async (response: any) => {
 
       widget.metadata.form_mapping.map((field: MetaField) => {
         const acessors = field.name.split(".");
-        if (acessors.length === 1) {
-          instance[acessors[0]] = (
-            fields.filter((f: any) => f.uid === field.uid)[0] || {}
-          ).value;
-        } else {
-          // extra fields
-          const rootField = acessors[0];
-          const childField = acessors[1];
-          const value = {
-            [childField]: (
-              fields.filter((f: any) => f.uid === field.uid)[0] || {}
-            ).value,
-          };
-
-          instance[rootField] = { ...instance[rootField], ...value };
-        }
+        instance[acessors[0]] = (
+          fields.filter((f: any) => f.uid === field.uid)[0] || {}
+        ).value;
       });
 
       // log({ instance });
@@ -101,18 +88,21 @@ const handleIntegration = (widgets: Widget[]) => async (response: any) => {
         if (instance[key]) register["user_fields"][key] = instance[key];
       }
 
+      register["user_fields"]["disponibilidade_de_atendimentos"] = (
+        instance["disponibilidade_de_atendimentos"] || ""
+      ).replace(/\s/g, "");
+
       register["user_fields"]["data_de_inscricao_no_bonde"] =
         formEntry.created_at;
 
-      // register["user_fields"]["state"] = "";
-      const geocoding = await getGeocoding(instance);
-      Object.keys(geocoding).map((g) => {
-        register["user_fields"][g] = geocoding[g];
-      });
+      register["user_fields"]["state"] = "";
+      // const geocoding = await getGeocoding(instance);
+      // Object.keys(geocoding).map((g) => {
+      //   register["user_fields"][g] = geocoding[g];
+      // });
 
-      const terms =
-        (instance["extras"] && instance["extras"]["accept_terms"]) || "";
-      if (terms.match(/sim/gi))
+      const terms = instance["accept_terms"];
+      if (terms && terms.match(/sim/gi))
         register["user_fields"]["condition"] = "inscrita";
       // Some MSR forms didn't have the `accept_terms` field
       if (
@@ -120,6 +110,9 @@ const handleIntegration = (widgets: Widget[]) => async (response: any) => {
         widget.id === 16850
       )
         register["user_fields"]["condition"] = "inscrita";
+      if (widget.id === 3297) {
+        register["user_fields"]["condition"] = "inscrita";
+      }
 
       register["user_fields"]["tipo_de_acolhimento"] = setType(
         instance.tipo_de_acolhimento

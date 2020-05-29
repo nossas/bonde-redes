@@ -23,6 +23,7 @@ export default async (
     results.find((r) => r.error && r.error.match(/error/i)) ||
     users.length < 1
   ) {
+    log(`Results with error: ${results}`);
     return handleUserError(users);
   }
   log("Preparing zendesk users to be saved in Hasura");
@@ -38,11 +39,12 @@ export default async (
 
   log("Saving users in Hasura...");
   const withoutDuplicates = removeDuplicatesBy((x) => x.user_id, hasuraUsers);
-  const inserted = await insertSolidarityUsers(withoutDuplicates);
-  if (!inserted) return handleUserError(users);
 
   const createTickets = await createUserTickets(withoutDuplicates);
   if (!createTickets) return handleUserError(users);
+
+  const inserted = await insertSolidarityUsers(withoutDuplicates);
+  if (!inserted) return handleUserError(users);
 
   // Batch update syncronized forms
   syncronizedForms = [

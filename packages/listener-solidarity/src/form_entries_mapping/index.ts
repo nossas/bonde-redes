@@ -40,10 +40,6 @@ export default [
           uid: "field-1464962055652-41",
         },
         {
-          name: "extras.recomendation",
-          uid: "field-1464962083833-11",
-        },
-        {
           name: "disponibilidade_de_atendimentos",
           uid: "field-1464962127079-77",
         },
@@ -75,10 +71,6 @@ export default [
           name: "cep",
           uid: "field-1468597036505-17",
         },
-        {
-          name: "extras.is_case_registered",
-          uid: "field-1468597056552-95",
-        },
       ],
     },
     organization_id: 360269610652,
@@ -106,10 +98,6 @@ export default [
         {
           name: "registration_number",
           uid: "field-1497368693005-33",
-        },
-        {
-          name: "extras.specialization",
-          uid: "field-1497368810164-63",
         },
         {
           name: "city",
@@ -220,14 +208,6 @@ export default [
           uid: "field-1530889937136-21",
         },
         {
-          name: "extras.service_type",
-          uid: "field-1530889975174-37",
-        },
-        {
-          name: "extras.disponibilidade_de_atendimentos",
-          uid: "field-1530890024584-74",
-        },
-        {
           name: "disponibilidade_de_atendimentos",
           uid: "field-1530890036340-68",
         },
@@ -268,7 +248,7 @@ export default [
           uid: "field-1531256486749-86",
         },
         {
-          name: "extras.accept_terms",
+          name: "accept_terms",
           uid: "field-1546881946816-20",
         },
       ],
@@ -308,7 +288,7 @@ export default [
           uid: "field-1533734468460-38",
         },
         {
-          name: "extras.accept_terms",
+          name: "disponibilidade_de_atendimentos",
           uid: "field-1533734495315-40",
         },
       ],
@@ -336,14 +316,6 @@ export default [
           uid: "field-1533735761357-93",
         },
         {
-          name: "state",
-          uid: "field-1533735770558-86",
-        },
-        {
-          name: "city",
-          uid: "field-1533735788159-99",
-        },
-        {
           name: "cep",
           uid: "field-1533735803691-45", // cep de atendimento ou endereço
         },
@@ -356,20 +328,8 @@ export default [
           uid: "field-1533735832329-53",
         },
         {
-          name: "extras.service_type",
-          uid: "field-1533735844231-43",
-        },
-        {
-          name: "extras.disponibilidade_de_atendimentos",
-          uid: "field-1533735866582-88",
-        },
-        {
           name: "disponibilidade_de_atendimentos",
           uid: "field-1533735888966-20",
-        },
-        {
-          name: "occupation_area",
-          uid: "field-1533735911227-68",
         },
       ],
     },
