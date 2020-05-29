@@ -45,7 +45,7 @@ export type User = {
     registration_number: string | null;
     occupation_area: string | null;
     disponibilidade_de_atendimentos: string | null;
-    data_de_inscricao_no_bonde: string | null;
+    data_de_inscricao_no_bonde: string;
   };
 };
 
@@ -118,4 +118,34 @@ export type Instance = {
   registration_number?: string;
   occupation_area?: string;
   disponibilidade_de_atendimentos?: string;
+};
+
+export type Ticket = {
+  comment: {
+    body: string;
+  };
+  id: number;
+  subject: string;
+  external_id: string;
+  requester_id: number;
+  custom_fields: Array<{ id: number; value: any }>;
+  created_at: string;
+  description: string;
+  ticket_id: number;
+  organization_id: number;
+  raw_subject: string;
+  status: string;
+  submitter_id: number;
+  tags: Array<string>;
+  updated_at: string;
+  community_id: number;
+  data_inscricao_bonde: string;
+  status_acolhimento: string;
+  nome_msr: string;
+  cidade: string | null;
+  estado: string | null;
+  link_match: string | null;
+  nome_voluntaria: string | null;
+  status_inscricao: string | null;
+  telefone: string | null;
 };

@@ -5,68 +5,72 @@ import dbg from "../../dbg";
 const log = dbg.extend("insertSolidarityTickets");
 
 const CREATE_TICKETS_MUTATION = gql`
-  mutation insert_solidarity_tickets(
-    $individuals: [rede_individuals_insert_input!]!
-  ) {
-    insert_solidarity_tickets(
-      objects: $individuals
+  mutation createSolidarityTicket($ticket: solidarity_tickets_insert_input!) {
+    insert_solidarity_tickets_one(
+      object: $ticket
       on_conflict: {
-        constraint: rede_individuals_form_entry_id
-        update_columns: [updated_at]
+        constraint: solidarity_tickets_ticket_id_key
+        update_columns: [
+          created_at
+          description
+          ticket_id
+          organization_id
+          raw_subject
+          requester_id
+          status
+          subject
+          submitter_id
+          tags
+          updated_at
+          community_id
+          custom_fields
+          data_inscricao_bonde
+          status_acolhimento
+          nome_msr
+        ]
       }
     ) {
-      returning {
-        id
-        first_name
-        last_name
-        email
-        phone
-        whatsapp
-
-        extras
-
-        zipcode
-        address
-        city
-        state
-        coordinates
-
-        form_entry_id
-        rede_group_id
-
-        created_at
-        updated_at
-      }
+      ticket_id
     }
   }
 `;
 
-type Response = {
-  data: {
-    insert_solidarity_tickets?: any;
-    errors?: Array<any>;
-  };
-};
+// type Response = {
+//   data: {
+//     insert_solidarity_tickets_one?: {
+//       affected_rows: number;
+//       returning: {
+//         ticket_id: number;
+//       };
+//     };
+//     errors?: Array<any>;
+//   };
+// };
 
-const insertSolidarityTickets = async (individuals: any): Promise<Response> => {
+const insertSolidarityTickets = async (ticket) => {
   try {
     const res = await GraphQLAPI.mutate({
       mutation: CREATE_TICKETS_MUTATION,
-      variables: { individuals },
+      variables: { ticket },
     });
 
     if (res && res.data && res.data.errors) {
-      return Promise.reject(res.data.errors);
+      log("failed on insert solidarity tickets: ".red, res.data.errors);
+      return undefined;
     }
 
     const {
-      data: { insert_solidarity_tickets },
+      data: { insert_solidarity_tickets_one },
     } = res;
 
-    return Promise.resolve(insert_solidarity_tickets);
+    log({ returning: insert_solidarity_tickets_one });
+
+    return (
+      insert_solidarity_tickets_one && insert_solidarity_tickets_one.ticket_id
+    );
   } catch (err) {
     log("failed on insert solidarity tickets: ".red, err);
-    return Promise.reject(err);
+    return undefined;
   }
 };
 

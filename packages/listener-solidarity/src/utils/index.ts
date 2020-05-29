@@ -1,4 +1,4 @@
-import { User } from "../types";
+import { User, Ticket } from "../types";
 
 export const organizationsIds = {
   MSR: 360273031591,
@@ -9,6 +9,7 @@ export const organizationsIds = {
 export const setType = (type: string | null) => {
   switch (type) {
     case "Acolhimento Jurídico":
+    case " Jurídico":
       return "jurídico";
     case "Acolhimento Terapêutico":
     case "Psicológico":
@@ -16,6 +17,7 @@ export const setType = (type: string | null) => {
     case "Acolhimento Terapêutico & Jurídico":
     case "psicológico & Jurídico":
     case "Psicológico & Jurídico":
+    case " Psicológico & Jurídico ":
       return "psicológico_e_jurídico";
     default:
       return null;
@@ -31,7 +33,7 @@ export const getOrganizationType = (id: number): string => {
   return "MSR";
 };
 
-export const handleError = (entries: User[]) => {
+export const handleUserError = (entries) => {
   console.log(
     `Integration failed in these form entries ${entries.map(
       (e) => e.external_id
@@ -39,5 +41,30 @@ export const handleError = (entries: User[]) => {
   );
   return undefined;
 };
+
+export const handleTicketError = ({ requester_id }) => {
+  console.log(`Ticket integration failed for this user ${requester_id}`);
+  return undefined;
+};
+
+export const capitalize = (s: string) => {
+  if (typeof s !== "string") return "";
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+export const formatDate = (date: string) => {
+  const formatted = new Date(date);
+  const dd = String(formatted.getDate()).padStart(2, "0");
+  const mm = String(formatted.getMonth() + 1).padStart(2, "0");
+  const yyyy = formatted.getFullYear();
+
+  return `${yyyy}-${mm}-${dd}`;
+};
+
+export const extractTypeFromSubject = (subject: string) =>
+  subject
+    .replace(/[-\\^$*+?.()|[\]{}]/g, "")
+    .split(" ")[0]
+    .toLowerCase();
 
 export { default as getGeocoding } from "./geocoding";
