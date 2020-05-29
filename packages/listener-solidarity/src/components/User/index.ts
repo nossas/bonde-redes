@@ -93,6 +93,8 @@ const handleIntegration = (widgets: Widget[]) => async (response: any) => {
         : instance.first_name;
       register["organization_id"] =
         organizationsIds[getOrganizationType(widget.id)];
+
+      // pq não colocamos o email? mais seguro.
       register["external_id"] = formEntry.id.toString();
 
       for (let key in register.user_fields) {
@@ -133,6 +135,7 @@ const handleIntegration = (widgets: Widget[]) => async (response: any) => {
       log("Creating users in Zendesk...");
       // Create users in Zendesk
       // Cb create users in Hasura
+      // log(users);
       await makeBatchRequests(users);
       return (cache = []);
     });
