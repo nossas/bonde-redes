@@ -42,7 +42,7 @@ export default async (widgets: Widget[]): Promise<any> => {
     const observable = GraphQLAPI.subscribe({
       query: FORM_ENTRIES_SUBSCRIPTION,
       variables: { widgets: widgets.map((w: any) => w.id) },
-      fetchPolicy: "network-only",
+      fetchPolicy: "network-only"
     }).subscribe({ next: handleIntegration(widgets), error });
 
     return observable;

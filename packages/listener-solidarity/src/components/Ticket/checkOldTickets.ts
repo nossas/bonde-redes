@@ -4,7 +4,7 @@ import dbg from "../../dbg";
 
 const log = dbg.extend("checkOldTickets");
 
-const updateTicketsStatus = (tickets) => {
+const updateTicketsStatus = tickets => {
   log("Entering updateTicketsStatus");
   return tickets.map((ticket, i: number) => {
     const changeStatus = {
@@ -12,9 +12,9 @@ const updateTicketsStatus = (tickets) => {
         status: "closed" as "closed",
         comment: {
           body: "Fechado após MSR fazer um novo pedido de acolhimento identico",
-          public: false,
-        },
-      },
+          public: false
+        }
+      }
     };
     return setTimeout(() => {
       return client.tickets.update(
@@ -51,7 +51,7 @@ export default async ({ requester_id, subject }) => {
       // Tickets com status novo e mesmo pedido de acolhimento
       // são esses que não  devem ser gerados novamente
       const newSubject = extractTypeFromSubject(subject);
-      const closeTickets = result.filter((oldTicket) => {
+      const closeTickets = result.filter(oldTicket => {
         const oldSubject = extractTypeFromSubject(oldTicket.subject);
         return oldSubject === newSubject && oldTicket.status === "new";
       });

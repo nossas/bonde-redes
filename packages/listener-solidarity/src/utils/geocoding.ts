@@ -12,7 +12,7 @@ const getCityAndState = (addressComponents): Array<string> => {
   addressComponents.forEach(
     ({
       types,
-      short_name: shortName,
+      short_name: shortName
     }: {
       types: string[];
       short_name: string;
@@ -49,8 +49,8 @@ const getGoogleGeolocation = async (address, key) => {
       {
         params: {
           address,
-          key,
-        },
+          key
+        }
       }
     );
     log("google maps responded!");
@@ -66,7 +66,7 @@ export default async ({
   city = "",
   cep = "",
   address = "",
-  email = "",
+  email = ""
 }): Promise<IndividualGeolocation> => {
   const { GOOGLE_MAPS_API_KEY } = process.env;
 
@@ -83,12 +83,12 @@ export default async ({
       results: [
         {
           geometry: {
-            location: { lat, lng },
+            location: { lat, lng }
           },
           address_components: addressComponents,
-          formatted_address: address,
-        },
-      ],
+          formatted_address: address
+        }
+      ]
     } = data;
 
     const [state, city] = getCityAndState(addressComponents);
@@ -99,7 +99,7 @@ export default async ({
       address,
       state,
       city,
-      cep,
+      cep
     };
 
     // log(i);
@@ -121,7 +121,7 @@ export default async ({
     address: `Cep Incorreto - ${cep}`,
     state: "ZERO_RESULTS",
     city: "ZERO_RESULTS",
-    cep,
+    cep
   };
 
   return i;

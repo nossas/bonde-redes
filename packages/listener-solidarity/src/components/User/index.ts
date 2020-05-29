@@ -10,7 +10,7 @@ import dbg from "../../dbg";
 
 const log = dbg.extend("User");
 
-let cache = new Array();
+let cache = [];
 
 const handleIntegration = (widgets: Widget[]) => async (response: any) => {
   log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
@@ -21,7 +21,7 @@ const handleIntegration = (widgets: Widget[]) => async (response: any) => {
   } = response;
 
   cache = entries.map((entry: any) => {
-    if (!cache.includes(entry.id)) return entry;
+    if (!cache.includes(entry.id as never)) return entry;
     return;
   });
 
@@ -84,7 +84,7 @@ const handleIntegration = (widgets: Widget[]) => async (response: any) => {
       // pq não colocamos o email? mais seguro.
       register["external_id"] = formEntry.id.toString();
 
-      for (let key in register.user_fields) {
+      for (const key in register.user_fields) {
         if (instance[key]) register["user_fields"][key] = instance[key];
       }
 
@@ -95,11 +95,11 @@ const handleIntegration = (widgets: Widget[]) => async (response: any) => {
       register["user_fields"]["data_de_inscricao_no_bonde"] =
         formEntry.created_at;
 
-      register["user_fields"]["state"] = "";
-      // const geocoding = await getGeocoding(instance);
-      // Object.keys(geocoding).map((g) => {
-      //   register["user_fields"][g] = geocoding[g];
-      // });
+      // register["user_fields"]["state"] = "";
+      const geocoding = await getGeocoding(instance);
+      Object.keys(geocoding).map((g) => {
+        register["user_fields"][g] = geocoding[g];
+      });
 
       const terms = instance["accept_terms"];
       if (terms && terms.match(/sim/gi))

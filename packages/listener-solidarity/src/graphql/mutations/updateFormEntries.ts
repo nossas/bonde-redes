@@ -33,7 +33,7 @@ const updateFormEntries = async (forms: number[]) => {
   try {
     const res = await GraphQLAPI.mutate({
       mutation: FORM_ENTRIES_MUTATION,
-      variables: { forms },
+      variables: { forms }
     });
 
     if (res && res.data && res.data.errors) {
@@ -43,8 +43,8 @@ const updateFormEntries = async (forms: number[]) => {
 
     const {
       data: {
-        update_form_entries: { returning: formEntries },
-      },
+        update_form_entries: { returning: formEntries }
+      }
     } = res;
 
     return formEntries;

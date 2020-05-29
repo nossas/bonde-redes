@@ -28,7 +28,7 @@ const dicio = {
   360021665652: "status_inscricao",
   360021812712: "telefone",
   360021879791: "estado",
-  360021879811: "cidade",
+  360021879811: "cidade"
 };
 
 export default async (ticket: Ticket) => {
@@ -38,7 +38,7 @@ export default async (ticket: Ticket) => {
       const key = dicio[old.id] && dicio[old.id];
       return {
         ...newObj,
-        [key]: old.value,
+        [key]: old.value
       };
     },
     {}
@@ -56,7 +56,7 @@ export default async (ticket: Ticket) => {
     tags: ticket.tags,
     updated_at: ticket.updated_at,
     ticket_id: ticket.id,
-    community_id: Number(process.env.COMMUNITY_ID),
+    community_id: Number(process.env.COMMUNITY_ID)
   };
 
   // log({ hasuraTicket: JSON.stringify(hasuraTicket, null, 2) });

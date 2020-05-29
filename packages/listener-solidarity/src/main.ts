@@ -21,10 +21,10 @@ throng({
       log("throng err: ".red, err);
     }
 
-    process.on("SIGTERM", function () {
+    process.on("SIGTERM", function() {
       log(`Worker ${id} exiting`);
       log("Cleanup here");
       process.exit();
     });
-  },
+  }
 });

@@ -20,7 +20,7 @@ const authHeaders = process.env.JWT_TOKEN
 
 const httpLink = createHttpLink({
   uri: process.env.GRAPHQL_URL || "data.bonde.devel:3001/graphql",
-  fetch,
+  fetch
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
@@ -33,9 +33,9 @@ const wsLink = new WebSocketLink({
   uri: process.env.WS_GRAPHQL_URL || "ws://localhost:5007/v1/graphql",
   options: {
     reconnect: true,
-    connectionParams: { headers: authHeaders },
+    connectionParams: { headers: authHeaders }
   },
-  webSocketImpl: ws,
+  webSocketImpl: ws
 });
 
 // using the ability to split links, you can send data to each link
@@ -55,5 +55,5 @@ const link = split(
 
 export const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: concat(authMiddleware, link),
+  link: concat(authMiddleware, link)
 });

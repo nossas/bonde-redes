@@ -15,7 +15,7 @@ export default async (users: User[]) => {
         log(err);
         return saveUsersHasura([], users);
       }
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         return client.jobstatuses.watch(
           result["job_status"].id,
           5000,

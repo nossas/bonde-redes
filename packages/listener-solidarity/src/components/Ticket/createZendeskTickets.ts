@@ -5,7 +5,7 @@ import dbg from "../../dbg";
 
 const log = dbg.extend("createZendeskTickets");
 
-const createTicket = (ticket) => {
+const createTicket = ticket => {
   return client.tickets.create({ ticket }, (err, _req, result: any) => {
     if (err) {
       log(err);
@@ -17,7 +17,7 @@ const createTicket = (ticket) => {
     log("Zendesk ticket created successfully");
     return saveTicketHasura({
       ...result,
-      requester_id: ticket.requester_id,
+      requester_id: ticket.requester_id
     });
   });
 };
