@@ -72,8 +72,9 @@ export default async ({
 
   const a = address ? address + "," : "";
   const c = city ? city + "," : "";
-  const s = state ? state : "";
-  const compose = a + c + s;
+  const s = state ? state + "," : "";
+  const z = cep ? cep + ",BR" : "";
+  const compose = a + c + s + z;
 
   const data = await getGoogleGeolocation(compose, GOOGLE_MAPS_API_KEY);
 

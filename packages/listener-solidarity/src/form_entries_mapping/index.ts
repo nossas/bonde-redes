@@ -344,8 +344,8 @@ export default [
           uid: "field-1533735788159-99",
         },
         {
-          name: "address",
-          uid: "field-1533735803691-45",
+          name: "cep",
+          uid: "field-1533735803691-45", // cep de atendimento ou endereço
         },
         {
           name: "phone",
