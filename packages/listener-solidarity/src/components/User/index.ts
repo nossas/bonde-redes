@@ -1,18 +1,14 @@
-import makeBatchRequests from "./batchRequests";
-import {
-  getOrganizationType,
-  setType,
-  organizationsIds,
-  getGeocoding,
-} from "../../utils";
-import { Widget, User, MetaField, Entries, Instance } from "../../types";
+import { makeBatchRequests, composeUser } from "./";
+import { Widget, FormEntry } from "../../types";
 import dbg from "../../dbg";
 
 const log = dbg.extend("User");
 
 let cache = [];
 
-const handleIntegration = (widgets: Widget[]) => async (response: any) => {
+export const handleIntegration = (widgets: Widget[]) => async (
+  response: any
+) => {
   log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
   // log({ response: response.data.form_entries });
 
@@ -20,115 +16,19 @@ const handleIntegration = (widgets: Widget[]) => async (response: any) => {
     data: { form_entries: entries },
   } = response;
 
-  cache = entries.map((entry: any) => {
+  cache = entries.map((entry: FormEntry) => {
     if (!cache.includes(entry.id as never)) return entry;
     return;
   });
 
   if (cache.length > 0) {
-    const usersToRegister = cache.map(async (formEntry: Entries) => {
-      const fields = JSON.parse(formEntry.fields);
-      const widget = widgets.filter(
-        (w: Widget) => w.id === formEntry.widget_id
-      )[0];
-
-      if (!widget) return;
-
-      const instance: Instance = {
-        tipo_de_acolhimento: null,
-        first_name: "",
-        email: "",
-      };
-
-      widget.metadata.form_mapping.map((field: MetaField) => {
-        const acessors = field.name.split(".");
-        instance[acessors[0]] = (
-          fields.filter((f: any) => f.uid === field.uid)[0] || {}
-        ).value;
-      });
-
-      // log({ instance });
-
-      const register: User = {
-        name: "",
-        role: "end-user",
-        organization_id: 0,
-        email: "",
-        external_id: "",
-        phone: "",
-        verified: true,
-        user_fields: {
-          tipo_de_acolhimento: null,
-          condition: "desabilitada",
-          state: "",
-          city: "",
-          cep: "",
-          address: "",
-          whatsapp: null,
-          registration_number: null,
-          occupation_area: null,
-          disponibilidade_de_atendimentos: null,
-          data_de_inscricao_no_bonde: "",
-        },
-      };
-
-      register["email"] = instance.email;
-      if (instance.phone) register["phone"] = instance.phone;
-
-      register["name"] = instance.last_name
-        ? `${instance.first_name} ${instance.last_name}`
-        : instance.first_name;
-      register["organization_id"] =
-        organizationsIds[getOrganizationType(widget.id)];
-
-      // pq não colocamos o email? mais seguro.
-      register["external_id"] = formEntry.id.toString();
-
-      for (const key in register.user_fields) {
-        if (instance[key]) register["user_fields"][key] = instance[key];
-      }
-
-      register["user_fields"]["disponibilidade_de_atendimentos"] = (
-        instance["disponibilidade_de_atendimentos"] || ""
-      ).replace(/\s/g, "");
-
-      register["user_fields"]["data_de_inscricao_no_bonde"] =
-        formEntry.created_at;
-
-      // register["user_fields"]["state"] = "";
-      const geocoding = await getGeocoding(instance);
-      Object.keys(geocoding).map((g) => {
-        register["user_fields"][g] = geocoding[g];
-      });
-
-      const terms = instance["accept_terms"];
-      if (terms && terms.match(/sim/gi))
-        register["user_fields"]["condition"] = "inscrita";
-      // Some MSR forms didn't have the `accept_terms` field
-      if (
-        formEntry.created_at < "2019-06-10 18:08:55.49997" &&
-        widget.id === 16850
-      )
-        register["user_fields"]["condition"] = "inscrita";
-      if (widget.id === 3297) {
-        register["user_fields"]["condition"] = "inscrita";
-      }
-
-      register["user_fields"]["tipo_de_acolhimento"] = setType(
-        instance.tipo_de_acolhimento
-      );
-
-      // log({ register });
-
-      return register;
-    });
-
+    const usersToRegister = await composeUser(cache, widgets);
     return Promise.all(usersToRegister).then(async (users: any) => {
       // Batch insert individuals
       log("Creating users in Zendesk...");
+      // log(users);
       // Create users in Zendesk
       // Cb create users in Hasura
-      // log(users);
       await makeBatchRequests(users);
       return (cache = []);
     });
@@ -142,3 +42,4 @@ export default handleIntegration;
 export { default as createZendeskUsers } from "./createZendeskUsers";
 export { default as makeBatchRequests } from "./batchRequests";
 export { default as saveUsersHasura } from "./saveUsersHasura";
+export { default as composeUser } from "./composeUser";

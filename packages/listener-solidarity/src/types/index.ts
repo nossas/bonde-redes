@@ -84,18 +84,6 @@ export type IndividualGeolocation = {
   longitude: string;
 };
 
-export interface MetaField {
-  uid: string;
-  name: string;
-}
-
-export type Entries = {
-  fields: string;
-  widget_id: number;
-  id: number;
-  created_at: string;
-};
-
 // Fields that come from BONDE widget
 export type Instance = {
   first_name: string;
@@ -148,4 +136,21 @@ export type Ticket = {
   nome_voluntaria: string | null;
   status_inscricao: string | null;
   telefone: string | null;
+};
+
+export type Fields = Array<{
+  uid: string;
+  kind: string;
+  label: string;
+  placeholder: string;
+  required: "true" | "false";
+  value: string;
+}>;
+
+export type FormEntry = {
+  fields: string;
+  id: number;
+  widget_id: number;
+  cached_community_id: number;
+  created_at: string;
 };
