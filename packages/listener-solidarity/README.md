@@ -37,3 +37,10 @@ A new ticket will always be created, but there is a check to see if a similar ti
   - the older ticket has the same type of request ("psicológico" or "jurídico")
   - the older ticket has a status "new"
 If the older ticket meets these criteria, it's status will be altered to "closed".
+
+## Tracking new form entries
+
+To make the script track new widgets here's the steps you need to follow:
+
+- Update LAWYER_WIDGET_IDS and THERAPIST_WIDGET_IDS envs in Cluster
+- Add new form mapping to /form_entries_mapping file
