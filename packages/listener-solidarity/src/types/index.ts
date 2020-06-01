@@ -52,28 +52,24 @@ export type User = {
 interface GoogleMapsAddressComponent {
   long_name: string;
   short_name: string;
-  type: string[];
+  types: string[];
 }
 
 interface GoogleMapsResults {
   address_components: GoogleMapsAddressComponent[];
-  formatted_address: string;
   geometry: {
     location: {
-      lat: string;
-      lng: string;
+      lat: number;
+      lng: number;
     };
   };
-  place_id: string;
-  types: string[];
+  formatted_address?: string;
 }
 
-export interface GoogleMapsResponse {
-  data: {
-    results: GoogleMapsResults[];
-    status: string;
-  };
-}
+export type GoogleMapsResponse = {
+  results: GoogleMapsResults[];
+  status: string;
+};
 
 export type IndividualGeolocation = {
   cep: string;
