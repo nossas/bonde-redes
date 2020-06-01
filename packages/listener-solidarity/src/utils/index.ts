@@ -1,7 +1,7 @@
 export const organizationsIds = {
   MSR: 360273031591,
   THERAPIST: 360282119532,
-  LAWYER: 360269610652
+  LAWYER: 360269610652,
 };
 
 export const setType = (type: string | null) => {
@@ -22,8 +22,9 @@ export const setType = (type: string | null) => {
   }
 };
 
-const therapist_widgets = [2760, 16835, 17628];
-const lawyer_widgets = [8190, 16838, 17633];
+const { LAWYER_WIDGET_IDS = "", THERAPIST_WIDGET_IDS = "" } = process.env;
+const lawyer_widgets = LAWYER_WIDGET_IDS.split(",").map(Number);
+const therapist_widgets = THERAPIST_WIDGET_IDS.split(",").map(Number);
 
 export const getOrganizationType = (id: number): string => {
   if (therapist_widgets.includes(id)) return "THERAPIST";
@@ -31,10 +32,10 @@ export const getOrganizationType = (id: number): string => {
   return "MSR";
 };
 
-export const handleUserError = entries => {
+export const handleUserError = (entries) => {
   console.log(
     `Integration failed in these form entries ${entries.map(
-      e => e.external_id
+      (e) => e.external_id
     )}`
   );
   return undefined;
@@ -65,9 +66,9 @@ export const extractTypeFromSubject = (subject: string) =>
     .split(" ")[0]
     .toLowerCase();
 
-export const removeDuplicatesBy = (keyFn, array) => {
+export const removeDuplicatesBy = (keyFn, array: Array<any>) => {
   const mySet = new Set();
-  return array.filter(x => {
+  return array.filter((x) => {
     const key = keyFn(x),
       isNew = !mySet.has(key);
     if (isNew) mySet.add(key);
