@@ -26,7 +26,19 @@ const { LAWYER_WIDGET_IDS = "", THERAPIST_WIDGET_IDS = "" } = process.env;
 const lawyer_widgets = LAWYER_WIDGET_IDS.split(",").map(Number);
 const therapist_widgets = THERAPIST_WIDGET_IDS.split(",").map(Number);
 
-export const getOrganizationType = (id: number): string => {
+// type PossibleWidgetIds =
+//   | 8190
+//   | 16838
+//   | 17633
+//   | 2760
+//   | 16835
+//   | 17628
+//   | 16850
+//   | 3297;
+
+export const getOrganizationType = (
+  id: number
+): "THERAPIST" | "LAWYER" | "MSR" => {
   if (therapist_widgets.includes(id)) return "THERAPIST";
   if (lawyer_widgets.includes(id)) return "LAWYER";
   return "MSR";

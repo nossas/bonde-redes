@@ -69,6 +69,7 @@ importers:
       yup: ^0.27.0
   packages/listener-solidarity:
     dependencies:
+      '@types/faker': 4.1.12
       '@types/node-zendesk': 1.4.0
       '@types/throng': 4.0.2
       apollo-cache-inmemory: 1.6.6_graphql@14.6.0
@@ -83,6 +84,7 @@ importers:
       cross-fetch: 3.0.4
       debug: 4.1.1
       dotenv-safe: 8.2.0
+      faker: 4.1.0
       fp-ts: 2.6.1
       graphql: 14.6.0
       graphql-tag: 2.10.3_graphql@14.6.0
@@ -109,6 +111,7 @@ importers:
       typescript: 3.9.3
     specifiers:
       '@types/debug': ^4.1.5
+      '@types/faker': ^4.1.12
       '@types/jest': ~25.1.0
       '@types/node': ~12.12.27
       '@types/node-zendesk': ^1.4.0
@@ -127,6 +130,7 @@ importers:
       cross-fetch: ^3.0.4
       debug: ^4.1.1
       dotenv-safe: ^8.2.0
+      faker: ^4.1.0
       fp-ts: ^2.5.1
       graphql: ^14.6.0
       graphql-tag: ^2.10.3
@@ -3265,6 +3269,10 @@ packages:
       '@types/serve-static': 1.13.4
     resolution:
       integrity: sha512-n/mr9tZI83kd4azlPG5y997C/M4DNABK9yErhFM6hKdym4kkmd9j0vtsJyjFIwfRBxtrxZtAfGZCNRIBMFLK5w==
+  /@types/faker/4.1.12:
+    dev: false
+    resolution:
+      integrity: sha512-0MEyzJrLLs1WaOCx9ULK6FzdCSj2EuxdSP9kvuxxdBEGujZYUOZ4vkPXdgu3dhyg/pOdn7VCatelYX7k0YShlA==
   /@types/geojson/7946.0.7:
     dev: true
     resolution:
@@ -7150,7 +7158,6 @@ packages:
     resolution:
       integrity: sha1-lpGEQOMEGnpBT4xS48V06zw+HgU=
   /faker/4.1.0:
-    dev: true
     resolution:
       integrity: sha1-HkW7vsxndLPBlfrSg1EJxtdIzD8=
   /fast-deep-equal/3.1.1:

@@ -28,6 +28,7 @@
     "clean": "rimraf coverage dist tmp"
   },
   "dependencies": {
+    "@types/faker": "^4.1.12",
     "@types/node-zendesk": "^1.4.0",
     "@types/throng": "^4.0.2",
     "apollo-cache-inmemory": "^1.6.5",
@@ -42,6 +43,7 @@
     "cross-fetch": "^3.0.4",
     "debug": "^4.1.1",
     "dotenv-safe": "^8.2.0",
+    "faker": "^4.1.0",
     "fp-ts": "^2.5.1",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
