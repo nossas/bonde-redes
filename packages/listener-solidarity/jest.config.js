@@ -8,4 +8,5 @@ module.exports = {
   coverageDirectory: "coverage",
   collectCoverageFrom: ["src/**/*.{ts,tsx,js,jsx}", "!src/**/*.d.ts"],
   setupFiles: ["<rootDir>/setEnvVars.ts"],
+  modulePathIgnorePatterns: ["/dist/"],
 };

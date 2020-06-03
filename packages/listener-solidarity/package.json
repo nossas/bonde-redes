@@ -20,7 +20,7 @@
   },
   "scripts": {
     "start": "node -r dotenv-safe/config dist/src/main.js",
-    "dev": "DEBUG=listener-solidarity* tsc-watch --onSuccess \"node -r dotenv-safe/config ./dist/main.js\"",
+    "dev": "DEBUG=listener-solidarity* tsc-watch --onSuccess \"node -r dotenv-safe/config ./dist/src/main.js\"",
     "test": "DEBUG=listener-solidarity* jest --coverage",
     "test:watch": "DEBUG=listener-solidarity* jest --watch --runInBand --detectOpenHandles",
     "build": "tsc -p tsconfig.json",
