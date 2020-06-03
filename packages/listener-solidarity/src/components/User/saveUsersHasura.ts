@@ -21,11 +21,13 @@ export default async (
 ) => {
   if (
     results.find((r) => r.error && r.error.match(/error/i)) ||
-    users.length < 1
+    users.length < 1 ||
+    results.length < 1
   ) {
     log(`Results with error: ${results}`);
     return handleUserError(users);
   }
+
   log("Preparing zendesk users to be saved in Hasura");
   const hasuraUsers = results.map((r) => {
     const user = users.find((u) => u.external_id === r.external_id);
@@ -39,6 +41,7 @@ export default async (
 
   log("Saving users in Hasura...");
   const withoutDuplicates = removeDuplicatesBy((x) => x.user_id, hasuraUsers);
+  // log({ withoutDuplicates: JSON.stringify(withoutDuplicates, null, 2) });
 
   const createTickets = await createUserTickets(withoutDuplicates);
   if (!createTickets) return handleUserError(users);

@@ -12,6 +12,7 @@ const limiter = new Bottleneck({
 
 export default async (users: any) => {
   if (users.length < 1) return undefined;
+  log("Performing batch requests to Zendesk...");
   let start = 0;
   const step = 50;
   const usersLength = users.length;

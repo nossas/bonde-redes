@@ -28,9 +28,8 @@ export const handleIntegration = (widgets: Widget[]) => async (
     // Batch insert individuals
     // Create users in Zendesk
     // Cb create users in Hasura
-    log("Creating users in Zendesk...");
     const batches = await makeBatchRequests(usersToRegister);
-    if (!batches) return handleUserError(cache);
+    if (!batches) return handleUserError(entries);
     return (cache = []);
   } else {
     log("No items for integration.");

@@ -77,7 +77,7 @@ export default async (
       register["user_fields"]["data_de_inscricao_no_bonde"] =
         formEntry.created_at;
 
-      register["user_fields"]["state"] = "";
+      // register["user_fields"]["state"] = "";
       const geocoding = await getGeolocation(instance);
       Object.keys(geocoding).map((g) => {
         register["user_fields"][g] = geocoding[g];
