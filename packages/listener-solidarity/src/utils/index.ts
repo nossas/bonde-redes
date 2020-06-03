@@ -88,4 +88,4 @@ export const removeDuplicatesBy = (keyFn, array: Array<any>) => {
   });
 };
 
-export { default as getGeocoding } from "./geocoding";
+export { default as getGeolocation } from "./geocoding";

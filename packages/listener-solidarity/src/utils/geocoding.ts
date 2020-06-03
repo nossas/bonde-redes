@@ -5,7 +5,6 @@ import { GoogleMapsResponse, IndividualGeolocation, User } from "../types";
 const log = dbg.extend("getGeocoding");
 
 export const getGoogleGeolocation = async (address: string, email: string) => {
-  const { GOOGLE_MAPS_API_KEY } = process.env;
   try {
     log(`requesting google with address ${address}...`);
     const response: { data: GoogleMapsResponse } = await axios.post(
@@ -14,19 +13,30 @@ export const getGoogleGeolocation = async (address: string, email: string) => {
       {
         params: {
           address,
-          GOOGLE_MAPS_API_KEY,
+          key: process.env.GOOGLE_MAPS_API_KEY,
         },
       }
     );
+
     log("google maps responded!");
-    return await geolocation(email, address, response.data);
+
+    if (response.data && response.data.error_message) {
+      log(
+        `google maps response failed (email, address): '${email}', ${address}`
+          .red,
+        response.data.error_message
+      );
+      return processGeolocation(email, address, undefined);
+    }
+
+    return processGeolocation(email, address, response.data);
   } catch (e) {
     log(
       `google maps response failed (email, address): '${email}', ${address}`
         .red,
       e
     );
-    return await geolocation(email, address, undefined);
+    return processGeolocation(email, address, undefined);
   }
 };
 
@@ -69,7 +79,7 @@ const getCityStateAndZipcode = (addressComponents): Array<string> => {
   return [state, city, zipcode];
 };
 
-export const geolocation = (
+export const processGeolocation = (
   userEmail: string,
   searchAddress: string,
   data?: GoogleMapsResponse
@@ -124,9 +134,9 @@ export const geolocation = (
 };
 
 export default async ({ state, city, cep, address, email }: any) => {
-  const a = address ? address + "," : "";
-  const c = city ? city + "," : "";
-  const s = state ? state + "," : "";
+  const a = address ? `${address},` : "";
+  const c = city ? `${city},` : "";
+  const s = state ? `${state},` : "";
   const z = cep ? cep + ",BR" : "";
 
   return await getGoogleGeolocation(a + c + s + z, email);

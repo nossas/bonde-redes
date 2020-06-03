@@ -1,4 +1,4 @@
-import { geolocation } from "../geocoding";
+import { processGeolocation } from "../geocoding";
 import faker from "faker/locale/pt_BR";
 
 describe("geolocation tests", () => {
@@ -53,7 +53,7 @@ describe("geolocation tests", () => {
   };
 
   it("should return valid output if there are results", () => {
-    const success = geolocation(email, validOutput.address, mapsSuccess);
+    const success = processGeolocation(email, validOutput.address, mapsSuccess);
     expect(success).toStrictEqual(validOutput);
   });
 
@@ -62,12 +62,12 @@ describe("geolocation tests", () => {
       results: [],
       status: "ZERO_RESULTS",
     };
-    const failure = geolocation(email, validOutput.address, mapsFailure);
+    const failure = processGeolocation(email, validOutput.address, mapsFailure);
     expect(failure).toStrictEqual(invalidOutput);
   });
 
   it("should return invalid output if there was an error with Google Maps API", () => {
-    const failure = geolocation(email, validOutput.address, undefined);
+    const failure = processGeolocation(email, validOutput.address, undefined);
     expect(failure).toStrictEqual(invalidOutput);
   });
 });

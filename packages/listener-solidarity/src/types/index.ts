@@ -69,6 +69,7 @@ interface GoogleMapsResults {
 export type GoogleMapsResponse = {
   results: GoogleMapsResults[];
   status: string;
+  error_message?: string;
 };
 
 export type IndividualGeolocation = {
