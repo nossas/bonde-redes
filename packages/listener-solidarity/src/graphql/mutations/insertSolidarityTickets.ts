@@ -47,11 +47,11 @@ const CREATE_TICKETS_MUTATION = gql`
 //   };
 // };
 
-const insertSolidarityTickets = async ticket => {
+const insertSolidarityTickets = async (ticket) => {
   try {
     const res = await GraphQLAPI.mutate({
       mutation: CREATE_TICKETS_MUTATION,
-      variables: { ticket }
+      variables: { ticket },
     });
 
     if (res && res.data && res.data.errors) {
@@ -60,10 +60,10 @@ const insertSolidarityTickets = async ticket => {
     }
 
     const {
-      data: { insert_solidarity_tickets_one }
+      data: { insert_solidarity_tickets_one },
     } = res;
 
-    log({ returning: insert_solidarity_tickets_one });
+    // log({ returning: insert_solidarity_tickets_one });
 
     return (
       insert_solidarity_tickets_one && insert_solidarity_tickets_one.ticket_id
