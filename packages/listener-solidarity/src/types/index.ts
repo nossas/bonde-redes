@@ -151,3 +151,10 @@ export type FormEntry = {
   cached_community_id: number;
   created_at: string;
 };
+
+export type ZendeskUserCreationResponse = {
+  id: number;
+  status: string;
+  external_id: string;
+  error?: string | undefined;
+};

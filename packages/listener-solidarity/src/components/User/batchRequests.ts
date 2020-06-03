@@ -1,7 +1,8 @@
 import Bottleneck from "bottleneck";
-import { createZendeskUsers } from "./";
+import { createZendeskUsers, saveUsersHasura } from "./";
 // import { User } from "../../types";
 import dbg from "../../dbg";
+import { handleUserError } from "../../utils";
 
 const log = dbg.extend("batchRequests");
 
@@ -19,6 +20,10 @@ export default async (users: any) => {
   for (start; start < usersLength; start += step) {
     log({ start, step });
     const batch = users.slice(start, start + step - 1);
-    return await limiter.schedule(() => createZendeskUsers(batch));
+    const userCreationResult = await limiter.schedule(() =>
+      createZendeskUsers(batch)
+    );
+    if (!userCreationResult) return handleUserError(users);
+    return userCreationResult;
   }
 };

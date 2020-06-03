@@ -4,19 +4,14 @@ import {
   updateFormEntries,
 } from "../../graphql/mutations";
 import { handleUserError, removeDuplicatesBy } from "../../utils";
-import { User } from "../../types";
+import { User, ZendeskUserCreationResponse } from "../../types";
 import dbg from "../../dbg";
 
 const log = dbg.extend("createUsersHasura");
 let syncronizedForms = new Array();
 
 export default async (
-  results: Array<{
-    id: number;
-    status: string;
-    external_id: string;
-    error?: string;
-  }>,
+  results: ZendeskUserCreationResponse[],
   users: User[]
 ) => {
   if (
@@ -62,5 +57,6 @@ export default async (
     return handleUserError(users);
   }
 
-  return log("User integration is done.");
+  log("User integration is done.");
+  return true;
 };

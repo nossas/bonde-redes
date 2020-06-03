@@ -1,4 +1,4 @@
-import { makeBatchRequests, composeUser } from "./";
+import { makeBatchRequests, composeUser, saveUsersHasura } from "./";
 import { getGeolocation, handleUserError } from "../../utils";
 import { Widget, FormEntry } from "../../types";
 import dbg from "../../dbg";
@@ -27,9 +27,12 @@ export const handleIntegration = (widgets: Widget[]) => async (
     // log(usersToRegister);
     // Batch insert individuals
     // Create users in Zendesk
-    // Cb create users in Hasura
-    const batches = await makeBatchRequests(usersToRegister);
-    if (!batches) return handleUserError(entries);
+    const userBatches = await makeBatchRequests(usersToRegister);
+    if (!userBatches) return handleUserError(entries);
+    // Create users in Hasura
+    // Create users tickets
+    const usersInHasura = saveUsersHasura(userBatches, usersToRegister);
+    if (!usersInHasura) return handleUserError(entries);
     return (cache = []);
   } else {
     log("No items for integration.");

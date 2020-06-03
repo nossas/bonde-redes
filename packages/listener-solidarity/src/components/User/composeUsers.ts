@@ -8,7 +8,7 @@ export default async (
   cache: FormEntry[],
   widgets: Widget[],
   getGeolocation
-) => {
+): Promise<any> => {
   log("Composing users...");
   const users = cache
     .map(async (formEntry: FormEntry) => {
