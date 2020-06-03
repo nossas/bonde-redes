@@ -1,4 +1,5 @@
 import { makeBatchRequests, composeUser } from "./";
+import { getGeolocation, handleUserError } from "../../utils";
 import { Widget, FormEntry } from "../../types";
 import dbg from "../../dbg";
 
@@ -22,16 +23,15 @@ export const handleIntegration = (widgets: Widget[]) => async (
   });
 
   if (cache.length > 0) {
-    const usersToRegister = await composeUser(cache, widgets);
-    return Promise.all(usersToRegister).then(async (users: any) => {
-      // Batch insert individuals
-      log("Creating users in Zendesk...");
-      // log(users);
-      // Create users in Zendesk
-      // Cb create users in Hasura
-      await makeBatchRequests(users);
-      return (cache = []);
-    });
+    const usersToRegister = await composeUser(cache, widgets, getGeolocation);
+    // log(usersToRegister);
+    // Batch insert individuals
+    // Create users in Zendesk
+    // Cb create users in Hasura
+    log("Creating users in Zendesk...");
+    const batches = await makeBatchRequests(usersToRegister);
+    if (!batches) return handleUserError(cache);
+    return (cache = []);
   } else {
     log("No items for integration.");
   }
@@ -42,4 +42,4 @@ export default handleIntegration;
 export { default as createZendeskUsers } from "./createZendeskUsers";
 export { default as makeBatchRequests } from "./batchRequests";
 export { default as saveUsersHasura } from "./saveUsersHasura";
-export { default as composeUser } from "./composeUser";
+export { default as composeUser } from "./composeUsers";

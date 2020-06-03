@@ -1,16 +1,17 @@
 import Bottleneck from "bottleneck";
 import { createZendeskUsers } from "./";
-import { User } from "../../types";
+// import { User } from "../../types";
 import dbg from "../../dbg";
 
 const log = dbg.extend("batchRequests");
 
 const limiter = new Bottleneck({
   maxConcurrent: 1,
-  minTime: 1000
+  minTime: 1000,
 });
 
-export default async (users: User[]) => {
+export default async (users: any) => {
+  if (users.length < 1) return undefined;
   let start = 0;
   const step = 50;
   const usersLength = users.length;
