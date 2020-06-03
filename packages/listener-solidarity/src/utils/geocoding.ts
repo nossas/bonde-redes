@@ -98,10 +98,11 @@ export const processGeolocation = (
     } = data;
 
     const [state, city, zipcode] = getCityStateAndZipcode(addressComponents);
-
+    const latitude = typeof lat === "string" ? lat : lat.toFixed(3);
+    const longitude = typeof lng === "string" ? lng : lng.toFixed(3);
     const i: IndividualGeolocation = {
-      latitude: lat.toString(),
-      longitude: lng.toString(),
+      latitude,
+      longitude,
       address,
       state,
       city,

@@ -3,8 +3,8 @@ import faker from "faker/locale/pt_BR";
 
 describe("geolocation tests", () => {
   const validOutput = {
-    latitude: faker.address.latitude(),
-    longitude: faker.address.longitude(),
+    latitude: Number(faker.address.latitude()).toFixed(3),
+    longitude: Number(faker.address.longitude()).toFixed(3),
     address: faker.address.streetAddress(true),
     state: faker.address.state(true),
     city: faker.address.city(),
