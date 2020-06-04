@@ -1,4 +1,200 @@
 export default {
+  tickets: {
+    mixed: [
+      {
+        id: 19855,
+        subject: "[Jurídico] Camila, Cuiabá - MT",
+        status: "closed",
+        fields: [
+          {
+            id: 360021879811,
+            value: null,
+          },
+          {
+            id: 360016631592,
+            value: null,
+          },
+          {
+            id: 360017432652,
+            value: null,
+          },
+          {
+            id: 360016631632,
+            value: null,
+          },
+          {
+            id: 360017056851,
+            value: "2020-05-27",
+          },
+          {
+            id: 360021665652,
+            value: null,
+          },
+          {
+            id: 360014379412,
+            value: "solicitação_recebida",
+          },
+          {
+            id: 360021812712,
+            value: null,
+          },
+          {
+            id: 360021879791,
+            value: null,
+          },
+          {
+            id: 360016681971,
+            value: "Camila",
+          },
+        ],
+      },
+      {
+        id: 19894,
+        subject: "[Psicológico] Igor, Belo Horizonte - MG",
+        status: "pending",
+        fields: [
+          {
+            id: 360021879811,
+            value: null,
+          },
+          {
+            id: 360016631592,
+            value: null,
+          },
+          {
+            id: 360017432652,
+            value: "2020-06-04",
+          },
+          {
+            id: 360016631632,
+            value: null,
+          },
+          {
+            id: 360017056851,
+            value: "2020-05-08",
+          },
+          {
+            id: 360021665652,
+            value: null,
+          },
+          {
+            id: 360014379412,
+            value: "encaminhamento__realizado",
+          },
+          {
+            id: 360021812712,
+            value: null,
+          },
+          {
+            id: 360021879791,
+            value: null,
+          },
+          {
+            id: 360016681971,
+            value: "Igor",
+          },
+        ],
+      },
+    ],
+    meets_conditions: [
+      {
+        id: 19892,
+        subject: "[Psicológico] Viviane, Taubaté - SP",
+        status: "pending",
+        fields: [
+          {
+            id: 360021879811,
+            value: null,
+          },
+          {
+            id: 360016631592,
+            value: null,
+          },
+          {
+            id: 360017432652,
+            value: null,
+          },
+          {
+            id: 360016631632,
+            value: null,
+          },
+          {
+            id: 360017056851,
+            value: "2020-05-27",
+          },
+          {
+            id: 360021665652,
+            value: null,
+          },
+          {
+            id: 360014379412,
+            value: "encaminhamento__realizado_para_serviço_público",
+          },
+          {
+            id: 360021812712,
+            value: null,
+          },
+          {
+            id: 360021879791,
+            value: null,
+          },
+          {
+            id: 360016681971,
+            value: "Viviane",
+          },
+        ],
+      },
+    ],
+    meets_no_conditions: [
+      {
+        id: 19892,
+        subject: "[Psicológico] Viviane, Taubaté - SP",
+        status: "new",
+        fields: [
+          {
+            id: 360021879811,
+            value: null,
+          },
+          {
+            id: 360016631592,
+            value: null,
+          },
+          {
+            id: 360017432652,
+            value: null,
+          },
+          {
+            id: 360016631632,
+            value: null,
+          },
+          {
+            id: 360017056851,
+            value: "2020-05-27",
+          },
+          {
+            id: 360021665652,
+            value: null,
+          },
+          {
+            id: 360014379412,
+            value: "encaminhamento__negado",
+          },
+          {
+            id: 360021812712,
+            value: null,
+          },
+          {
+            id: 360021879791,
+            value: null,
+          },
+          {
+            id: 360016681971,
+            value: "Viviane",
+          },
+        ],
+      },
+    ],
+  },
   users: {
     volunteers: [
       {
