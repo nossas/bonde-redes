@@ -74,6 +74,12 @@ export default async (tickets: Ticket[]) => {
         createTicket({
           ...ticket,
           status: "closed",
+          custom_fields: [
+            {
+              id: 360014379412,
+              value: "solicitação_repetida",
+            },
+          ],
           comment: {
             body:
               "Ticket foi criado com status fechado pois MSR já possui um encaminhamento feito com o mesmo tipo de pedido de acolhimento",
