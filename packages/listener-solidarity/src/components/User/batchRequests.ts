@@ -1,5 +1,5 @@
 import Bottleneck from "bottleneck";
-import { createZendeskUsers, saveUsersHasura } from "./";
+import { createZendeskUsers } from "./";
 // import { User } from "../../types";
 import dbg from "../../dbg";
 import { handleUserError } from "../../utils";

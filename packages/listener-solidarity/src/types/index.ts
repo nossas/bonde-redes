@@ -114,6 +114,7 @@ export type Ticket = {
   external_id: string;
   requester_id: number;
   custom_fields: Array<{ id: number; value: any }>;
+  fields: Array<{ id: number; value: any }>;
   created_at: string;
   description: string;
   ticket_id: number;

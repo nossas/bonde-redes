@@ -46,11 +46,12 @@ const CREATE_USERS_MUTATION = gql`
 // };
 
 const insertSolidarityUsers = async (users: any) => {
-  const ids = users.map(u => u.external_id);
+  log("Saving users in Hasura...");
+  const ids = users.map((u) => u.external_id);
   try {
     const res = await GraphQLAPI.mutate({
       mutation: CREATE_USERS_MUTATION,
-      variables: { users }
+      variables: { users },
     });
 
     if (res && res.data && res.data.errors) {
@@ -60,8 +61,8 @@ const insertSolidarityUsers = async (users: any) => {
 
     const {
       data: {
-        insert_solidarity_users: { returning }
-      }
+        insert_solidarity_users: { returning },
+      },
     } = res;
 
     return returning;

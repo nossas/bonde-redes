@@ -1,4 +1,4 @@
-import { composeUser } from "../.";
+import { composeUsers } from "../.";
 import widgets from "../../../form_entries_mapping";
 import data, { geolocation } from "../__mocks__";
 
@@ -10,7 +10,7 @@ describe("Test if user is build correctly", () => {
       const {
         2760: { cache, results },
       } = data;
-      const user = await composeUser(cache, widgets, getGeolocation);
+      const user = await composeUsers(cache, widgets, getGeolocation);
       Promise.all(user).then((u) => {
         expect(u).toStrictEqual(results);
       });
@@ -19,7 +19,7 @@ describe("Test if user is build correctly", () => {
       const {
         16835: { cache, results },
       } = data;
-      const user = await composeUser(cache, widgets, getGeolocation);
+      const user = await composeUsers(cache, widgets, getGeolocation);
       Promise.all(user).then((u) => {
         expect(u).toStrictEqual(results);
       });
@@ -28,7 +28,7 @@ describe("Test if user is build correctly", () => {
       const {
         17628: { cache, results },
       } = data;
-      const user = await composeUser(cache, widgets, getGeolocation);
+      const user = await composeUsers(cache, widgets, getGeolocation);
       Promise.all(user).then((u) => {
         expect(u).toStrictEqual(results);
       });
@@ -39,7 +39,7 @@ describe("Test if user is build correctly", () => {
       const {
         8190: { cache, results },
       } = data;
-      const user = await composeUser(cache, widgets, getGeolocation);
+      const user = await composeUsers(cache, widgets, getGeolocation);
       Promise.all(user).then((u) => {
         expect(u).toStrictEqual(results);
       });
@@ -48,7 +48,7 @@ describe("Test if user is build correctly", () => {
       const {
         16838: { cache, results },
       } = data;
-      const user = await composeUser(cache, widgets, getGeolocation);
+      const user = await composeUsers(cache, widgets, getGeolocation);
       Promise.all(user).then((u) => {
         expect(u).toStrictEqual(results);
       });
@@ -57,7 +57,7 @@ describe("Test if user is build correctly", () => {
       const {
         17633: { cache, results },
       } = data;
-      const user = await composeUser(cache, widgets, getGeolocation);
+      const user = await composeUsers(cache, widgets, getGeolocation);
       Promise.all(user).then((u) => {
         expect(u).toStrictEqual(results);
       });
@@ -69,7 +69,7 @@ describe("Test if user is build correctly", () => {
         16850: { cache, results },
       } = data;
 
-      const user = await composeUser(cache, widgets, getGeolocation);
+      const user = await composeUsers(cache, widgets, getGeolocation);
       Promise.all(user).then((u) => {
         expect(u).toStrictEqual(results);
       });
@@ -79,7 +79,7 @@ describe("Test if user is build correctly", () => {
         3297: { cache, results },
       } = data;
 
-      const user = await composeUser(cache, widgets, getGeolocation);
+      const user = await composeUsers(cache, widgets, getGeolocation);
       Promise.all(user).then((u) => {
         expect(u).toStrictEqual(results);
       });

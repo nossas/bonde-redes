@@ -12,17 +12,16 @@ const limiter = new Bottleneck({
 });
 
 const createTicketLog = dbg.extend("createTicket");
-const listUserTicketsLog = dbg.extend("listUserTickets");
+const fetchUserTicketsLog = dbg.extend("fetchUserTickets");
 const log = dbg.extend("createZendeskTickets");
 
-const createTicket = (ticket) => {
+const createTicket = (ticket): Promise<boolean | undefined> => {
   createTicketLog(`${new Date()}: CREATE TICKET`);
   return new Promise((resolve) => {
     return client.tickets.create({ ticket }, (err, _req, result: any) => {
       if (err) {
         createTicketLog(err);
-        resolve(true);
-        return handleTicketError(ticket);
+        return resolve(handleTicketError(ticket));
       }
       // createTicketLog(
       //   `Results from zendesk ticket creation ${JSON.stringify(
@@ -32,31 +31,32 @@ const createTicket = (ticket) => {
       //   )}`
       // );
       createTicketLog("Zendesk ticket created successfully!");
-      resolve(true);
-      return saveTicketHasura({
+      saveTicketHasura({
         ...result,
         requester_id: ticket.requester_id,
       });
+      return resolve(true);
     });
   });
 };
 
-const listUserTickets = async ({
+export const fetchUserTickets = async ({
   requester_id,
 }): Promise<Ticket[] | undefined> => {
-  listUserTicketsLog(`${new Date()}: LIST USER TICKETS`);
+  fetchUserTicketsLog(`${new Date()}: LIST USER TICKETS`);
   return new Promise((resolve) => {
     return client.tickets.listByUserRequested(
       requester_id,
       (err, _req, result: any) => {
         if (err) {
-          listUserTicketsLog(
-            `Failed to fetch tickets from user '${requester_id}'`
+          fetchUserTicketsLog(
+            `Failed to fetch tickets from user '${requester_id}'`.red,
+            err
           );
-          listUserTicketsLog(err);
           return resolve(undefined);
         }
-        resolve(result);
+        // fetchUserTicketsLog(JSON.stringify(result, null, 2));
+        return resolve(result);
       }
     );
   });
@@ -64,30 +64,27 @@ const listUserTickets = async ({
 
 export default async (tickets: Ticket[]) => {
   log(`${new Date()}: Entering createZendeskTickets`);
-  return tickets.map(async (ticket) => {
-    const userTickets = await limiter.schedule(() => listUserTickets(ticket));
+  const createTickets = tickets.map(async (ticket) => {
+    const userTickets = await limiter.schedule(() => fetchUserTickets(ticket));
     if (!userTickets) return handleTicketError(ticket);
 
-    const oldTickets = await checkOldTickets(ticket.subject, userTickets);
+    const oldTickets = checkOldTickets(ticket.subject, userTickets);
 
-    if (oldTickets === "hasMatch") {
+    if (oldTickets) {
       return await limiter.schedule(() =>
         createTicket({
           ...ticket,
           status: "closed",
           comment: {
             body:
-              "Ticket foi criado com status fechado pois MSR já possui um atendimento em andamento com o mesmo tipo de pedido de acolhimento",
+              "Ticket foi criado com status fechado pois MSR já possui um encaminhamento feito com o mesmo tipo de pedido de acolhimento",
             public: false,
           },
         })
       );
     }
 
-    if (oldTickets && oldTickets.length > 0) {
-      await limiter.schedule(() => closeTickets(oldTickets));
-    }
-
     return await limiter.schedule(() => createTicket(ticket));
   });
+  return Promise.all(createTickets);
 };
