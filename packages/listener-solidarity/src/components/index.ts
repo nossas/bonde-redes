@@ -1,7 +1,7 @@
 import Bottleneck from "bottleneck";
 
 import { makeBatchRequests, composeUsers } from "./User";
-import { composeTickets, createZendeskTickets } from "./Ticket";
+import createZendeskTickets, { composeTickets } from "./Ticket";
 import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
 import { getGeolocation, handleUserError, removeDuplicatesBy } from "../utils";
 import { Widget, FormEntry } from "../types";
