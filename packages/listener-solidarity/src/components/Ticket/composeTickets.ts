@@ -19,6 +19,7 @@ export default async (users) => {
         city,
         state,
       },
+      external_id,
       name,
       user_id,
     } = user;
@@ -32,6 +33,7 @@ export default async (users) => {
       `[${capitalize(type)}] ${name}, ${city} - ${state}`;
 
     const ticket = {
+      external_id,
       comment: {
         body: "Importado pelo BONDE.",
         public: false,

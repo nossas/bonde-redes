@@ -63,7 +63,6 @@ export default async (
       register["organization_id"] =
         organizationsIds[getOrganizationType(widget.id)];
 
-      // pq não colocamos o email? mais seguro.
       register["external_id"] = formEntry.id.toString();
 
       for (const key in register.user_fields) {

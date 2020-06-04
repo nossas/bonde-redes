@@ -14,6 +14,30 @@ const createTicketLog = dbg.extend("createTicket");
 const fetchUserTicketsLog = dbg.extend("fetchUserTickets");
 const log = dbg.extend("createZendeskTickets");
 
+export const dicio: {
+  360014379412: "status_acolhimento";
+  360016631592: "nome_voluntaria";
+  360016631632: "link_match";
+  360016681971: "nome_msr";
+  360017056851: "data_inscricao_bonde";
+  360017432652: "data_encaminhamento";
+  360021665652: "status_inscricao";
+  360021812712: "telefone";
+  360021879791: "estado";
+  360021879811: "cidade";
+} = {
+  360014379412: "status_acolhimento",
+  360016631592: "nome_voluntaria",
+  360016631632: "link_match",
+  360016681971: "nome_msr",
+  360017056851: "data_inscricao_bonde",
+  360017432652: "data_encaminhamento",
+  360021665652: "status_inscricao",
+  360021812712: "telefone",
+  360021879791: "estado",
+  360021879811: "cidade",
+};
+
 const createTicket = (ticket): Promise<boolean | undefined> => {
   createTicketLog(`${new Date()}: CREATE TICKET`);
   return new Promise((resolve) => {
@@ -30,8 +54,16 @@ const createTicket = (ticket): Promise<boolean | undefined> => {
       //   )}`
       // );
       createTicketLog("Zendesk ticket created successfully!");
+      const custom_fields = result.custom_fields.reduce(
+        (newObj, old) => ({
+          ...newObj,
+          [dicio[old.id]]: old.value,
+        }),
+        {}
+      );
       saveTicketHasura({
         ...result,
+        ...custom_fields,
         requester_id: ticket.requester_id,
       });
       return resolve(true);
