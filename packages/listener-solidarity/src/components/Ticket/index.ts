@@ -54,16 +54,8 @@ const createTicket = (ticket): Promise<boolean | undefined> => {
       //   )}`
       // );
       createTicketLog("Zendesk ticket created successfully!");
-      const custom_fields = result.custom_fields.reduce(
-        (newObj, old) => ({
-          ...newObj,
-          [dicio[old.id]]: old.value,
-        }),
-        {}
-      );
       saveTicketHasura({
         ...result,
-        ...custom_fields,
         requester_id: ticket.requester_id,
       });
       return resolve(true);
