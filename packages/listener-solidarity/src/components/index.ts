@@ -63,10 +63,15 @@ export const handleIntegration = (widgets: Widget[]) => async (
     const withoutDuplicates = removeDuplicatesBy((x) => x.user_id, hasuraUsers);
     // log({ withoutDuplicates: JSON.stringify(withoutDuplicates, null, 2) });
 
-    // Create users tickets
-    const tickets = await composeTickets(withoutDuplicates);
-    // log(JSON.stringify(tickets, null, 2));
-    await limiter.schedule(() => createZendeskTickets(tickets));
+    // Create users tickets if they're not "desabilitada"
+    const removeDesabilitadedUsers = withoutDuplicates.filter(
+      (user) => user["user_fields"]["condition"] !== "desabilitada"
+    );
+    if (removeDesabilitadedUsers.length > 0) {
+      const tickets = await composeTickets(removeDesabilitadedUsers);
+      // log(JSON.stringify(tickets, null, 2));
+      await limiter.schedule(() => createZendeskTickets(tickets));
+    }
 
     // Save users in Hasura
     const inserted = await insertSolidarityUsers(withoutDuplicates);
