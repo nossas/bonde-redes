@@ -7,12 +7,12 @@ const verifyOrganization = async (ticket: TicketHasuraIn) => {
   const { ZENDESK_ORGANIZATIONS } = process.env;
   try {
     const organizations = await yup
-      .object()
-      .shape({
+      .object({
         ADVOGADA: yup.number().required(),
         MSR: yup.number().required(),
         PSICOLOGA: yup.number().required()
       })
+      .required()
       .validate(JSON.parse(ZENDESK_ORGANIZATIONS));
 
     const { organization_id } = ticket;

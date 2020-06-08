@@ -21,12 +21,14 @@ const getTicketIdFromRequest = async (req: Express.Request) => {
   const {
     ticket: { id }
   } = await yup
-    .object()
-    .shape({
-      ticket: yup.object().shape({
-        id: yup.string().required()
-      })
+    .object({
+      ticket: yup
+        .object({
+          id: yup.string().required()
+        })
+        .required()
     })
+    .required()
     .validate(req.body);
 
   return id;
