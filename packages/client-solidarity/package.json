@@ -1,5 +1,5 @@
 {
-  "name": "solidarity-client",
+  "name": "client-solidarity",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { Header as BondeHeader } from "bonde-styleguide";
 import { Header as Title } from "bonde-components";
 
-import { Tabs, MatchForm, Form } from "../components";
+import { Tabs, MatchForm, Form } from ".";
 
 const StyledBondeHeader = styled(BondeHeader)`
   width: 100%;
