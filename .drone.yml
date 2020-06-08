@@ -111,129 +111,129 @@ pipeline:
   #     status: success
   #     event: tag
 
-  # deploy-stag-cli-zendesk-user:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/cli-zendesk-user
-  #   group: deploying
-  #   docker_image: nossas/mapa-do-acolhimento:${DRONE_BRANCH/\//-}
-  #   timeout: 360
-  #   confirm: true
-  #   secrets: [rancher_access_key, rancher_secret_key]
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, develop]
-  #     event: push
+  deploy-stag-cli-zendesk-user:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/cli-zendesk-user
+    group: deploying
+    docker_image: nossas/mapa-do-acolhimento:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [rancher_access_key, rancher_secret_key]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
-  # deploy-stag-cli-zendesk-ticket:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/cli-zendesk-ticket
-  #   group: deploying
-  #   docker_image: nossas/mapa-do-acolhimento:${DRONE_BRANCH/\//-}
-  #   timeout: 360
-  #   confirm: true
-  #   secrets: [rancher_access_key, rancher_secret_key]
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, develop]
-  #     event: push
+  deploy-stag-cli-zendesk-ticket:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/cli-zendesk-ticket
+    group: deploying
+    docker_image: nossas/mapa-do-acolhimento:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [rancher_access_key, rancher_secret_key]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
-  # deploy-prod-cli-zendesk-user:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/cli-zendesk-user
-  #   docker_image: "nossas/mapa-do-acolhimento:${DRONE_TAG##v}"
-  #   timeout: 360
-  #   group: deploying
-  #   confirm: true
-  #   secrets:
-  #     - source: rancher_access_key_prod
-  #       target: rancher_access_key
-  #     - source: rancher_secret_key_prod
-  #       target: rancher_secret_key
-  #   when:
-  #     status: success
-  #     event: tag
+  deploy-prod-cli-zendesk-user:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/cli-zendesk-user
+    docker_image: "nossas/mapa-do-acolhimento:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
 
-  # deploy-prod-cli-zendesk-ticket:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/cli-zendesk-ticket
-  #   docker_image: "nossas/mapa-do-acolhimento:${DRONE_TAG##v}"
-  #   timeout: 360
-  #   group: deploying
-  #   confirm: true
-  #   secrets:
-  #     - source: rancher_access_key_prod
-  #       target: rancher_access_key
-  #     - source: rancher_secret_key_prod
-  #       target: rancher_secret_key
-  #   when:
-  #     status: success
-  #     event: tag
+  deploy-prod-cli-zendesk-ticket:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/cli-zendesk-ticket
+    docker_image: "nossas/mapa-do-acolhimento:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
 
-  # deploy-stag-webhooks-solidarity-count:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/solidarity-count
-  #   group: deploying
-  #   docker_image: nossas/mapa-do-acolhimento:${DRONE_BRANCH/\//-}
-  #   timeout: 360
-  #   confirm: true
-  #   secrets: [rancher_access_key, rancher_secret_key]
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, develop]
-  #     event: push
+  deploy-stag-webhooks-solidarity-count:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/solidarity-count
+    group: deploying
+    docker_image: nossas/mapa-do-acolhimento:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [rancher_access_key, rancher_secret_key]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
 
-  # deploy-prod-webhooks-solidarity-count:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webhooks/solidarity-count
-  #   docker_image: "nossas/mapa-do-acolhimento:${DRONE_TAG##v}"
-  #   timeout: 360
-  #   group: deploying
-  #   confirm: true
-  #   secrets:
-  #     - source: rancher_access_key_prod
-  #       target: rancher_access_key
-  #     - source: rancher_secret_key_prod
-  #       target: rancher_secret_key
-  #   when:
-  #     status: success
-  #     event: tag
-  #
-  # deploy-stag-client-solidarity:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webservers/match-voluntarias
-  #   group: deploying
-  #   docker_image: nossas/mapa-do-acolhimento:${DRONE_BRANCH/\//-}
-  #   timeout: 360
-  #   confirm: true
-  #   secrets: [rancher_access_key, rancher_secret_key]
-  #   when:
-  #     status: success
-  #     branch: [hotfix/*, release/*, feature/*, develop]
-  #     event: push
+  deploy-prod-webhooks-solidarity-count:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webhooks/solidarity-count
+    docker_image: "nossas/mapa-do-acolhimento:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
 
-  # deploy-prod-client-solidarity:
-  #   image: peloton/drone-rancher
-  #   url: http://cluster.bonde.org
-  #   service: webservers/match-voluntarias
-  #   docker_image: "nossas/mapa-do-acolhimento:${DRONE_TAG##v}"
-  #   timeout: 360
-  #   group: deploying
-  #   confirm: true
-  #   secrets:
-  #     - source: rancher_access_key_prod
-  #       target: rancher_access_key
-  #     - source: rancher_secret_key_prod
-  #       target: rancher_secret_key
-  #   when:
-  #     status: success
-  #     event: tag
+  deploy-stag-client-solidarity:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webservers/match-otimizado
+    group: deploying
+    docker_image: nossas/mapa-do-acolhimento:${DRONE_BRANCH/\//-}
+    timeout: 360
+    confirm: true
+    secrets: [rancher_access_key, rancher_secret_key]
+    when:
+      status: success
+      branch: [hotfix/*, release/*, feature/*, develop]
+      event: push
+
+  deploy-prod-client-solidarity:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: webservers/match-otimizado
+    docker_image: "nossas/mapa-do-acolhimento:${DRONE_TAG##v}"
+    timeout: 360
+    group: deploying
+    confirm: true
+    secrets:
+      - source: rancher_access_key_prod
+        target: rancher_access_key
+      - source: rancher_secret_key_prod
+        target: rancher_secret_key
+    when:
+      status: success
+      event: tag
 
   deploy-stag-listener-solidarity:
     image: peloton/drone-rancher
