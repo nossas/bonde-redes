@@ -35,7 +35,7 @@ pipeline:
     when:
       event: [tag]
 
-  publish-stag-mapa-do-acolhimento:
+  publish-stag-solidarity:
     image: plugins/docker
     repo: nossas/mapa-do-acolhimento
     group: publishing
@@ -47,7 +47,7 @@ pipeline:
       branch: [hotfix/*, release/*, feature/*, support/*, develop]
       event: push
 
-  publish-prod-mapa-do-acolhimento:
+  publish-prod-solidarity:
     image: plugins/docker
     repo: nossas/mapa-do-acolhimento
     group: publishing
@@ -238,7 +238,7 @@ pipeline:
   deploy-stag-listener-solidarity:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
-    service: listener/mapa-do-acolhimento
+    service: listeners/solidarity
     group: deploying
     docker_image: nossas/mapa-do-acolhimento:${DRONE_BRANCH/\//-}
     timeout: 360
@@ -252,7 +252,7 @@ pipeline:
   deploy-prod-listener-solidarity:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
-    service: listener/mapa-do-acolhimento
+    service: listeners/solidarity
     docker_image: "nossas/mapa-do-acolhimento:${DRONE_TAG##v}"
     timeout: 360
     group: deploying

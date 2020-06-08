@@ -4,7 +4,7 @@ import dbg from "../../dbg";
 
 const log = dbg.extend("checkOldTickets");
 
-export default (subject: string, tickets: Ticket[]) => {
+export default (subject: string, tickets: Ticket[]): undefined | number[] => {
   log("Checking old tickets");
   const newSubject = extractTypeFromSubject(subject);
   const hasSameSubject = tickets.filter((oldTicket) => {
@@ -42,6 +42,6 @@ export default (subject: string, tickets: Ticket[]) => {
     return false;
   });
 
-  if (hasOldTickets.length > 0) return true;
+  if (hasOldTickets.length > 0) return hasOldTickets.map((ticket) => ticket.id);
   return undefined;
 };

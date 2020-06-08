@@ -7,7 +7,7 @@ import Bottleneck from "bottleneck";
 
 const limiter = new Bottleneck({
   maxConcurrent: 1,
-  minTime: 1000,
+  minTime: 2000,
 });
 
 const createTicketLog = dbg.extend("createTicket");
@@ -43,8 +43,11 @@ const createTicket = (ticket): Promise<boolean | undefined> => {
   return new Promise((resolve) => {
     return client.tickets.create({ ticket }, (err, _req, result: any) => {
       if (err) {
-        createTicketLog(err);
-        return resolve(handleTicketError(ticket));
+        createTicketLog(
+          `Failed to create ticket for user '${ticket.requester_id}'`.red,
+          err
+        );
+        return resolve(undefined);
       }
       // createTicketLog(
       //   `Results from zendesk ticket creation ${JSON.stringify(
@@ -97,7 +100,7 @@ export default async (tickets: Ticket[]) => {
       return await limiter.schedule(() =>
         createTicket({
           ...ticket,
-          status: "closed",
+          status: "pending",
           custom_fields: [
             {
               id: 360014379412,
@@ -105,8 +108,7 @@ export default async (tickets: Ticket[]) => {
             },
           ],
           comment: {
-            body:
-              "Ticket foi criado com status fechado pois MSR já possui um encaminhamento feito com o mesmo tipo de pedido de acolhimento",
+            body: `Ticket foi criado com status pendente e status do acolhimento 'solicitação recebida' pois MSR já possui um encaminhamento feito com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${oldTickets.join()}`,
             public: false,
           },
         })
