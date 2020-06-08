@@ -6,27 +6,33 @@ import dbg from "../../dbg";
 
 const log = dbg.extend("subscriptionFormEntries");
 
+// { id: { _eq: 2000367 } }
+// { id: { _eq: 2000368 } }
+// { id: { _eq: 2000369 } }
+// { id: { _eq: 2000370 } }
+// { id: { _eq: 2000371 } }
+// { id: { _eq: 2000372 } }
+
+// { id: { _eq: 2000375 } }
+// { id: { _eq: 2000374 } }
+// { id: { _eq: 2000373 } }
+
+// { id: { _eq: 2000364 } }
+// { id: { _eq: 2000365 } }
+
 const FORM_ENTRIES_SUBSCRIPTION = gql`
   subscription pipeline_form_entries($widgets: [Int!]) {
     form_entries(
       where: {
         widget_id: { _in: $widgets }
         rede_syncronized: { _eq: false }
-        _or: [
-          { id: { _eq: 2000367 } }
-          { id: { _eq: 2000368 } }
-          { id: { _eq: 2000369 } }
-          { id: { _eq: 2000370 } }
-          { id: { _eq: 2000371 } }
-          { id: { _eq: 2000372 } }
-        ]
+        _or: [{ id: { _eq: 2000377 } }, { id: { _eq: 2000376 } }]
       }
       order_by: { id: asc }
     ) {
       id
       fields
       cached_community_id
-      activist_id
       widget_id
       created_at
     }
@@ -42,7 +48,7 @@ export default async (widgets: Widget[]): Promise<any> => {
     const observable = GraphQLAPI.subscribe({
       query: FORM_ENTRIES_SUBSCRIPTION,
       variables: { widgets: widgets.map((w: any) => w.id) },
-      fetchPolicy: "network-only"
+      fetchPolicy: "network-only",
     }).subscribe({ next: handleIntegration(widgets), error });
 
     return observable;
