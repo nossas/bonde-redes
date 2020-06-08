@@ -7,7 +7,5 @@ packages:
   - "packages/client-solidarity"
   - "packages/listener-solidarity"
   # - "packages/cli-mautic"
-  # - "packages/webhooks-auth"
   # - "packages/webhooks-solidarity-match"
   # - "packages/webhook-mail"
-  # - "packages/webhook-activists"
