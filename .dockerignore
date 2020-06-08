@@ -1,4 +1,4 @@
 .env
 packages/webhooks-registry/.env
-packages/webhooks-zendesk/.env
+packages/webhooks-mautic-zendesk/.env
 packages/webhooks-auth/.env

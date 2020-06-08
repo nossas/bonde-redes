@@ -1,6 +1,6 @@
 packages:
   - "."
-  - "packages/webhooks-zendesk"
+  - "packages/webhooks-mautic-zendesk"
   - "packages/webhooks-registry"
   - "packages/cli-zendesk"
   - "packages/webhooks-solidarity-count"
