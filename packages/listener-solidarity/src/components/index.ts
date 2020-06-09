@@ -39,34 +39,45 @@ export const handleIntegration = (widgets: Widget[]) => async (
     // Batch insert individuals
     // Create users in Zendesk
     const userBatches = await makeBatchRequests(usersToRegister);
-    if (!userBatches) return handleUserError(cache);
+    if (!userBatches) {
+      log(
+        `Zendesk user creation failed on these form entries:
+        ${cache}`.red
+      );
+      return undefined;
+    }
 
     if (
       userBatches.find((r) => r.error && r.error.match(/error/i)) ||
       userBatches.length < 1 ||
       usersToRegister.length < 1
     ) {
-      log("Zendesk user creation results with error:".red, userBatches);
-      return handleUserError(cache);
+      log("Zendesk user creation results with error:".red);
+      return handleUserError(userBatches);
     }
 
     log("Preparing zendesk users to be saved in Hasura");
-    const hasuraUsers = userBatches.map((r) => {
-      const user = usersToRegister.find((u) => u.external_id === r.external_id);
-      return {
-        ...user,
-        ...((user && user.user_fields) || {}),
-        community_id: Number(process.env.COMMUNITY_ID),
-        user_id: r.id,
-      };
-    });
+    const hasuraUsers = userBatches
+      .filter((r) => !(r.error && r.error.match(/PermissionDenied/i)))
+      .map((r) => {
+        const user = usersToRegister.find(
+          (u) => u.external_id === r.external_id
+        );
+        return {
+          ...user,
+          ...((user && user.user_fields) || {}),
+          community_id: Number(process.env.COMMUNITY_ID),
+          user_id: r.id,
+        };
+      });
+
     const withoutDuplicates = removeDuplicatesBy((x) => x.user_id, hasuraUsers);
-    // log({ withoutDuplicates: JSON.stringify(withoutDuplicates, null, 2) });
 
     // Create users tickets if they're not "desabilitada"
     const removeDesabilitadedUsers = withoutDuplicates.filter(
-      (user) => user["user_fields"]["condition"] !== "desabilitada"
+      (user) => user["condition"] !== "desabilitada"
     );
+
     if (removeDesabilitadedUsers.length > 0) {
       const tickets = await composeTickets(removeDesabilitadedUsers);
       // log(JSON.stringify(tickets, null, 2));
@@ -75,19 +86,21 @@ export const handleIntegration = (widgets: Widget[]) => async (
 
     // Save users in Hasura
     const inserted = await insertSolidarityUsers(withoutDuplicates);
-    if (!inserted) return handleUserError(cache);
+    if (!inserted) return handleUserError(withoutDuplicates);
 
     // Batch update syncronized forms
     syncronizedForms = [
       ...syncronizedForms,
-      ...inserted.map((i) => i.external_id),
+      ...inserted.filter((i) => !!i.external_id).map((i) => i.external_id),
     ];
     const updateEntries = await updateFormEntries(syncronizedForms);
     if (!updateEntries) {
-      log("Couldn't update form entries with already syncronized forms");
-      return handleUserError(cache);
+      log(
+        `Couldn't update form entries with already syncronized forms: ${syncronizedForms}`
+          .red
+      );
+      return undefined;
     }
-    log({ syncronizedForms });
     log("User integration is done.");
     return (cache = []);
   } else {
