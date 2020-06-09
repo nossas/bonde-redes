@@ -29,3 +29,5 @@ dist/
 # Misc
 .DS_Store
 .env
+
+tsconfig.tsbuildinfo
