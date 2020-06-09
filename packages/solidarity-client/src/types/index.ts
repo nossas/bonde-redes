@@ -1,1 +1,1 @@
-export { default as Ticket } from "./Ticket";
+export type { default as Ticket } from "./Ticket";

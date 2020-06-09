@@ -53,8 +53,8 @@ const Table = () => {
   } = individual;
 
   const {
-    latitude,
-    longitude,
+    latitude: volunteer_lat,
+    longitude: volunteer_lng,
     name: volunteer_name,
     whatsapp: volunteer_whatsapp,
     organization_id: volunteer_organization_id,
@@ -71,8 +71,6 @@ const Table = () => {
   const individualFirstName = individual_name.split(" ")[0];
 
   const distance = 50;
-  const lat = Number(latitude);
-  const lng = Number(longitude);
 
   const createWhatsappLink = (number, textVariables) => {
     if (!number) return "";
@@ -86,29 +84,32 @@ const Table = () => {
       data
         .map(i => {
           const pointA = [Number(i.latitude), Number(i.longitude)];
-
+          const pointB = [Number(volunteer_lat), Number(volunteer_lng)];
+          const calculatedDistance =
+            !Number.isNaN(pointA[0]) &&
+            !Number.isNaN(pointA[1]) &&
+            !Number.isNaN(pointB[0]) &&
+            !Number.isNaN(pointB[1]) &&
+            turf.distance(pointB, pointA);
+          const formatDistance = Number(calculatedDistance).toFixed(2);
           return {
             ...i,
-            distance:
-              !Number.isNaN(pointA[0]) &&
-              !Number.isNaN(pointA[1]) &&
-              lat &&
-              lng &&
-              Number(turf.distance([lat, lng], pointA)).toFixed(2)
+            distance: formatDistance
           };
         })
         .filter(i => {
-          if (!lat || !lng) {
+          if (!volunteer_lat || !volunteer_lng) {
             return true;
           }
-          return i.distance && Number(i.distance) < distance;
+          return i.distance && i.distance < distance;
         })
         .sort((a, b) => Number(a.distance) - Number(b.distance)),
-    [distance, lat, lng]
+    [distance, volunteer_lat, volunteer_lng]
   );
 
   const filteredTableData = useMemo(() => {
     let data = [];
+    console.log({ tableData });
     if (typeof tableData !== "string") {
       data = filterByDistance(tableData);
     }
