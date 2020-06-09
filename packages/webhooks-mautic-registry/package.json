@@ -1,0 +1,28 @@
+{
+  "name": "bonde-webhooks-mautic-registry",
+  "dependencies": {
+    "@types/debug": "^4.1.5",
+    "@types/express": "^4.17.6",
+    "@types/jest": "^24.0.23",
+    "@types/node": "14.0.1",
+    "@types/source-map-support": "^0.5.0",
+    "@types/supertest": "^2.0.8",
+    "axios": "^0.19.0",
+    "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "elastic-apm-node": "^3.2.0",
+    "express": "^4.17.1",
+    "jest": "^24.9.0",
+    "source-map-support": "^0.5.16",
+    "supertest": "^4.0.2",
+    "ts-jest": "^24.1.0"
+  },
+  "scripts": {
+    "start": "DEBUG=webhooks-mautic-registry* node dist/index.js",
+    "dev": "DEBUG=webhooks-mautic-registry* tsc-watch --onSuccess \"node dist/index.js\"",
+    "clean": "rm -rf node_modules dist",
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint ./**/*.ts"
+  }
+}
