@@ -69,9 +69,12 @@ export default async (
         if (instance[key]) register["user_fields"][key] = instance[key];
       }
 
-      register["user_fields"]["disponibilidade_de_atendimentos"] = (
+      const availability = (
         instance["disponibilidade_de_atendimentos"] || ""
       ).replace(/\s/g, "");
+
+      register["user_fields"]["disponibilidade_de_atendimentos"] =
+        availability === "5oumais" ? "5" : availability;
 
       register["user_fields"]["data_de_inscricao_no_bonde"] =
         formEntry.created_at;
