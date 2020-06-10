@@ -15,11 +15,11 @@ const limiter = new Bottleneck({
 });
 
 let cache = [];
-let syncronizedForms = new Array();
 
 export const handleIntegration = (widgets: Widget[]) => async (
   response: any
 ) => {
+  let syncronizedForms = new Array();
   log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
   // log({ response: response.data.form_entries });
 
