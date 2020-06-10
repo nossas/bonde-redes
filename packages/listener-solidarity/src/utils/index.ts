@@ -8,8 +8,10 @@ export const setType = (type: string | null) => {
   switch (type) {
     case "Acolhimento Jurídico":
     case " Jurídico":
+    case "Jurídico":
       return "jurídico";
     case "Acolhimento Terapêutico":
+    case " Psicológico":
     case "Psicológico":
       return "psicológico";
     case "Acolhimento Terapêutico & Jurídico":

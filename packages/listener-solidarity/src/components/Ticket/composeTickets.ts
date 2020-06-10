@@ -24,10 +24,10 @@ export default async (users) => {
       user_id,
     } = user;
 
-    if (!tipo_de_acolhimento) {
-      log("Only MSR's get their ticket created.");
-      return log("Ticket integration is done.");
-    }
+    // if (!tipo_de_acolhimento) {
+    //   log("Only MSR's get their ticket created.");
+    //   return log("Ticket integration is done.");
+    // }
 
     const subject = (type: string) =>
       `[${capitalize(type)}] ${name}, ${city} - ${state}`;
@@ -62,7 +62,7 @@ export default async (users) => {
       ...tickets,
       {
         ...ticket,
-        subject: subject(tipo_de_acolhimento),
+        subject: subject(tipo_de_acolhimento || "Sem tipo de acolhimento"),
       },
     ]);
   });

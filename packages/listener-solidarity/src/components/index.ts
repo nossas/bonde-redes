@@ -77,6 +77,7 @@ export const handleIntegration = (widgets: Widget[]) => async (
     const withoutDuplicates = removeDuplicatesBy((x) => x.user_id, hasuraUsers);
 
     // Create users tickets if they're not "desabilitada"
+    // approved MSRs and not a volunteer
     const removeDesabilitadedUsers = withoutDuplicates.filter(
       (user) => user["condition"] !== "desabilitada"
     );
