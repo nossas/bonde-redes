@@ -52,7 +52,10 @@ export const handleIntegration = (widgets: Widget[]) => async (
       userBatches.length < 1 ||
       usersToRegister.length < 1
     ) {
-      log("Zendesk user creation results with error:".red);
+      log(
+        "Zendesk user creation results with error:".red,
+        userBatches.filter((u) => !!u.error)
+      );
       return handleUserError(userBatches);
     }
 
@@ -101,6 +104,7 @@ export const handleIntegration = (widgets: Widget[]) => async (
       );
       return undefined;
     }
+    log({ syncronizedForms });
     log("User integration is done.");
     return (cache = []);
   } else {

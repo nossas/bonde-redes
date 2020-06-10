@@ -4,15 +4,31 @@ import dbg from "../../dbg";
 
 const log = dbg.extend("checkOldTickets");
 
-export default (subject: string, tickets: Ticket[]): undefined | number[] => {
+const getStatusAcolhimento = (ticket: Ticket): string | boolean => {
+  const status = ticket.fields.find((field) => field.id === 360014379412);
+  return status && status.value;
+};
+
+export default (
+  subject: string,
+  tickets: Ticket[]
+): false | number | number[] => {
   log("Checking old tickets");
   const newSubject = extractTypeFromSubject(subject);
+
+  // same type, new/open/pending
   const hasSameSubject = tickets.filter((oldTicket) => {
     const oldSubject = extractTypeFromSubject(oldTicket.subject);
-    return oldSubject === newSubject;
+    return (
+      oldSubject === newSubject &&
+      oldTicket.status !== "closed" &&
+      oldTicket.status !== "solved"
+    );
   });
 
-  if (hasSameSubject.length < 1) return undefined;
+  // log({ hasSameSubject: JSON.stringify(hasSameSubject, null, 2) });
+
+  if (hasSameSubject.length < 1) return false;
 
   // "atendimento__concluído"
   // "atendimento__iniciado"
@@ -24,24 +40,29 @@ export default (subject: string, tickets: Ticket[]): undefined | number[] => {
   // "encaminhamento__realizado_para_serviço_público"
   // "solicitação_recebida";
 
-  const hasOldTickets = hasSameSubject.filter((oldTicket) => {
-    const status_acolhimento = oldTicket.fields.find(
-      (field) => field.id === 360014379412
+  // search for match tickets
+  const isACurrentMatch = hasSameSubject.filter((oldTicket) => {
+    const status_acolhimento = getStatusAcolhimento(oldTicket);
+    return (
+      status_acolhimento !== "atendimento__concluído" &&
+      status_acolhimento !== "atendimento__interrompido" &&
+      status_acolhimento !== "encaminhamento__negado" &&
+      status_acolhimento !== "solicitação_recebida" &&
+      status_acolhimento !== "solicitação_repetida"
     );
-    if (status_acolhimento && status_acolhimento.value) {
-      return (
-        (status_acolhimento.value === "solicitação_recebida" ||
-          status_acolhimento.value === "atendimento__iniciado" ||
-          status_acolhimento.value === "encaminhamento__realizado" ||
-          status_acolhimento.value ===
-            "encaminhamento__realizado_para_serviço_público") &&
-        oldTicket.status !== "closed" &&
-        oldTicket.status !== "solved"
-      );
-    }
-    return false;
   });
 
-  if (hasOldTickets.length > 0) return hasOldTickets.map((ticket) => ticket.id);
-  return undefined;
+  // log({ isACurrentMatch });
+
+  // she has a match ticket
+  if (isACurrentMatch.length > 0) return isACurrentMatch.map((t) => t.id);
+
+  const oldestTicket = hasSameSubject.sort(
+    (a, b) => (new Date(a.created_at) as any) - (new Date(b.created_at) as any)
+  )[0];
+
+  // log({ oldestTicket });
+
+  const status_acolhimento = getStatusAcolhimento(oldestTicket);
+  return status_acolhimento === "solicitação_recebida" && oldestTicket.id;
 };
