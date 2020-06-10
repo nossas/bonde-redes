@@ -126,7 +126,7 @@ export const processGeolocation = (
     latitude: "ZERO_RESULTS",
     longitude: "ZERO_RESULTS",
     address: `Endereço não encontrado - ${searchAddress}`,
-    state: "ZERO_RESULTS",
+    state: null,
     city: "ZERO_RESULTS",
     cep: "ZERO_RESULTS",
   };
