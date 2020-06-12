@@ -29,6 +29,7 @@ const dicio = {
   360021812712: "telefone",
   360021879791: "estado",
   360021879811: "cidade",
+  360032229831: "atrelado_ao_ticket",
 };
 
 export default async (ticket: Ticket) => {

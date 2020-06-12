@@ -75,7 +75,7 @@ export type GoogleMapsResponse = {
 export type IndividualGeolocation = {
   cep: string;
   address: string;
-  state: string;
+  state: string | null;
   city: string;
   latitude: string;
   longitude: string;

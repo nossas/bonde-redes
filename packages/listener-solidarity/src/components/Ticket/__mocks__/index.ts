@@ -1,5 +1,65 @@
 export default {
   tickets: {
+    case_one: [
+      {
+        id: 16866,
+        external_id: "1273183",
+        created_at: "2020-01-29T20:47:52Z",
+        subject: "[Psicológico] Teste, Curitiba - PR",
+        description: "Importado pelo BONDE.",
+        status: "new",
+        requester_id: 393261194131,
+        submitter_id: 393261194131,
+        organization_id: 360273031591,
+        fields: [
+          { id: 360017056851, value: "2020-01-27" },
+          { id: 360014379412, value: "solicitação_recebida" },
+          { id: 360016681971, value: "Teste" },
+        ],
+      },
+      {
+        id: 20073,
+        external_id: "1274029",
+        created_at: "2020-06-10T15:31:25Z",
+        subject: "[Psicológico] Teste, Curitiba - PR",
+        description:
+          "MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: 16866",
+        status: "pending",
+        requester_id: 393261194131,
+        submitter_id: 393261194131,
+        organization_id: 360273031591,
+        fields: [
+          { id: 360017056851, value: "2020-02-06" },
+          { id: 360014379412, value: "solicitação_repetida" },
+          { id: 360032229831, value: "16866" },
+          { id: 360016681971, value: "Teste" },
+        ],
+      },
+    ],
+    case_two: [
+      {
+        id: 19895,
+        created_at: "2020-06-04T18:41:25Z",
+        subject: "[Psicológico] Camila, Cuiabá - MT",
+        description: "Importado pelo BONDE.",
+        status: "pending",
+        requester_id: 398420465092,
+        organization_id: 360273031591,
+        fields: [
+          { id: 360021879811, value: null },
+          { id: 360016631592, value: null },
+          { id: 360017432652, value: null },
+          { id: 360016631632, value: null },
+          { id: 360017056851, value: "2020-05-27" },
+          { id: 360021665652, value: null },
+          { id: 360014379412, value: "atendimento__iniciado" },
+          { id: 360032229831, value: null },
+          { id: 360021812712, value: null },
+          { id: 360021879791, value: null },
+          { id: 360016681971, value: "Camila" },
+        ],
+      },
+    ],
     mixed: [
       {
         id: 19855,
@@ -92,55 +152,6 @@ export default {
           {
             id: 360016681971,
             value: "Igor",
-          },
-        ],
-      },
-    ],
-    meets_conditions: [
-      {
-        id: 19892,
-        subject: "[Psicológico] Viviane, Taubaté - SP",
-        status: "pending",
-        fields: [
-          {
-            id: 360021879811,
-            value: null,
-          },
-          {
-            id: 360016631592,
-            value: null,
-          },
-          {
-            id: 360017432652,
-            value: null,
-          },
-          {
-            id: 360016631632,
-            value: null,
-          },
-          {
-            id: 360017056851,
-            value: "2020-05-27",
-          },
-          {
-            id: 360021665652,
-            value: null,
-          },
-          {
-            id: 360014379412,
-            value: "encaminhamento__realizado_para_serviço_público",
-          },
-          {
-            id: 360021812712,
-            value: null,
-          },
-          {
-            id: 360021879791,
-            value: null,
-          },
-          {
-            id: 360016681971,
-            value: "Viviane",
           },
         ],
       },
@@ -370,6 +381,7 @@ export default {
         body: "Importado pelo BONDE.",
         public: false,
       },
+      external_id: "2000302",
       requester_id: 398426996571,
       custom_fields: [
         {
@@ -392,6 +404,7 @@ export default {
         body: "Importado pelo BONDE.",
         public: false,
       },
+      external_id: "2000364",
       requester_id: 398420465072,
       custom_fields: [
         {
@@ -429,6 +442,7 @@ export default {
           value: "Viviane",
         },
       ],
+      external_id: "2000364",
       subject: "[Jurídico] Viviane, Taubaté - SP",
     },
     {
@@ -451,6 +465,7 @@ export default {
           value: "Camila",
         },
       ],
+      external_id: "2000365",
       subject: "[Psicológico] Camila, Cuiabá - MT",
     },
   ],

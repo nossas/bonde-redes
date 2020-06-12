@@ -94,21 +94,31 @@ export default async (tickets: Ticket[]) => {
     const userTickets = await limiter.schedule(() => fetchUserTickets(ticket));
     if (!userTickets) return handleTicketError(ticket);
 
-    const oldTickets = checkOldTickets(ticket.subject, userTickets);
+    const relatableTickets = checkOldTickets(ticket.subject, userTickets);
 
-    if (oldTickets) {
+    if (relatableTickets) {
       return await limiter.schedule(() =>
         createTicket({
           ...ticket,
           status: "pending",
           custom_fields: [
+            ...ticket.custom_fields,
             {
               id: 360014379412,
               value: "solicitação_repetida",
             },
+            {
+              id: 360032229831,
+              value:
+                typeof relatableTickets === "number" ? relatableTickets : null,
+            },
           ],
           comment: {
-            body: `Ticket foi criado com status pendente e status do acolhimento 'solicitação recebida' pois MSR já possui um encaminhamento feito com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${oldTickets.join()}`,
+            body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${
+              typeof relatableTickets === "number"
+                ? relatableTickets
+                : relatableTickets.join(", ")
+            }`,
             public: false,
           },
         })

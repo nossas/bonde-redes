@@ -44,7 +44,7 @@ const getCityStateAndZipcode = (addressComponents): Array<string> => {
   let state = "";
   let city = "";
   let zipcode = "";
-  // let country: string | undefined
+  let country = "";
 
   addressComponents.forEach(
     ({
@@ -65,16 +65,17 @@ const getCityStateAndZipcode = (addressComponents): Array<string> => {
       } else if (types.includes("locality")) {
         city = shortName;
       }
-      // if (types.includes('country')) {
-      //   country = shortName
-      // }
+      if (types.includes("country")) {
+        country = shortName;
+      }
     }
   );
 
-  // if (country !== 'BR') {
-  //   state = undefined
-  //   city = undefined
-  // }
+  if (country !== "BR") {
+    city = "Internacional";
+    zipcode = "Internacional";
+    state = "INT";
+  }
 
   return [state, city, zipcode];
 };
@@ -126,7 +127,7 @@ export const processGeolocation = (
     latitude: "ZERO_RESULTS",
     longitude: "ZERO_RESULTS",
     address: `Endereço não encontrado - ${searchAddress}`,
-    state: "ZERO_RESULTS",
+    state: null,
     city: "ZERO_RESULTS",
     cep: "ZERO_RESULTS",
   };
@@ -134,8 +135,16 @@ export const processGeolocation = (
   return i;
 };
 
-export default async ({ state, city, cep, address, email }: any) => {
+export default async ({
+  state,
+  city,
+  cep,
+  address,
+  neighborhood,
+  email,
+}: any) => {
   const a = address ? `${address},` : "";
+  const n = neighborhood ? `${neighborhood},` : "";
   const c = city ? `${city},` : "";
   const s = state ? `${state},` : "";
   const z = cep ? cep + ",BR" : "";

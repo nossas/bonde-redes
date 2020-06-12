@@ -15,11 +15,11 @@ const limiter = new Bottleneck({
 });
 
 let cache = [];
-let syncronizedForms = new Array();
 
 export const handleIntegration = (widgets: Widget[]) => async (
   response: any
 ) => {
+  let syncronizedForms = new Array();
   log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
   // log({ response: response.data.form_entries });
 
@@ -52,7 +52,10 @@ export const handleIntegration = (widgets: Widget[]) => async (
       userBatches.length < 1 ||
       usersToRegister.length < 1
     ) {
-      log("Zendesk user creation results with error:".red);
+      log(
+        "Zendesk user creation results with error:".red,
+        userBatches.filter((u) => !!u.error)
+      );
       return handleUserError(userBatches);
     }
 
@@ -74,6 +77,7 @@ export const handleIntegration = (widgets: Widget[]) => async (
     const withoutDuplicates = removeDuplicatesBy((x) => x.user_id, hasuraUsers);
 
     // Create users tickets if they're not "desabilitada"
+    // approved MSRs and not a volunteer
     const removeDesabilitadedUsers = withoutDuplicates.filter(
       (user) => user["condition"] !== "desabilitada"
     );
@@ -101,6 +105,7 @@ export const handleIntegration = (widgets: Widget[]) => async (
       );
       return undefined;
     }
+    log({ syncronizedForms });
     log("User integration is done.");
     return (cache = []);
   } else {
