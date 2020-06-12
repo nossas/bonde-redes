@@ -57,9 +57,14 @@ export default async (
       register["email"] = instance.email;
       if (instance.phone) register["phone"] = instance.phone;
 
-      register["name"] = instance.last_name
-        ? `${instance.first_name} ${instance.last_name}`
-        : instance.first_name;
+      if ([16850, 3297].includes(widget.id)) {
+        register["name"] = instance.first_name.split(" ")[0];
+      } else {
+        register["name"] = instance.last_name
+          ? `${instance.first_name} ${instance.last_name}`
+          : instance.first_name;
+      }
+
       register["organization_id"] =
         organizationsIds[getOrganizationType(widget.id)];
 
