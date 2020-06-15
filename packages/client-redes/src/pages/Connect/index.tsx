@@ -124,13 +124,16 @@ const Table = () => {
       volunteer_id,
       status: "pendente"
     }
+    const update: any = [
+      { id: { _eq: volunteer_id } }, { id: { _eq: individual_id } }
+    ]
 
     if (user.isAdmin) {
       input.user_id = user.id
     }
 
     return createConnection({
-      variables: { input },
+      variables: { input, update },
       refetchQueries: [
         {
           query: USERS_BY_GROUP,
