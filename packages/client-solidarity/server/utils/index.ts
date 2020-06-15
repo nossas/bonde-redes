@@ -3,8 +3,8 @@ import { LAWYER, THERAPIST } from "../parse/index";
 export const getUserFromTicket = (users, ticket) =>
   users.filter(user => user.user_id === ticket.requester_id);
 
-export const getSupportType = subject => {
-  const str = subject.toLowerCase();
+export const getSupportType = (subject: string) => {
+  const str = typeof subject === "string" ? subject.toLowerCase() : "";
   const removeSpecialCaracters = str.replace(/[^\w\s]/gi, "");
   // retorna se no subject existe algum match dos termos
   const match = removeSpecialCaracters.match(
