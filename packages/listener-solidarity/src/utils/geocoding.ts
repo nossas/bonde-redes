@@ -149,5 +149,5 @@ export default async ({
   const s = state ? `${state},` : "";
   const z = cep ? cep + ",BR" : "";
 
-  return await getGoogleGeolocation(a + c + s + z, email);
+  return await getGoogleGeolocation(a + n + c + s + z, email);
 };
