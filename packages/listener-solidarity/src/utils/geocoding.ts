@@ -148,6 +148,7 @@ export default async ({
   const c = city ? `${city},` : "";
   const s = state ? `${state},` : "";
   const z = cep ? cep + ",BR" : "";
+  const composeSearchAddress = a + n + c + s + z;
 
-  return await getGoogleGeolocation(a + c + s + z, email);
+  return await getGoogleGeolocation(composeSearchAddress, email);
 };

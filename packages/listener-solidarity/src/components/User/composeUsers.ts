@@ -71,7 +71,7 @@ export default async (
       if (instance.phone) register["phone"] = instance.phone;
 
       if ([16850, 3297].includes(widget.id)) {
-        register["name"] = instance.first_name.split(" ")[0];
+        register["name"] = instance.first_name;
       } else {
         register["name"] = instance.last_name
           ? `${instance.first_name} ${instance.last_name}`
@@ -92,7 +92,9 @@ export default async (
       ).replace(/\s/g, "");
 
       register["user_fields"]["disponibilidade_de_atendimentos"] =
-        availability === "5oumais" ? "5" : availability;
+        availability === "5oumais" || Number(availability) > 5
+          ? "5"
+          : availability;
 
       register["user_fields"]["data_de_inscricao_no_bonde"] =
         formEntry.created_at;
