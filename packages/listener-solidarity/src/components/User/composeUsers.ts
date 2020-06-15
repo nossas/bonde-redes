@@ -71,7 +71,7 @@ export default async (
       if (instance.phone) register["phone"] = instance.phone;
 
       if ([16850, 3297].includes(widget.id)) {
-        register["name"] = instance.first_name.split(" ")[0];
+        register["name"] = instance.first_name;
       } else {
         register["name"] = instance.last_name
           ? `${instance.first_name} ${instance.last_name}`
