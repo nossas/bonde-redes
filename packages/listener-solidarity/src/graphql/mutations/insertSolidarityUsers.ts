@@ -28,6 +28,7 @@ const CREATE_USERS_MUTATION = gql`
           registration_number
           occupation_area
           disponibilidade_de_atendimentos
+          updated_at
         ]
       }
     ) {
