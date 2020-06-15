@@ -1,8 +1,21 @@
+import Bottleneck from "bottleneck";
 import { getOrganizationType, setType, organizationsIds } from "../../utils";
-import { Widget, User, FormEntry, Instance, Fields } from "../../types";
+import {
+  Widget,
+  User,
+  FormEntry,
+  Instance,
+  Fields,
+  IndividualGeolocation,
+} from "../../types";
 import dbg from "../../dbg";
 
 const log = dbg.extend("composeUser");
+
+const limiter = new Bottleneck({
+  maxConcurrent: 1,
+  minTime: 1000,
+});
 
 export default async (
   cache: FormEntry[],
@@ -85,7 +98,10 @@ export default async (
         formEntry.created_at;
 
       // register["user_fields"]["state"] = "";
-      const geocoding = await getGeolocation(instance);
+
+      const geocoding = (await limiter.schedule(() =>
+        getGeolocation(instance)
+      )) as IndividualGeolocation;
       Object.keys(geocoding).map((g) => {
         register["user_fields"][g] = geocoding[g];
       });
