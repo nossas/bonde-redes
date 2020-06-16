@@ -172,5 +172,5 @@ export type CustomFields = {
   status_inscricao?: null;
   telefone?: null;
   estado?: null;
-  cidad?: null;
+  cidade?: null;
 };
