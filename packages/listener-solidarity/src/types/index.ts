@@ -44,8 +44,10 @@ export type User = {
     whatsapp: string | null;
     registration_number: string | null;
     occupation_area: string | null;
-    disponibilidade_de_atendimentos: string;
+    disponibilidade_de_atendimentos: string | null;
     data_de_inscricao_no_bonde: string;
+    latitude: string | null;
+    longitude: string | null;
   };
 };
 
@@ -158,4 +160,17 @@ export type ZendeskUserCreationResponse = {
   status: string;
   external_id: string;
   error?: string | undefined;
+};
+
+export type CustomFields = {
+  status_acolhimento?: string;
+  data_inscricao_bonde?: string;
+  nome_msr?: string;
+  nome_voluntaria?: null;
+  link_match?: null;
+  data_encaminhamento?: null;
+  status_inscricao?: null;
+  telefone?: null;
+  estado?: null;
+  cidad?: null;
 };

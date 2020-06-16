@@ -1,7 +1,8 @@
-import { saveTicketHasura, checkOldTickets } from "./";
+import { checkOldTickets } from "./";
 import client from "../../zendesk";
+import { insertSolidarityTickets } from "../../graphql/mutations";
 import { handleTicketError } from "../../utils";
-import { Ticket } from "../../types";
+import { Ticket, CustomFields } from "../../types";
 import dbg from "../../dbg";
 import Bottleneck from "bottleneck";
 
@@ -14,18 +15,7 @@ const createTicketLog = dbg.extend("createTicket");
 const fetchUserTicketsLog = dbg.extend("fetchUserTickets");
 const log = dbg.extend("createZendeskTickets");
 
-export const dicio: {
-  360014379412: "status_acolhimento";
-  360016631592: "nome_voluntaria";
-  360016631632: "link_match";
-  360016681971: "nome_msr";
-  360017056851: "data_inscricao_bonde";
-  360017432652: "data_encaminhamento";
-  360021665652: "status_inscricao";
-  360021812712: "telefone";
-  360021879791: "estado";
-  360021879811: "cidade";
-} = {
+const dicio = {
   360014379412: "status_acolhimento",
   360016631592: "nome_voluntaria",
   360016631632: "link_match",
@@ -36,6 +26,30 @@ export const dicio: {
   360021812712: "telefone",
   360021879791: "estado",
   360021879811: "cidade",
+  360032229831: "atrelado_ao_ticket",
+};
+
+const saveTicketInHasura = async (ticket: Ticket) => {
+  createTicketLog("Preparing ticket to be saved in Hasura");
+  const custom_fields: CustomFields = ticket.custom_fields.reduce(
+    (newObj, old) => {
+      const key = dicio[old.id] && dicio[old.id];
+      return {
+        ...newObj,
+        [key]: old.value,
+      };
+    },
+    {}
+  );
+  // log({ hasuraTicket: JSON.stringify(hasuraTicket, null, 2) });
+  const inserted = await insertSolidarityTickets({
+    ...ticket,
+    ...custom_fields,
+    ticket_id: ticket.id,
+    community_id: Number(process.env.COMMUNITY_ID),
+  });
+  if (!inserted) return handleTicketError(ticket);
+  return createTicketLog("Ticket integration is done.");
 };
 
 const createTicket = (ticket): Promise<boolean | undefined> => {
@@ -57,10 +71,7 @@ const createTicket = (ticket): Promise<boolean | undefined> => {
       //   )}`
       // );
       createTicketLog("Zendesk ticket created successfully!");
-      saveTicketHasura({
-        ...result,
-        requester_id: ticket.requester_id,
-      });
+      saveTicketInHasura(result);
       return resolve(true);
     });
   });
@@ -131,5 +142,4 @@ export default async (tickets: Ticket[]) => {
 };
 
 export { default as checkOldTickets } from "./checkOldTickets";
-export { default as saveTicketHasura } from "./saveTicketHasura";
 export { default as composeTickets } from "./composeTickets";
