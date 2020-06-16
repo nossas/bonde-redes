@@ -24,7 +24,6 @@ import { Filters } from "../../services/FilterProvider";
 type onConfirm = {
   individual_id: number;
   volunteer_id: number;
-  agent_id: number;
   popups: Record<string, string>;
   filters: Filters;
 };
@@ -60,7 +59,6 @@ const Table = () => {
     volunteer_lat,
     volunteer_lng,
     distance,
-    agent,
     volunteer_text,
     individual_text
   } = useAppLogic();
@@ -71,7 +69,7 @@ const Table = () => {
 
   const { goBack, push } = useHistory();
   const { state: linkState = { volunteer: {} } } = useLocation();
-  const { community = { id: 0 } } = useSession();
+  const { user, community = { id: 0 } } = useSession();
 
   const [success, setSuccess] = useState(false);
   const [isLoading, setLoader] = useState(false);
@@ -116,17 +114,26 @@ const Table = () => {
   const onConfirm = ({
     individual_id,
     volunteer_id,
-    agent_id,
     popups,
     filters
   }: onConfirm) => {
     setPopup({ ...popups, confirm: false });
+
+    const input: any = {
+      recipient_id: individual_id,
+      volunteer_id,
+      status: "pendente"
+    }
+    const update: any = [
+      { id: { _eq: volunteer_id } }, { id: { _eq: individual_id } }
+    ]
+
+    if (user.isAdmin) {
+      input.user_id = user.id
+    }
+
     return createConnection({
-      variables: {
-        recipientId: individual_id,
-        volunteerId: volunteer_id,
-        agentId: agent_id
-      },
+      variables: { input, update },
       refetchQueries: [
         {
           query: USERS_BY_GROUP,
@@ -244,7 +251,6 @@ const Table = () => {
                     onConfirm({
                       individual_id,
                       volunteer_id,
-                      agent_id: agent.id,
                       popups,
                       filters
                     })

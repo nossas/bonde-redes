@@ -55,7 +55,7 @@ pipeline:
       status: success
       event: tag
 
-  deploy-stag-solidarity-client:
+  deploy-stag-client-redes:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
     service: webservers/client-redes
@@ -69,7 +69,7 @@ pipeline:
       branch: [hotfix/*, release/*, feature/*, develop]
       event: push
 
-  deploy-prod-solidarity-client:
+  deploy-prod-client-redes:
     image: peloton/drone-rancher
     url: http://cluster.bonde.org
     service: webservers/client-redes
