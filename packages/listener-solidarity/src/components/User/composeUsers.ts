@@ -62,7 +62,7 @@ export default async (
           whatsapp: null,
           registration_number: null,
           occupation_area: null,
-          disponibilidade_de_atendimentos: null,
+          disponibilidade_de_atendimentos: "",
           data_de_inscricao_no_bonde: "",
         },
       };
@@ -89,12 +89,16 @@ export default async (
 
       const availability = (
         instance["disponibilidade_de_atendimentos"] || ""
-      ).replace(/\s/g, "");
+      ).replace(/\D/g, "");
 
-      register["user_fields"]["disponibilidade_de_atendimentos"] =
-        availability === "5oumais" || Number(availability) > 5
-          ? "5"
-          : availability;
+      if (availability === "") {
+        register["user_fields"]["disponibilidade_de_atendimentos"] = "1";
+      } else {
+        register["user_fields"]["disponibilidade_de_atendimentos"] =
+          Number(availability) > 5
+            ? "5_ou_mais"
+            : Number(availability).toString();
+      }
 
       register["user_fields"]["data_de_inscricao_no_bonde"] =
         formEntry.created_at;

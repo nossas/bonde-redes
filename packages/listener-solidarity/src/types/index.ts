@@ -44,7 +44,7 @@ export type User = {
     whatsapp: string | null;
     registration_number: string | null;
     occupation_area: string | null;
-    disponibilidade_de_atendimentos: string | null;
+    disponibilidade_de_atendimentos: string;
     data_de_inscricao_no_bonde: string;
   };
 };
