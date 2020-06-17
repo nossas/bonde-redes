@@ -1,8 +1,8 @@
-import axios from 'axios'
-import * as yup from 'yup'
-import { Ticket } from '../interfaces/Ticket'
-import dbg from './dbg'
-import { stringifyVariables } from '../stringify'
+import axios from "axios";
+import * as yup from "yup";
+import { Ticket } from "../interfaces/Ticket";
+import dbg from "./dbg";
+import { stringifyVariables } from "../stringify";
 
 const generateVariablesIndex = (index: number) => `
 $assignee_id_${index}: bigint
@@ -30,7 +30,9 @@ $telefone_${index}: String
 $estado_${index}:String
 $cidade_${index}: String
 $community_id_${index}: Int
-`
+$external_id_${index}: bigint
+$atrelado_ao_ticket_${index}: bigint
+`;
 const generateObjectsIndex = (index: number) => `
 assignee_id: $assignee_id_${index}
 created_at: $created_at_${index}
@@ -57,13 +59,17 @@ telefone: $telefone_${index}
 estado: $estado_${index}
 cidade: $cidade_${index}
 community_id: $community_id_${index}
-`
+external_id: $external_id_${index}
+atrelado_ao_ticket: $atrelado_ao_ticket_${index}
+`;
 
-const generateVariables = (tickets: Ticket[]) => tickets.map(
-  (_, index) => generateVariablesIndex(index),
-).flat()
+const generateVariables = (tickets: Ticket[]) =>
+  tickets.map((_, index) => generateVariablesIndex(index)).flat();
 
-const generateObjects = (tickets: Ticket[]) => `[${tickets.map((_, index) => `{${generateObjectsIndex(index)}}`).join(',')}]`
+const generateObjects = (tickets: Ticket[]) =>
+  `[${tickets
+    .map((_, index) => `{${generateObjectsIndex(index)}}`)
+    .join(",")}]`;
 
 const createQuery = (tickets: any) => `mutation (${generateVariables(tickets)}){
   insert_solidarity_tickets(objects: ${generateObjects(tickets)}, on_conflict: {
@@ -94,60 +100,74 @@ const createQuery = (tickets: any) => `mutation (${generateVariables(tickets)}){
       estado
       cidade
       community_id
+      atrelado_ao_ticket
+      external_id
     ]
   }) {
     affected_rows
   }
-}`
+}`;
 
-const validate = yup.array().of(yup.object().shape({
-  id: yup.number().strip(true),
-  ticket_id: yup.number().required(),
-  assignee_id: yup.number().nullable(),
-  created_at: yup.string(),
-  custom_fields: yup.array().of(yup.object().shape({
-    id: yup.number(),
-    value: yup.string().nullable(),
-  })),
-  description: yup.string(),
-  group_id: yup.number().nullable(),
-  organization_id: yup.number().nullable(),
-  raw_subject: yup.string(),
-  requester_id: yup.number(),
-  status: yup.string(),
-  subject: yup.string(),
-  submitter_id: yup.number(),
-  tags: yup.mixed(),
-  updated_at: yup.string(),
-  status_acolhimento: yup.string().nullable(),
-  nome_voluntaria: yup.string().nullable(),
-  link_match: yup.string().nullable(),
-  nome_msr: yup.string().nullable(),
-  data_inscricao_bonde: yup.string().nullable(),
-  data_encaminhamento: yup.string().nullable(),
-  status_inscricao: yup.string().nullable(),
-  telefone: yup.string().nullable(),
-  estado: yup.string().nullable(),
-  cidade: yup.string().nullable(),
-  community_id: yup.number(),
-  webhooks_registry_id: yup.number(),
-}))
+const validate = yup.array().of(
+  yup.object().shape({
+    id: yup.number().strip(true),
+    ticket_id: yup.number().required(),
+    assignee_id: yup.number().nullable(),
+    created_at: yup.string(),
+    custom_fields: yup.array().of(
+      yup.object().shape({
+        id: yup.number(),
+        value: yup.string().nullable()
+      })
+    ),
+    description: yup.string(),
+    group_id: yup.number().nullable(),
+    organization_id: yup.number().nullable(),
+    raw_subject: yup.string(),
+    requester_id: yup.number(),
+    status: yup.string(),
+    subject: yup.string(),
+    submitter_id: yup.number(),
+    tags: yup.mixed(),
+    updated_at: yup.string(),
+    status_acolhimento: yup.string().nullable(),
+    nome_voluntaria: yup.string().nullable(),
+    link_match: yup.string().nullable(),
+    nome_msr: yup.string().nullable(),
+    data_inscricao_bonde: yup.string().nullable(),
+    data_encaminhamento: yup.string().nullable(),
+    status_inscricao: yup.string().nullable(),
+    telefone: yup.string().nullable(),
+    estado: yup.string().nullable(),
+    cidade: yup.string().nullable(),
+    community_id: yup.number(),
+    webhooks_registry_id: yup.number(),
+    external_id: yup.mixed(),
+    atrelado_ao_ticket: yup.mixed()
+  })
+);
 
 const saveTickets = async (tickets: Ticket[]) => {
-  const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
-  const validatedTickets = (await validate.validate(tickets, { stripUnknown: true }))
-  const response = await axios.post(HASURA_API_URL, {
-    query: createQuery(validatedTickets),
-    variables: stringifyVariables(validatedTickets),
-  }, {
-    headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
+  const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env;
+  const validatedTickets = await validate.validate(tickets, {
+    stripUnknown: true
+  });
+  const response = await axios.post(
+    HASURA_API_URL,
+    {
+      query: createQuery(validatedTickets),
+      variables: stringifyVariables(validatedTickets)
     },
-  })
+    {
+      headers: {
+        "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET
+      }
+    }
+  );
 
-  response.data.errors && dbg(response.data.errors)
+  response.data.errors && dbg(response.data.errors);
 
-  return response
-}
+  return response;
+};
 
-export default saveTickets
+export default saveTickets;

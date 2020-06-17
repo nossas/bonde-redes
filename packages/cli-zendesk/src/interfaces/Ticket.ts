@@ -9,6 +9,7 @@ export const dicio: {
   360021812712: "telefone";
   360021879791: "estado";
   360021879811: "cidade";
+  360032229831: "atrelado_ao_ticket";
 } = {
   360014379412: "status_acolhimento",
   360016631592: "nome_voluntaria",
@@ -19,7 +20,8 @@ export const dicio: {
   360021665652: "status_inscricao",
   360021812712: "telefone",
   360021879791: "estado",
-  360021879811: "cidade"
+  360021879811: "cidade",
+  360032229831: "atrelado_ao_ticket"
 };
 
 type status_acolhimento_values =
@@ -33,18 +35,19 @@ type status_acolhimento_values =
   | "encaminhamento__realizado_para_serviço_público"
   | "solicitação_recebida";
 
+type CustomFields =
+  | {
+      id: keyof typeof dicio;
+      value: string | null;
+    }
+  | { id: 360014379412; value: status_acolhimento_values };
+
 export interface Ticket {
   id: number;
   ticket_id: number;
   assignee_id: number;
   created_at: string;
-  custom_fields: Array<
-    | {
-        id: keyof typeof dicio;
-        value: string | null;
-      }
-    | { id: 360014379412; value: status_acolhimento_values }
-  >;
+  custom_fields: CustomFields[];
   description: string;
   group_id: number;
   organization_id: number;
@@ -67,24 +70,36 @@ export interface Ticket {
   cidade: string | null;
   community_id: number;
   webhooks_registry_id: number | null;
+  atrelado_ao_ticket: number | null;
+  external_id: number | null;
 }
 
 export const handleCustomFields = (ticket: Ticket) => {
-  const newTicket = ticket;
-  newTicket.custom_fields.forEach(i => {
-    if (dicio[i.id]) {
-      if (i.id === 360014379412) {
-        newTicket[dicio[i.id]] = i.value as status_acolhimento_values;
-      } else {
-        newTicket[dicio[i.id]] = i.value;
-      }
-    }
-  });
+  const custom_fields: CustomFields = ticket.custom_fields.reduce(
+    (newObj, old) => {
+      const key = dicio[old.id] && dicio[old.id];
+      return {
+        ...newObj,
+        [key]: old.value
+      };
+    },
+    {} as CustomFields
+  );
 
-  const { id, ...otherFields } = newTicket;
+  // newTicket.custom_fields.forEach(i => {
+  //   if (dicio[i.id]) {
+  //     if (i.id === 360014379412) {
+  //       newTicket[dicio[i.id]] = i.value as status_acolhimento_values;
+  //     } else {
+  //       newTicket[dicio[i.id]] = i.value;
+  //     }
+  //   }
+  // });
+
   const finalTicket = {
-    ...otherFields,
-    ticket_id: id,
+    ...ticket,
+    ...custom_fields,
+    ticket_id: ticket.id,
     community_id: Number(process.env.COMMUNITY_ID)
   } as Ticket;
 
