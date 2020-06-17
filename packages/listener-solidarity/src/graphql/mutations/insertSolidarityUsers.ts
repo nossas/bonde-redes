@@ -62,7 +62,7 @@ const schema = yup.array().of(
     external_id: yup.string().required(),
     user_id: yup.number().required(),
     condition: yup.string().required(),
-    city: yup.string().required(),
+    city: yup.string().nullable(),
     community_id: yup.string().required(),
     data_de_inscricao_no_bonde: yup.string().required(),
     address: yup.string().required(),
@@ -79,7 +79,7 @@ const schema = yup.array().of(
     cep: yup.string().nullable(),
     user_fields: yup.object().shape({
       condition: yup.string().required(),
-      city: yup.string().required(),
+      city: yup.string().nullable(),
       state: yup.string().nullable(),
       data_de_inscricao_no_bonde: yup.string().required(),
       tipo_de_acolhimento: yup.string().nullable(),
