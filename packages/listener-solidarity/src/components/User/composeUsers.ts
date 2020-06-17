@@ -62,8 +62,10 @@ export default async (
           whatsapp: null,
           registration_number: null,
           occupation_area: null,
-          disponibilidade_de_atendimentos: "",
+          disponibilidade_de_atendimentos: null,
           data_de_inscricao_no_bonde: "",
+          latitude: null,
+          longitude: null,
         },
       };
 
@@ -87,17 +89,19 @@ export default async (
         if (instance[key]) register["user_fields"][key] = instance[key];
       }
 
-      const availability = (
-        instance["disponibilidade_de_atendimentos"] || ""
-      ).replace(/\D/g, "");
+      if (![16850, 3297].includes(widget.id)) {
+        const availability = (
+          instance["disponibilidade_de_atendimentos"] || ""
+        ).replace(/\D/g, "");
 
-      if (availability === "") {
-        register["user_fields"]["disponibilidade_de_atendimentos"] = "1";
-      } else {
-        register["user_fields"]["disponibilidade_de_atendimentos"] =
-          Number(availability) > 5
-            ? "5_ou_mais"
-            : Number(availability).toString();
+        if (availability === "") {
+          register["user_fields"]["disponibilidade_de_atendimentos"] = "1";
+        } else {
+          register["user_fields"]["disponibilidade_de_atendimentos"] =
+            Number(availability) > 5
+              ? "5_ou_mais"
+              : Number(availability).toString();
+        }
       }
 
       register["user_fields"]["data_de_inscricao_no_bonde"] =

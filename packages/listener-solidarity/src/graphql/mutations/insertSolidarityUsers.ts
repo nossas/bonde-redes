@@ -1,4 +1,5 @@
 import gql from "graphql-tag";
+import * as yup from "yup";
 import { client as GraphQLAPI } from "../";
 import dbg from "../../dbg";
 
@@ -11,13 +12,14 @@ const CREATE_USERS_MUTATION = gql`
       on_conflict: {
         constraint: solidarity_users_user_id_key
         update_columns: [
+          updated_at
           name
           role
           organization_id
           email
           external_id
           phone
-          user_fields
+          verified
           tipo_de_acolhimento
           condition
           state
@@ -28,7 +30,12 @@ const CREATE_USERS_MUTATION = gql`
           registration_number
           occupation_area
           disponibilidade_de_atendimentos
-          updated_at
+          data_de_inscricao_no_bonde
+          latitude
+          longitude
+          user_fields
+          community_id
+          user_id
         ]
       }
     ) {
@@ -46,13 +53,59 @@ const CREATE_USERS_MUTATION = gql`
 //   };
 // };
 
+const schema = yup.array().of(
+  yup.object().shape({
+    role: yup.string().nullable(),
+    organization_id: yup.number().required(),
+    name: yup.string().required(),
+    email: yup.string().required(),
+    external_id: yup.string().required(),
+    user_id: yup.number().required(),
+    condition: yup.string().required(),
+    city: yup.string().nullable(),
+    community_id: yup.string().required(),
+    data_de_inscricao_no_bonde: yup.string().required(),
+    address: yup.string().required(),
+    latitude: yup.string().required(),
+    longitude: yup.string().required(),
+    phone: yup.string().nullable(),
+    state: yup.string().nullable(),
+    tipo_de_acolhimento: yup.string().nullable(),
+    registration_number: yup.string().nullable(),
+    occupation_area: yup.string().nullable(),
+    disponibilidade_de_atendimentos: yup.string().nullable(),
+    whatsapp: yup.string().nullable(),
+    verified: yup.boolean(),
+    cep: yup.string().nullable(),
+    user_fields: yup.object().shape({
+      condition: yup.string().required(),
+      city: yup.string().nullable(),
+      state: yup.string().nullable(),
+      data_de_inscricao_no_bonde: yup.string().required(),
+      tipo_de_acolhimento: yup.string().nullable(),
+      registration_number: yup.string().nullable(),
+      occupation_area: yup.string().nullable(),
+      disponibilidade_de_atendimentos: yup.string().nullable(),
+      latitude: yup.string().required(),
+      longitude: yup.string().required(),
+      whatsapp: yup.string().nullable(),
+      cep: yup.string().nullable(),
+      address: yup.string().required(),
+    }),
+  })
+);
+
 const insertSolidarityUsers = async (users: any) => {
   log("Saving users in Hasura...");
   const ids = users.map((u) => u.external_id);
   try {
+    const validatedUsers = await schema.validate(users, {
+      stripUnknown: true,
+    });
+    // log(validatedUsers);
     const res = await GraphQLAPI.mutate({
       mutation: CREATE_USERS_MUTATION,
-      variables: { users },
+      variables: { users: validatedUsers },
     });
 
     if (res && res.data && res.data.errors) {

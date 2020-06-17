@@ -1,4 +1,5 @@
 import gql from "graphql-tag";
+import * as yup from "yup";
 import { client as GraphQLAPI } from "../";
 import dbg from "../../dbg";
 
@@ -11,22 +12,29 @@ const CREATE_TICKETS_MUTATION = gql`
       on_conflict: {
         constraint: solidarity_tickets_ticket_id_key
         update_columns: [
-          created_at
+          updated_at
+          external_id
+          custom_fields
           description
-          ticket_id
           organization_id
-          raw_subject
-          requester_id
-          status
           subject
+          status
           submitter_id
           tags
-          updated_at
+          ticket_id
           community_id
-          custom_fields
-          data_inscricao_bonde
+          requester_id
           status_acolhimento
+          nome_voluntaria
+          link_match
           nome_msr
+          data_inscricao_bonde
+          data_encaminhamento
+          status_inscricao
+          telefone
+          estado
+          cidade
+          atrelado_ao_ticket
         ]
       }
     ) {
@@ -47,11 +55,48 @@ const CREATE_TICKETS_MUTATION = gql`
 //   };
 // };
 
+const schema = yup.object().shape({
+  external_id: yup.number().required(),
+  created_at: yup.string().required(),
+  custom_fields: yup.array().of(
+    yup.object().shape({
+      id: yup.number(),
+      value: yup.string().nullable(),
+    })
+  ),
+  description: yup.string().required(),
+  organization_id: yup.number().required(),
+  subject: yup.string().required(),
+  status: yup.string().required(),
+  ticket_id: yup.number().required(),
+  community_id: yup.number().required(),
+  requester_id: yup.number().required(),
+  status_acolhimento: yup.string().required(),
+  submitter_id: yup.number().required(),
+  data_inscricao_bonde: yup.string().required(),
+  nome_voluntaria: yup.string().nullable(),
+  link_match: yup.string().nullable(),
+  nome_msr: yup.string().nullable(),
+  data_encaminhamento: yup.string().nullable(),
+  status_inscricao: yup.string().nullable(),
+  telefone: yup.string().nullable(),
+  estado: yup.string().nullable(),
+  cidade: yup.string().nullable(),
+  atrelado_ao_ticket: yup.number().nullable(),
+  updated_at: yup.string(),
+  tags: yup.mixed(),
+});
+
 const insertSolidarityTickets = async (ticket) => {
+  log(`Saving ticket '${ticket.id}' in Hasura...`);
   try {
+    const validatedTicket = await schema.validate(ticket, {
+      stripUnknown: true,
+    });
+    // log(validatedTicket);
     const res = await GraphQLAPI.mutate({
       mutation: CREATE_TICKETS_MUTATION,
-      variables: { ticket },
+      variables: { ticket: validatedTicket },
     });
 
     if (res && res.data && res.data.errors) {
