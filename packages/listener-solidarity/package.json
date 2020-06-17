@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@types/faker": "^4.1.12",
-    "@types/node-zendesk": "^1.4.0",
+    "@types/node-zendesk": "1.4.0",
     "@types/throng": "^4.0.2",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
@@ -47,7 +47,7 @@
     "fp-ts": "^2.5.1",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
-    "node-zendesk": "^1.4.0",
+    "node-zendesk": "1.4.0",
     "prettier": "^2.0.5",
     "signale": "^1.4.0",
     "subscriptions-transport-ws": "^0.9.16",
