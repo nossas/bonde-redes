@@ -10,7 +10,7 @@ pipeline:
       - export REACT_APP_GOOGLE_CLIENT_KEY=$STAG_GOOGLE_CLIENT
       - export ZENDESK_API_TOKEN=$STGA_ZENDESK_API_TOKEN
       - export ZENDESK_API_USER=$STGA_ZENDESK_API_USER
-      - yarn global add pnpm
+      - yarn global add pnpm@4.14.4
       - pnpm i
       - pnpm m run build
     secrets: [stag_google_client, stag_zendesk_token, stag_zendesk_user]
