@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import { client as GraphQLAPI } from "../../graphql";
 
 const INDIVIDUALS_MUTATION = gql`

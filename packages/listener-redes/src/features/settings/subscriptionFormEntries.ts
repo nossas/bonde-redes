@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import { client as GraphQLAPI } from "../../graphql";
 import { updateFormEntries, insertRedeIndividuals } from "./";
 
@@ -33,7 +33,7 @@ let cache: Array<any> = [];
 const handleNext = (widgets: Widget[]) => async (response: any) => {
   console.log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
   const {
-    data: { form_entries: entries = [] }
+    data: { form_entries: entries }
   } = response;
 
   entries.forEach((formEntry: any) => {
