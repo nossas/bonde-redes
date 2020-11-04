@@ -1,12 +1,17 @@
 import "colors";
-import { ApolloClient } from "apollo-client";
-import { ApolloLink, concat, split } from "apollo-link";
-import { createHttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { WebSocketLink } from "apollo-link-ws";
-import { getMainDefinition } from "apollo-utilities";
+import {
+  split,
+  HttpLink,
+  InMemoryCache,
+  ApolloLink,
+  ApolloClient,
+  concat
+} from "@apollo/client";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { WebSocketLink } from "@apollo/client/link/ws";
+import { SubscriptionClient } from "subscriptions-transport-ws";
 import fetch from "cross-fetch";
-import ws from "ws";
+import * as ws from "ws";
 
 if (!process.env.JWT_TOKEN && !process.env.HASURA_SECRET) {
   throw new Error(
@@ -18,30 +23,38 @@ const authHeaders = process.env.JWT_TOKEN
   ? { authorization: `Bearer ${process.env.JWT_TOKEN}` }
   : { "x-hasura-admin-secret": process.env.HASURA_SECRET };
 
-const httpLink = createHttpLink({
+const httpLink = new HttpLink({
   uri: process.env.GRAPHQL_URL || "data.bonde.devel:3001/graphql",
   fetch
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
-  operation.setContext({ headers: authHeaders });
+  // add the authorization to the headers
+  operation.setContext({
+    headers: authHeaders
+  });
+
   return forward(operation);
 });
 
-// Create a WebSocket link:
-const wsLink = new WebSocketLink({
-  uri: process.env.WS_GRAPHQL_URL || "ws://localhost:5007/v1/graphql",
-  options: {
+const subscriptionClient = new SubscriptionClient(
+  process.env.WS_GRAPHQL_URL || "ws://localhost:5007/v1/graphql",
+  {
     reconnect: true,
     connectionParams: { headers: authHeaders }
   },
-  webSocketImpl: ws
-});
+  ws
+);
 
-// using the ability to split links, you can send data to each link
-// depending on what kind of operation is being sent
-const link = split(
-  // split based on operation type
+// Create a WebSocket link:
+const wsLink = new WebSocketLink(subscriptionClient);
+
+// The split function takes three parameters:
+//
+// * A function that's called for each operation to execute
+// * The Link to use for an operation if the function returns a "truthy" value
+// * The Link to use for an operation if the function returns a "falsy" value
+const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
     return (
@@ -53,9 +66,7 @@ const link = split(
   httpLink
 );
 
-const cache = new InMemoryCache();
-
 export const client = new ApolloClient({
-  cache,
-  link: concat(authMiddleware, link)
+  cache: new InMemoryCache(),
+  link: concat(authMiddleware, splitLink)
 });
