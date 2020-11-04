@@ -1,4 +1,4 @@
-import * as throng from "throng";
+import throng from "throng";
 import { fetchRedesGroups, subscriptionFormEntries } from "./features/settings";
 
 throng({
