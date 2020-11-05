@@ -1,12 +1,9 @@
 import axios from "axios";
 import { logger } from "./logger";
 import { SubscribeIndividual } from "./types/individual";
-import { 
-  GoogleMapsResponse, 
-  IndividualGeolocation
-} from './types/geolocation'
+import { GoogleMapsResponse, IndividualGeolocation } from "./types/geolocation";
 
-const getCityAndState = (addressComponents): Array<string> => {
+const getCityAndState = (addressComponents): Array<string | undefined> => {
   let state: string | undefined;
   let city: string | undefined;
   // let country: string | undefined
@@ -27,7 +24,7 @@ const getCityAndState = (addressComponents): Array<string> => {
       } else if (types.includes("locality")) {
         city = shortName;
       }
-      
+
       // if (types.includes('country')) {
       //   country = shortName
       // }
@@ -59,9 +56,9 @@ const getGoogleGeolocation = async (cep, key) => {
     return response.data;
   } catch (e) {
     logger.error("falha na requisição para o google maps", e);
-    return e
+    return e;
   }
-}
+};
 
 const convertCepToAddressWithGoogleApi = async (
   individual: SubscribeIndividual
@@ -74,27 +71,9 @@ const convertCepToAddressWithGoogleApi = async (
   }
 
   const cep = individual.zipcode;
-  const data = await getGoogleGeolocation(cep, GOOGLE_MAPS_API_KEY) 
+  const data = await getGoogleGeolocation(cep, GOOGLE_MAPS_API_KEY);
 
-  if (data.status === "ZERO_RESULTS") {
-    logger.log(
-      "error",
-      `google maps return with zero result (id, zipcode): '${individual.id}', ${cep}`
-    );
-
-    const i: IndividualGeolocation = {
-      id: individual.id,
-      coordinates: {
-        latitude: "ZERO_RESULTS",
-        longitude: "ZERO_RESULTS"
-      },
-      address: `Cep Incorreto - ${individual.zipcode}`,
-      state: "ZERO_RESULTS",
-      city: "ZERO_RESULTS"
-    };
-
-    return i
-  } if (data.status === "OK") {
+  if (data.status === "OK") {
     const {
       results: [
         {
@@ -125,7 +104,23 @@ const convertCepToAddressWithGoogleApi = async (
     return i;
   }
 
-  return undefined
+  logger.log(
+    "error",
+    `google maps return with zero result (id, zipcode): '${individual.id}', ${cep}`
+  );
+
+  const i: IndividualGeolocation = {
+    id: individual.id,
+    coordinates: {
+      latitude: "ZERO_RESULTS",
+      longitude: "ZERO_RESULTS"
+    },
+    address: `Cep Incorreto - ${individual.zipcode}`,
+    state: "ZERO_RESULTS",
+    city: "ZERO_RESULTS"
+  };
+
+  return i;
 };
 
-export default convertCepToAddressWithGoogleApi
+export default convertCepToAddressWithGoogleApi;

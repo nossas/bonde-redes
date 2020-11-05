@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import { client as GraphQLAPI } from "../../graphql";
 import { updateFormEntries, insertRedeIndividuals } from "./";
 
@@ -28,7 +28,7 @@ interface MetaField {
   name: string;
 }
 
-let cache = [];
+let cache: Array<any> = [];
 
 const handleNext = (widgets: Widget[]) => async (response: any) => {
   console.log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
@@ -42,8 +42,8 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
     }
   });
 
-  const syncronizedForms = [];
-  const individuals = [];
+  const syncronizedForms: Array<any> = [];
+  const individuals: Array<any> = [];
   if (cache.length > 0) {
     cache.forEach((formEntry: any) => {
       const fields = JSON.parse(formEntry.fields);
@@ -55,9 +55,10 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
         widget.metadata["form_mapping"].forEach((field: MetaField) => {
           const acessors = field.name.split(".");
           if (acessors.length === 1) {
-            instance[acessors[0]] = (
+            const fieldValue = (
               fields.filter((f: any) => f.uid === field.uid)[0] || {}
             ).value;
+            instance[acessors[0]] = acessors[0] === 'zipcode' ? fieldValue.substr(0, 100) : fieldValue
           } else {
             // extra fields
             const rootField = acessors[0];

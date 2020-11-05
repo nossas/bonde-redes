@@ -1,8 +1,6 @@
 {
   "name": "listener-redes-geolocation",
   "version": "1.0.0",
-  "private": true,
-  "description": "",
   "engines": {
     "node": ">= 12.13 <13"
   },
@@ -10,21 +8,13 @@
     "@types/jest": "~25.1.2",
     "@types/node": "~12.12.27",
     "@types/yup": "^0.26.33",
-    "@typescript-eslint/eslint-plugin": "~2.19.2",
-    "@typescript-eslint/parser": "~2.19.2",
-    "eslint": "~6.8.0",
-    "eslint-config-prettier": "~6.10.0",
-    "eslint-plugin-jest": "~23.7.0",
     "jest": "~25.1.0",
-    "prettier": "~1.19.1",
     "rimraf": "~3.0.2",
-    "ts-jest": "~25.2.0",
-    "tsutils": "~3.17.0",
-    "typescript": "~3.8.2"
+    "ts-jest": "~25.2.0"
   },
   "scripts": {
-    "dev": "tsc-watch --outDir ./build --onSuccess \"node -r dotenv/config ./build/src/main.js\"",
-    "start": "node -r dotenv/config build/src/main.js",
+    "dev": "tsc-watch --outDir ./build --onSuccess \"node -r dotenv/config ./dist/main.js\"",
+    "start": "node -r dotenv/config ./dist/main.js",
     "clean": "rimraf coverage build tmp",
     "build": "tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
@@ -46,7 +36,6 @@
     "graphql-tag": "^2.10.3",
     "node-fetch": "^2.6.0",
     "throng": "^4.0.0",
-    "tslib": "~1.10.0",
     "winston": "^3.2.1",
     "ws": "^7.2.1",
     "yup": "^0.28.3"
