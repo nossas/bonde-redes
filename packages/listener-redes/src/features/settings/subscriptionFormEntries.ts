@@ -20,7 +20,12 @@ const FORM_ENTRIES_SUBSCRIPTION = gql`
 interface Widget {
   id: number;
   group_id: number;
-  metadata: object;
+  metadata: {
+    form_mapping?: Array<{
+      uid: string;
+      name: string;
+    }>;
+  };
 }
 
 interface MetaField {
@@ -47,18 +52,20 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
   if (cache.length > 0) {
     cache.forEach((formEntry: any) => {
       const fields = JSON.parse(formEntry.fields);
-      const widget = widgets.filter(
-        (w: any) => w.id === formEntry.widget_id
-      )[0];
-      if (widget) {
+      const widget = widgets.filter(w => w.id === formEntry.widget_id)[0];
+
+      if (widget.metadata.form_mapping) {
         const instance = {};
-        widget.metadata["form_mapping"].forEach((field: MetaField) => {
+        widget.metadata.form_mapping.forEach((field: MetaField) => {
           const acessors = field.name.split(".");
           if (acessors.length === 1) {
             const fieldValue = (
               fields.filter((f: any) => f.uid === field.uid)[0] || {}
             ).value;
-            instance[acessors[0]] = acessors[0] === 'zipcode' ? fieldValue.substr(0, 100) : fieldValue
+            instance[acessors[0]] =
+              acessors[0] === "zipcode"
+                ? fieldValue.substr(0, 100)
+                : fieldValue;
           } else {
             // extra fields
             const rootField = acessors[0];
