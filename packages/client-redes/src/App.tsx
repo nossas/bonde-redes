@@ -60,7 +60,7 @@ const BondeToastify = styled(ToastContainer)`
 const App = () => {
   const adminUrl =
     process.env.REACT_APP_ADMIN_URL ||
-    "http://admin-canary.bonde.devel:5001/admin";
+    "http://bonde.devel:5001/admin";
   return (
     <BondeSessionProvider
       fetchData
