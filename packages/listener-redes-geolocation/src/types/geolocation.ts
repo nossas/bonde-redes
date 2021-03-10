@@ -1,5 +1,28 @@
 import { Individual } from './individual'
 
+export interface OpenCageResponse {
+  documentation: string,
+  licences: [],
+  rate: {
+    limit: number,
+    remaining: number,
+    reset: number,
+  },
+  results: OpenCageResponseResults[]
+}
+
+export interface OpenCageResponseResults {
+  formatted: string,
+  geometry: [{
+    lat: string,
+    lng: string,
+  }]
+}
+
+export interface BrasilApiResponse {
+
+}
+
 export enum GMAPS_ERRORS {
   REQUEST_FAILED,
   INVALID_INPUT
