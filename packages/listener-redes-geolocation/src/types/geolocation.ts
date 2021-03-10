@@ -20,7 +20,12 @@ export interface OpenCageResponseResults {
 }
 
 export interface BrasilApiResponse {
-
+  cep: string,
+  state: string,
+  city: string,
+  neighborhood: string,
+  street: string,
+  service: string,
 }
 
 export enum GMAPS_ERRORS {
@@ -54,4 +59,4 @@ export interface GoogleMapsAddressComponent {
   type: string[];
 }
 
-export type IndividualGeolocation = Omit<Individual, 'created_at'| 'zipcode'>
+export type IndividualGeolocation = Omit<Individual, 'created_at' | 'zipcode'>

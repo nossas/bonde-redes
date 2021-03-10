@@ -65,8 +65,7 @@ const getOpenCageGeoLocation = async(
   state,
   city,
   neighborhood,
-  street,
-  service) => {
+  street) => {
 
     const { GEOCODING_API_KEY } = process.env;
     if (!GEOCODING_API_KEY) {
@@ -96,8 +95,8 @@ const getBrasilApiLocation = async (cep) => {
     const response: BrasilApiResponse = await axios.get(
       `https://brasilapi.com.br/api/cep/v1/${cep}`
     );
-    logger.log("info", "Brasil api response!", response.data);
-    return response.data;
+    logger.log("info", "Brasil api response!", response);
+    return response;
   } catch (e) {
     logger.error("falha na requisição para o Brasil api", e);
     return e;
@@ -124,16 +123,14 @@ const convertCepToAddressWithGoogleApi = async (
       state,
       city,
       neighborhood,
-      street,
-      service
+      street
     } = data;
 
     const geolocation = getOpenCageGeoLocation(cep,
       state,
       city,
       neighborhood,
-      street,
-      service);
+      street);
   // handle google response
   // if (data.status === "OK") {
   //   const {
