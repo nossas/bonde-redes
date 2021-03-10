@@ -1,7 +1,7 @@
 import axios from "axios";
 import { logger } from "./logger";
 import { SubscribeIndividual } from "./types/individual";
-import { GoogleMapsResponse, IndividualGeolocation, OpenCageResponse, BrasilApiResponse } from "./types/geolocation";
+import { GoogleMapsResponse, IndividualGeolocation, BrasilApiResponse } from "./types/geolocation";
 
 const getCityAndState = (addressComponents): Array<string | undefined> => {
   let state: string | undefined;
@@ -80,9 +80,9 @@ const getOpenCageGeoLocation = async (
 
   try {
     logger.log("info", `requesting open cage with complete address ${cep}...`);
-    const response: OpenCageResponse = await axios.get(requestUrl);
-    logger.log("info", "open cage response!", response.results);
-    return response.results;
+    const response: any = await axios.get(requestUrl);
+    logger.log("info", `open cage response!`);
+    return response.data.results;
   } catch (e) {
     logger.error("falha na requisição para o open cage", e);
     return e;
@@ -118,21 +118,21 @@ const convertCepToAddressWithGoogleApi = async (
   let data;
 
   if (GOOGLE_MAPS_API_KEY) {
-    data = await getGoogleGeolocation(cep,GOOGLE_MAPS_API_KEY);
+    data = await await getGoogleGeolocation(cep,GOOGLE_MAPS_API_KEY);
   } else {
-    data = await getBrasilApiLocation(cep);
+    data = await await getBrasilApiLocation(cep);
   }
 
-  if (data.errors !== undefined && data.errors.length < 1) {
+  if (data.statusText === "OK") {
     const {
       cep,
       state,
       city,
       neighborhood,
       street
-    } = data;
+    } = data.data;
 
-    const geolocation = getOpenCageGeoLocation(cep,
+    const geolocation = await getOpenCageGeoLocation(cep,
       state,
       city,
       neighborhood,

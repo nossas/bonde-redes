@@ -13,10 +13,10 @@ export interface OpenCageResponse {
 
 export interface OpenCageResponseResults {
   formatted: string,
-  geometry: [{
+  geometry: {
     lat: string,
     lng: string,
-  }]
+  }
 }
 
 export interface BrasilApiResponse {
