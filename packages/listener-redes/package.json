@@ -4,7 +4,7 @@
   "description": "Listener Redes",
   "main": "src/main.ts",
   "engines": {
-    "node": ">= 12.13 <13"
+    "node": ">= 12"
   },
   "devDependencies": {
     "@types/jest": "~25.1.0",

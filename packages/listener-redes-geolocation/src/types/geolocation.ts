@@ -1,5 +1,33 @@
 import { Individual } from './individual'
 
+export interface OpenCageResponse {
+  documentation: string,
+  licences: [],
+  rate: {
+    limit: number,
+    remaining: number,
+    reset: number,
+  },
+  results: OpenCageResponseResults[]
+}
+
+export interface OpenCageResponseResults {
+  formatted: string,
+  geometry: {
+    lat: string,
+    lng: string,
+  }
+}
+
+export interface BrasilApiResponse {
+  cep: string,
+  state: string,
+  city: string,
+  neighborhood: string,
+  street: string,
+  service: string,
+}
+
 export enum GMAPS_ERRORS {
   REQUEST_FAILED,
   INVALID_INPUT
@@ -31,4 +59,4 @@ export interface GoogleMapsAddressComponent {
   type: string[];
 }
 
-export type IndividualGeolocation = Omit<Individual, 'created_at'| 'zipcode'>
+export type IndividualGeolocation = Omit<Individual, 'created_at' | 'zipcode'>

@@ -1,5 +1,3 @@
 packages:
   - "."
-  - "packages/client-redes"
-  - "packages/listener-redes"
-  - "packages/listener-redes-geolocation"
+  - "packages/*"

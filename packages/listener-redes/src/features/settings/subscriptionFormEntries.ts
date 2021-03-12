@@ -58,7 +58,7 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
             const fieldValue = (
               fields.filter((f: any) => f.uid === field.uid)[0] || {}
             ).value;
-            instance[acessors[0]] = acessors[0] === 'zipcode' ? fieldValue.substr(0, 100) : fieldValue
+            instance[acessors[0]] = acessors[0] === 'zipcode' ? String(fieldValue).substr(0, 100) : fieldValue
           } else {
             // extra fields
             const rootField = acessors[0];
