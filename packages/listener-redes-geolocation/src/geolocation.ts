@@ -62,7 +62,6 @@ const getGoogleGeolocation = async (cep, key) => {
 
 const getOpenCageGeoLocation = async (
   cep,
-  state,
   city,
   neighborhood,
   street) => {
@@ -76,12 +75,12 @@ const getOpenCageGeoLocation = async (
 
   const apikey = GEOCODING_API_KEY;
   const api_url = 'https://api.opencagedata.com/geocode/v1/json';
-  const requestUrl = `${api_url}?key=${apikey}&q=${encodeURIComponent(`${street}, ${neighborhood}, ${city}, ${state}`)}&pretty=1&no_annotations=1`;
+  const requestUrl = `${api_url}?key=${apikey}&q=${encodeURIComponent(`${street}, ${neighborhood}, ${city}`)}&pretty=1&no_annotations=1`;
 
   try {
     logger.log("info", `requesting open cage with complete address ${cep}...`);
     const response: any = await axios.get(requestUrl);
-    logger.log("info", `open cage response!`);
+    logger.log("info", `open cage response! ${requestUrl}`);
     return response.data.results;
   } catch (e) {
     logger.error("falha na requisição para o open cage", e);
@@ -133,25 +132,26 @@ const convertCepToAddressWithGoogleApi = async (
     } = data.data;
 
     const geolocation = await getOpenCageGeoLocation(cep,
-      state,
       city,
       neighborhood,
       street);
 
-    const i: IndividualGeolocation = {
-      id: individual.id,
-      coordinates: {
-        latitude: geolocation[0].geometry.lat.toString(),
-        longitude: geolocation[0].geometry.lng.toString(),
-      },
-      address: geolocation[0].formatted,
-      state,
-      city
-    };
+    if (geolocation.results > 0) {
+      const i: IndividualGeolocation = {
+        id: individual.id,
+        coordinates: {
+          latitude: geolocation[0].geometry.lat.toString(),
+          longitude: geolocation[0].geometry.lng.toString(),
+        },
+        address: geolocation[0].formatted,
+        state,
+        city
+      };
 
-    logger.log("info", "returned valid individual geolocation data", i);
+      logger.log("info", "returned valid individual geolocation data", i);
 
-    return i;
+      return i;
+    }
   } else if (data.status === "OK") {
     //  handle google response
     const {
