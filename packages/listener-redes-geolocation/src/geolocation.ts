@@ -115,12 +115,24 @@ const convertCepToAddressWithGoogleApi = async (
 
   const cep = individual.zipcode;
   let data;
+  let i: IndividualGeolocation = {
+    id: individual.id,
+    coordinates: {
+      latitude: "ZERO_RESULTS",
+      longitude: "ZERO_RESULTS"
+    },
+    address: `Cep Incorreto - ${individual.zipcode}`,
+    state: "ZERO_RESULTS",
+    city: "ZERO_RESULTS"
+  };
 
   if (GOOGLE_MAPS_API_KEY) {
     data = await await getGoogleGeolocation(cep,GOOGLE_MAPS_API_KEY);
   } else {
     data = await await getBrasilApiLocation(cep);
   }
+
+  console.log(data.statusText, data.status);
 
   if (data.statusText === "OK") {
     const {
@@ -137,7 +149,7 @@ const convertCepToAddressWithGoogleApi = async (
       street);
 
     if (geolocation.results > 0) {
-      const i: IndividualGeolocation = {
+      i = {
         id: individual.id,
         coordinates: {
           latitude: geolocation[0].geometry.lat.toString(),
@@ -149,8 +161,6 @@ const convertCepToAddressWithGoogleApi = async (
       };
 
       logger.log("info", "returned valid individual geolocation data", i);
-
-      return i;
     }
   } else if (data.status === "OK") {
     //  handle google response
@@ -168,8 +178,7 @@ const convertCepToAddressWithGoogleApi = async (
 
     const [state, city] = getCityAndState(addressComponents);
 
-
-    const i: IndividualGeolocation = {
+    i = {
       id: individual.id,
       coordinates: {
         latitude: lat.toString(),
@@ -181,25 +190,14 @@ const convertCepToAddressWithGoogleApi = async (
     };
 
     logger.log("info", "returned valid individual geolocation data", i);
-
-    return i;
   }
+  //  else {
+  //   logger.log(
+  //     "error",
+  //     `google maps return with zero result (id, zipcode): '${individual.id}', ${cep}`
+  //   );
 
-  logger.log(
-    "error",
-    `google maps return with zero result (id, zipcode): '${individual.id}', ${cep}`
-  );
-
-  const i: IndividualGeolocation = {
-    id: individual.id,
-    coordinates: {
-      latitude: "ZERO_RESULTS",
-      longitude: "ZERO_RESULTS"
-    },
-    address: `Cep Incorreto - ${individual.zipcode}`,
-    state: "ZERO_RESULTS",
-    city: "ZERO_RESULTS"
-  };
+  // }
 
   return i;
 };
