@@ -39,131 +39,29 @@ const getCityAndState = (addressComponents): Array<string | undefined> => {
   return [state, city];
 };
 
-const getGoogleGeolocation = async (cep, key) => {
+const getGoogleGeolocation = async (individual: SubscribeIndividual, key) => {
   try {
-    logger.log("info", `requesting google with cep ${cep}...`);
+    logger.log("info", `requesting google with cep ${individual.zipcode}...`);
+
     const response: GoogleMapsResponse = await axios.post(
       "https://maps.googleapis.com/maps/api/geocode/json",
       undefined,
       {
         params: {
-          address: cep,
+          address: individual.zipcode,
           key
         }
       }
     );
-    logger.log("info", "google maps response!", response.data);
-    return response.data;
-  } catch (e) {
-    logger.error("falha na requisição para o google maps", e);
-    return e;
-  }
-};
 
-const getOpenCageGeoLocation = async (
-  cep,
-  city,
-  neighborhood,
-  street) => {
-
-  const { GEOCODING_API_KEY } = process.env;
-  if (!GEOCODING_API_KEY) {
-    throw new Error(
-      "Please specify the `GEOCODING_API_KEY` environment variable."
-    );
-  }
-
-  const apikey = GEOCODING_API_KEY;
-  const api_url = 'https://api.opencagedata.com/geocode/v1/json';
-  const requestUrl = `${api_url}?key=${apikey}&q=${encodeURIComponent(`${street}, ${neighborhood}, ${city}`)}&pretty=1&no_annotations=1`;
-
-  try {
-    logger.log("info", `requesting open cage with complete address ${cep}...`);
-    const response: any = await axios.get(requestUrl);
-    logger.log("info", `open cage response! ${requestUrl}`);
-    return response.data.results;
-  } catch (e) {
-    logger.error("falha na requisição para o open cage", e);
-    return e;
-  }
-}
-
-const getBrasilApiLocation = async (cep) => {
-  try {
-    logger.log("info", `requesting Brasil api with cep ${cep}...`);
-    const response: BrasilApiResponse = await axios.get(
-      `https://brasilapi.com.br/api/cep/v1/${cep}`
-    );
-    logger.log("info", "Brasil api response!", response);
-    return response;
-  } catch (e) {
-    logger.error("falha na requisição para o Brasil api", e);
-    return e;
-  }
-};
-
-const convertCepToAddressWithGoogleApi = async (
-  individual: SubscribeIndividual
-): Promise<IndividualGeolocation> => {
-
-  const { GOOGLE_MAPS_API_KEY, BRASIL_API_KEY } = process.env;
-  if (!GOOGLE_MAPS_API_KEY && !BRASIL_API_KEY) {
-    throw new Error(
-      "Please specify the `GOOGLE_MAPS_API_KEY` or `BRASIL_API_KEY` environment variable."
-    );
-  }
-
-  const cep = individual.zipcode;
-  let data;
-  let i: IndividualGeolocation = {
-    id: individual.id,
-    coordinates: {
-      latitude: "ZERO_RESULTS",
-      longitude: "ZERO_RESULTS"
-    },
-    address: `Cep Incorreto - ${individual.zipcode}`,
-    state: "ZERO_RESULTS",
-    city: "ZERO_RESULTS"
-  };
-
-  if (GOOGLE_MAPS_API_KEY) {
-    data = await await getGoogleGeolocation(cep,GOOGLE_MAPS_API_KEY);
-  } else {
-    data = await await getBrasilApiLocation(cep);
-  }
-
-  console.log(data.statusText, data.status);
-
-  if (data.statusText === "OK") {
-    const {
-      cep,
-      state,
-      city,
-      neighborhood,
-      street
-    } = data.data;
-
-    const geolocation = await getOpenCageGeoLocation(cep,
-      city,
-      neighborhood,
-      street);
-
-    if (geolocation.results > 0) {
-      i = {
-        id: individual.id,
-        coordinates: {
-          latitude: geolocation[0].geometry.lat.toString(),
-          longitude: geolocation[0].geometry.lng.toString(),
-        },
-        address: geolocation[0].formatted,
-        state,
-        city
-      };
-
-      logger.log("info", "returned valid individual geolocation data", i);
-    }
-  } else if (data.status === "OK") {
     //  handle google response
+    logger.log("info", "google maps response!", response.data);
+
+
+    if (response.data.status !== "OK") {
+      return false
+    }
+
     const {
       results: [
         {
@@ -174,11 +72,11 @@ const convertCepToAddressWithGoogleApi = async (
           formatted_address: address
         }
       ]
-    } = data;
+    } = response.data;
 
     const [state, city] = getCityAndState(addressComponents);
 
-    i = {
+    const i = {
       id: individual.id,
       coordinates: {
         latitude: lat.toString(),
@@ -189,8 +87,110 @@ const convertCepToAddressWithGoogleApi = async (
       city
     };
 
-    logger.log("info", "returned valid individual geolocation data", i);
+    logger.log("info", "returned valid individual geolocation data with google", i);
+
+    return i;
+    // return response.data;
+  } catch (e) {
+    logger.error("falha na requisição para o google maps", e);
+    return e;
   }
+};
+
+const getOpenCageGeoLocation = async (
+  cep,
+  city,
+  neighborhood,
+  street,
+  GEOCODING_API_KEY) => {
+
+  const api_url = 'https://api.opencagedata.com/geocode/v1/json';
+  const requestUrl = `${api_url}?key=${GEOCODING_API_KEY}&q=${encodeURIComponent(`${street}, ${neighborhood}, ${city}`)}&pretty=1&no_annotations=1`;
+
+  try {
+    logger.log("info", `requesting open cage with complete address ${cep}...`);
+    const response: any = await axios.get(requestUrl);
+    logger.log("info", `open cage response! ${requestUrl}`);
+    return (response.data.results > 0) ? response.data.results : false;
+  } catch (e) {
+    logger.error("falha na requisição para o open cage", e);
+    return e;
+  }
+}
+
+const getBrasilApiLocation = async (individual, GEOCODING_API_KEY) => {
+  try {
+    logger.log("info", `requesting Brasil api with cep ${individual.zipcode}...`);
+    const response: BrasilApiResponse = await axios.get(
+      `https://brasilapi.com.br/api/cep/v1/${individual.zipcode}`
+    );
+    logger.log("info", "Brasil api response!", response);
+
+    const {
+      cep,
+      state,
+      city,
+      neighborhood,
+      street
+    } = response;
+
+    const geolocation = await getOpenCageGeoLocation(cep,
+      city,
+      neighborhood,
+      street,
+      GEOCODING_API_KEY);
+
+    const i = {
+      id: individual.id,
+      coordinates: {
+        latitude: geolocation[0].geometry.lat.toString(),
+        longitude: geolocation[0].geometry.lng.toString(),
+      },
+      address: geolocation[0].formatted,
+      state,
+      city
+    };
+
+    logger.log("info", "returned valid individual geolocation data", i);
+
+    return i;
+  } catch (e) {
+    logger.error("falha na requisição para o Brasil api", e);
+    return e;
+  }
+};
+
+const convertCepToAddressWithGoogleApi = async (
+  individual: SubscribeIndividual
+): Promise<IndividualGeolocation> => {
+
+  const { GOOGLE_MAPS_API_KEY, GEOCODING_API_KEY } = process.env;
+  if (!GOOGLE_MAPS_API_KEY && !GEOCODING_API_KEY) {
+    throw new Error(
+      "Please specify the `GOOGLE_MAPS_API_KEY` or `GEOCODING_API_KEY` environment variable."
+    );
+  }
+
+  if (GOOGLE_MAPS_API_KEY) {
+    return await getGoogleGeolocation(individual, GOOGLE_MAPS_API_KEY);
+  } else if (GOOGLE_MAPS_API_KEY) {
+    return await getBrasilApiLocation(individual, GEOCODING_API_KEY);
+  }
+
+  // const cep = individual.zipcode;
+  // let data;
+  return {
+    id: individual.id,
+    coordinates: {
+      latitude: "ZERO_RESULTS",
+      longitude: "ZERO_RESULTS"
+    },
+    address: `Cep Incorreto - ${individual.zipcode}`,
+    state: "ZERO_RESULTS",
+    city: "ZERO_RESULTS"
+  };
+
+
   //  else {
   //   logger.log(
   //     "error",
@@ -199,7 +199,7 @@ const convertCepToAddressWithGoogleApi = async (
 
   // }
 
-  return i;
+  // return i;
 };
 
 export default convertCepToAddressWithGoogleApi;
