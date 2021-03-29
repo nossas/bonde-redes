@@ -130,7 +130,7 @@ const getBrasilApiLocation = async (individual, GEOCODING_API_KEY) => {
       city,
       neighborhood,
       street
-    } = response;
+    } = response.data;
 
     const geolocation = await getOpenCageGeoLocation(cep,
       city,
