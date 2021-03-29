@@ -109,7 +109,7 @@ const getOpenCageGeoLocation = async (
     logger.log("info", `requesting open cage with complete address ${cep}...`);
     const response: any = await axios.get(requestUrl);
     logger.log("info", `open cage response! ${requestUrl}`);
-    return (response.data.results > 0) ? response.data.results : false;
+    return (response.data.results.length > 0) ? response.data.results : false;
   } catch (e) {
     logger.error("falha na requisição para o open cage", e);
     return e;
