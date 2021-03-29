@@ -54,9 +54,7 @@ const getGoogleGeolocation = async (individual: SubscribeIndividual, key) => {
       }
     );
 
-    //  handle google response
     logger.log("info", "google maps response!", response.data);
-
 
     if (response.data.status !== "OK") {
       return false
@@ -164,21 +162,15 @@ const convertCepToAddressWithGoogleApi = async (
   individual: SubscribeIndividual
 ): Promise<IndividualGeolocation> => {
 
-  const { GOOGLE_MAPS_API_KEY, GEOCODING_API_KEY } = process.env;
-  if (!GOOGLE_MAPS_API_KEY && !GEOCODING_API_KEY) {
-    throw new Error(
-      "Please specify the `GOOGLE_MAPS_API_KEY` or `GEOCODING_API_KEY` environment variable."
-    );
-  }
+  const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || '';
+  const GEOCODING_API_KEY = process.env.GEOCODING_API_KEY || '';
 
-  if (GOOGLE_MAPS_API_KEY) {
+  if (GOOGLE_MAPS_API_KEY.length > 0) {
     return await getGoogleGeolocation(individual, GOOGLE_MAPS_API_KEY);
-  } else if (GOOGLE_MAPS_API_KEY) {
+  } else if (GEOCODING_API_KEY.length > 0) {
     return await getBrasilApiLocation(individual, GEOCODING_API_KEY);
   }
 
-  // const cep = individual.zipcode;
-  // let data;
   return {
     id: individual.id,
     coordinates: {
@@ -189,17 +181,6 @@ const convertCepToAddressWithGoogleApi = async (
     state: "ZERO_RESULTS",
     city: "ZERO_RESULTS"
   };
-
-
-  //  else {
-  //   logger.log(
-  //     "error",
-  //     `google maps return with zero result (id, zipcode): '${individual.id}', ${cep}`
-  //   );
-
-  // }
-
-  // return i;
 };
 
 export default convertCepToAddressWithGoogleApi;
