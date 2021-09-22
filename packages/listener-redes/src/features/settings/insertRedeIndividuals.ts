@@ -47,8 +47,8 @@ const insertRedeIndividuals = async (individuals: any): Promise<any> => {
   
     return returning
   } catch (err) {
-		console.error('failed on insert rede individuals: '.red, err)
-		return undefined
+		throw new Error (`failed on insert rede individuals: .red ${err}`)
+		
 	}
 }
 
