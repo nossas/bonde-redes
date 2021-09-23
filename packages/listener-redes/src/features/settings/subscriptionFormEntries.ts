@@ -85,16 +85,18 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
 
     // console.log('individuals', individuals)
     // Batch insert individuals
-    console.log("Inserting the new individuals on GraphQL API...");
-    await insertRedeIndividuals(individuals)
-          .then (async()=>{ // Batch update syncronized forms
-                            console.log("Updating form_entries syncronized on GraphQL API...");
-                            await updateFormEntries(syncronizedForms);
-                          })
-          .catch((err)=>{
-            console.log(err);
-          });
 
+    try{
+      console.log("Inserting the new individuals on GraphQL API...");
+      await insertRedeIndividuals(individuals); 
+    }catch(err) {
+      throw new Error(err);
+    }
+    
+    // Batch update syncronized forms
+    console.log("Updating form_entries syncronized on GraphQL API...");
+    await updateFormEntries(syncronizedForms);
+ 
     cache = [];
     console.log("Integration is done.");
   } else {
