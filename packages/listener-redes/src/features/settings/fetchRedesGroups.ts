@@ -1,9 +1,11 @@
 import { gql } from "@apollo/client";
 import { client as GraphQLAPI } from "../../graphql";
 
+const MAPA_DO_ACOLHIMENTO_COMMUNITY = 40;
+
 const FETCH_REDES_QUERY = gql`
   query redes {
-    rede_groups {
+    rede_groups(where: {community_id: {_neq: ${MAPA_DO_ACOLHIMENTO_COMMUNITY}}}) {
       id
       name
       is_volunteer
