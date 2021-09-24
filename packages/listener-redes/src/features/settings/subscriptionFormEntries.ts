@@ -94,7 +94,7 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
       console.log("Updating form_entries syncronized on GraphQL API...");
       await updateFormEntries(syncronizedForms);
     }catch(err) {
-      console.log(err);
+      console.error(err);
     }
     
     cache = [];
