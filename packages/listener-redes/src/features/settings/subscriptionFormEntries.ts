@@ -83,20 +83,20 @@ const handleNext = (widgets: Widget[]) => async (response: any) => {
       }
     });
 
-    // console.log('individuals', individuals)
-    // Batch insert individuals
+    try {
 
-    try{
+      // console.log('individuals', individuals)
+      // Batch insert individuals
       console.log("Inserting the new individuals on GraphQL API...");
       await insertRedeIndividuals(individuals); 
+
+       // Batch update syncronized forms
+      console.log("Updating form_entries syncronized on GraphQL API...");
+      await updateFormEntries(syncronizedForms);
     }catch(err) {
-      throw new Error(err);
+      console.log(err);
     }
     
-    // Batch update syncronized forms
-    console.log("Updating form_entries syncronized on GraphQL API...");
-    await updateFormEntries(syncronizedForms);
- 
     cache = [];
     console.log("Integration is done.");
   } else {
