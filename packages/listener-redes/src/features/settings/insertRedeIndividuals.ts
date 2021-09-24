@@ -44,10 +44,10 @@ const insertRedeIndividuals = async (individuals: any): Promise<any> => {
       mutation: INDIVIDUALS_MUTATION,
       variables: { individuals }
     })
-  
+
     return returning
   } catch (err) {
-		console.error('failed on insert rede individuals: '.red, err)
+		console.error('failed on insert rede individuals: '.red, err, individuals)
 		return undefined
 	}
 }

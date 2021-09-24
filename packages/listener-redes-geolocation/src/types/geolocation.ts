@@ -20,12 +20,14 @@ export interface OpenCageResponseResults {
 }
 
 export interface BrasilApiResponse {
-  cep: string,
-  state: string,
-  city: string,
-  neighborhood: string,
-  street: string,
-  service: string,
+  data: {
+    cep: string,
+    state: string,
+    city: string,
+    neighborhood: string,
+    street: string,
+    service: string,
+  }
 }
 
 export enum GMAPS_ERRORS {
