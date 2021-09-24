@@ -12,6 +12,7 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import fetch from "cross-fetch";
 import * as ws from "ws";
+import { exit } from 'process';
 
 if (!process.env.JWT_TOKEN && !process.env.HASURA_SECRET) {
   throw new Error(
@@ -45,6 +46,27 @@ const subscriptionClient = new SubscriptionClient(
   },
   ws
 );
+
+subscriptionClient.onConnecting(() => {
+  console.log("connecting");
+});
+
+subscriptionClient.onConnected(() => {
+  console.log("connected");
+});
+
+subscriptionClient.onReconnecting(() => {
+  console.log("reconnecting");
+});
+
+subscriptionClient.onReconnected(() => {
+  console.log("reconnected");
+});
+
+subscriptionClient.onDisconnected(() => {
+  console.log("disconnected");
+  exit(1);
+});
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink(subscriptionClient);
