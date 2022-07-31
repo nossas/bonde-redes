@@ -34,7 +34,7 @@
     "dotenv": "^8.2.0",
     "gql": "^1.1.2",
     "graphql-tag": "^2.10.3",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.2.10",
     "throng": "^4.0.0",
     "winston": "^3.2.1",
     "ws": "^7.2.1",
